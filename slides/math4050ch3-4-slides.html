@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>MATH 4050 - Mathematical Finance and Interest Theory</title>
+<meta name="author" content="\\
+Jie Zhong \\
+Department of Mathematics \\
+California State University, Los Angeles"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+
+<link rel="stylesheet" href="../dist/theme/serif.css" id="theme"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+
+<link rel="stylesheet" href="../gnohz.css"/>
+<script>window.MathJax = { TeX: {Macros: {range: "\\text{Range}", ow: "\\text{otherwise}"}} }</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1>MATH 4050 - Mathematical Finance and Interest Theory</h1><h2></h2><h6> <br />
+Jie Zhong <br />
+Department of Mathematics <br />
+California State University, Los Angeles</h6>
+</section>
+<section>
+<section id="slide-org7e43753">
+<h2 id="org7e43753">Chapter 3 Annuities (annuities certain)</h2>
+<div class="outline-text-2" id="text-org7e43753">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge2a62f8">
+<h3 id="orge2a62f8">Introduction</h3>
+<div class="outline-text-3" id="text-orge2a62f8">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgfd0639c">
+<h4 id="orgfd0639c">General terminology</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">An <span style="color: rgb(24,116,205)">annuitiy</span> is a series of payments made at specified intervals (called <span style="color: rgb(24,116,205)">payment period</span>) for a fixed or contingent period.</li>
+<li data-fragment-index="2" class="fragment">If the length of time is fixed (deterministic), then the annuity is called an <span style="color: rgb(24,116,205)">annuitiy-certain</span>.</li>
+<li data-fragment-index="3" class="fragment">If not, then it is called a <span style="color: rgb(24,116,205)">contingent annuity</span>; an import example is the <span style="color: rgb(24,116,205)">life annuity</span>.</li>
+<li data-fragment-index="4" class="fragment">If the length of time is deterministic and infinite, the annuity is called a <span style="color: rgb(24,116,205)">perpetuity</span>.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org74fd51e">
+<h3 id="org74fd51e">Annuities-immediate</h3>
+<div class="outline-text-3" id="text-org74fd51e">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org0dd9a5e">
+<h4 id="org0dd9a5e">Definition</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">If an annuity is such that the payments are made at the <span style="color: rgb(24,116,205)">end</span> of each payment periods, then it is called an <span style="color: rgb(24,116,205)">annuity-immediate</span>.</li>
+<li data-fragment-index="2" class="fragment"><i>Caveat</i>: The terminology may seem counter-intuitive &#x2026;</li>
+<li data-fragment-index="3" class="fragment">If the amount paid at the end of each period is equal to \(1\), we call this annuity the <span style="color: rgb(24,116,205)">basic annuity-immediate</span>.</li>
+<li data-fragment-index="4" class="fragment">In general, if the payments are equal for all the periods of an annuity, we say that the annuity is <span style="color: rgb(24,116,205)">level</span>; otherwise, we say it is <span style="color: rgb(24,116,205)">nonlevel</span>.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org105381b">
+<h4 id="org105381b">Notation: Present value</h4>
+<p class="fragment">
+An \(n \text{-year}\) basic annuity-immediate pays \(1\) at times \(1, 2, 3, \dots, n\).
+</p>
+<p class="fragment">
+Those payments are worth (at time \(0\)):
+</p>
+<div class="fragment">
+\begin{align*}
+ v(1)  + v(2) + v(3) + \cdots + v(n).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+When we have compound interest, then \(v(t) = (1 + i)^{-t} = v^t\), and the present value becomes
+</p>
+<div class="fragment">
+\begin{align*}
+ a_{\overline{n}|i} = v + v^2 + v^3 + \cdots + v^n = \frac{1 - v^n}{i}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6aef7b9">
+<h4 id="org6aef7b9">Notation: Accumulated value</h4>
+<p class="fragment">
+The accumulated value at the time of <b>the last payment</b> of all the payments made by a basic annuity-immediate lasting \(n\) periods is denoted as \(s_{\overline{n}|}\), i.e.,
+</p>
+<div class="fragment">
+\begin{align*}
+ s_{\overline{n}|}  = a(n) a_{\overline{n}|}\qquad \text{or} \qquad a_{\overline{n}|} = v(n) s_{\overline{n}|}.
+\end{align*}
+
+</div>
+<p class="fragment">
+When \(a(n) = (1 + i)^n\),
+</p>
+<div class="fragment">
+\begin{align*}
+ s_{\overline{n}|i}  = (1 + i)^na_{\overline{n}|i} \qquad \text{or} \qquad a_{\overline{n}|i}  = v^n s_{\overline{n}|i}.
+\end{align*}
+
+</div>
+<div class="fragment">
+\begin{align*}
+s_{\overline{n}|i} = (1+i)^{n-1} + (1 + i)^{n-2} + \cdots + 1 = \frac{(1 +i)^n - 1}{i}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5170fe2">
+<h4 id="org5170fe2">Example 3.2.11 - Unknown present value</h4>
+<p>
+Candace wishes to buy a new car. Her budget allows her to make monthly payments of \(500\), and she has saved \(1,800\) for a down payment. Candace qualifies for a 36-month auto loan which has a nominal interest rate of \(4.8\%\) convertible monthly. How expensive a car can Candace buy?
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<b>Solution</b>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">The monthly interest rate is \(\displaystyle\frac{i^{(12)}}{12} = 0.048/12 = 0.004\).</li>
+<li data-fragment-index="2" class="fragment">The present value of payments: \(\displaystyle 500 a_{\overline{36}|0.004} = 500 \left[ \frac{1 - 1.004^{-36}}{0.004} \right] = 16732.94\).</li>
+<li data-fragment-index="3" class="fragment">Total cost of the car: \(16732.94 + 1800=18532.94\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org7bc6e22">
+<h4 id="org7bc6e22">Example 3.2.12 - Unknown contribution</h4>
+<p>
+Seth wishes to borrow \(4,400\) so he can pay his tuition. He qualifies for a two-year loan with a monthly effective interest rate of \(0.25\%\) and level payments. Find the amount of Seth's monthly payments under this loan.
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<b>Solution</b>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">Let \(Q\) be the monthly payment.</li>
+<li data-fragment-index="2" class="fragment">The time \(0\) equation of value: \(\displaystyle 4400 = Q a_{\overline{24}|0.0025}\).</li>
+<li data-fragment-index="3" class="fragment">\(\displaystyle Q = \frac{4400 \cdot 0.0025}{1 - 1.0025^{-24}} = 189.12\)</li>
+<li data-fragment-index="4" class="fragment">However, \(189.12 a_{\overline{24}|0.0025} = 4400.062057114\)</li>
+<li data-fragment-index="5" class="fragment">Therefore, the <b>last</b> payment should be reduced by \(\displaystyle 0.06257114(1.0025)^{24} = 0.065889578 = 0.07\).</li>
+
+</ul>
+
+<p data-fragment-index="6" class="fragment">
+<span style="color: rgb(24,116,205)">Read:</span> Algorithm 3.2.14 and Example 3.2.15.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgfa9393c">
+<h4 id="orgfa9393c">Example 3.2.17 - Unknown number of contributions</h4>
+<p>
+Hyun wishes to contribute \(100\) at the end of each month to his savings account until the account has a balance of at least \(3,000\), at which time he will buy his grandmother's piano. Hyun's savings account has an annual interest rate of \(5.4\%\) convertible monthly. How many months it will take Hyun to accumulate the needed money?
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<b>Solution</b>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">The monthly interest rate is \(0.054/12 = 0.0045\).</li>
+<li data-fragment-index="2" class="fragment">Find the smallest integer \(n\) such that \(100 s_{\overline{n}|0.0045} \ge 3000\).</li>
+<li data-fragment-index="3" class="fragment">Equivalently, \(\displaystyle \frac{1.0045^n - 1}{0.0045} \ge 30\), and thus \(\displaystyle n\ge \frac{\ln 1.135}{\ln 1.0045} = 28.2\).</li>
+<li data-fragment-index="4" class="fragment">Therefore, \(n = 29\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgeae4297">
+<h4 id="orgeae4297">Relationship between the present and future values</h4>
+<div>
+\begin{align*}
+ i + \frac{1}{s_{\overline{n}|i}} = \frac{1}{a_{\overline{n}|i}}.
+\end{align*}
+
+</div>
+<p class="fragment">
+<b>Why</b>?
+</p>
+
+<p class="fragment">
+Mathematically,
+</p>
+<div class="fragment">
+\begin{align*}
+ i + \frac{1}{s_{\overline{n}|i}}
+& = i + \frac{i}{(1 + i)^n - 1} = i \cdot \left[ 1 + \frac{1}{(1 + i)^n - 1} \right]\\
+& = i \cdot \frac{(1 + i)^n}{(1 + i)^n -1} = i\cdot \frac{1}{1 - v^n}= \frac{1}{a_{\overline{n}|i}}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Intuitive interpretation?</span>
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgecad790">
+<h4 id="orgecad790">Loan repayment</h4>
+<p class="fragment">
+Consider a loan of amount \(L\) to be repaid at the end of \(n\) periods, and let \(i\) be the effective interest rate per period.
+</p>
+
+<p class="fragment">
+Then we can setup a repayment schedule as a level annuity-immediate with the level payment
+</p>
+<div class="fragment">
+\begin{align*}
+ Q_1 = \frac{L}{a_{\overline{n}|i}}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org3f742d5">
+<h4 id="org3f742d5">Loan repayment - another way</h4>
+<p>
+This time we repay the loan \(L\) as follows:
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">at the end of each period the interest accrued is repaid</li>
+<li data-fragment-index="2" class="fragment">the entire principal is repaid at the end of \(n\) periods.</li>
+
+</ul>
+
+<p data-fragment-index="3" class="fragment">
+In order to be able to repay the entire principal at the end of \(n\) periods, we should make a level payment of \(L/s_{\overline{n}|i}\) at the end of every period.
+</p>
+
+<p data-fragment-index="4" class="fragment">
+Together with the interest \(L\cdot i\) paid at the end of every period, we totally pay
+</p>
+<div data-fragment-index="5" class="fragment">
+\begin{align*}
+ Q_2 = L \left( i + \frac{1}{s_{\overline{n}|i}} \right).
+\end{align*}
+
+</div>
+
+<p data-fragment-index="6" class="fragment">
+The two payments \(Q_1\) and \(Q_2\) should be equal, we arrive at the desired equality.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgb6ab57c">
+<h3 id="orgb6ab57c">Annuities-due</h3>
+<div class="outline-text-3" id="text-orgb6ab57c">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4fa5cc7">
+<h4 id="org4fa5cc7">Notation: Present value</h4>
+<p class="fragment">
+An \(n \text{-year}\) basic annuity-due pays \(1\) at times \(0, 1, 2, \dots, n-1\).
+Those payments are worth (at time \(0\)):
+</p>
+<div class="fragment">
+\begin{align*}
+ v(0)  + v(1) + v(2) + \cdots + v(n-1).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+When we have compound interest, then \(v(t) = (1 + i)^{-t} = v^t\), and the present value becomes
+</p>
+<div class="fragment">
+\begin{align*}
+ \ddot{a}_{\overline{n}|i} = 1 + v + v^2 + \cdots + v^{n-1} = \frac{1 - v^n}{1 - v} = \frac{1 - v^n}{d}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org925917b">
+<h4 id="org925917b">Notation: Accumulated value</h4>
+<p class="fragment">
+The accumulated value at the time \(n\) of all the payments made by a basic annuity-due lasting \(n\) periods is denoted as \(\ddot{s}_{\overline{n}|}\), i.e.,
+</p>
+<div class="fragment">
+\begin{align*}
+ \ddot{s}_{\overline{n}|}  = a(n) \ddot{a}_{\overline{n}|}\qquad \text{or} \qquad \ddot{a}_{\overline{n}|} = v(n) \ddot{s}_{\overline{n}|}.
+\end{align*}
+
+</div>
+<p class="fragment">
+When \(a(n) = (1 + i)^n\),
+</p>
+<div class="fragment">
+\begin{align*}
+ \ddot{s}_{\overline{n}|i}  = (1 + i)^n \ddot{a}_{\overline{n}|i} \qquad \text{or} \qquad \ddot{a}_{\overline{n}|i}  = v^n \ddot{s}_{\overline{n}|i}.
+\end{align*}
+
+</div>
+<div class="fragment">
+\begin{align*}
+\ddot{s}_{\overline{n}|i} = (1+i)^n + (1 + i)^{n-1} + \cdots + (1+i) = \frac{(1 +i)^n - 1}{d}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org2b73c22">
+<h4 id="org2b73c22">Connection between "due" and "immediate"</h4>
+<p class="fragment">
+The most basic relationship is obtained through discounting
+</p>
+<div class="fragment">
+\begin{align*}
+ \ddot{a}_{\overline{n}|i}  = (1 + i) a_{\overline{n}|i} \qquad \text{and}\qquad
+ \ddot{s}_{\overline{n}|i}  = (1 + i) s_{\overline{n}|i}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+The other basic relationship is obtained by "shifting the time" by one
+</p>
+<div class="fragment">
+\begin{align*}
+  \ddot{a}_{\overline{n}|i}  = 1 + a_{\overline{n-1}|i} \qquad \text{and}\qquad
+ \ddot{s}_{\overline{n}|i} + 1  = s_{\overline{n+1}|i}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6c3b7cc">
+<h4 id="org6c3b7cc">Example 3.3.11</h4>
+<p>
+During 1998, Omar had a dividend payment of \(100\) directly deposited to his savings account on the first day of each month. Find the accumulated value of these payments at the end of the year if his savings account had a nominal discount rate of \(4.8\%\) payable monthly.
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<b>Solution</b>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">The monthly discount rate is \(0.048/12 = 0.004\).</li>
+<li data-fragment-index="2" class="fragment">The equivalent monthly interest rate is \(\displaystyle \frac{0.004}{1 - 0.004} = \frac{4}{996}\).</li>
+<li data-fragment-index="3" class="fragment">The accumulated value at the end of the year is \(\displaystyle 100 \ddot{s}_{\overline{12}|\frac{4}{996}} = 100 \left[ \frac{\left( \frac{1000}{996} \right)^{12} - 1}{0.004} \right] = 1231.79\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org3c89b89">
+<h3 id="org3c89b89">Perpetuities</h3>
+<div class="outline-text-3" id="text-org3c89b89">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb10a09f">
+<h4 id="orgb10a09f">Definitions</h4>
+<p>
+Recall \(\displaystyle  a_{\overline{n}|i} = \frac{1 - v^n}{i}, \quad \ddot{a}_{\overline{n}|i} = \frac{1 - v^n}{d}\).
+</p>
+<p class="fragment">
+As we take the limit as \(n\to\infty\), we
+</p>
+<div class="fragment">
+\begin{align*}
+  a_{\overline{\infty}|i} = \frac{1}{i},
+\end{align*}
+
+</div>
+<p class="fragment">
+called the present value of a <span style="color: rgb(24,116,205)">basic perpetuity-immediate</span>; and
+</p>
+<div class="fragment">
+\begin{align*}
+  \ddot{a}_{\overline{\infty}|i} = \frac{1}{d},
+\end{align*}
+
+</div>
+<p class="fragment">
+called the present value of a <span style="color: rgb(24,116,205)">basic perpetuity-due</span>.
+</p>
+
+<p class="fragment">
+It is quite straightforward that \(a_{\overline{\infty}|} = \ddot{a}_{\overline{\infty}|}-1\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org984c388">
+<h4 id="org984c388">Example 3.4.7</h4>
+<p>
+Norman wishes to leave an inheritance to three charities. The total inheritance is a series of level payments at the beginning of each year forever. He wishes charities \(A\) and \(B\) (which support medical research) to share the payments equally for ten years, and then all payments revert to charity \(C\) (that helps needy children). If the shares received by all three charities have the same value at the time of the bequest, find the annual effective interest rate \(i\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org7a4509d">
+<h4 id="org7a4509d">Example 3.4.7 - Solution</h4>
+<p class="fragment">
+Let \(P\) denote the payment at the beginning of each year.
+</p>
+<p class="fragment">
+Then the charity \(A\) has the value at time \(0\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{P}{2} \ddot{a}_{\overline{10}|i} = \frac{P}{2}\left( \frac{1-v^{10}}{d} \right),
+\end{align*}
+
+</div>
+<p class="fragment">
+and the charity \(C\) has the value at time \(0\): \(\displaystyle   \frac{P}{d} v^{10}\).
+</p>
+<p class="fragment">
+Since all charities have the same value at time \(0\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{P}{2}\left( \frac{1-v^{10}}{d} \right) =
+  \frac{P}{d} v^{10},
+\end{align*}
+
+</div>
+<p class="fragment">
+which give \(v^{10}=1/3\), and thus \(i = v^{-1} -1 = 0.116123174\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgd1fe09d">
+<h3 id="orgd1fe09d">Deferred Annuities Certain</h3>
+<p>
+Self-study, work on Example 3.5.1 - 4.
+</p>
+
+<p>
+In particular, the idea of <i>imaginary payments</i>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org0d124cb">
+<h3 id="org0d124cb">Outstanding Loan Balances and Nonlevel Annuities</h3>
+<p class="fragment">
+A loan of amount L is to be repaid at the end of n time periods by payments at the end of each period. These payments are to be level except for a slightly reduced final payment if need be.
+</p>
+
+<p class="fragment">
+We now consider the important question of how to find the <span style="color: rgb(24,116,205)">loan balanace</span> at an intermediate date between the loan origination date and the date of the final payment.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgb0a14f6">
+<h4 id="orgb0a14f6">Retrospective method</h4>
+<p class="fragment">
+If \(OLB_k\) denotes the loan-balance at the end of \(k\) payment period, just after any time \(k\) payment, and \(Q\) denotes the amount  of each of the first \(k\) payments, then
+</p>
+<div class="fragment">
+\begin{align*}
+  OLB_k = L a(k) - Q s_{\overline{k}|}.
+\end{align*}
+
+</div>
+<p class="fragment">
+In particular, \(a(t) = (1 + i)^t\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  OLB_k = L(1 + i)^k - Q s_{\overline{k}|i}.
+\end{align*}
+
+</div>
+<p class="fragment">
+This method of "look back", i.e., of looking how much one has repaid until time \(k\) when determining the loan-balance is called the <span style="color: rgb(24,116,205)">retrospective method</span>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org13f97e1">
+<h4 id="org13f97e1">An Example</h4>
+<p>
+A loan is being repaid with \(10\) payments of \(2,000\) each followed by \(10\) payments of \(1,000\) each <b>all</b> at the end of each half-year. Assume that the nominal rate of interest convertible semiannually equals \(i^{(2)} = 10\%\).
+</p>
+
+<p class="fragment">
+Find the outstanding loan balance immediately after the fifth payment is made.
+</p>
+
+<p class="fragment">
+<b>Note</b>: This is a <span style="color: rgb(24,116,205)">nonlevel annuity</span> problem, and we discuss more in Sec 3.8 and 3.9.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgb501bac">
+<h4 id="orgb501bac">An Example - Solution</h4>
+<p>
+Recall the formula
+</p>
+<div class="fragment">
+\begin{align*}
+  OLB_k = L(1 + i)^k - Q s_{\overline{k}|i},
+\end{align*}
+
+</div>
+<p class="fragment">
+and let the basic time unit be a half-year.
+</p>
+<p class="fragment">
+Then, we have \(k = 10, Q = 2000, i = 0.05\), but the loan amount \(L\) is to be determined.
+</p>
+<p class="fragment">
+In fact,
+</p>
+<div class="fragment">
+\begin{align*}
+  L & = 2000 a_{\overline{10}|0.05} + 1000 (a_{\overline{20}|0.05}  - a_{\overline{10}|0.05} )\\
+& = 1000(a_{\overline{20}|0.05} + a_{\overline{10}|0.05}) = 20183.945272
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb97baa1">
+<h4 id="orgb97baa1">An Example - Solution (Continued)</h4>
+<p>
+So,
+</p>
+<div class="fragment">
+\begin{align*}
+  OLB_5 = L(1.05)^5 - 2000 s_{\overline{5}|0.05} = 14709.13.
+\end{align*}
+
+</div>
+<p class="fragment">
+<b>Note</b>:
+</p>
+<div class="fragment">
+\begin{align*}
+  a_{\overline{20}|0.05}  - a_{\overline{10}|0.05} = a_{\overline{10}|0.05}v^{10},
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(v = 1/(1 + 0.05)\).
+</p>
+<p class="fragment">
+Again, please read Example 3.5.1, 3.5.2.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgfd0d6ac">
+<h4 id="orgfd0d6ac">Prospective method</h4>
+<p>
+Contrary to the retrospective method, the <span style="color: rgb(24,116,205)">propspective method</span> is based on "looking into the future", i.e., evaluating the value of remaining payments.
+</p>
+
+<p class="fragment">
+If \(a(t) = (1 +i)^t\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+ OLB_k = Q a_{\overline{n-k-1}|i} + R (1 + i)^{-(n-k)},
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(Q\) denotes the level amount of all but the last payment and \(R\) the amount in the last payment.
+</p>
+
+<p class="fragment">
+If \(Q = R\), then the equation is reduced to
+</p>
+<div class="fragment">
+\begin{align*}
+  OLB_k = Q a_{\overline{n-k}|i}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgd1dcf8b">
+<h4 id="orgd1dcf8b">An Example</h4>
+<p>
+A loan is being repaid with \(20\) annual payments of \(1000\) each. At the time of the fifth payment, the borrow wishes to repay an extra \(2,000\) and then repay the balance using level annual payments over the next 12 years.
+</p>
+
+<p class="fragment">
+Note that due to the extra \(2000\) repaid at time \(5\), the level payments that are supposed to be made over those \(12\) years need to be <b>revised</b>. Assume that the effective rate of interest is \(9\%\).
+</p>
+
+<p class="fragment">
+Find the amount of the revised annual payment.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org73f8c97">
+<h4 id="org73f8c97">An Example - Solution</h4>
+<p>
+Using the prospective method, the balance of the loan after the first \(5\) years is
+</p>
+<div class="fragment">
+\begin{align*}
+  OLB_5 = 1000 a_{\overline{15}|0.09} = 8060.69.
+\end{align*}
+
+</div>
+<p class="fragment">
+Thus, after the extra \(2,000\) are repaid, the outstanding loan balance becomes \(6,060.69\).
+</p>
+<p class="fragment">
+Denote \(X\) by the revised level payment amount, then
+</p>
+<div class="fragment">
+\begin{align*}
+  X a_{\overline{12}|0.09} = 6060.69 \Longrightarrow X = \frac{6060.69}{a_{\overline{12}|0.09}} = 846.38.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgd59ee5b">
+<h4 id="orgd59ee5b">Which method should we use?</h4>
+<p data-fragment-index="0" class="fragment">
+The answer depends on the context:
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">If the payments before time \(k\) are level, while the last payment is irregular, then it is better to use the retrospective method.</li>
+<li data-fragment-index="2" class="fragment">If you not know the total number of payments \(n\), again, you use the retrospective method.</li>
+<li data-fragment-index="3" class="fragment">If the last payment is also level and you know \(n\), use the prospective method.</li>
+
+</ul>
+
+<p data-fragment-index="4" class="fragment">
+<span style="color: rgb(24,116,205)">Read:</span> Example 3.6.5-7, and 3.6.9-10.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5777d31">
+<h4 id="org5777d31">Amount of principal paid</h4>
+<p>
+The <span style="color: rgb(24,116,205)">amount of principal paid</span> in any time period \([m, n]\) is
+</p>
+<div class="fragment">
+\begin{align*}
+  OLB_{m} - OLB_n.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+The <span style="color: rgb(24,116,205)">amount of interest paid</span> in any time period \([m, n]\) is obtained by subtracting the amount of principal paid from the total amount paid during the period \([m, n]\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org2f4c5ee">
+<h4 id="org2f4c5ee">An Example</h4>
+<p>
+A loan is to be repaid by annual payments \(P\) at the end of each year for \(10\) years. You are given the following:
+</p>
+<p class="fragment">
+(1) The amount of principal paid over the first \(3\) years is \(290.35\).
+</p>
+<p class="fragment">
+(2) The amount of principal paid over the last \(3\) years is \(408.55\).
+</p>
+
+<p class="fragment">
+Find the total amount of interest paid during the loan term.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org29a2b04">
+<h4 id="org29a2b04">An Example - Solution</h4>
+<p>
+Let \(L\) denote the loan amount, and let \(I\) denote the total amount of interest paid. Then,
+</p>
+<div class="fragment">
+\begin{align*}
+  I = 10 P - L.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+The amount of principal paid over the first \(3\) years is
+</p>
+<div class="fragment">
+\begin{align*}
+  OLB_0 - OLB_3
+& = P(v + v^2 + \cdots v^{10}) - P(v + v^2 + \cdots + v^7)\\
+& = P(v^8 + v^9 + v^{10}) = 290.35.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+The amount of principal paid over the last \(3\) years is
+</p>
+<div class="fragment">
+\begin{align*}
+  OLB_7 - OLB_{10}
+ = P(v + v^2 + v^3) - 0 = P(v + v^2 + v^3) = 408.55.
+\end{align*}
+
+</div>
+<p class="fragment">
+Dividing the above two equation, we have  \(\displaystyle v^7 = \frac{290.35}{408.55} \Rightarrow i = 0.05\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org6833b1e">
+<h4 id="org6833b1e">An Example - Solution (Continued)</h4>
+<p>
+Now let's find \(P\) and \(L\).
+</p>
+
+<p class="fragment">
+Using the condition (2) again, we get
+</p>
+<div class="fragment">
+\begin{align*}
+  P = \frac{408.55}{v+ v^2 + v^3} = \frac{408.55}{2.7234} = 150.02.
+\end{align*}
+
+</div>
+<p class="fragment">
+Hence,
+</p>
+<div class="fragment">
+\begin{align*}
+  L = P a_{\overline{10}|0.05} = 1158.44.
+\end{align*}
+
+</div>
+<p class="fragment">
+Finally, the amount of interest paid is
+</p>
+<div class="fragment">
+\begin{align*}
+  10 \cdot 150.02 - 1158.44 = 341.66.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org57b1835">
+<h3 id="org57b1835">Annuities with Payments in Geometric Progression</h3>
+<div class="outline-text-3" id="text-org57b1835">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org01502c7">
+<h4 id="org01502c7">An Example</h4>
+<p>
+Assume that an annuity-immediate provides \(20\) annual payments: the first payment being \(1,000\). The payments increase in such a way that each payment is \(4\%\) greater than the preceding payment.
+</p>
+
+<p class="fragment">
+Find the present value of this annuity at an annual effective rate of interest of \(7\%\).
+</p>
+
+<p class="fragment">
+<b>Answer</b>
+</p>
+<div class="fragment">
+\begin{align*}
+  1000 \cdot \frac{1 - \left( \frac{1 + 0.04}{1 + 0.07} \right)^{20}}{0.07 - 0.04} = 14459.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<b>How</b>?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1f4426b">
+<h4 id="org1f4426b">Geometrically Increasing Annuities</h4>
+<p>
+Let \(n\) denote the number of periods.
+For simplicity, assume that the first payment is equal to \(1\), and let all subsequent payments increase in <span style="color: rgb(24,116,205)">geometric progression</span> with the common ratio equal to \(1 + g\).
+</p>
+<p class="fragment">
+Then, the present value of this non-level annuity equals
+</p>
+<div class="fragment">
+\begin{align*}
+  PV & = v + v^2(1 + g) + v^3(1 + g)^2 + \cdots + v^n(1 + g)^{n-1}\\
+& = \frac{v [1 - (v(1 + g))^n]}{1 - v(1 + g)}\\
+& = \frac{1 - \left( \frac{1 + g}{1 + i} \right)^n}{i - g}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgcfc7e94">
+<h4 id="orgcfc7e94">A Simplifying Formula</h4>
+<p class="fragment">
+Let us revisit the formula previously,
+</p>
+<div class="fragment">
+\begin{align*}
+  PV = \frac{1 - \left( \frac{1 + g}{1 + i} \right)^n}{i - g}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Define \(j = (i - g)/(1 + g)\). Then, we can express the above present value as
+</p>
+<div class="fragment">
+\begin{align*}
+  PV = (1 + i)^{-1} \cdot \ddot{a}_{\overline{n}|j} = \frac{1 + j}{1 + i}a_{\overline{n}|j}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+In particular, if \(i = g\), i.e., the increase in the payment exactly offsets the interest rate, then the present value becomes
+</p>
+<div class="fragment">
+\begin{align*}
+ \frac{n}{1 + i}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5fcd7bc">
+<h4 id="org5fcd7bc">Example - \(i > g\)</h4>
+<p data-fragment-index="0" class="fragment">
+You purchase an annuity-immediate with 25 annual payments. The first payment is \(800\) and the payments increase by \(3\%\) each year. Using an annual interest rate of \(7\%\), calculate the present value of this annuity.
+</p>
+
+<p data-fragment-index="1" class="fragment">
+<b>Solution</b>
+</p>
+<ul>
+<li data-fragment-index="2" class="fragment">\(n = 25, i = 0.07, g = 0.03\)</li>
+<li data-fragment-index="3" class="fragment">\(j = (i - g)/(1 + g) = 0.038834951\)</li>
+<li data-fragment-index="4" class="fragment">The present value is \(\displaystyle 800 \cdot \frac{1.038834951}{1.07} a_{\overline{25}|0.038834951} = 12,284.46\).</li>
+
+</ul>
+<p data-fragment-index="5" class="fragment">
+<span style="color: rgb(255,0,0)">Warning:</span> Keep as many decimals as possible for \(j\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org3daf8c5">
+<h4 id="org3daf8c5">Example - \(i < g\)</h4>
+<p data-fragment-index="0" class="fragment">
+You purchase an annuity-immediate with 25 annual payments. The first payment is \(800\) and the payments increase by \(3\%\) each year. Using an annual interest rate of \(1\%\), calculate the present value of this annuity.
+</p>
+
+<p data-fragment-index="1" class="fragment">
+<b>Solution</b>
+</p>
+<ul>
+<li data-fragment-index="2" class="fragment">\(n = 25, i = 0.01, g = 0.03\)</li>
+<li data-fragment-index="3" class="fragment">\(j = (i - g)/(1 + g) = -0.0194174757\)</li>
+<li data-fragment-index="4" class="fragment">The present value is \(\displaystyle 800 \cdot \frac{0.9805825243}{1.01} a_{\overline{25}|-0.0194174757} = 25406.48\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org048d1e0">
+<h4 id="org048d1e0">Example - \(i = g\)</h4>
+<p class="fragment">
+You purchase an annuity-immediate with 25 annual payments. The first payment is \(800\) and the payments increase by \(3\%\) each year. Using an annual interest rate of \(3\%\), calculate the present value of this annuity.
+</p>
+
+<p class="fragment">
+<b>Solution</b>
+</p>
+<p class="fragment">
+If \(g = i\), in general we have
+</p>
+<div class="fragment">
+  \begin{align*}
+  &  v + v^2(1 + g) + v^3(1 + g)^2 + \cdots + v^n(1 + g)^{n-1}\\
+ =\, & v + v + \cdots v = n v = \frac{n}{1 + i}.
+\end{align*}
+
+</div>
+<p class="fragment">
+So in this example, the present value is
+</p>
+<div class="fragment">
+\begin{align*}
+ 800 \cdot \frac{25}{1.03} = 19,417.48.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org33b1c38">
+<h4 id="org33b1c38">Geometrically Increasing Perpetuities</h4>
+<p class="fragment">
+The present value of a perpetuity which pays \(P\) at time 1 and \(P(1 + g)^{k-1}\) at time \(k \ge 1\) is:
+</p>
+<div class="fragment">
+\begin{align*}
+ \lim_{n\to \infty} \frac{P \left[ 1 - \left( \frac{1 + g}{1 + i} \right)^n \right]}{i - g} = \frac{P}{i - g}, \quad \text{for } i > g.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+If \(g \ge i\), the present value is <b>infinite</b> because the future payments will be worth at least as much as the earlier payments.
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Read:</span>
+Example 3.8.3
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgee32799">
+<h3 id="orgee32799">Annuities with Payments in Arithmetic Progression</h3>
+<div class="outline-text-3" id="text-orgee32799">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga8661c5">
+<h4 id="orga8661c5">Notations</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">\(n\): the number of time periods for the annuity-immediate.</li>
+<li data-fragment-index="2" class="fragment">\(P\): the value of the <b>first</b> payment.</li>
+<li data-fragment-index="3" class="fragment">\(Q\): the amount by which the payment per period <b>increases</b>.</li>
+<li data-fragment-index="4" class="fragment">The payment at the end of the \(j^{\text{th}}\) period: \(P+Q(j-1)\).</li>
+<li data-fragment-index="5" class="fragment">\((I_{P,Q} a)_{\overline{n}|i}\): the present value of the annuity described above.</li>
+<li data-fragment-index="6" class="fragment">\((I_{P,Q} s)_{\overline{n}|i}\): the accumulated value at the time of the last payment of the annuity described above.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org61915d5">
+<h4 id="org61915d5">Formulas for Accumulated and Present Values</h4>
+<p>
+Consider an annuity lasting \(n\) periods with a payment of \(P + Q(j-1)\) at the end of the \(j^{\text{th}}\) period, then
+</p>
+<div class="fragment">
+\begin{align*}
+  (I_{P,Q} s)_{\overline{n}|i} = P s_{\overline{n}|i} + \frac{Q}{i}(s_{\overline{n}|i} - n).
+\end{align*}
+
+</div>
+<p class="fragment">
+Multiplying by \(v^n\),
+</p>
+<div class="fragment">
+\begin{align*}
+  (I_{P,Q} a)_{\overline{n}|i} = P a_{\overline{n}|i} + \frac{Q}{i}(a_{\overline{n}|i} - n v^n).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<b>How</b>? Read page 158-160.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1237cd5">
+<h4 id="org1237cd5">Special Cases</h4>
+<p class="fragment">
+When \(P = Q = 1\), i.e, the sequence of payments is \(1, 2, \dots, n\), we can simply drop the \(P\) and \(Q\),
+</p>
+<div class="fragment">
+\begin{align*}
+ (Is)_{\overline{n}|i}  = \frac{s_{\overline{n+1}|i} - (n+1)}{i} = \frac{\ddot{s}_{\overline{n}|i} - n}{i}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Again multiplying by \(v^n\), \(\displaystyle (Ia)_{\overline{n}|i}  = \frac{\ddot{a}_{\overline{n}|i} - n v^n}{i}\).
+</p>
+<p class="fragment">
+When \(P = n\) and \(Q = -1\), i.e., the sequence of payments is \(n, n-1, \dots, 1\), we modify the notation to stress that the annuity is <b>decreasing</b> and we have
+</p>
+<div class="fragment">
+\begin{align*}
+ (Ds)_{\overline{n}|i}  = \frac{n(1+i)^n - s_{\overline{n}|i}}{i}\quad \text{and} \quad (Da)_{\overline{n}|i}  = \frac{n - a_{\overline{n}|i}}{i}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgd9622d3">
+<h4 id="orgd9622d3">Example 3.9.8</h4>
+<p>
+Susan receives an annuity for her eighteenth birthday. The annuity pays \(2,000\) on her nineteenth birthday and then has an annual payment on each of her birthdays through her thirty-fifth birthday. Each year the payments increase by \(500\). Find the value of the annuity on Susan's eighteenth birthday, assuming the annual effective rate of interest is \(4.2\%\).
+</p>
+
+<p class="fragment">
+<b>Solution</b>
+</p>
+<p class="fragment">
+The desired value is
+</p>
+<div class="fragment">
+\begin{align*}
+ (I_{2000, 500} a)_{\overline{17}|0.042}
+& = 2000 a_{\overline{17}|0.042} + \frac{500}{0.042} (a_{\overline{17}|0.042} - 17(1.042)^{-17}) \\
+& = 23958.24444 + 42050.1836 = 66008.43.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Read:</span>
+Example 3.9.9
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org19fc4d2">
+<h4 id="org19fc4d2">Arithmetically Increasing Annuities-due</h4>
+<p>
+Related formulas are available for annuities-due, most of which simply  replace \(i\) with \(d\):
+</p>
+<div class="fragment">
+\begin{align*}
+(I_{P,Q} \ddot{s})_{\overline{n}|i} & = P \ddot{s}_{\overline{n}|i} + \frac{Q}{d}(s_{\overline{n}|i} - n)\\
+(I_{P,Q} \ddot{a})_{\overline{n}|i} & = P \ddot{a}_{\overline{n}|i} + \frac{Q}{d}(a_{\overline{n}|i} - n v^n)\\
+(I\ddot{s})_{\overline{n}|i}  &= \frac{s_{\overline{n+1}|i} - (n+1)}{d} = \frac{\ddot{s}_{\overline{n}|i} - n}{d}\\
+(D\ddot{a})_{\overline{n}|i}  &= \frac{n - a_{\overline{n}|i}}{d}
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgad65586">
+<h4 id="orgad65586">Arithmetically Increasing Perpetuities</h4>
+<p class="fragment">
+Taking the limit of \((I_{P, Q}a)_{\overline{n}|i}\) as \(n\to \infty\), we find
+</p>
+<div class="fragment">
+\begin{align*}
+ (I_{P,Q}a)_{\overline{\infty}|i} = \frac{P}{i} + \frac{Q}{i^2},
+\end{align*}
+
+</div>
+<p class="fragment">
+and
+</p>
+<div class="fragment">
+\begin{align*}
+ (I_{P,Q}\ddot{a})_{\overline{\infty}|i} = \frac{P}{d} + \frac{Q}{i d}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org13d72c5">
+<h4 id="org13d72c5">Example 3.9.18</h4>
+<p>
+Rafael purchases a perpetuity-immediate. The perpetuity pays \(1,000\) at the end of each of the first eleven years and then has payments that increase by \(180\) each year. So, the payment at time 11 is \(1,000\), and the payment at time 12 is \(1,180\). The purchase price was determined using a \(5\%\) annual effective interest rate. Find Rafael's purchase price.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org851ad3b">
+<h4 id="org851ad3b">Example 3.9.18 - Solution</h4>
+<p class="fragment">
+This perpetuity consists of:
+</p>
+
+<p class="fragment">
+(1) A level annuity-immediate paying \(1,000\) for ten years. Its present value (at the time of purchase) is \(1000 a_{\overline{10}|0.05} = 7721.73\).
+</p>
+
+<p class="fragment">
+(2) A deferred arithmetically increasing perpetuity-immediate. Its present value is
+</p>
+<div class="fragment">
+\begin{align*}
+    (1.05)^{-10}  (I_{1000, 180}a)_{\overline{\infty}|0.05}
+& = (1.05)^{-10} \left( \frac{1000}{0.05} + \frac{180}{(0.05)^2} \right)\\
+& = (1.05)^{-10} (20000+72000)\\
+& = 56480.02.
+\end{align*}
+
+</div>
+<p class="fragment">
+So, the purchase price is \(7721.73+56480.02=64201.75\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org60380a9">
+<h3 id="org60380a9">Annuity Symbols for Nonintegral Terms</h3>
+<div class="outline-text-3" id="text-org60380a9">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4084d55">
+<h4 id="org4084d55">Motivation</h4>
+<p>
+Recall that \(\displaystyle a_{\overline{n}|i} = \frac{1 - v^n}{i}\).
+</p>
+<p class="fragment">
+In fact, we can define  \(\displaystyle a_{\overline{r}|i}  = \frac{1 - v^r}{i}\quad \text{for } \forall r \in \mathbb{R}\).
+</p>
+<p class="fragment">
+But how does this arise?
+</p>
+
+<p class="fragment">
+Suppose we have the following equation
+</p>
+<div class="fragment">
+\begin{align*}
+ L = Q a_{\overline{r}|i} = Q \left( \frac{1 - v^r}{i} \right).
+\end{align*}
+
+</div>
+<p class="fragment">
+We can solve it for \(r\) and obtain
+</p>
+<div class="fragment">
+\begin{align*}
+ r = \frac{\ln \left( 1 - \frac{iL}{Q} \right)}{\ln v} = - \frac{\ln \left( 1 - \frac{iL}{Q} \right)}{\ln (1 + i)}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgfe1eeda">
+<h4 id="orgfe1eeda">Motivation - Continued</h4>
+<p>
+However, the solution \(r\) might NOT be an integer. So, how can we make the payments schedule?
+</p>
+
+<p class="fragment">
+Let \(r = n + f\), where \(n\) is an integer and \(0\le f<1\), so we rewrite
+</p>
+<div class="fragment">
+\begin{align*}
+ L = Q a_{\overline{r}|i} & = Q \left( \frac{1 - v^r}{i} \right) = Q \left( \frac{1 - v^n + v^n - v^r}{i} \right)\\
+& = Q \left( \frac{1 - v^n}{i} \right)  + Q \left( \frac{v^n - v^r}{i} \right)\\
+& = Q a_{\overline{n}|i} + Q v^r \left( \frac{(1 + i)^f - 1}{i} \right).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org630b264">
+<h4 id="org630b264">Drop Payment</h4>
+<p>
+Recall \(\displaystyle L = Q a_{\overline{n}|i} + Q v^r \left( \frac{(1 + i)^f - 1}{i} \right)\).
+</p>
+
+<p class="fragment">
+We can schedule total of \(n+1\) payments as follows: make \(n\) payments of \(Q\) at times \(1, 2, \dots, n\), and make a final payment of
+</p>
+<div class="fragment">
+\begin{align*}
+Q v^r \left( \frac{(1 + i)^f - 1}{i} \right) a(n+1) =  Q \left( \frac{(1 + i)^f - 1}{i} \right)(1 + i)^{1 - f}
+\end{align*}
+
+</div>
+<p class="fragment">
+at time \(n+1\).
+</p>
+
+<p class="fragment">
+This \((n+1)\text{-st}\) payment is called a <span style="color: rgb(24,116,205)">drop payment</span>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org891452f">
+<h4 id="org891452f">Balloon Payment</h4>
+<p>
+Recall \(\displaystyle L = Q a_{\overline{n}|i} + Q v^r \left( \frac{(1 + i)^f - 1}{i} \right)\).
+</p>
+
+<p class="fragment">
+We can also schedule total of \(n\) payments as follows: make \(n-1\) payments of \(Q\) at times \(1, 2, \dots, n-1\), and make a final payment of
+</p>
+<div class="fragment">
+\begin{align*}
+Q + Q \left( \frac{(1 + i)^f - 1}{i} \right) v^f
+\end{align*}
+
+</div>
+<p class="fragment">
+at time \(n\).
+</p>
+
+<p class="fragment">
+This one-time <b>larger</b> payment is called a <span style="color: rgb(24,116,205)">balloon payment</span>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org32f25a7">
+<h4 id="org32f25a7">Example 3.11.5</h4>
+<div style="font-size: 90%;">
+<p>
+Jamaar borrows \(9,600\) from Friendly Financing in order to purchase a car. The account representative who handles Jamaar's loan application determines that Jamaar can afford monthly payments of \(345\). Moreover, the nominal interest rate convertible monthly on Jamaar's loan will be \(5.4\%\).
+</p>
+
+<p class="fragment">
+(a) If the Friendly account representative arranges the loan so that there are \(N\) end-of-month payments of \(345\), followed by a drop payment, find \(N\) and the amount of the drop payment?
+</p>
+
+<p class="fragment">
+(b) If the loan is structured so that it has \((N - 1)\) level monthly payments of \(345\), followed by a balloon payment, find the amount of the balloon payment. Here, \(N\) is as in part (a).
+</p>
+
+<p class="fragment">
+(c) If the loan has twenty-three level payments of \(345\), followed by a larger final payment at the end of the 24th month, find the amount of the final payment. This final payment is also called a balloon payment.
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7179818">
+<h4 id="org7179818">Example 3.11.5 - (a)</h4>
+<p>
+(a) If the Friendly account representative arranges the loan so that there are \(N\) end-of-month payments of \(345\), followed by a drop payment, find \(N\) and the amount of the drop payment?
+</p>
+
+<p class="fragment">
+(a) With \(L = 9600, Q = 345\) and the monthly interest rate \(i = 0.054/12=0.0045\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+ r = -  \frac{\ln \left( 1 - \frac{0.0045\cdot 9600}{345} \right)}{\ln (1 + 0.0045)} = 29.79570004.
+\end{align*}
+
+</div>
+<p class="fragment">
+Therefore, there \(N= 29\) level payments of \(345\) followed by the drop payment \(X\) satisfying the equation:
+</p>
+<div class="fragment">
+\begin{align*}
+   9600 = 345 a_{\overline{29}|0.0045} + X(1.0045)^{-30},
+\end{align*}
+
+</div>
+<p class="fragment">
+which gives us \(X = 274.64\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org57f821e">
+<h4 id="org57f821e">Example 3.11.5 - (b)</h4>
+<p>
+(b) If the loan is structured so that it has \((N - 1)\) level monthly payments of \(345\), followed by a balloon payment, find the amount of the balloon payment. Here, \(N\) is as in part (a).
+</p>
+
+<p class="fragment">
+Let \(Y\) be the amount of the balloon payment, then
+</p>
+<div class="fragment">
+\begin{align*}
+ 9600 = 345 a_{\overline{28}|0.0045} + Y(1.0045)^{-29},
+\end{align*}
+
+</div>
+<p class="fragment">
+which gives \(Y = 618.41\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org6e4d073">
+<h4 id="org6e4d073">Example 3.11.5 - (c)</h4>
+<p>
+(c) If the loan has twenty-three level payments of \(345\), followed by a larger final payment at the end of the 24th month, find the amount of the final payment. This final payment is also called a balloon payment.
+</p>
+
+<p class="fragment">
+Let \(Z\) be the last payment, then
+</p>
+<div class="fragment">
+\begin{align*}
+    9600 = 345 a_{\overline{23}|0.0045} + Z (1.0045)^{-24},
+\end{align*}
+
+</div>
+<p class="fragment">
+which gives \(Z = 2314.30\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org3fc21b6">
+<h4 id="org3fc21b6">Remark</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">To compute \(r\), use the equation \(\displaystyle L = Q a_{\overline{r}|i} = Q \left( \frac{1 - v^r}{i} \right)\).</li>
+<li data-fragment-index="2" class="fragment">Let \(n\) be the integer part of \(r\).</li>
+<li data-fragment-index="3" class="fragment">If the last payment \(X\) is a drop (smaller) payment, i.e., we have \(n\) level payment of \(Q\), and then \(L = Q a_{\overline{n}|i} + X (1 + i)^{-(n+1)}\).</li>
+<li data-fragment-index="4" class="fragment">If the last payment \(Y\) is a balloon (larger) payment, i.e., we have \(n-1\) level payment of \(Q\), and then \(L = Q a_{\overline{n-1}|i} + Y (1 + i)^{-n}\).</li>
+<li data-fragment-index="5" class="fragment">We can also use <i>retrospective</i> method to compute \(X\) or \(Y\); Read the solution of Example 3.11.5.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org53fc94b">
+<h3 id="org53fc94b">Continuously Paying Annuities</h3>
+<div class="outline-text-3" id="text-org53fc94b">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge56efd9">
+<h4 id="orge56efd9">Level and Continuous</h4>
+<p>
+Assume that we have compound interest with the effective interest rate per interest period equal to \(i\), and the equivalent constant force of interest is \(\delta\).
+</p>
+
+<p data-fragment-index="0" class="fragment">
+Consider the following continuous annuity:
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">The annuity lasts for \(n\) interest periods.</li>
+<li data-fragment-index="2" class="fragment">The payments take place continuously, at a rate of \(1\) per interest period.</li>
+<li data-fragment-index="3" class="fragment">The present value of such annuity is \(\displaystyle \bar{a}_{\overline{n}|i} = \frac{1 - e^{-\delta n}}{\delta}\).</li>
+<li data-fragment-index="4" class="fragment">The accumulated value of such annuity is \(\displaystyle \bar{s}_{\overline{n}|i} = \frac{e^{\delta n} - 1}{\delta}\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org5eabac1">
+<h4 id="org5eabac1">An Example</h4>
+<p>
+Find the constant force of interest \(\delta\) at which \(\displaystyle \bar{s}_{\overline{20}|} = 3 \cdot \bar{s}_{\overline{10}|}\).
+</p>
+
+<p class="fragment">
+<b>Solution</b>
+</p>
+<p class="fragment">
+Recall that \(\displaystyle \bar{s}_{\overline{n}|i} = \frac{e^{\delta n} - 1}{\delta}\).
+</p>
+<p class="fragment">
+We have
+</p>
+<div class="fragment">
+\begin{align*}
+ \frac{e^{20\delta}-1}{\delta} = 3 \cdot \frac{e^{10\delta}-1}{\delta},
+\end{align*}
+
+</div>
+<p class="fragment">
+or equivalent, \(\displaystyle e^{20\delta} - 3 e^{10\delta} + 2 = 0\).
+</p>
+<p class="fragment">
+Solving the equation for \(\delta\), we obtain \(\delta= \ln(2)/10 = 0.0693\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org3eff141">
+<h4 id="org3eff141">Continuous and Increasing</h4>
+<p>
+Consider the following continuous annuity:
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">The annuity lasts for \(n\) interest periods.</li>
+<li data-fragment-index="2" class="fragment">The payments take place continuously, at a rate of \(t\) per interest period at time \(t\).</li>
+<li data-fragment-index="3" class="fragment">The present value of such an annuity is \(\displaystyle (\bar{I} \bar{a})_{\overline{n}|i}  = \frac{\bar{a}_{\overline{n}|i}-n v^n}{\delta}\).</li>
+<li data-fragment-index="4" class="fragment">The accumulated value of such an annuity is \(\displaystyle (\bar{I}\bar{s})_{\overline{n}|i} = \frac{\bar{s}_{\overline{n}|i}-n}{\delta}\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgab2f692">
+<h4 id="orgab2f692">Level and Continuous - Revisit</h4>
+<p>
+Let \(v(t)\) denote the general discount function.
+</p>
+<p class="fragment">
+Let us consider the basic continuous annuity, i.e., the annuity that pays at the unit rate at all times.
+</p>
+<p class="fragment">
+Then, the present value of such an annuity with length \(n\) equals
+</p>
+<div class="fragment">
+\begin{align*}
+  \int_0^n v(t) \,dt.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+We still denote this value by \(\bar{a}_{\overline{n}|}\).
+</p>
+
+<p class="fragment">
+In the special case of compound interest, the above formula collapses to the one already familiar to us from the compound interest set-up. You can verify this through simple integration&#x2026;
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org37aa703">
+<h4 id="org37aa703">General Set-up</h4>
+<p>
+Let \(f(t)\) be a continuous function which represents the rate of payments of a continuous annuity on the time interval \([0,n]\).
+</p>
+
+<p class="fragment">
+Then, the present value of this annuity can be obtained as
+</p>
+<div class="fragment">
+\begin{align*}
+  \int_0^n f(t) \cdot v(t)\, dt.
+\end{align*}
+
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/markdown/markdown.js"></script>
+<script src="../plugin/notes/notes.js"></script>
+<script src="../plugin/search/search.js"></script>
+<script src="../plugin/zoom/zoom.js"></script>
+<script src="../plugin/reveal.js-menu/menu.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: false,
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'none',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom, RevealMenu, RevealChalkboard ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+,chalkboard: {storage: "chalkboard-demo", toggleChalkboardButton: { left: "80px" },	toggleNotesButton: { left: "130px" },	colorButtons: 5}});
+</script>
+</body>
+</html>

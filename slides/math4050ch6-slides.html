@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>MATH 4050 - Mathematical Finance and Interest Theory</title>
+<meta name="author" content="\\
+Jie Zhong \\
+Department of Mathematics \\
+California State University, Los Angeles"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+
+<link rel="stylesheet" href="../dist/theme/serif.css" id="theme"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+
+<link rel="stylesheet" href="../gnohz.css"/>
+<script>window.MathJax = { TeX: {Macros: {range: "\\text{Range}", ow: "\\text{otherwise}"}} }</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1>MATH 4050 - Mathematical Finance and Interest Theory</h1><h2></h2><h6> <br />
+Jie Zhong <br />
+Department of Mathematics <br />
+California State University, Los Angeles</h6>
+</section>
+<section>
+<section id="slide-org0bde001">
+<h2 id="org0bde001">Chapter 6 Bonds</h2>
+<div class="outline-text-2" id="text-org0bde001">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org8ff21f7">
+<h3 id="org8ff21f7">Introduction</h3>
+<div class="outline-text-3" id="text-org8ff21f7">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge0d8ffe">
+<h4 id="orge0d8ffe">Terminology</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">A <span style="color: rgb(24,116,205)">bond</span> is a security, issued by a government entity or corporation, that promises certain payments at future dates.</li>
+<li data-fragment-index="2" class="fragment">The time of purchase of the bond is called the <span style="color: rgb(24,116,205)">issue date</span>.</li>
+<li data-fragment-index="3" class="fragment">The life of a bond is <b>finite</b>; there is a <span style="color: rgb(24,116,205)">maturity date</span> (or <span style="color: rgb(24,116,205)">redemption date</span>) when the last payment occurs.</li>
+<li data-fragment-index="4" class="fragment">If the maturity date is fixed, the bond is said to be <span style="color: rgb(24,116,205)">noncallable</span>. But there may be a stipulation that the bond may be <b>called</b> earlier and the redemption amount must be given to the holder of the bond, and such bonds are referred to as <span style="color: rgb(24,116,205)">callable bonds</span>.</li>
+<li data-fragment-index="5" class="fragment">The <span style="color: rgb(24,116,205)">term</span> of the bond is the interval between the issue date and the maturity date (or the length of that interval, depending on the context).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgfa1e6f0">
+<h4 id="orgfa1e6f0">More Vocabulary</h4>
+<ul>
+<li data-fragment-index="1" class="fragment"><span style="color: rgb(24,116,205)">Zero-coupon bonds</span> (or <span style="color: rgb(24,116,205)">pure discount bonds</span>) have only a single payment at the fixed maturity date.</li>
+<li data-fragment-index="2" class="fragment">The bonds that have intermediate payments are called <span style="color: rgb(24,116,205)">coupon bonds</span>.</li>
+<li data-fragment-index="3" class="fragment">The time periods between two consecutive payments that occur before maturity are referred to as <span style="color: rgb(24,116,205)">coupon periods</span>.</li>
+<li data-fragment-index="4" class="fragment">The <span style="color: rgb(24,116,205)">indenture</span> is the legal document (contract) that specifies the terms and conditions of a particular.</li>
+<li data-fragment-index="5" class="fragment"><span style="color: rgb(24,116,205)">Read:</span> Section 6.1</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgffcf71a">
+<h3 id="orgffcf71a">Bond Alphabet Soup and the Basic Price Formula</h3>
+<div class="outline-text-3" id="text-orgffcf71a">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org0d5ff0d">
+<h4 id="org0d5ff0d">What's printed on the bond?</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">Let \(F\) be the <span style="color: rgb(24,116,205)">face</span> (or <span style="color: rgb(24,116,205)">par</span>) <span style="color: rgb(24,116,205)">value</span> of a bond.</li>
+<li data-fragment-index="2" class="fragment">The par value is used to calculate <b>the size of the coupon payments</b>.</li>
+<li data-fragment-index="3" class="fragment">Assume that \(m\) is the number of coupons issued during a year and that \(\alpha\) is the nominal rate convertible \(m\) times per year; then, \(r = \alpha/m\) is the effective rate per coupon period.</li>
+<li data-fragment-index="4" class="fragment">Then, the amount of a coupon payment equals \(\displaystyle Fr = \frac{F \alpha}{m}\).</li>
+<li data-fragment-index="5" class="fragment"><i>Caveat</i>: <b>Both</b> \(\alpha\) and \(r\) can be referred to as <span style="color: rgb(24,116,205)">coupon rates</span>.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org5864256">
+<h4 id="org5864256">Modified Coupon Rate</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">If \(n\) denotes the number of coupon periods in the term of the bond, and the bond is an \(N\text{-year}\) bond, then \(Nm = n\).</li>
+<li data-fragment-index="2" class="fragment">The <span style="color: rgb(24,116,205)">redemption amount</span> is the amount that the bond holder receives at the bond's maturity date, excluding the regular coupon amount, denoted as \(C\).</li>
+<li data-fragment-index="3" class="fragment">If \(F = C\), then the bond is called a <span style="color: rgb(24,116,205)">par-value bond</span> (or <span style="color: rgb(24,116,205)">redeemable at par</span>).</li>
+<li data-fragment-index="4" class="fragment"><i>Convention</i>: If it is not specified otherwise, one should assume that \(F=C\).</li>
+<li data-fragment-index="5" class="fragment">The <span style="color: rgb(24,116,205)">modified coupon rate</span> \(g\) is defined by \(\displaystyle g := \frac{Fr}{C}\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orge8ab823">
+<h4 id="orge8ab823">Investor's Effective Yield Rate</h4>
+<p class="fragment">
+Here we reserve the letter \(i\) for an <b>annual</b> effective yield rate, and use \(j\) for the investor's effective yield rate <b>per coupon period</b>.
+</p>
+
+<p class="fragment">
+We also define the <span style="color: rgb(24,116,205)">discount factor per coupon period</span> as \(\displaystyle v_j = \frac{1}{1 + j}\).
+Let \(\displaystyle G = \frac{Fr}{j}\), and call \(G\) the <span style="color: rgb(24,116,205)">base amount</span>.
+</p>
+
+<p class="fragment">
+Now, the coupon amount equals \(Fr = Cg = Gj\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgaf66e0c">
+<h4 id="orgaf66e0c">Basic Price Formula</h4>
+<p>
+Let \(P\) be the price paid for the bond by the investor if \(j\) is the desired yield rate per period.
+</p>
+
+<p>
+<b>Question</b> How to compute \(P\)?
+</p>
+
+<div data-fragment-index="1" class="fragment">
+\begin{align*}
+  P = (Fr)\cdot a_{\overline{n}|j} + C v_j^n = (Fr)\cdot a_{\overline{n}|j} + K,
+\end{align*}
+
+</div>
+<p data-fragment-index="2" class="fragment">
+where \(K = C v_j^n\) is the value of the redemption amount at the issue date (time 0).
+</p>
+
+<p data-fragment-index="3" class="fragment">
+<span style="color: rgb(24,116,205)">Read:</span>
+</p>
+<ul>
+<li data-fragment-index="4" class="fragment">Table 6.2.4 on page 269, which collects all the notations.</li>
+<li data-fragment-index="5" class="fragment">Do Example 6.2.3, 6.2.5, 6.2.6 and 6.2.7.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgcaa9f7d">
+<h3 id="orgcaa9f7d">The Premium Discount Formula</h3>
+<div class="outline-text-3" id="text-orgcaa9f7d">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org34a1836">
+<h4 id="org34a1836">Formula Derivation</h4>
+<p>
+Recall that
+</p>
+<div>
+\begin{align*}
+  a_{\overline{n}|j} = \frac{1 - v_j^n}{j}, \quad \text{or equivalently,} \quad v_j^n = 1 - j a_{\overline{n}|j},
+\end{align*}
+
+</div>
+<p>
+and also the basic price formula, \(\displaystyle P = (Fr) a_{\overline{n}|j} + C v_j^n\).
+</p>
+
+<p class="fragment">
+Using the fact that \(Fr = Cg\), we have \(\displaystyle P = (Cg)a_{\overline{n}|j} + C(1- j a_{\overline{n}|j})\),
+and thus,
+</p>
+<div class="fragment">
+\begin{align*}
+  P = C(g - j)a_{\overline{n}|j} + C,
+\end{align*}
+
+</div>
+<p class="fragment">
+which is known as the <span style="color: rgb(24,116,205)">premium-discount pricing formula</span> for a bond.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org20ea13a">
+<h4 id="org20ea13a">Sell at a Premium</h4>
+<p class="fragment">
+If \(P > C\), we say that the bond <span style="color: rgb(24,116,205)">sells at a premium</span>.
+</p>
+
+<p class="fragment">
+The value \(P - C\) is called the <span style="color: rgb(24,116,205)">premium</span> or <span style="color: rgb(24,116,205)">amount of premium</span> for the bond, i.e.,
+</p>
+<div class="fragment">
+\begin{align*}
+  P - C = C(g - j) a_{\overline{n}|j}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+It is obvious that a bond sells at a premium if and only if \(g>j\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgbae737f">
+<h4 id="orgbae737f">Sell at a Discount</h4>
+<p class="fragment">
+If \(C > P\), we say that the bond <span style="color: rgb(24,116,205)">sells at a discount</span>.
+</p>
+
+<p class="fragment">
+The value \(C - P\) is called the <span style="color: rgb(24,116,205)">discount</span> or <span style="color: rgb(24,116,205)">amount of discount</span> for the bond, i.e.,
+</p>
+<div class="fragment">
+\begin{align*}
+  C - P = C(j - g) a_{\overline{n}|j}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+It is obvious that a bond sells at a discount if and only if \(j > g\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org7a54583">
+<h4 id="org7a54583">An Example</h4>
+<p>
+Find the price of a \(1,000\) par value \(10\text{-year}\) bond with coupons at \(8.4\%\) convertible semiannually, which will be redeemed at \(1,050\). The bond is bought to yield \(10\%\) convertible semiannually.
+</p>
+
+<p class="fragment">
+First of all, identify the parameters \(F, C, r, g, j, n, K\) and \(G\).
+</p>
+<p class="fragment">
+\(F = 1000, C = 1050\)
+</p>
+<p class="fragment">
+\(r = \frac{0.084}{2} = 0.042,  g = \frac{1000}{1050}\cdot 0.042 = 0.04\)
+</p>
+<p class="fragment">
+\(j = \frac{0.1}{2} = 0.05,  n = 20\)
+</p>
+<p class="fragment">
+\(K = 1050 \cdot 1.05^{-20} = 395.7340\)
+</p>
+<p class="fragment">
+\(G = \frac{0.042}{0.05}\cdot 1000 = 840\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1accffe">
+<h4 id="org1accffe">An Example - Basic Pricing Formula</h4>
+<div class="fragment">
+\begin{align*}
+  P & = F r a_{\overline{n}|} + K\\
+& = 1000\cdot 0.042 \cdot a_{\overline{20}|0.05} + 395.7340\\
+& = 42 \cdot 12.4622 + 395.7340\\
+& = 919.15
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org8848d0e">
+<h4 id="org8848d0e">An Example - Premium-Discount Pricing Formula</h4>
+<div class="fragment">
+\begin{align*}
+  P & = C(g - j)a_{\overline{n}|j} + C\\
+& = 1050(0.04 - 0.05) \cdot a_{\overline{20}|0.05} + 1050\\
+& = -10.5\cdot 12.4622 + 1050\\
+& = 919.15
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org153ffa3">
+<h4 id="org153ffa3">Example 6.3.6</h4>
+<p>
+A \(7.5\text{-year}\) \(14\%\) bond with a face value of \(2,500\) has semiannual coupons and is sold to yield \(7.2\%\) convertible semiannually. The discount on the bond is \(283.12\). Find the price of the bond.
+</p>
+
+<p class="fragment">
+<b>Solution</b>
+</p>
+<p class="fragment">
+Let \(D = 283.12\) be the amount of discount. Then we have
+</p>
+<div class="fragment">
+\begin{align*}
+  P  = F r a_{\overline{n}|j} + C v_j^n, \quad \text{and}\quad  D  = C - P.
+\end{align*}
+
+</div>
+<p class="fragment">
+Use substitution, we obtain \(\displaystyle  P = \frac{F r a_{\overline{n}|j} + D v_j^n}{1 - v_j^n}\).
+</p>
+<p class="fragment">
+Since \(F = 2500, N = 7.5, m = 2, n = Nm = 15, \alpha = 0.14, r = \alpha/m, j = 0.072/2\), and \(v_j = 1/(1 + j)\), we finally have \(P = 5265.69\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5233f41">
+<h3 id="org5233f41">Base Amount and Makeham's Formula</h3>
+<div class="outline-text-3" id="text-org5233f41">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6bd6d25">
+<h4 id="org6bd6d25">Base Amount Formula</h4>
+<p class="fragment">
+Recall that \(\displaystyle a_{\overline{n}|j} = \frac{1 - v^n_j}{j}\), and \(\displaystyle P = Fr \left( \frac{1 - v_j^n}{j} \right) + Cv_j^n\).
+</p>
+<p class="fragment">
+We replace the coupon amount \(F r\) by the alternative expression \(Gj\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  P = G - Gv_j^n + Cv_j^n = (C - G)v_j^n + G
+\end{align*}
+
+</div>
+<p class="fragment">
+which is called the <span style="color: rgb(24,116,205)">base amount formula</span>.
+</p>
+
+<p class="fragment">
+<b>Interpretation</b> of \(G\): since \(\displaystyle G = \frac{Cg}{j}\), we can consider \(G\) as the present value of a perpetuity paying \(Cg\) forever at interest rate \(j\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org4def438">
+<h4 id="org4def438">Example 6.4.6</h4>
+<p>
+An eight-year bond has annual coupons and a redemption value of \(2,338\). It is purchased to yield \(9\%\) and each coupon is for \(63\). Use the base amount formula to calculate the price of the bond.
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<b>Solution</b>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(n = 8, j = 0.09, C = 2338\) and \(Fr = Cg = Gj =63\).</li>
+<li data-fragment-index="2" class="fragment">\(\displaystyle G = \frac{63}{0.09} = 700\).</li>
+<li data-fragment-index="3" class="fragment">\(P = (2338 - 700)(1.09)^{-8} + 700 = 1522.06\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orga9a266a">
+<h4 id="orga9a266a">Makeham's Formula</h4>
+<p>
+Recall again \(\displaystyle P = Fr \left( \frac{1 - v_j^n}{j} \right) + Cv_j^n\).
+</p>
+<p class="fragment">
+If we substitute the product \(Cg\) for \(Fr\) in the equation above, we find
+</p>
+<div class="fragment">
+\begin{align*}
+  P = Cg \left( \frac{1 - v_j^n}{j} \right) + Cv_j^n = \frac{g}{j}C(1 - v_j^n) + Cv_j^n.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Note that \(K = Cv_j^n\), thus we have the <span style="color: rgb(24,116,205)">Makeham's formula</span>:
+</p>
+<div class="fragment">
+\begin{align*}
+  P = \frac{g}{j}(C - K) + K.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+This formula is useful when the present value \(K\) of the redemption amount is known but the number of coupons \(n\) has not be given.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org0b273a0">
+<h4 id="org0b273a0">Example 6.4.5</h4>
+<p>
+A \(2,000\) bond with coupon rate of \(10\%\) payable quarterly is redeemable after an unspecified number of periods for \(2,250\). The bond is bought to yield \(8\%\) convertible quarterly. If the present value of the redemption is \(869.71\), find the purchase price.
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<b>Solution</b> using Makeham's formula
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(F = 2000, m = 4, \alpha=10\%, C = 2250, j = 0.08/4 = 0.02, K = 869.71\).</li>
+<li data-fragment-index="2" class="fragment">What else we need to make use of the Makeham's formula?</li>
+<li data-fragment-index="3" class="fragment">\(g = Fr/C = 2000\cdot (0.1/4) / 2250 = 1/45\).</li>
+<li data-fragment-index="4" class="fragment">\(\displaystyle P = \frac{1/45}{0.02}(2250 - 869.71) + 869.71 = 2403.37\).</li>
+
+</ul>
+
+<p data-fragment-index="5" class="fragment">
+<span style="color: rgb(24,116,205)">Read:</span> The bottom of page 275 for the solution without the Makeham's formula.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org05a3d5b">
+<h3 id="org05a3d5b">Bond Amortization Schedules</h3>
+<div class="outline-text-3" id="text-org05a3d5b">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org306465a">
+<h4 id="org306465a">Bonds as Loans</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">The bonds can be seen as loans that the holder of the bond gives to the issuer of the bond; the coupon payments and the redemption payment are there to repay this loan.</li>
+<li data-fragment-index="2" class="fragment">The coupon period plays the role of the payment period we are familiar with from the context of amortized loans.</li>
+<li data-fragment-index="3" class="fragment">The investor's effective yield rate per coupon period \(j\) stands for the per payment period interest rate \(i\) in the set-up for loan repayment.</li>
+<li data-fragment-index="4" class="fragment">The above analogy justifies the construction of amortization tables for bonds.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org48600ee">
+<h4 id="org48600ee">Notations</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">\(B_t\) denotes the <span style="color: rgb(24,116,205)">balance of debt at time</span> \(t\), immediately <b>after</b> any time \(t\) coupon payment, but <b>before</b> redemption payment, and commonly called the <span style="color: rgb(24,116,205)">book value</span> at time \(t\).</li>
+<li data-fragment-index="2" class="fragment"><i>Caveat</i>: \(B_t\) is calculated using the <b>investor's</b> yield rate \(j\) and does not take into account market forces.</li>
+<li data-fragment-index="3" class="fragment">In particular: \(B_0 = P, B_n = C\).</li>
+<li data-fragment-index="4" class="fragment">The <span style="color: rgb(24,116,205)">interest due</span> at the time of the \(t\text{-th}\) coupon: \(I_t = jB_{t-1}\).</li>
+<li data-fragment-index="5" class="fragment">The <span style="color: rgb(24,116,205)">amount of adjustment of principal</span> in the \(t\text{-th}\) coupon: \(P_t = B_t - B_{t-1}\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org4ff09a8">
+<h4 id="org4ff09a8">How to find \(B_t\)?</h4>
+<p class="fragment">
+From the basic price formula:
+</p>
+<div class="fragment">
+\begin{align*}
+  B_t = F r a_{\overline{n-t}|j} + Cv_j^{n-t}, \quad t = 0, 1, 2,\dots, n.
+\end{align*}
+
+</div>
+<p class="fragment">
+From the premium-discount formula:
+</p>
+<div class="fragment">
+\begin{align*}
+  B_t = C(g - j) a_{\overline{n-t}|j} + C, \quad t = 0, 1, 2,\dots, n.
+\end{align*}
+
+</div>
+<p class="fragment">
+Therefore,
+</p>
+<div class="fragment">
+\begin{align*}
+  I_t &= jB_{t - 1} = Cg - C(g - j)v_j^{n-t+1}\\
+  P_t &= B_{t - 1} - B_t = C(g - j)v_j^{n- t +1}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Hence, \(I_t + P_t = Cg\), i.e., the coupons consist of the payment of interest due and the repayment of principal.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org33b81c9">
+<h4 id="org33b81c9">Premium vs Discount</h4>
+<p>
+<span style="color: rgb(24,116,205)">At a premium:</span>
+</p>
+<p class="fragment">
+If \(g>j\), i.e., a bond sells at a premium, then \(P_t\) is positive for every \(t\). So, \(P_t\) is a portion of the coupon which compensates the investor for the premium initially paid for the bond and the rest goes towards the interest payment on that premium.
+</p>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">At a discount:</span>
+</p>
+<p class="fragment">
+If \(j>g\), i.e., a bond sells at a discount, then \(P_t\) is negative for every \(t\). Thus, not even the interest due on the balance can be covered by the coupon payments meaning that the remainder of the interest due is added onto the outstanding loan balance which increases as time goes by.
+</p>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">\(P=C\):</span>
+\(P_t = 0\) for all \(t\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org6243a18">
+<h4 id="org6243a18">Amount for Amortization of Premium</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">If the bond is sold at a <b>premium</b> (\(g>j\)), we usually refer to \(P_t\) as the <span style="color: rgb(24,116,205)">amount for amortization of premium</span>.</li>
+<li data-fragment-index="2" class="fragment">In this case, the book values \(B_t\) decrease as \(t\) increases (see Figure 6.5.9).</li>
+<li data-fragment-index="3" class="fragment">The process of find the values of \(B_t\) is called <span style="color: rgb(24,116,205)">writing down</span> the bond.</li>
+<li data-fragment-index="4" class="fragment">Also, \(P_t=C(g - j)v_j^{n- t +1}\) form an increasing sequence in \(t\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org8c630cd">
+<h4 id="org8c630cd">Amount for Accumulation of Discount</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">If the bond is sold at a <b>discount</b> (\(j>g\)), we usually refer to \(-P_t\) as the <span style="color: rgb(24,116,205)">amount for amortization of discount</span>.</li>
+<li data-fragment-index="2" class="fragment">In this case, the book values \(B_t\) increase as \(t\) increases (see Figure 6.5.10).</li>
+<li data-fragment-index="3" class="fragment">The process of find the values of \(B_t\) is called <span style="color: rgb(24,116,205)">writing up</span> the bond.</li>
+<li data-fragment-index="4" class="fragment">Also, \(-P_t=C(j - g)v_j^{n- t +1}\) form an increasing sequence in \(t\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org1f19d5a">
+<h4 id="org1f19d5a">Amortization Table for a Bond with Level Coupons</h4>
+
+<div id="orgc46ce07" class="figure">
+<p><img src="../img/math4050/bond-amortization.png" alt="bond-amortization.png" width="75%" class="fragment middle" />
+</p>
+</div>
+
+<p class="fragment">
+Recursion formula: \(B_t = (1 + j)B_{t-1} - Cg\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgb1ee858">
+<h4 id="orgb1ee858">Example</h4>
+<p>
+Find the book value immediately after the payment of the 14th coupon of a 10-year \(1,000\) par value bond with semiannual coupons, if \(r = 0.05\) and the yield rate is \(12\%\) convertible semiannually.
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<b>Solution</b>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment"><b>Have</b>: \(F = C = 1000, N = 10, m = 2, n = 20, r = 0.05, j = 0.12/2 = 0.06\).</li>
+<li data-fragment-index="2" class="fragment"><b>Want</b>: \(B_{14}\)? Which formula to use?</li>
+<li data-fragment-index="3" class="fragment">\(B_{14} = 1000(0.05) a_{\overline{6}|0.06} + 1000(1.06)^{-6} = 950.83\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org6d9a70a">
+<h4 id="org6d9a70a">Example 6.5.14</h4>
+<p>
+A twelve-year bond with semiannual level coupons is bought at a premium to yield \(7.5\%\) convertible semiannually. If the amount for amortization of premium in the fourth to the last payment is \(8.02\), find the total amount for amortization of premium in the first three years.
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<b>Have</b>:
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(N = 12, m = 2\), so \(n = Nm= 24\).</li>
+<li data-fragment-index="2" class="fragment">Also \(j = 0.075/2 = 0.0375\).</li>
+<li data-fragment-index="3" class="fragment">We are given \(P_{21} = 8.02\).</li>
+
+</ul>
+
+<p data-fragment-index="4" class="fragment">
+<b>Want</b>:
+</p>
+<div data-fragment-index="5" class="fragment">
+\begin{align*}
+P_1 + P_2 + P_3 + P_4 + P_5 + P_6.
+\end{align*}
+
+</div>
+
+<p data-fragment-index="6" class="fragment">
+<b>How</b>?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org003ce0d">
+<h4 id="org003ce0d">Example 6.5.14 - Continued</h4>
+<p>
+First of all, note that
+</p>
+<div class="fragment">
+\begin{align*}
+    & P_1 + P_2 + P_3 + P_4 + P_5 + P_6\\
+ = & B_0 - B_1 + B_1 - B_2 + B_2 - B_3 + \cdots + B_5 - B_6\\
+ = & B_0 - B_6.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Thus,
+</p>
+<div class="fragment">
+\begin{align*}
+B_0 - B_6 & = [C(g - j) a_{\overline{24}|j} + C] - [C(g - j) a_{\overline{18}|j} + C]\\
+& = C(g - j)(a_{\overline{24}|0.0375} - a_{\overline{18}|0.0375})
+\end{align*}
+
+</div>
+
+<p class="fragment">
+How can we find \(C(g - j)\)?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org2bf2c46">
+<h4 id="org2bf2c46">Example 6.5.14 - Continued</h4>
+<p>
+Since
+</p>
+<div class="fragment">
+\begin{align*}
+P_{21} = C(g - j)v_j^{24 - 21 + 1} = C(g - j)v_j^4 = 8.02,
+\end{align*}
+
+</div>
+<p class="fragment">
+we have
+</p>
+<div class="fragment">
+\begin{align*}
+ C(g - j) = \frac{8.02}{v_j^4} = 8.02(1 + j)^4 = 8.02(1 + 0.0375)^4.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Finally,
+</p>
+<div class="fragment">
+\begin{align*}
+ B_0 - B_6 & =  C(g - j)(a_{\overline{24}|0.0375} - a_{\overline{18}|0.0375})\\
+& = 8.02(1 + 0.0375)^4 (a_{\overline{24}|0.0375} - a_{\overline{18}|0.0375})\\
+& = 25.32.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7cdd621">
+<h3 id="org7cdd621">Callable Bonds</h3>
+<div class="outline-text-3" id="text-org7cdd621">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge3f2327">
+<h4 id="orge3f2327">Vocabulary</h4>
+<ul>
+<li data-fragment-index="1" class="fragment"><span style="color: rgb(24,116,205)">Callable bonds</span> are issued with a <span style="color: rgb(24,116,205)">call provision</span> that allows the <b>issuer</b> to replay the debt <b>earlier</b>, i.e., before maturity.</li>
+<li data-fragment-index="2" class="fragment">The dates at which the debt can be repaid early are called <span style="color: rgb(24,116,205)">call dates</span> and for each of them, a particular <b>redemption value</b> is specified.</li>
+<li data-fragment-index="3" class="fragment">The initial period before the first call  date is called the <span style="color: rgb(24,116,205)">lockout period</span>.</li>
+<li data-fragment-index="4" class="fragment"><span style="color: rgb(24,116,205)">European option:</span> <b>single</b> call date before maturity.</li>
+<li data-fragment-index="5" class="fragment"><span style="color: rgb(24,116,205)">Bermundan option:</span> <b>multiple</b> (discrete) call dates before maturity.</li>
+<li data-fragment-index="6" class="fragment"><span style="color: rgb(24,116,205)">American option:</span> <b>any</b> dates before maturity.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgbc362dd">
+<h4 id="orgbc362dd">What's the Matter?</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">A callable bond gives the issuer more flexibility.</li>
+<li data-fragment-index="2" class="fragment">From the bond purchaser's perspective, a call provision makes the bond less desirable.</li>
+<li data-fragment-index="3" class="fragment">The call provision creates difficulty in investment planning and increases the likelihood that there will be a redemption when interest rates are relatively low. Call provisions also tend to reduce the appreciation in the price of the bond when there is a decrease in interest rates.</li>
+<li data-fragment-index="4" class="fragment">When viewing a callable bond, a potential buyer should consider yields if the bond is redeemed at any of the potential call dates as well as the maturity date.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org2e06e0b">
+<h4 id="org2e06e0b">Example 6.9.1</h4>
+<p>
+Callable Corporation is offering a \(1,000\) bond with semiannual coupons and a nominal coupon rate of \(8\%\) convertible semiannually. It is a five-year bond with call dates at the end of years 2 and 3. If the redemption value at each of these dates and also at maturity is \(1,060\) and the price is \(1,022\), find the possible yields to the investor and note which is least.
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<b>Have</b>:
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(F = 1000, m = 2, \alpha = 8\%, r = \alpha/m = 4\%\), and \(Fr = 40\).</li>
+<li data-fragment-index="2" class="fragment">The redemption value at the end of year 2, 3 or 5 is \(1060\).</li>
+<li data-fragment-index="3" class="fragment">Also, \(P = 1022\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org920e8e0">
+<h4 id="org920e8e0">Example 6.9.1 - Continued</h4>
+<p>
+Let \(y_4\) be the yield rate (per coupon period) if the bond is called at the end of two years, then the time 0 equation of value is
+</p>
+<div class="fragment">
+\begin{align*}
+  1022 = 40 a_{\overline{4}|y_4} + 1060(1 + y_4)^{-4}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Use the calculator, we have \(y_4 = 4.779395\%\).
+</p>
+
+<p class="fragment">
+Let \(y_6\) be the yield rate (per coupon period) if the bond is called at the end of three years, then the time 0 equation of value is
+</p>
+<div class="fragment">
+\begin{align*}
+  1022 = 40 a_{\overline{6}|y_6} + 1060(1 + y_6)^{-6}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Use the calculator, we have \(y_6 = 4.467901\%\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org0bf00cb">
+<h4 id="org0bf00cb">Example 6.9.1 - Continued</h4>
+<p>
+Let \(j\) be the yield rate (per coupon period) if the bond is called at the maturity, then the time 0 equation of value is
+</p>
+<div class="fragment">
+\begin{align*}
+  1022 = 40 a_{\overline{10}|j} + 1060(1 + j)^{-10}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Use the calculator, we have \(j = 4.220435\%\).
+</p>
+
+<p class="fragment">
+Therefore, we have \(y_4 > y_6 > j\). The yield to the bond holder is smallest if the bond is held to maturity.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgabe1b34">
+<h4 id="orgabe1b34">Example 6.9.1 - Modified</h4>
+<p>
+What if the price of the bond is \(1,150\)?
+</p>
+
+<p data-fragment-index="0" class="fragment">
+In this case:
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(1150 = 40 a_{\overline{4}|y_4} + 1060(1 + y_4)^{-4}\) gives \(y_4 = 1.567135\%\).</li>
+<li data-fragment-index="2" class="fragment">\(1150 = 40 a_{\overline{6}|y_6} + 1060(1 + y_6)^{-6}\) gives \(y_6 = 2.245231\%\).</li>
+<li data-fragment-index="3" class="fragment">\(1150 = 40 a_{\overline{10}|j} + 1060(1 + j)^{-10}\) gives \(j = 2.788924\%\).</li>
+
+</ul>
+
+<p data-fragment-index="4" class="fragment">
+Therefore, we have \(y_4 < y_6 < j\). The yield to the bond holder is largest if the bond is held to maturity.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org074576b">
+<h4 id="org074576b">Optimal Exercise</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">At a <b>discount</b>: If a bond is bought at a discount and it has a Bermudan option with call dates at coupon dates and redemption amount \(C\) independent of the time it is called, then the <b>smallest yield</b> occurs if the bond is <b>not called before maturity</b>.</li>
+<li data-fragment-index="2" class="fragment">At a <b>premium</b>: If a bond is bought at a premium and it has a Bermudan option with call dates at coupon dates and redemption amount \(C\) independent of the time it is called, then the <b>smallest</b> yield occurs if the bond is <b>called at the earliest call date</b></li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org0e6711f">
+<h4 id="org0e6711f">Example</h4>
+<p>
+A ten-year \(100\) face amount bond has an annual coupon rate of \(8\%\) payable semiannually. The bond is callable at the end of the 5th, 7th, and 9th years at par, immediately after the coupon payment. Calculate the maximum price of the bond that ensures an annual effective yield of at least \(6\%\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org602a9ce">
+<h4 id="org602a9ce">Example - Solution</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">\(\alpha = 0.08, m =2\), so \(r = \alpha/m = 0.04\).</li>
+<li data-fragment-index="2" class="fragment">\(F = C\), so \(g = r = 0.04\).</li>
+<li data-fragment-index="3" class="fragment">Since \(1.06 = (1 + j)^2\), we have \(j = 0.029563 < g\).</li>
+<li data-fragment-index="4" class="fragment">Thus, it is to the disadvantage of the bond holder to have the bond redeemed at an early date.</li>
+<li data-fragment-index="5" class="fragment">Hence, we only need to calculate the present value of such a bond at the worst-case scenario, which is that the bond is called at th end of the 5th year: \(P = 4 a_{\overline{10}|j} + 100 v_j^{10} = 108.92\)</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/markdown/markdown.js"></script>
+<script src="../plugin/notes/notes.js"></script>
+<script src="../plugin/search/search.js"></script>
+<script src="../plugin/zoom/zoom.js"></script>
+<script src="../plugin/reveal.js-menu/menu.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: false,
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'none',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom, RevealMenu, RevealChalkboard ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+,chalkboard: {storage: "chalkboard-demo", toggleChalkboardButton: { left: "80px" },	toggleNotesButton: { left: "130px" },	colorButtons: 5}});
+</script>
+</body>
+</html>

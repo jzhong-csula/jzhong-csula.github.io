@@ -1,0 +1,1048 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-06-13 Mon 11:49 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Math 4740 - Theory of Probability</title>
+<meta name="author" content="Jie Zhong" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/readtheorg.css"/>
+<script type="text/javascript" src="src/lib/js/jquery.min.js"></script>
+<script type="text/javascript" src="src/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="src/readtheorg_theme/js/readtheorg.js"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Math 4740 - Theory of Probability</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgeece582">Chapter 1 - Introduction to Probability</a>
+<ul>
+<li><a href="#orgb469c81">1.4. Set Theory</a></li>
+<li><a href="#orga08b474">1.5. The Definition of Probability</a></li>
+<li><a href="#orgc367a31">1.6. Finite Sample Spaces</a></li>
+<li><a href="#orgf9a9602">1.7. Counting Methods</a></li>
+<li><a href="#orgb7c3ec4">1.8. Combinatorial Methods</a>
+<ul>
+<li><a href="#orgc9941c1">Sampling with replacement but un-ordered</a></li>
+</ul>
+</li>
+<li><a href="#orge5a63c6">1.9. Multinomial Coefficients</a>
+<ul>
+<li><a href="#org2af67c9">Partitions</a></li>
+<li><a href="#orgf5b08da">Example</a></li>
+</ul>
+</li>
+<li><a href="#org71ecf5b">1.10. The Probability of a Union of Events</a>
+<ul>
+<li><a href="#orgee9a0d7">Matching Problem</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org9ab46b3">Chapter 2 - Conditional Probability</a>
+<ul>
+<li><a href="#org47af5c7">The Definition of Conditional Probability</a></li>
+<li><a href="#org8df3045">Independent Events</a></li>
+<li><a href="#orge2c041d">Bayes&rsquo; Theorem</a></li>
+</ul>
+</li>
+<li><a href="#org607da72">Chapter 3 - Random Variables and Distributions</a>
+<ul>
+<li><a href="#orga9b5ca2">Random Variables and Discrete Distributions</a></li>
+<li><a href="#org99da2c9">Continuous Distributions</a></li>
+<li><a href="#orgee7df07">The Cumulative Distribution Functions</a>
+<ul>
+<li><a href="#org17a11ac">Why CDF?</a></li>
+<li><a href="#orgdd4364a">another</a></li>
+</ul>
+</li>
+<li><a href="#org2b1000d">Bivariate Distributions</a></li>
+<li><a href="#org21d5648">Marginal Distributions</a></li>
+<li><a href="#org8193233">Conditional Distributions</a></li>
+<li><a href="#orge3ca274">Multivariate Distributions</a></li>
+<li><a href="#org65e0216">Functions of a Random Variable</a></li>
+<li><a href="#org1c5e529">Functions of Two or More Random Variables</a></li>
+</ul>
+</li>
+<li><a href="#org87e7a47">Chapter 4 - Expectation</a>
+<ul>
+<li><a href="#org9236551">The Expectation of a Random Variable</a></li>
+<li><a href="#orgcf35ab0">Properties of Expectations</a></li>
+<li><a href="#orgbdfcc63">Variance</a></li>
+<li><a href="#org2c58de9">4.6. Covariance and Correlation</a></li>
+<li><a href="#org4d844d5">4.4. Moments</a></li>
+<li><a href="#org9207c3c">4.5. The Mean and Median</a></li>
+<li><a href="#org9255fb6">4.7. Conditional Expectation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgeece582" class="outline-2">
+<h2 id="orgeece582">Chapter 1 - Introduction to Probability</h2>
+<div class="outline-text-2" id="text-orgeece582">
+</div>
+<div id="outline-container-orgb469c81" class="outline-3">
+<h3 id="orgb469c81">1.4. Set Theory</h3>
+<div class="outline-text-3" id="text-orgb469c81">
+
+<div id="org272e5d2" class="figure">
+<p><img src="file:///Users/jzhong/Dropbox/org-attach/29/30D9BB-45BD-4B5F-A919-AC6F0C753980/20220610-164412intersection-of-two-sets.png" alt="20220610-164412intersection-of-two-sets.png" />
+</p>
+</div>
+
+
+<div id="orgd1955e8" class="figure">
+<p><img src="file:///Users/jzhong/Dropbox/org-attach/29/30D9BB-45BD-4B5F-A919-AC6F0C753980/20220610-164059union-of-two-sets.png" alt="20220610-164059union-of-two-sets.png" />
+</p>
+</div>
+
+
+
+<div id="org0fc1300" class="figure">
+<p><img src="file:///Users/jzhong/Dropbox/org-attach/29/30D9BB-45BD-4B5F-A919-AC6F0C753980/20220610-164431intersection-venn-diagram.png" alt="20220610-164431intersection-venn-diagram.png" />
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orga08b474" class="outline-3">
+<h3 id="orga08b474">1.5. The Definition of Probability</h3>
+</div>
+<div id="outline-container-orgc367a31" class="outline-3">
+<h3 id="orgc367a31">1.6. Finite Sample Spaces</h3>
+</div>
+<div id="outline-container-orgf9a9602" class="outline-3">
+<h3 id="orgf9a9602">1.7. Counting Methods</h3>
+</div>
+<div id="outline-container-orgb7c3ec4" class="outline-3">
+<h3 id="orgb7c3ec4">1.8. Combinatorial Methods</h3>
+<div class="outline-text-3" id="text-orgb7c3ec4">
+<p>
+Example 1.8.1 (choosing subsets)
+</p>
+
+<p>
+Consider the set \(\{a, b, c, d\}\). How many distinct subsets of size two?
+</p>
+
+<p>
+Note: \(\{a, b\} = \{b, a\}\), where the order does not matter!
+</p>
+
+<p>
+All subsets of size two:
+\[
+\{a, b\}, \{a, c\}, \{a, d\}, \{b, c\}, \{b, d\}, \{c, d\},
+\]
+and the total is \(6\).
+</p>
+
+<p>
+Combination: A selection of items from a set such that the order of the selection does not matter.
+</p>
+
+<p>
+In fact, a combination is an un-ordered sampling without replacement. We ask how many combinations of \(k\) items selected from a set of \(n\) distinct items are possible?
+</p>
+
+<p>
+We call this number &ldquo;\(n\) choose \(k\)&rdquo;, denoted by
+\[
+C_{n, k}, \quad\text{or}\quad C^n_k, \quad\text{or}\quad \binom{n}{k}
+\]
+How to find this number?
+</p>
+
+<p>
+We will use a different way to compute \(P_{n,k}\).
+</p>
+
+<p>
+Making an ordered selection of \(k\) items (\(k\text{-permutation}\)) is the same as choosing a combination of \(k\) items and then ordering them.
+</p>
+
+<p>
+This is a \(2\text{-step}\) procedure:
+</p>
+\begin{align*}
+&\text{"number of $k$ - permutations"}\\
+ = &\text{"number of combination of $k$ items"}\\
+ &\quad \times \text{"number of ways to order $k$ items"}
+\end{align*}
+<p>
+So,
+\[
+P_{n, k} = C_{n,k} \cdot k!,
+\]
+and thus
+\[
+C_{n,k} = \frac{P_{n,k}}{k!} = \frac{n!}{(n-k)! k!}
+\]
+</p>
+
+<p>
+Example. Select \(5\) of \(30\) students in a class without regard to the order:
+\[
+C_{30, 5} = \frac{30!}{25!5!}
+\]
+</p>
+
+<p>
+Binomial coefficient:
+\[
+\binom{n}{k} = C_{n,k} = \frac{n!}{(n-k)! k!}
+\]
+</p>
+
+<p>
+Theorem. For any real numbers \(x\) and \(y\), \(n\in \mathbb{N}\),
+\[
+(x + y)^n = \sum_{k=0}^n \binom{n}{k} x^k y^{n-k}.
+\]
+</p>
+
+<p>
+For the case \(n=2\):
+</p>
+\begin{align*}
+  (x + y)^2
+& = \binom{2}{0} x^0 y^{2 -0} + \binom{2}{1} x^1 y^{2-1} + \binom{2}{2}x^2 y^{2-2}\\
+& = 1 \cdot 1 \cdot y^2 + 2\cdot x\cdot y + 1\cdot x^2 \cdot y^0\\
+& = x^2 + 2xy + y^2.
+\end{align*}
+
+<p>
+Idea of the proof:
+\[
+(x + y)^n = (x + y)(x + y)\cdots (x + y).
+\]
+After expansion, a typical term should look like
+\[
+\text{const}\times x^k y^j, \quad k + j = n; \quad \text{or}\quad \text{const}\times x^k y^{n-k}.
+\]
+This &ldquo;const&rdquo; is the number of copies of each \(x^ky^{n-k}\), which is a combination number selecting \(k\) times of \(x\) out of total number \(n\).
+</p>
+
+<p>
+Note:
+</p>
+
+<p>
+(1) \(\binom{n}{0} = \binom{n}{n} = 1\).
+</p>
+
+<p>
+(2) \(\binom{n}{k} = \binom{n}{n-k}\)
+</p>
+
+<p>
+Proof of (2):
+</p>
+\begin{align*}
+  \text{LHS}
+& = \frac{n!}{(n-k)!k!} = \frac{n!}{k!(n-k)!}\\
+& = \frac{n!}{(n-(n-k))!(n-k)!} = \text{RHS}.
+\end{align*}
+
+<p>
+The second formula above suggests that choosing \(k\) items from a set of \(n\) distinct items is the same as choosing \((n-k)\) items.
+</p>
+
+<p>
+In other words, a combination is in fact a &ldquo;partition&rdquo; of a set into two parts.
+</p>
+
+<p>
+Example. Flip a fair coin \(10\) times.
+</p>
+
+<p>
+(1) What&rsquo;s the probability \(p\) of obtaining exactly three heads?
+</p>
+
+<p>
+The sample space here is
+\[
+S = \{(i_1, \dots, i_{10}) \mid i_j = 0 ~\text{or}~ 1, j = 1, \dots, 10 \}.
+\]
+</p>
+
+<p>
+Let \(A\) be the event that we obtain exactly three heads when flipping a coin \(10\) times. One typical (possible) outcome could be \(H T \dots T\), or \(10\dots 0\), and thus
+\[
+p = \frac{\# A}{\# S} = \frac{\binom{10}{3}}{2^{10}}.
+\]
+</p>
+
+<p>
+(2) What&rsquo;s the probability \(p'\) of obtaining three or fewer heads?
+</p>
+
+<p>
+Let \(A'\) be the event that we obtain three or fewer heads. Then
+\[
+\# A' = \binom{10}{0} + \binom{10}{1} + \binom{10}{2} + \binom{10}{3},
+\]
+and so
+\[
+p' = \frac{\# A'}{\# S} = \frac{\binom{10}{0} + \binom{10}{1} + \binom{10}{2} + \binom{10}{3}}{2^{10}}.
+\]
+</p>
+</div>
+<div id="outline-container-orgc9941c1" class="outline-4">
+<h4 id="orgc9941c1">Sampling with replacement but un-ordered</h4>
+<div class="outline-text-4" id="text-orgc9941c1">
+<p>
+Recall: sampling with replacement but ordered: \(n^k\).
+</p>
+
+<p>
+Example 1.8.4 (Blood types)
+</p>
+
+<p>
+The gene for human blood types consists of a pair of alleles chosen from three alleles, called \(A, B\) and \(O\).
+</p>
+
+<p>
+\(OA\) is the same as \(AO\): order does NOT matter.
+</p>
+
+<p>
+\(AA, BB, CC\) are valid types: with replacement.
+</p>
+
+<p>
+How many genotypes are there for the blood type?
+</p>
+
+<p>
+We can simply list all cases: \(AA, BB, OO, AB, BO, AO\), and there are \(6\) in total.
+</p>
+
+<p>
+<b>Note</b>: \(6\) here is not \(C_{3,2} = 3\), nor \(3^2 = 9\).
+</p>
+
+<p>
+What if a gene consists of a pair chosen from a set of \(n\) different alleles? How many genotypes?
+</p>
+
+<p>
+Case 1: there \(n\) pairs where both alleles are the same.
+</p>
+
+<p>
+Case 2: there are \(\binom{n}{2}\) pairs where two alleles are different.
+</p>
+
+<p>
+Then the total is
+</p>
+\begin{align*}
+  n + \binom{n}{2}
+& = n + \frac{n(n-1)}{2}\\
+& = n + \frac{n^2 - n}{2}\\
+& = \frac{n^{2} + n}{2}.
+\end{align*}
+<p>
+In general, the number of un-ordered sampling of size \(k\) items with replacement for \(n\) items is
+\[
+\binom{n+k-1}{k}, \qquad \text{see Exercise 19}.
+\]
+</p>
+
+<p>
+<b>Summary</b>
+</p>
+
+<ul class="org-ul">
+<li><p>
+Sampling with replacement, order matters.
+</p>
+
+<p>
+Example: flip a fair coin \(10\) times, then \(\# S = 2^{10} (n^k)\).
+</p></li>
+<li><p>
+Sampling without replacement, order matters.
+</p>
+
+<p>
+Example: pick \(5\) students out of 30 to form a line: \(P_{30, 5}, \quad(P_{n,k})\).
+</p></li>
+<li><p>
+Sampling without replacement, order does not matter.
+</p>
+
+<p>
+Example: pick \(5\) students out of \(30\) to form a team/committee: \(C_{30, 5} = \binom{30}{5}\).
+</p></li>
+<li>Sampling with replacement, order does not matter (tricky).
+Example 1.8.4, Exercise 19.</li>
+</ul>
+
+<p>
+Example. Suppose we have a class of \(24\) children. We consider three different scenarios that each involves choosing \(3\) children.
+</p>
+
+<p>
+(1) Every day a random child is chosen to lead the class to lunch, without regard to previous choices.
+</p>
+
+<p>
+What is the probability that Carlos was chosen on Monday and Wednesday, Aaron on Tuesday?
+</p>
+
+<p>
+Let \(A\) denote the event that Carlos was chosen on Monday and Wednesday, Aaron on Tuesday.
+</p>
+
+<p>
+There are two ways to count in this problem:
+\[
+\# S = 24^3,~ \# A = 1\qquad \text{or}\qquad \# S = 24^5, ~ \# A = 24^2,
+\]
+but both give you
+\[
+\mathbb{P}(A) = \frac{1}{24^{3}}.
+\]
+</p>
+
+<p>
+(2) Three children are chosen randomly to be the class president, vice president and treasurer. No student can hold more than one position. What&rsquo;s the probability that Mary is president, Cory is vice president and Matt is treasurer?
+</p>
+
+<p>
+Let \(A'\) be the event that Mary is president, Cory is vice president and Matt is treasurer. Then
+\[
+\# S = P_{24, 3}, \quad \# A' = 1,
+\]
+and
+\[
+\mathbb{P}(A') = \frac{1}{P_{24,3}}.
+\]
+</p>
+
+<p>
+(3) A team of three children is chosen at random. What&rsquo;s the probability that Mary is on the team?
+</p>
+
+<p>
+Let \(A''\) be the event that Mary is on the team. Then
+</p>
+
+<p>
+\[
+\# S = \binom{24}{3}, \quad \# A'' = \binom{1}{1} \binom{23}{2},
+\]
+and
+\[
+\mathbb{P}(A'') = \frac{\binom{1}{1} \binom{23}{2}}{\binom{24}{3}}.
+\]
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge5a63c6" class="outline-3">
+<h3 id="orge5a63c6">1.9. Multinomial Coefficients</h3>
+<div class="outline-text-3" id="text-orge5a63c6">
+<p>
+Recall: Binomial coefficient
+\[\binom{n}{k} = C_{n, k} = \binom{n}{n-k}\]
+</p>
+</div>
+
+<div id="outline-container-org2af67c9" class="outline-4">
+<h4 id="org2af67c9">Partitions</h4>
+<div class="outline-text-4" id="text-org2af67c9">
+<p>
+A combination is a choice of \(k\) items of an \(n\) -item set, and the order does not matter.
+This is the same as partitioning the set into two parts. One part contains \(k\) items, and the other contains the remaining \(n-k\) items.
+</p>
+
+<p>
+Now consider partitions into more than two parts.
+</p>
+
+<p>
+Example. Suppose that \(20\) members of an  4 organization are to be divided into three committees \(A, B\) and \(C\), in such a way \(A\) and \(B\) each has \(8\) members, \(C\) has \(4\) members. Each member can be assigned to only one committee.
+</p>
+
+<p>
+How many ways to assign the members?
+</p>
+
+<p>
+\(3\text{-step}\)  procedure: in each step we choose the members to one committee.
+</p>
+\begin{align*}
+  & \binom{20}{8} \cdot \binom{12}{8} \cdot \binom{4}{4}\\
+  = & \frac{20!}{8!12!} \cdot \frac{12!}{8!4!} \cdot 1\\
+  = & \frac{20!}{8!8!4!}
+\end{align*}
+
+<p>
+In general, given a set of \(n\) distinct items and non-negative integers \(n_{1}, n_{2}, \dots, n_{r}\) with \(n_1 + n_2 + \cdots +n _r = n\).
+</p>
+
+<p>
+How many ways can the set be partitioned into \(r\) disjoint subsets with \(n_i\) items in its \(i^{\text{th}}\) subset?
+We call this number
+\[
+  \binom{n}{n_1, n_{2}, \dots, n_{r}}
+\]
+</p>
+
+<p>
+This is  a \(r\text{-step}\) procedure:
+</p>
+\begin{align*}
+  & \binom{n}{n_{1}} \cdot \binom{n-n_{1}}{n_{2}} \cdots \binom{n-n_{1}-n_{2}-\cdots - n_{r-1}}{n_{r}}\\
+  = & \frac{n!}{n_{1}!(n-n_{1})!} \cdot \frac{(n-n_{1})!}{n_{2}!(n-n_{1} - n_{2})!} \cdot \frac{(n-n_{1} -n_{2})!}{n_{3}!(n-n_{1} - n_{2}-n_{3})!}\\
+   &  \qquad \cdots \frac{(n-n_{1} -n_{2}- \cdots n_{r-1})!}{n_{r}!(n-n_{1} - n_{2}-\cdots - n_{r-1} - n_{r})!}\\
+= & \frac{n!}{n_{1}!n_{2}! \cdots n_{r}!}
+\end{align*}
+
+<p>
+Check for \(n=2\): \(n_1 = k, n_2 = n-k\),
+\[
+\binom{n}{k} = \binom{n}{n-k} = \binom{n}{k, n-k} = \frac{n!}{k!(n-k)!}
+\]
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orgf5b08da" class="outline-4">
+<h4 id="orgf5b08da">Example</h4>
+<div class="outline-text-4" id="text-orgf5b08da">
+<p>
+How many arrangements are there of the letters &ldquo;BANANA&rdquo;?
+</p>
+
+<p>
+Solution (1):
+There are \(6\) positions for the \(3\) letters.
+Each arrangement is a partition of the set of \(6\) positions into a subset of size \(3\) (the positions that get the letter \(A\)), and subset of size \(2\) (the positions that get the letter \(N\)), and a subset of size \(1\) (the position that gets the letter \(B\)).
+</p>
+
+<p>
+For example,
+\[
+A A A B N N \leftrightarrow \{1, 2, 3\}, \{4\}, \{5, 6\}
+\]
+\[
+B A N A N A \leftrightarrow \{1, 2, 3\}, \{4\}, \{5, 6\}
+\]
+</p>
+
+<p>
+Total number of arrangements:
+\[
+\binom{6}{3,2,1} = \frac{6!}{3!2!1!} = 60.
+\]
+</p>
+
+<p>
+Solution (2):
+We first pretend the \(6\) letters are distinct:
+\[
+B, A_1, A_2, A_3, N_1, N_2.
+\]
+There are \(6!\) ways to arrange them.
+But each of \(3!\) ways to arrange \(A\)&rsquo;s and each of the 2! ways to arrange $N$s correspond to the same arrangement.
+</p>
+
+<p>
+For example,
+\[
+B A_1 N_1 A_2 N_2 A_3 \quad\text{and}\quad B A_2 N_1 A_3 N_2 A_{1}
+\]
+both spell as \(BANANA\). So we need to divide it by \(3!2!\), there are
+\[
+\frac{6!}{3!2!} = 60 = \binom{6}{3, 2, 1}
+\]
+ways of arrangements.
+</p>
+
+<p>
+Example. (Example 1.9.4)
+A deck of \(52\) cards, containing \(13\) hearts. Suppose cards are shuffled and distributed among \(A, B, C\) and \(D\) four players.
+What is the probability that \(A\) gets \(6\) hearts, \(B\) gets \(4\) hearts, \(C\) gets \(2\) hearts, and \(D\) gets \(1\) heart?
+</p>
+
+<p>
+Solution (1):
+\[
+\# S = \binom{52}{13, 13, 13, 13} = \frac{52!}{(13!)^4}.
+\]
+Let \(E\) be the event that \(A\) gets \(6\) hearts, \(B\) gets \(4\) hearts, \(C\) gets \(2\) hearts, and \(D\) gets \(1\) heart, then
+\[
+\# E = \binom{13}{6, 4, 2, 1} \cdot \binom{39}{7, 9, 11, 12}.
+\]
+Thus,
+\[
+\mathbb{P}(E) = \frac{\# E}{\# S} = \frac{13!}{6!4!2!} \cdot \frac{39!}{7!9!11!12!} \cdot \frac{(13!)^{4}}{52!}.
+\]
+</p>
+
+<p>
+Solution (2):
+Consider \(52\) cards are distributed one by one. So there are \(\# S = \binom{52}{13}\) total number of combinations of positions of \(13\) hearts, and
+\[
+\# E = \binom{13}{6} \binom{13}{4} \binom{13}{2} \binom{13}{1}.
+\]
+Of course the probability \(\mathbb{P}(E)\) is the same as before.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org71ecf5b" class="outline-3">
+<h3 id="org71ecf5b">1.10. The Probability of a Union of Events</h3>
+<div class="outline-text-3" id="text-org71ecf5b">
+<p>
+Recall: Inclusion-Exclusion formula
+\[
+\mathbb{P}(A\cup B) = \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A \cap B).
+\]
+</p>
+
+<div id="org1239c84" class="figure">
+<p><img src="file:///Users/jzhong/Dropbox/org-attach/29/30D9BB-45BD-4B5F-A919-AC6F0C753980/20220610-16572920220610-164412intersection-of-two-sets.png" alt="20220610-16572920220610-164412intersection-of-two-sets.png" width="400px" />
+</p>
+</div>
+
+<p>
+Theorem. (1) Three events:
+</p>
+\begin{align*}
+\mathbb{P}(A\cup B\cup C)
+& = \mathbb{P}(A) + \mathbb{P}(B) + \mathbb{P}(C) - \mathbb{P}(A\cap B) - \mathbb{P}(A\cap C)\\
+& \quad  - \mathbb{P}(B\cap C) + \mathbb{P}(A\cap B\cap C).
+\end{align*}
+
+<div id="orgd6c952d" class="figure">
+<p><img src="file:///Users/jzhong/Dropbox/org-attach/29/30D9BB-45BD-4B5F-A919-AC6F0C753980/20220610-164431intersection-venn-diagram.png" alt="20220610-164431intersection-venn-diagram.png" width="400px" />
+</p>
+</div>
+
+<p>
+(2) General case: see the textbook.
+</p>
+
+<p>
+Example 1.10.1 (easy, read by yourself)
+</p>
+</div>
+
+<div id="outline-container-orgee9a0d7" class="outline-4">
+<h4 id="orgee9a0d7">Matching Problem</h4>
+<div class="outline-text-4" id="text-orgee9a0d7">
+<p>
+Suppose \(3\) men throw their hats into the center of a room. The hats are mixed up, and then each man randomly selects a hat. What&rsquo;s the probability that at least one man selects his own hat?
+</p>
+
+<p>
+WANT: \(\mathbb{P}(A)\), where \(A\) is the event that at least one man selects his own hat.
+</p>
+
+<p>
+What is the sample space \(S\)?
+</p>
+
+<p>
+Consider each outcome is a vector of \(3\) members. For example, \((1, 2, 3)\) means each man selects his own hat; \((2, 1, 3)\) means 1st man selects the hat \(2\), 2nd man selects the hat \(1\), and 3rd man selects his own. Therefore, \(\# S = 3! = 6\).
+</p>
+
+<p>
+What is the event \(A\)?
+</p>
+
+<p>
+Denote by \(E_i\) the event that \(i^{\text{th}}\) man selects his own hat, then
+\[
+A = E_1\cup E_2\cup E_3.
+\]
+To compute \(\mathbb{P}(A)\), we need \(\mathbb{P}(E_{i}), \mathbb{P}(E_{i}\cap E_j)\) and \(\mathbb{P}(E_i\cap E_2\cap E_3)\):
+</p>
+\begin{align*}
+  & \mathbb{P}(E_1) = \frac{2}{6} = \mathbb{P}(E_2) = \mathbb{P}(E_3)\\
+ & \mathbb{P}(E_1\cap E_2) = \frac{1}{6} = \mathbb{P}(E_2\cap E_3) = \mathbb{P}(E_1\cap E_3)\\
+& \mathbb{P}(E_1\cap E_2\cap E_3) = \frac{1}{6}.
+\end{align*}
+
+<p>
+Therefore,
+\[
+\mathbb{P}(A) = \frac{1}{3} \cdot 3 - 3 \cdot \frac{1}{6} + \frac{1}{6} = 1 - \frac{1}{2} + \frac{1}{6} = \frac{2}{3}.
+\]
+</p>
+
+<p>
+Note: see the &ldquo;hat problem&rdquo; on page 49 for the general case.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9ab46b3" class="outline-2">
+<h2 id="org9ab46b3">Chapter 2 - Conditional Probability</h2>
+<div class="outline-text-2" id="text-org9ab46b3">
+</div>
+<div id="outline-container-org47af5c7" class="outline-3">
+<h3 id="org47af5c7">The Definition of Conditional Probability</h3>
+<div class="outline-text-3" id="text-org47af5c7">
+<p>
+Definition. Given an experiment with probability model \((S, \mathbb{P}, \mathcal{F})\). Suppose we know the outcome belongs to a given event \(B\), such that \(\mathbb{P}(B)>0\). The probability that the outcome also belongs to the event \(A\) is called the conditional probability of \(A\) given \(B\), and is defined by
+\[
+\mathbb{P}(A|B) = \frac{\mathbb{P}(A\cap B)}{\mathbb{P}(B)}.
+\]
+Intuitively, out of the total probability assigned to elements of \(B\), \(\mathbb{P}(A|B)\) is the fraction assigned to elements that also belongs to \(A\):
+</p>
+
+
+<div id="org17bcca6" class="figure">
+<p><img src="file:///Users/jzhong/Dropbox/org-attach/29/30D9BB-45BD-4B5F-A919-AC6F0C753980/20220610-211829Complement of a Set.svg" alt="20220610-211829Complement of a Set.svg" class="org-svg" width="400px" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8df3045" class="outline-3">
+<h3 id="org8df3045">Independent Events</h3>
+</div>
+<div id="outline-container-orge2c041d" class="outline-3">
+<h3 id="orge2c041d">Bayes&rsquo; Theorem</h3>
+</div>
+</div>
+<div id="outline-container-org607da72" class="outline-2">
+<h2 id="org607da72">Chapter 3 - Random Variables and Distributions</h2>
+<div class="outline-text-2" id="text-org607da72">
+</div>
+<div id="outline-container-orga9b5ca2" class="outline-3">
+<h3 id="orga9b5ca2">Random Variables and Discrete Distributions</h3>
+</div>
+<div id="outline-container-org99da2c9" class="outline-3">
+<h3 id="org99da2c9">Continuous Distributions</h3>
+</div>
+<div id="outline-container-orgee7df07" class="outline-3">
+<h3 id="orgee7df07">The Cumulative Distribution Functions</h3>
+<div class="outline-text-3" id="text-orgee7df07">
+</div>
+<div id="outline-container-org17a11ac" class="outline-4">
+<h4 id="org17a11ac">Why CDF?</h4>
+<div class="outline-text-4" id="text-org17a11ac">
+<p>
+Suppose the p.d.f of \(X\) is de  fined by
+\[
+  f_X(x) =\begin{cases}
+  \dfrac{1}{(1+x)^2}, \quad & x>0,\\
+  0, & x\le 0.
+\end{cases}
+\]
+</p>
+<p>
+Compute
+</p>
+<ul class="org-ul">
+<li>\(\mathbb{P}(X\le 3)\)</li>
+<li>\(\mathbb{P}(X \le -1)\)</li>
+<li>\(\mathbb{P}(X > 2)\)</li>
+<li>\(\mathbb{P}(2< X\le 3)\)</li>
+</ul>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-orgdd4364a" class="outline-4">
+<h4 id="orgdd4364a">another</h4>
+<div class="outline-text-4" id="text-orgdd4364a">
+<p>
+\[
+\mathbb{P}(X\le 3)
+\]
+test
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2b1000d" class="outline-3">
+<h3 id="org2b1000d">Bivariate Distributions</h3>
+</div>
+<div id="outline-container-org21d5648" class="outline-3">
+<h3 id="org21d5648">Marginal Distributions</h3>
+</div>
+<div id="outline-container-org8193233" class="outline-3">
+<h3 id="org8193233">Conditional Distributions</h3>
+</div>
+<div id="outline-container-orge3ca274" class="outline-3">
+<h3 id="orge3ca274">Multivariate Distributions</h3>
+<div class="outline-text-3" id="text-orge3ca274">
+<p>
+Skip.
+</p>
+</div>
+</div>
+<div id="outline-container-org65e0216" class="outline-3">
+<h3 id="org65e0216">Functions of a Random Variable</h3>
+</div>
+<div id="outline-container-org1c5e529" class="outline-3">
+<h3 id="org1c5e529">Functions of Two or More Random Variables</h3>
+</div>
+</div>
+<div id="outline-container-org87e7a47" class="outline-2">
+<h2 id="org87e7a47">Chapter 4 - Expectation</h2>
+<div class="outline-text-2" id="text-org87e7a47">
+</div>
+<div id="outline-container-org9236551" class="outline-3">
+<h3 id="org9236551">The Expectation of a Random Variable</h3>
+</div>
+<div id="outline-container-orgcf35ab0" class="outline-3">
+<h3 id="orgcf35ab0">Properties of Expectations</h3>
+</div>
+<div id="outline-container-orgbdfcc63" class="outline-3">
+<h3 id="orgbdfcc63">Variance</h3>
+</div>
+<div id="outline-container-org2c58de9" class="outline-3">
+<h3 id="org2c58de9">4.6. Covariance and Correlation</h3>
+</div>
+<div id="outline-container-org4d844d5" class="outline-3">
+<h3 id="org4d844d5">4.4. Moments</h3>
+</div>
+<div id="outline-container-org9207c3c" class="outline-3">
+<h3 id="org9207c3c">4.5. The Mean and Median</h3>
+</div>
+<div id="outline-container-org9255fb6" class="outline-3">
+<h3 id="org9255fb6">4.7. Conditional Expectation</h3>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Jie Zhong</p>
+<p class="date">Created: 2022-06-13 Mon 11:49</p>
+</div>
+</body>
+</html>

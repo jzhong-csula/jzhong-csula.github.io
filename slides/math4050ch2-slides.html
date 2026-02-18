@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>MATH 4050 - Mathematical Finance and Interest Theory</title>
+<meta name="author" content="\\
+Jie Zhong \\
+Department of Mathematics \\
+California State University, Los Angeles"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+
+<link rel="stylesheet" href="../dist/theme/serif.css" id="theme"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+
+<link rel="stylesheet" href="../gnohz.css"/>
+<script>window.MathJax = { TeX: {Macros: {range: "\\text{Range}", ow: "\\text{otherwise}"}} }</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1>MATH 4050 - Mathematical Finance and Interest Theory</h1><h2></h2><h6> <br />
+Jie Zhong <br />
+Department of Mathematics <br />
+California State University, Los Angeles</h6>
+</section>
+<section>
+<section id="slide-org78c5a73">
+<h2 id="org78c5a73">Chapter 2 Equations of value and yield rates</h2>
+<div class="outline-text-2" id="text-org78c5a73">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org2ff400d">
+<h4 id="org2ff400d">Motivation</h4>
+<p class="fragment">
+A financial transaction may be as simple as making a single deposit, or more commonly, there is a series of deposits and withdrawals before one focuses on the accumulation.
+</p>
+
+<p class="fragment">
+For example, you would like to save money each month to buy a house, or at least to have the down payment.
+</p>
+
+<p class="fragment">
+You might have a predictable contribution/expense schedule, the question is when you can buy the house and become a homeowner.
+</p>
+
+<p class="fragment">
+This is why we study the equations of value in this chapter.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org7dfbe0e">
+<h3 id="org7dfbe0e">Single deposit under compound interest</h3>
+<div class="outline-text-3" id="text-org7dfbe0e">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb10962b">
+<h4 id="orgb10962b">The amount function</h4>
+<p>
+Let the principal be denoted by \(C\). Then, in the usual notation, the amount function with the <b>compound</b> interest \(i\) reads as
+</p>
+<div class="fragment">
+\begin{align*}
+  A_C(T)= C(1 + i)^T\qquad \text{for every } T \ge 0.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+The above equation is referred to as the \(T\) time <span style="color: rgb(24,116,205)">equation of value</span>.
+</p>
+
+<p class="fragment">
+Knowing any three among the values \(A_C(T), C, T\) and \(i\) allows us to calculate the fourth one.
+</p>
+
+<p class="fragment">
+We will illustrate this fact through examples.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org9a2570b">
+<h4 id="org9a2570b">Unknown principal</h4>
+<p class="fragment">
+Assume that the annual effective compound interest rate is \(6.25\%\).
+</p>
+
+<p class="fragment">
+How much would you have to deposit on October 1, 2020 in order to be able to withdraw the \(1,000\) from the account on July 1, 2024?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org127d9f1">
+<h4 id="org127d9f1">Unknown principal - Solution</h4>
+<p>
+The start of the loan term is October 1, 2020. So we call that time zero. Hence, the time at which we are given the accumulated amount we want to produce is
+</p>
+<div class="fragment">
+\begin{align*}
+  T = 3.75\quad \text{(in years)}.
+\end{align*}
+
+</div>
+<p class="fragment">
+The equation of value reads as
+</p>
+<div class="fragment">
+\begin{align*}
+  1000 = C (1 + 0.0625)^{3.75},
+\end{align*}
+
+</div>
+<p class="fragment">
+so
+</p>
+<div class="fragment">
+\begin{align*}
+  C = \frac{1000}{(1 + 0.0625)^{3.75}} = 796.65.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgc0ca2e2">
+<h4 id="orgc0ca2e2">Unknown length of investment</h4>
+<p>
+Find the length of time necessary for \(1,000\) to accumulate to \(1,500\) if invested at \(6\%\) per annum compounded semi-annually.
+</p>
+
+<p class="fragment">
+<b>Solution</b>
+</p>
+<p class="fragment">
+It is more convenient to think of time-units in this situation as half-years.
+</p>
+
+<p class="fragment">
+Let us denote the unknown number of half-years by \(n\).
+</p>
+<p class="fragment">
+Then the equation of value reads as
+</p>
+<div class="fragment">
+\begin{align*}
+  1000 \left( 1 + \frac{0.06}{2} \right)^n = 1500.
+\end{align*}
+
+</div>
+<p class="fragment">
+So \(\displaystyle n = \frac{\ln(1500/1000)}{\ln(1 + 0.06/2)} = 13.7\),
+</p>
+<p class="fragment">
+or, the sought for the length of time is about \(6.85\) years.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org201cd60">
+<h4 id="org201cd60">Unknown time - Doubling your money</h4>
+<p>
+At a nominal interest rate of \(10\%\) convertible quarterly, how long will it take you to double your money?
+</p>
+
+<p class="fragment">
+<b>Solution</b>
+</p>
+<p class="fragment">
+Since the wealth accumulated at any given time is proportional to the principal, we can assume (without loss of generality) that the initial investment is \(1\).
+</p>
+
+<p class="fragment">
+Then the equation of value becomes
+</p>
+<div class="fragment">
+\begin{align*}
+  \left( 1 + \frac{0.1}{4} \right)^n = 2,
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(n\) denotes the unknown length of time (in quarter-years) that it takes to double the initial investment.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgc06f96c">
+<h4 id="orgc06f96c">Unknown time - Doubling your money - Continued</h4>
+<p>
+Solving for \(n\):
+</p>
+<div class="fragment">
+\begin{align*}
+  n = \frac{\ln 2}{\ln ( 1 + 0.1/4 )} = 28.071,
+\end{align*}
+
+</div>
+<p class="fragment">
+and so the length of time we looking for is about \(7\) years.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org46bd1a1">
+<h4 id="org46bd1a1">Unknown interest rate</h4>
+<p>
+At what interest rate convertible quarterly would \(1,000\) accumulate to \(1,600\) in six years?
+</p>
+
+<p class="fragment">
+<b>Solution</b>
+</p>
+<p class="fragment">
+We need to find \(i^{(4)}\) from the equation of value
+</p>
+<div class="fragment">
+\begin{align*}
+  1000 \left( 1 + \frac{i^{(4)}}{4} \right)^{24} = 1600.
+\end{align*}
+
+</div>
+<p class="fragment">
+We get
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{i^{(4)}}{4} = (1.6)^{1/24} - 1 = 0.019776,
+\end{align*}
+
+</div>
+<p class="fragment">
+and so \(i^{(4)} = 0.0791\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org7816f4e">
+<h3 id="org7816f4e">Investment with multiple contributions</h3>
+<div class="outline-text-3" id="text-org7816f4e">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org73a85cc">
+<h4 id="org73a85cc">The time \(\tau\) equation of value</h4>
+<p class="fragment">
+Generally, we may have a sequence of contributions \(\{C_{t_k}\}\).
+</p>
+<p class="fragment">
+A negative contribution \(C_{t_k}\) means there is a withdrawal at time \(t_k\)
+</p>
+
+<p class="fragment">
+This sequence of investments is liquidated at a time \(T\) and the
+resulting balance is denoted by \(B\).
+</p>
+
+<p class="fragment">
+Suppose that a certain intermediate time \(\tau\) bears a significance for the investor and that the investor wants to <b>value</b> all the contributions at that specific time \(\tau\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org731178c">
+<h4 id="org731178c">The time \(\tau\) equation of value - Continued</h4>
+<p class="fragment">
+Then the value of all the combined contributions to the account valued at time \(\tau\) must be equal to the final balance B valued at time \(\tau\).
+</p>
+
+<p class="fragment">
+Formally, we have <span style="color: rgb(24,116,205)">the time</span> \(\tau\) <span style="color: rgb(24,116,205)">equation of value</span>:
+</p>
+<div class="fragment">
+\begin{align*}
+  \sum_k C_{t_k} \frac{a(\tau)}{a(t_k)} = B \frac{a(\tau)}{a(T)}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<b>Why</b>?
+</p>
+
+<p class="fragment">
+Important Fact 1.7.5 on page 31.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5029ea5">
+<h4 id="org5029ea5">The time \(0\) equation of value</h4>
+<p>
+In the case that we choose \(\tau =0\), the time \(0\) equation of value becomes
+</p>
+<div class="fragment">
+\begin{align*}
+  \sum_k C_{t_k} v(t_k) = B v(T).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+In words, it suffices to discount all the contributions and the balance from the times their corresponding cash flows took place to the initial time \(0\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org015d390">
+<h4 id="org015d390">The time \(T\) equation of value</h4>
+<p>
+In the case that we set \(\tau = T\), we have as the time \(T\) equation of value
+</p>
+<div class="fragment">
+\begin{align*}
+  \sum_k C_{t_k} \frac{a(T)}{a(t_k)} = B.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+That is, all the contributions must be augmented to their value at the final time \(T\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Read:</span> How can you understand the single deposit is a special case of the multiple contributions? Page 87
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org26d222e">
+<h4 id="org26d222e">An example: Unknown payment</h4>
+<p>
+In return for a promise to receive \(600\) at the end of \(8\) years, Roger agrees to pay \(100\) now, \(200\) at the end of \(5\) years, and to make a further payment \(X\) at the end of \(10\) years.
+</p>
+
+<p class="fragment">
+Assume that the nominal rate of interest is \(8\%\) convertible semi-annually.
+</p>
+
+<p class="fragment">
+Find \(X\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org6453683">
+<h4 id="org6453683">An example: Unknown payment - Solution</h4>
+<p>
+We can assume here \(T = 10\), and \(B = 0\). So we are looking for a payment that is made at time \(\tau = 10\).
+</p>
+
+<p class="fragment">
+Then the equation of value is
+</p>
+<div class="fragment">
+\begin{align*}
+  100(1.04)^{20} + 200(1.04)^{10} - 600(1.04)^4 + X = 0,
+\end{align*}
+
+</div>
+<p class="fragment">
+which give
+</p>
+<div class="fragment">
+\begin{align*}
+  X = 186.76.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgaa7d3c6">
+<h4 id="orgaa7d3c6">An example: Unknown rate of interest</h4>
+<p>
+At what effective rate of interest will the present value of the investment consisting of \(2,000\) deposited at the end of \(2\) years and \(3,000\) deposited at the end of four years be equal to \(4,000\)?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5ff95d7">
+<h4 id="org5ff95d7">An example: Unknown rate of interest - Solution</h4>
+<p>
+The time \(0\) equation of value is
+</p>
+<div class="fragment">
+\begin{align*}
+  2000 v^2 + 3000 v^4 = 4000,
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(v = (1 + i)^{-1}\) is the discount factor.
+</p>
+
+<p class="fragment">
+We obtain a <b>quadratic</b> equation in \(v^2\):
+</p>
+<div class="fragment">
+\begin{align*}
+  3 v^4 + 2v^2 - 4 = 0,
+\end{align*}
+
+</div>
+<p class="fragment">
+which yields only one positive solution \(v^2 = 0.8685\).
+</p>
+
+<p class="fragment">
+So, \(i = \frac{1}{v} - 1 = 0.073\).
+</p>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Read:</span> Example 2.3.6 - Unknown rate of interest and equation of value that has no easy algebraic solution (Calculator can help)
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgab66512">
+<h4 id="orgab66512">An example: Unknown payment times</h4>
+<p>
+The present value of two payments of \(100\) each to be made at the end of \(n\) years and \(2n\) year is \(100\). If \(i = 0.08\), find \(n\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgc6baff9">
+<h4 id="orgc6baff9">An example: Unknown payment times - Solution</h4>
+<p class="fragment">
+The time \(0\) equation of value:
+</p>
+<div class="fragment">
+\begin{align*}
+  100(1+0.08)^{-n} + 100(1+0.08)^{-2n} = 100.
+\end{align*}
+
+</div>
+<p class="fragment">
+Setting \(A = (1.08)^{-n}\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+  A^2 + A - 1 = 0,
+\end{align*}
+
+</div>
+<p class="fragment">
+which has only one positive solution \(\displaystyle A = \frac{\sqrt{5} -1}{2}\).
+</p>
+
+<p class="fragment">
+So
+</p>
+<div class="fragment">
+\begin{align*}
+  n = - \frac{\ln(A)}{\ln(1.08)} = 6.25.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org02d84ce">
+<h3 id="org02d84ce">Investment return</h3>
+<div class="outline-text-3" id="text-org02d84ce">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org50768be">
+<h4 id="org50768be">An example: Unknown rate</h4>
+<p>
+At an unknown interest rate \(i\), an investment of \(1,000\) immediately and \(1,500\) at the end of the second year accumulates to \(2,600\) at the end of the fourth year. Find \(i\).
+</p>
+
+<p class="fragment">
+<b>Solution</b>
+</p>
+<p class="fragment">
+Setting \(j = 1 + i\), then the equation of value at time \(\tau =4\) reads as
+</p>
+<div class="fragment">
+\begin{align*}
+  1000 j^4 + 1500 j^2 = 2600.
+\end{align*}
+
+</div>
+<p class="fragment">
+Solving the quadratic equation, we get \(j^2 = 1.028342\). So \(i = 0.014\).
+</p>
+
+<p class="fragment">
+<b>Note</b>: The rate we have just calculated is known at the <span style="color: rgb(24,116,205)">yield rate</span> for an investment.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org68d897c">
+<h4 id="org68d897c">Yield rate</h4>
+<p>
+Formally, recall the equation of value with reference time \(\tau\), i.e.,
+</p>
+<div class="fragment">
+\begin{align*}
+  \sum_k C_{t_k} (1 + i)^{\tau - t_k} = B(1 + i)^{\tau - T}.
+\end{align*}
+
+</div>
+<p class="fragment">
+The rate of interest \(i\) which satisfies the above equation (for all other ingredients given and fixed) is called the <span style="color: rgb(24,116,205)">(annual) yield rate</span> or <span style="color: rgb(24,116,205)">internal rate of return</span> for that investment.
+</p>
+
+<p class="fragment">
+The yield rate is often understood as a measure of quality of a certain investment.
+</p>
+
+<p class="fragment">
+There is slightly problem with this line of thinking, as we can see from the following examples &#x2026;
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org4feaf3d">
+<h4 id="org4feaf3d">An example: Non-unique yield rate</h4>
+<p>
+Consider a transaction in which Gautam makes payments of \(100\) immediately and \(132\) at the end of the two years in exchange for a payment in return of \(230\) at the end of one year. What is the yield rate of this investment scheme?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgd00e3ff">
+<h4 id="orgd00e3ff">An example: Non-unique yield rate - Solution</h4>
+<p>
+The equation of value is:
+</p>
+<div class="fragment">
+\begin{align*}
+  100(1+i)^2 + 132 = 230(1+i),
+\end{align*}
+
+</div>
+<p class="fragment">
+which gives the quadratic equation
+</p>
+<div class="fragment">
+\begin{align*}
+  (1 + i)^2 - 2.3(1 + i) + 1.32 = 0.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Now, we factor and obtain
+</p>
+<div class="fragment">
+\begin{align*}
+  [(1+i) - 1.1]\cdot [(1+i) - 1.2] = 0,
+\end{align*}
+
+</div>
+<p class="fragment">
+so that both \(i = 0.1\) and \(i=0.2\) may be considered as solutions!
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org9950f22">
+<h4 id="org9950f22">An example: Undefined yield</h4>
+<p>
+Assume that Johnson is able to borrow \(100\) from a bank for one year at \(8\%\) effective and immediately loan out \(100\) to Harry for one year at \(10\%\) effective. What is Johnson's yield rate for this combination of transaction?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgb15e9bf">
+<h4 id="orgb15e9bf">An example: Undefined yield - Solution</h4>
+<p>
+Apparently, Johnson is able to make a \(2\) profit at the end the one year - without any net investment at time zero.
+</p>
+
+<p class="fragment">
+We might say that this means that the yield rate is infinite &#x2026;
+</p>
+
+<p class="fragment">
+However, if Johnson were able to borrow \(1000\) and then lend that amount of money to Harry, his profit at the end of th one year would be \(20\); this is clearly preferable to the \(2\) profit.
+</p>
+
+<p class="fragment">
+It is sensible to wish to be able to compare the above two cases, but this comparison is not allowed through the definition of the yield rate &#x2026;
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org75c7564">
+<h4 id="org75c7564">A sufficient condition for uniqueness of yield rates</h4>
+<p>
+Hopefully, we have managed to illustrate the importance of showing the <b>existence</b> and <b>uniqueness</b> of yield rates &#x2026;
+</p>
+
+<p class="fragment">
+An easily verified condition (Important Fact 2.4.9) for uniqueness of yield rates is the following:
+</p>
+<p class="fragment">
+Suppose that the contributions take place at times \(t_1 < t_2 <\cdots < t_n\) and that there <b>exists</b> a yield rate \(i>-1\) such that the outstanding balances
+</p>
+<div class="fragment">
+\begin{align*}
+  B_{t_k} = \sum_{q=1}^k C_{t_q}(1 + i)^{t_k-t_q}, \quad \text{for } k \le n-1
+\end{align*}
+
+</div>
+<p class="fragment">
+are all of the <b>same</b> sign. Then \(i\) is the <b>unique</b> yield rate greater than \(-1\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org444fc33">
+<h4 id="org444fc33">Example 2.4.7 - Three party example</h4>
+<p>
+Brian, Filemon, and Harold are friends. Brian will pay Filemon \(1,000\) now. Filemon will pay Brian \(300\) and Harold \(800\) in exactly one year. Finally, Harold will pay Brian \(900\) two years from now. What is Brian's annual yield for this three-way transaction spanning two years?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org0eca5c4">
+<h4 id="org0eca5c4">Example 2.4.7 - Three party example - Solution</h4>
+<p>
+We only focus on Brian's investment, and the time \(2\) equation of value is
+</p>
+<div class="fragment">
+\begin{align*}
+  1000(1 + i)^2 - 300(1 + i) - 900 = 0.
+\end{align*}
+
+</div>
+<p class="fragment">
+The quadratic equation then tell us that
+</p>
+<div class="fragment">
+\begin{align*}
+  1 + i = \frac{3 \pm \sqrt{9 + 360}}{20}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Note that Brian invests \(1,000\) and receives total \(1,200 > 1,000\), he has a positive yield rate, namely,
+</p>
+<div class="fragment">
+\begin{align*}
+  i = \frac{3 + \sqrt{9 + 360}}{20} - 1 = 0.11046836.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org74528d6">
+<h4 id="org74528d6">Bottom line approach</h4>
+<p>
+When computing Brian's yield rate in Example (2.4.7), we were not concerned with the source of the money coming in or the recipient of outgoing money.
+</p>
+
+<p>
+Rather, we took a "bottom line approach." We were only concerned with the times and amounts of all contributions (positive or negative) by Brian. This approach is fundamental to the successful determination of yield rates.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1d15572">
+<h3 id="org1d15572">Reinvestment</h3>
+<div class="outline-text-3" id="text-org1d15572">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org34549c0">
+<h4 id="org34549c0">Example 2.5.1</h4>
+<p>
+Jose loans Martin \(12,000\). Martin repays the loan by paying \(5,000\) at the end of two years and \(10,000\) at the end of four years. The money received at \(t = 2\) is immediately reinvested at an annual effective interest rate of \(2.4\%\).
+</p>
+
+<p>
+Find Martin's rate of interest and Jose's annual yield rate.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgeb1781d">
+<h4 id="orgeb1781d">Example 2.5.1 - Solution</h4>
+<p>
+For Martin, the time \(4\) equation of value is
+</p>
+<div class="fragment">
+\begin{align*}
+12000(1 + i)^4 - 5000(1 + i)^2 - 10000 = 0,
+\end{align*}
+
+</div>
+<p class="fragment">
+which gives \(i = 0.069894953\).
+</p>
+
+<p class="fragment">
+For Jose,
+</p>
+<div class="fragment">
+\begin{align*}
+12000(1 + i_J)^4 = 5000(1 + 0.024)^2 + 10000,
+\end{align*}
+
+</div>
+<p class="fragment">
+which gives \(i_J = 0.061625755\).
+</p>
+
+<p class="fragment">
+<b>Note</b>: Jose's yield rate is lower than Martin's interest since Jose reinvested the $5,000 at an interest rate lower than Martin's rate.
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Read:</span> Example 2.5.2.
+</p>
+</section>
+</section>
+</div>
+</div>
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/markdown/markdown.js"></script>
+<script src="../plugin/notes/notes.js"></script>
+<script src="../plugin/search/search.js"></script>
+<script src="../plugin/zoom/zoom.js"></script>
+<script src="../plugin/reveal.js-menu/menu.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: false,
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'none',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom, RevealMenu, RevealChalkboard ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+,chalkboard: {storage: "chalkboard-demo", toggleChalkboardButton: { left: "80px" },	toggleNotesButton: { left: "130px" },	colorButtons: 5}});
+</script>
+</body>
+</html>

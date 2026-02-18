@@ -1,0 +1,2453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>MATH 4100 - Vector Analysis</title>
+<meta name="author" content="\\
+Jie Zhong \\
+Department of Mathematics \\
+California State University, Los Angeles"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+
+<link rel="stylesheet" href="../dist/theme/serif.css" id="theme"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+
+<link rel="stylesheet" href="../gnohz.css"/>
+<script>window.MathJax = { TeX: {Macros: {range: "\\text{Range}", ow: "\\text{otherwise}"}} }</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1>MATH 4100 - Vector Analysis</h1><h2></h2><h6> <br />
+Jie Zhong <br />
+Department of Mathematics <br />
+California State University, Los Angeles</h6>
+</section>
+<section>
+<section id="slide-org3ace99b">
+<h2 id="org3ace99b">Chapter 1 Vector Algebra</h2>
+<div class="outline-text-2" id="text-org3ace99b">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org06788df">
+<h3 id="org06788df">1.1 Definitions</h3>
+<div class="outline-text-3" id="text-org06788df">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbe8f8db">
+<h4 id="orgbe8f8db">What is a vector?</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">A <b>vector</b> is a quantity that has both direction and magnitude. It can be visualized as a directed line segment.</li>
+<li data-fragment-index="2" class="fragment">A <b>line segment</b> \(PQ\) is a portion of the line between the points \(P\) and \(Q\)</li>
+<li data-fragment-index="3" class="fragment">A <b>directed line segment</b> is a line segment when the endpoints are given a definite order.</li>
+<li data-fragment-index="4" class="fragment">Two directed line segments are <b>equivalent</b> if they are parallel with the same direction and have the same length.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org484e09c">
+<h4 id="org484e09c">Definition (Vector)</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">A <b>vector</b> is a collection of equivalent directed line segments. It is denoted by \(\mathbf{A}\) (boldfaced letters), or \(\underline{A}\) or \(\overrightarrow{A}\).</li>
+<li data-fragment-index="2" class="fragment">In Figure 1.1, we see that \(PQ, RS\), and \(TU\) are all equivalent and they represent the same vector, <span style="color: rgb(24,116,205)">regardless of the initial and end positions</span>.</li>
+
+</ul>
+
+<div id="org2679c7f" class="figure">
+<p><img src="../img/math4100/fig1-1.jpeg" alt="fig1-1.jpeg" width="350px" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org51a25e2">
+<h4 id="org51a25e2">More Definitions</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">The <b>magnitude</b> (or the <b>length</b>, or the <b>norm</b>) \(|\mathbf{A}|\) of a vector \(\mathbf{A}\) is the distance between the initial and terminal points of its (any) equivalent directed line segment.</li>
+<li data-fragment-index="2" class="fragment">If \(P\) and \(Q\) coincide, \(PQ\) is said to be <b>degenerate</b>, and the line segment is just a point. The corresponding vector is called the <b>zero vector</b>.</li>
+<li data-fragment-index="3" class="fragment">Zero vector has zero magnitude and does not have any direction.</li>
+<li data-fragment-index="4" class="fragment"><b>Scalar</b> is just a (real) number.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org9d467dc">
+<h4 id="org9d467dc">Examples</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">Vectors: velocity, position, force, acceleration, etc.</li>
+<li data-fragment-index="2" class="fragment">Scalars: mass, energy, volume, temperature, etc.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgdbfba4d">
+<h3 id="orgdbfba4d">1.2 Addition and Subtraction</h3>
+<div class="outline-text-3" id="text-orgdbfba4d">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge0a3fdb">
+<h4 id="orge0a3fdb">Addition</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">The <b>sum</b> \(\mathbf{C} = \mathbf{A} + \mathbf{B}\) has the initial point at the initial point of \(\mathbf{A}\) and the endpoint at the endpoint of \(\mathbf{B}\).</li>
+<li data-fragment-index="2" class="fragment">By definition, if \(\mathbf{A} = \mathbf{A}'\) and \(\mathbf{B} = \mathbf{B}'\), then</li>
+
+</ul>
+<div class="fragment">
+\begin{align*}
+  \mathbf{A} + \mathbf{B} = \mathbf{A}' + \mathbf{B}'.
+  \end{align*}
+
+</div>
+
+<div id="org26fa465" class="figure">
+<p><img src="../img/math4100/fig1-2.jpeg" alt="fig1-2.jpeg" width="800px" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf6f457a">
+<h4 id="orgf6f457a">Commutative:</h4>
+<div class="fragment">
+\begin{align*}
+  \mathbf{A} + \mathbf{B} = \mathbf{B} + \mathbf{A}.
+  \end{align*}
+
+</div>
+
+<div id="org78f9f18" class="figure">
+<p><img src="../img/math4100/fig1-3.jpeg" alt="fig1-3.jpeg" width="800px" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga816f68">
+<h4 id="orga816f68">Associative: \((\mathbf{A} + \mathbf{B}) + \mathbf{C} = \mathbf{A} + (\mathbf{B} + \mathbf{C})\)</h4>
+
+<div id="org106b522" class="figure">
+<p><img src="../img/math4100/fig1-4.jpeg" alt="fig1-4.jpeg" width="500px" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga7f79fc">
+<h4 id="orga7f79fc">Subtraction</h4>
+
+<div id="org913c912" class="figure">
+<p><img src="../img/math4100/fig1-5.jpeg" alt="fig1-5.jpeg" data-fragment-index="0" width="500px" class="fragment middle" />
+</p>
+</div>
+
+<ul>
+<li data-fragment-index="1" class="fragment">If \(\mathbf{B}\) is a vector, \(-\mathbf{B}\) is defined to be the vector with the same magnitude as \(\mathbf{B}\) but <b>opposite</b> direction.</li>
+<li data-fragment-index="2" class="fragment"><b>Subtraction</b> of vectors: \(\mathbf{A} - \mathbf{B} = \mathbf{A} + (-\mathbf{B})\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org314e7d0">
+<h4 id="org314e7d0">More on Addition and Subtraction</h4>
+<p class="fragment">
+<b>Triangle Rule</b>
+</p>
+
+<div id="orgff8a5f1" class="figure">
+<p><img src="../img/math4100/addition.png" alt="addition.png" width="600px" class="fragment middle" />
+</p>
+</div>
+
+
+<div id="orgf1d91c4" class="figure">
+<p><img src="../img/math4100/subtraction.png" alt="subtraction.png" width="600px" class="fragment middle" />
+</p>
+</div>
+
+<p class="fragment">
+<b>Parallelogram Rule</b>
+</p>
+
+<div id="orgd4be33b" class="figure">
+<p><img src="../img/math4100/parallelogram.jpeg" alt="parallelogram.jpeg" width="600px" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7cd8f5c">
+<h4 id="org7cd8f5c">Properties of Zero Vector</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">\(\mathbf{0} = - \mathbf{0}\)</li>
+<li data-fragment-index="2" class="fragment">\(\mathbf{A} - \mathbf{A} = \mathbf{0}\)</li>
+<li data-fragment-index="3" class="fragment">\(\mathbf{A} + \mathbf{0} = \mathbf{0} + \mathbf{A} = \mathbf{A}\)</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org632b1c6">
+<h4 id="org632b1c6">Exercise (page 6)</h4>
+
+<div id="orgd111c53" class="figure">
+<p><img src="../img/math4100/fig1-6.jpeg" alt="fig1-6.jpeg" data-fragment-index="0" width="400px" class="fragment middle" />
+</p>
+</div>
+
+<ol>
+<li data-fragment-index="1" class="fragment">Write \(\mathbf{C}\) in terms of \(\mathbf{E}, \mathbf{D}, \mathbf{F}\).</li>
+<li data-fragment-index="2" class="fragment">Write \(\mathbf{G}\) in terms of \(\mathbf{C}, \mathbf{D}, \mathbf{E}, \mathbf{K}\).</li>
+<li data-fragment-index="3" class="fragment">Solve for \(\mathbf{x}: \mathbf{x} + \mathbf{B} = \mathbf{F}\).</li>
+<li data-fragment-index="4" class="fragment">Solve for \(\mathbf{x}: \mathbf{x} + \mathbf{H} = \mathbf{D} - \mathbf{E}\).</li>
+
+</ol>
+</section>
+</section>
+<section>
+<section id="slide-org7a2c9c2">
+<h3 id="org7a2c9c2">1.3 Multiplication of Vectors by Numbers</h3>
+<div class="outline-text-3" id="text-org7a2c9c2">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org148cfc5">
+<h4 id="org148cfc5">Properties of Magnitude</h4>
+<div class="column" style="float:left; width: 50%">
+<ul>
+<li data-fragment-index="1" class="fragment">\(|\mathbf{A}| \ge 0\)</li>
+<li data-fragment-index="2" class="fragment">\(|\mathbf{A}| = 0\) if and only if \(\mathbf{A} = \mathbf{0}\)</li>
+<li data-fragment-index="3" class="fragment">\(|\mathbf{A}| = |-\mathbf{A}|\), and \(|\mathbf{A} - \mathbf{B}| = |\mathbf{B} - \mathbf{A}|\)</li>
+<li data-fragment-index="4" class="fragment"><b>Triangle inequality</b>: \(| \mathbf{A} + \mathbf{B} | \le | \mathbf{A} | + | \mathbf{B} |\)</li>
+
+</ul>
+
+</div>
+<div class="column" style="float:right; width: 50%">
+
+<div id="org9a342b2" class="figure">
+<p><img src="../img/math4100/fig1-7.jpeg" alt="fig1-7.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf2a2a73">
+<h4 id="orgf2a2a73">Scalar multiplication</h4>
+<p data-fragment-index="0" class="fragment">
+A <b>scalar multiple</b> of \(\mathbf{A}\) by a number \(s\) is defined by \(s \mathbf{A}\):
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(|s \mathbf{A}| = |s| |\mathbf{A}|\).</li>
+<li data-fragment-index="2" class="fragment">\(s \mathbf{A}\) has the same direction if \(s>0\) or the opposite direction if \(s<0\).</li>
+
+</ul>
+
+
+<div id="orga55849e" class="figure">
+<p><img src="../img/math4100/fig1-8.jpeg" alt="fig1-8.jpeg" width="500px" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org594a9e7">
+<h4 id="org594a9e7">Properties of Scalar Multiplication</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">\(0 \mathbf{A} = \mathbf{0}, 1 \mathbf{A} = \mathbf{A}, (-1) \mathbf{A} = - \mathbf{A}\)</li>
+<li data-fragment-index="2" class="fragment">\((s + t) \mathbf{A} = s \mathbf{A} + t \mathbf{A}\)</li>
+<li data-fragment-index="3" class="fragment">\(s(\mathbf{A} + \mathbf{B}) = s \mathbf{A} + s \mathbf{B}\)</li>
+<li data-fragment-index="4" class="fragment">\(s(t \mathbf{A}) = (st) \mathbf{A}\)</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orge06d7ee">
+<h4 id="orge06d7ee">Standardization</h4>
+<ul>
+<li data-fragment-index="1" class="fragment"><b>Unit vector</b>: a vector whose magnitude is \(1\).</li>
+<li data-fragment-index="2" class="fragment">We can create a unit vector in the direction of any given (nonzero) vector \(\mathbf{A}\):</li>
+
+</ul>
+<div class="fragment">
+\begin{align*}
+  \frac{\mathbf{A}}{|\mathbf{A}|}\quad\text{so that}\quad \left|\frac{\mathbf{A}}{|\mathbf{A}|}  \right| = \frac{|\mathbf{A}|}{|\mathbf{A}|} = 1.
+  \end{align*}
+
+</div>
+<p class="fragment">
+This process is called the <b>standardization</b> or <b>normalization</b> of a vector.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org53860fb">
+<h3 id="org53860fb">1.4 Cartesian Coordinates</h3>
+<div class="outline-text-3" id="text-org53860fb">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org8b8842d">
+<h4 id="org8b8842d">Cartesian Coordinates in \(\mathbb{R}^2\)</h4>
+<div class="column" style="float:left; width: 50%">
+<p class="fragment">
+In this section, we consider a cartesian coordinate system in the plane or \(\mathbb{R}^2\) by introducing two mutually perpendicular axes, labeled as \(x\) and \(y\).
+</p>
+
+</div>
+<div class="column" style="float:right; width: 50%">
+
+<div id="orgb11851c" class="figure">
+<p><img src="../img/math4100/fig1-9.jpeg" alt="fig1-9.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+
+<p class="fragment">
+The unit vectors \(\mathbf{i}, \mathbf{j}\) parallel to the \(x\text{-axis}\), \(y\text{-axis}\), respectively, pointing to the positive directions.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org24edf49">
+<h4 id="org24edf49">Orthogonal Projections</h4>
+<p class="fragment">
+Every vector in the plane can be written uniquely in the form
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbf{A} = A_1 \mathbf{i} + A_2 \mathbf{j}.
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+The real numbers \(A_1, A_2\) are called the cartesian <b>components</b> (or <b>orthogonal projections</b>) of \(\mathbf{A}\).
+</p>
+
+<p class="fragment">
+The magnitude of the vector \(\mathbf{A}\) is
+</p>
+<div class="fragment">
+\begin{align*}
+    \vert\mathbf{A}\vert  = \sqrt{A_1^{2} + A_{2}^{2}}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6a1aaac">
+<h4 id="org6a1aaac">Direction Angles</h4>
+<p class="fragment">
+The angles between the vector and the coordinate axes are the <b>direction angles</b>, which is conventionally taken to be <i>positive</i> in the counterclockwise sense.
+</p>
+
+<p class="fragment">
+Suppose \(\mathbf{A}\) is a nonzero vector, how to express the direction angle \(\theta\) in the figure below in terms of \(\mathbf{A}, A_1, A_2\)?
+</p>
+
+<div class="column" style="float:right; width: 50%">
+
+<div id="org0d85aed" class="figure">
+<p><img src="../img/math4100/fig1-11.jpeg" alt="fig1-11.jpeg" class="fragment" />
+</p>
+</div>
+
+</div>
+<div class="column" style="float:left; width: 50%">
+<div class="fragment">
+\begin{align*}
+    \cos \theta = \frac{A_1}{|\mathbf{A}|}.
+    \end{align*}
+
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge5b2941">
+<h3 id="orge5b2941">1.5 Space Vectors</h3>
+<div class="outline-text-3" id="text-orge5b2941">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9e30896">
+<h4 id="org9e30896">Cartesian Coordinates in \(\mathbb{R}^3\)</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">All concepts or ideas from Sec 1.4 can be extended to \(\mathbb{R}^3\).</li>
+<li data-fragment-index="2" class="fragment">The unit vectors \(\mathbf{i}, \mathbf{j}, \mathbf{k}\) parallel to the \(x\text{-axis}\), \(y\text{-axis}\), \(z\text{-axis}\) respectively, pointing to the positive directions.</li>
+<li data-fragment-index="3" class="fragment">Every vector in the plane can be written <i>uniquely</i> in the form</li>
+
+</ul>
+<div data-fragment-index="4" class="fragment">
+\begin{align*}
+    \mathbf{A} = A_1 \mathbf{i} + A_2 \mathbf{j} + A_3 \mathbf{k}.
+\end{align*}
+
+</div>
+<ul data-fragment-index="5" class="fragment">
+<li>The real numbers \(A_1, A_2, A_3\) are called the cartesian <b>components</b> (or <b>orthogonal projections</b>) of \(\mathbf{A}\).</li>
+
+</ul>
+
+</section>
+<section>
+
+<div id="orge8ea9f1" class="figure">
+<p><img src="../img/math4100/fig1-12.jpeg" alt="fig1-12.jpeg" width="600px" class="middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga6d22b4">
+<h4 id="orga6d22b4">Magnitude and Direction Angles</h4>
+<p class="fragment">
+The magnitude of the vector \(\mathbf{A}\) is
+</p>
+<div class="fragment">
+\begin{align*}
+    \vert\mathbf{A}\vert  = \sqrt{A_1^{2} + A_{2}^{2} + A_3^2}
+\end{align*}
+
+</div>
+<p class="fragment">
+The angles between the vector and the coordinate axes are the <b>direction angles</b>, which can be determined by
+</p>
+<div class="fragment">
+\begin{align*}
+  \cos \alpha = \frac{A_1}{|\mathbf{A}|}, \quad
+  \cos \beta = \frac{A_2}{|\mathbf{A}|}, \quad
+  \cos \gamma = \frac{A_3}{|\mathbf{A}|}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org66832e7">
+<h4 id="org66832e7">Pythagorean Theorem</h4>
+
+<div id="orgd366532" class="figure">
+<p><img src="../img/math4100/fig1-14.jpeg" alt="fig1-14.jpeg" width="500px" class="fragment middle" />
+</p>
+</div>
+
+<div class="fragment">
+\begin{align*}
+  \cos^2 \alpha + \cos^2 \beta + \cos^2 \gamma = 1.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org147a81b">
+<h4 id="org147a81b">Addition and Scalar Multiplication in \(\mathbb{R}^3\)</h4>
+<p data-fragment-index="0" class="fragment">
+Vector addition and scalar multiplication proceeds <b>component-wise</b>:
+</p>
+
+<p data-fragment-index="0" class="fragment">
+Suppose \(\mathbf{A} = A_1 \mathbf{i} + A_2 \mathbf{j} + A_3 \mathbf{k}\) and \(\mathbf{B} = B_1 \mathbf{i} + B_2 \mathbf{j} + B_3 \mathbf{k}\), then
+</p>
+
+<ul>
+<li data-fragment-index="1" class="fragment">\(\mathbf{A} + \mathbf{B} = (A_1 + B_1) \mathbf{i} + (A_2 + B_2) \mathbf{j} + (A_3 + B_3) \mathbf{k}\)</li>
+<li data-fragment-index="2" class="fragment">\(s \mathbf{A} = (s A_1) \mathbf{i} + (s A_2) \mathbf{j} + (s A_3) \mathbf{k}\)</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgb3b0376">
+<h3 id="orgb3b0376">1.6 Types of Vectors</h3>
+<ul data-fragment-index="1" class="fragment">
+<li><b>Position vector</b> of the particle: directed line segment extending from the origin \((0, 0, 0)\) to the point \((x, y, z)\) where the particle is located.</li>
+
+</ul>
+<div data-fragment-index="2" class="fragment">
+\begin{align*}
+  \mathbf{R} = x \mathbf{i} + y \mathbf{j}  + z \mathbf{k}.
+  \end{align*}
+
+</div>
+<ul data-fragment-index="3" class="fragment">
+<li><b>Displacement vector</b> of the particle: directed line segment extending from the initial position \(\mathbf{R}_1 = (x_1, y_1, z_1)\) to its final position \(\mathbf{R}_2 = (x_2, y_2, z_2)\).</li>
+
+</ul>
+<div data-fragment-index="4" class="fragment">
+\begin{align*}
+   \mathbf{R}_2 - \mathbf{R}_1 = (x_2 - x_1) \mathbf{i} + (y_2 - y_1) \mathbf{j} + (z_2 - z_1) \mathbf{k}.
+  \end{align*}
+
+</div>
+<ul data-fragment-index="5" class="fragment">
+<li>The displacement vector is an <b>intrinsic</b> property of the particle, i.e, it does not depend on the choice of the coordinate system.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org8b42e9f">
+<h3 id="org8b42e9f">1.7 Some Problems in Geometry</h3>
+<div class="outline-text-3" id="text-org8b42e9f">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5da7268">
+<h4 id="org5da7268">Example 1.2</h4>
+<p class="fragment">
+If the midpoints of the consecutive sides of a quadrilateral are joined by line segments, is the resulting quadrilateral a parallelogram?
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: <i>The quadrilateral needs not be a plane figure</i>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org48039ce">
+<h4 id="org48039ce">Solution</h4>
+<div class="column" style="float:left; width: 50%">
+<p class="fragment">
+Let the sides be made into directed line segments \(\mathbf{A}, \mathbf{B}, \mathbf{C}\), and \(\mathbf{D}\), as shown.
+</p>
+
+</div>
+<div class="column" style="float:right; width: 45%">
+
+<div id="org7895e38" class="figure">
+<p><img src="../img/math4100/fig1-16.jpeg" alt="fig1-16.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">WTS</span>: \(TUVW\) is a parallelogram.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org083b119">
+<h4 id="org083b119">Solution - Continued</h4>
+<div class="column" style="float:left; width: 60%">
+<ul>
+<li data-fragment-index="1" class="fragment">To conclude that \(TUVW\) is a parallelogram, we will show that \(\overrightarrow{TU}= -\overrightarrow{VW}\).</li>
+<li data-fragment-index="2" class="fragment">We have</li>
+
+</ul>
+<div data-fragment-index="3" class="fragment">
+\begin{align*}
+      \overrightarrow{TU} = \frac{1}{2}\mathbf{A} + \frac{1}{2} \mathbf{B} = \frac{1}{2}( \mathbf{A} + \mathbf{B} ),
+\end{align*}
+
+</div>
+<div data-fragment-index="4" class="fragment">
+\begin{align*}
+      \overrightarrow{VW} = \frac{1}{2}\mathbf{C} + \frac{1}{2} \mathbf{D} = \frac{1}{2}( \mathbf{C} + \mathbf{D} ).
+\end{align*}
+
+</div>
+<ul>
+<li data-fragment-index="5" class="fragment">\(\mathbf{A} + \mathbf{B} + \mathbf{C} + \mathbf{D} = \mathbf{0}\).</li>
+<li data-fragment-index="6" class="fragment">Since \(\mathbf{A} + \mathbf{B} = - (\mathbf{C} + \mathbf{D})\), we have \(\overrightarrow{TU} = - \overrightarrow{VW}\).</li>
+
+</ul>
+
+</div>
+<div class="column" style="float:right; width: 40%">
+
+<div id="org85624cd" class="figure">
+<p><img src="../img/math4100/fig1-16.jpeg" alt="fig1-16.jpeg" data-fragment-index="0" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9e0608f">
+<h4 id="org9e0608f">Example 1.5</h4>
+<p class="fragment">
+Let \(\theta\) denote the angle between two nonzero vectors \(\mathbf{A}\) and \(\mathbf{B}\). Show that
+</p>
+
+<div class="fragment">
+\begin{align*}
+  \cos \theta = \frac{A_1 B_1 + A_2 B_2 + A_3 B_3}{|\mathbf{A}| |\mathbf{B}|}.
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: <i>This is one of the most important identities in vector algebra</i>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org0d7b02c">
+<h4 id="org0d7b02c">Idea of Proof</h4>
+<p class="fragment">
+Compare component-wise and geometric derivation of \(|\mathbf{A}- \mathbf{B}|\).
+</p>
+
+
+<div id="org265ec6a" class="figure">
+<p><img src="../img/math4100/fig1-19.jpeg" alt="fig1-19.jpeg" width="75%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org8ee72dd">
+<h4 id="org8ee72dd">Proof</h4>
+<p class="fragment">
+Using components:
+</p>
+<div class="fragment">
+\begin{align*}
+  \vert \mathbf{A} - \mathbf{B} \vert^2
+& = (A_1 - B_1)^2 + (A_2 - B_2)^2 + (A_3 - B_3)^2 \\
+& = \vert \mathbf{A} \vert^2 + \vert \mathbf{B} \vert^2 - 2(A_1 B_1 + A_2 B_2 + A_3 B_3).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Using geometry:
+</p>
+<div class="fragment">
+\begin{align*}
+  \vert \mathbf{A} - \mathbf{B} \vert^2
+& = (|\mathbf{B}| \sin \theta)^2 + (|\mathbf{A}| - |\mathbf{B}| \cos \theta)^2 \\
+& = \vert \mathbf{B} \vert^2 (\sin^2 \theta + \cos^2 \theta) + \vert \mathbf{A} \vert^2 - 2 |\mathbf{A}| |\mathbf{B}| \cos \theta\\
+& = \vert \mathbf{A} \vert^2  + \vert \mathbf{B} \vert^2 - 2 |\mathbf{A}| |\mathbf{B}| \cos \theta.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Comparing two expressions of \(|\mathbf{A} - \mathbf{B}|^2\), we conclude
+</p>
+<div class="fragment">
+\begin{align*}
+       \vert \mathbf{A} \vert   \vert \mathbf{B} \vert \cos \theta = A_1 B_1 + A_2 B_2 + A_3 B_3.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org85b8acb">
+<h4 id="org85b8acb">Example 1.6</h4>
+<p class="fragment">
+Show that the vectors \(\mathbf{A} = 2 \mathbf{i} - \mathbf{j} + 5 \mathbf{k}\) and \(\mathbf{B} = \mathbf{i} + 7 \mathbf{j} + \mathbf{k}\) are perpendicular to each other.
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<div class="fragment">
+\begin{align*}
+  \cos \theta = \frac{2 - 7 + 5}{\sqrt{30} \sqrt{51}} = 0,
+  \end{align*}
+
+</div>
+<p class="fragment">
+so \(\theta = 90^\circ\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgcf19cfc">
+<h3 id="orgcf19cfc">1.8 Equations of a Line</h3>
+<div class="outline-text-3" id="text-orgcf19cfc">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgce4d197">
+<h4 id="orgce4d197">Parametric Equation</h4>
+<p class="fragment">
+Given a point \(\mathbf{R}_0 = x_0 \mathbf{i}+  y_0 \mathbf{j} +  z_0 \mathbf{k}\), and a nonzero vector \(\mathbf{V}= a \mathbf{i} + b \mathbf{j} + c \mathbf{k}\), the <b>parametric equation of the line</b> that passing through \(\mathbf{R}_0\) and parallel to \(\mathbf{V}\) is
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R} = \mathbf{R}_0 + t \mathbf{V}\quad\text{or}\quad \begin{cases}
+  x & = x_0 + at\\
+  y & = y_0 + bt\\
+  z & = z_0 + ct
+  \end{cases},
+      \end{align*}
+
+</div>
+<p class="fragment">
+where \(t\) is a <b>parameter</b> that ranges between \(-\infty\) and \(\infty\) (you may think of it as time).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org3a6267e">
+<h4 id="org3a6267e">How to Derive the Equation?</h4>
+<div class="column" style="float:left; width: 50%">
+<p class="fragment">
+Note that \(\mathbf{R}\) and \(\mathbf{R}_0\) are two points on the line, so the vector from \(\mathbf{R}_0\) to \(\mathbf{R}\) should be parallel to the desired line, and thus should be parallel to \(\mathbf{V}\), that is,
+</p>
+<div class="fragment">
+\begin{align*}
+    \mathbf{R} - \mathbf{R}_0 = t \mathbf{V}.
+\end{align*}
+
+</div>
+
+</div>
+<div class="column" style="float:right; width: 48%">
+
+<div id="org86bb092" class="figure">
+<p><img src="../img/math4100/fig1-20.jpeg" alt="fig1-20.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+
+<p class="fragment">
+<span style="color: rgb(30,144,255)">Note</span>: we used the fact that <i>two vectors are parallel to each other if and only if they are scalar multiple of each other</i>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org278fa4e">
+<h4 id="org278fa4e">More on Parametric Equations</h4>
+<div data-fragment-index="1" class="fragment">
+\begin{align*}
+  \mathbf{R} = \mathbf{R}_0 + t \mathbf{V}.
+\end{align*}
+
+</div>
+<p data-fragment-index="2" class="fragment">
+Try out some values of \(t\):
+</p>
+<div class="column" style="float:left; width: 50%">
+<ul>
+<li data-fragment-index="3" class="fragment">\(t = 0\), then \(\mathbf{R} = \mathbf{R}_0\)</li>
+<li data-fragment-index="4" class="fragment">\(t = 1\), then \(\mathbf{R} = \mathbf{R}_0 + \mathbf{V}\)</li>
+<li data-fragment-index="5" class="fragment">\(t = -1\), then \(\mathbf{R} = \mathbf{R}_0 - \mathbf{V}\)</li>
+
+</ul>
+
+</div>
+<div class="column" style="float:right; width: 50%">
+
+<div id="org3327f27" class="figure">
+<p><img src="../img/math4100/fig1-21.jpeg" alt="fig1-21.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org273a82c">
+<h4 id="org273a82c">More on Parametric Equations - Continued</h4>
+<p class="fragment">
+We can replace \(t\) by any scalar function of \(t\), as long as the function takes <b>all</b> values between \(-\infty\) and \(\infty\).
+</p>
+
+<p class="fragment">
+For example,
+</p>
+<div class="fragment">
+\begin{align*}
+  t/2, -t, ~\text{or} ~ t^3.
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: Parametric form is <b>not</b> unique.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org2d5c97e">
+<h4 id="org2d5c97e">More on Parametric Equations - Continued</h4>
+<p>
+However, if we write
+</p>
+<div class="fragment">
+\begin{align*}
+ \mathbf{R} = \mathbf{R}_0 + t^2 \mathbf{V},
+  \end{align*}
+
+</div>
+<p class="fragment">
+then it represents only "half" of the line.
+</p>
+
+<p class="fragment">
+Or, if we write
+</p>
+<div class="fragment">
+\begin{align*}
+ \mathbf{R} = \mathbf{R}_0 + (\sin t) \mathbf{V},
+  \end{align*}
+
+</div>
+<p class="fragment">
+then it represents just the segment of the line between \(\mathbf{R}_0 - \mathbf{V}\) and \(\mathbf{R}_0 + \mathbf{V}\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5813ecb">
+<h4 id="org5813ecb">Non-parametric Form</h4>
+<p class="fragment">
+Recall the parametric form:
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R} = \mathbf{R}_0 + t \mathbf{V}\quad\text{or}\quad \begin{cases}
+  x & = x_0 + at\\
+  y & = y_0 + bt\\
+  z & = z_0 + ct
+  \end{cases},
+      \end{align*}
+
+</div>
+
+<p class="fragment">
+Alternatively, if we eliminate \(t\) (assuming \(a, b, c\) nonzero), we obtain the <b>non-parametric</b> equation of the line
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{x - x_0}{a} = \frac{y - y_0}{b} = \frac{z - z_0}{c}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgd78a459">
+<h4 id="orgd78a459">Example 1.8</h4>
+<p class="fragment">
+Find equations of the line passing through \((2, 0, 4)\) and parallel to \(2 \mathbf{i} + \mathbf{j} + 3 \mathbf{k}\), both in the parametric and non-parametric form.
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+
+<p class="fragment">
+The condition that \(\mathbf{R} - \mathbf{R}_0\) is parallel to \(\mathbf{V}\) becomes
+</p>
+<div class="fragment">
+\begin{align*}
+x - 2 = 2t, \quad y - 0 = 1 t, \quad z - 4 = 3t.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Equivalently,
+</p>
+<div class="fragment">
+\begin{align*}
+x = 2 + 2t, \quad y = t, \quad z = 4 + 3t.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Non-parametric form:
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{x - 2}{2} = y = \frac{z - 4}{3}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org293480e">
+<h4 id="org293480e">Example 1.10</h4>
+<p class="fragment">
+Find a unit vector parallel to the line
+</p>
+<div class="fragment">
+\begin{align*}
+x - 2 = 2 y -3 = \frac{- 2z + 1}{2}.
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+
+<p class="fragment">
+By comparing with the general non-parametric form
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{x - x_0}{a} = \frac{y - y_0}{b} = \frac{z - z_0}{c},
+\end{align*}
+
+</div>
+<p class="fragment">
+we have
+</p>
+<div class="fragment">
+\begin{align*}
+a = 1, b = \frac{1}{2}, c = -1.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9e721f4">
+<h4 id="org9e721f4">Example 1.10 - Continued</h4>
+<p class="fragment">
+Vector parallel to the line is
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{i} + \frac{1}{2} \mathbf{j} - \mathbf{k}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Normalization:
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{\mathbf{i} + \frac{1}{2} \mathbf{j} - \mathbf{k}}{|\mathbf{i} + \frac{1}{2} \mathbf{j} - \mathbf{k}|} = \frac{2}{3} \mathbf{i} + \frac{1}{3} \mathbf{j} - \frac{2}{3} \mathbf{k}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4d8fe02">
+<h3 id="org4d8fe02">1.9 Scalar Products</h3>
+<div class="outline-text-3" id="text-org4d8fe02">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org05d99cb">
+<h4 id="org05d99cb">Definition</h4>
+<p class="fragment">
+Recall the identity:
+</p>
+<div class="fragment">
+\begin{align*}
+  \cos \theta = \frac{A_1 B_1 + A_2 B_2 + A_3 B_3}{|\mathbf{A}| |\mathbf{B}|},
+  \end{align*}
+
+</div>
+<p class="fragment">
+or, equivalently,
+</p>
+<div class="fragment">
+\begin{align*}
+\vert \mathbf{A} \vert \vert \mathbf{B} \vert \cos \theta = A_1 B_1 + A_2 B_2 + A_3 B_3.
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+<b>Scalar product</b> (<b>dot product</b> or <b>inner product</b>) of vectors \(\mathbf{A}\) and \(\mathbf{B}\):
+</p>
+<div class="fragment">
+\begin{align*}
+ \mathbf{A}\cdot \mathbf{B} & = \vert \mathbf{A}\vert \vert \mathbf{B} \vert \cos \theta && \textit{geometric form}\\
+  & = A_1 B_1 + A_2 B_2 + A_3 B_3 && \textit{component form}
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org14a067e">
+<h4 id="org14a067e">Geometric Interpretation</h4>
+<div class="fragment">
+  \begin{align*}
+\mathbf{A} \cdot \mathbf{B} =
+(\text{length of $\mathbf{A}$})(\text{signed component of $\mathbf{B}$ along $\mathbf{A}$})\end{align*}
+
+</div>
+
+
+<div id="org053c981" class="figure">
+<p><img src="../img/math4100/fig1-23.jpeg" alt="fig1-23.jpeg" width="75%" class="fragment middle" />
+</p>
+</div>
+
+<p class="fragment">
+We identify \(\mathbf{B}\cos \theta\) as the length of the orthogonal projection of \(\mathbf{B}\) in the direction of \(\mathbf{A}\), with positive sign if \(\theta < \pi /2\) or negative sign if \(\theta > \pi / 2\).
+</p>
+
+<p class="fragment">
+Two nonzero vectors \(\mathbf{A}, \mathbf{B}\) are <b>orthogonal</b> (or <b>perpendicular</b>), denoted by \(\mathbf{A} \perp \mathbf{B}\), if
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{A} \cdot \mathbf{B} = 0.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org79e59d8">
+<h4 id="org79e59d8">Properties of Scalar Product</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">\(\mathbf{A} \cdot \mathbf{A} = |\mathbf{A}|^2\).</li>
+<li data-fragment-index="2" class="fragment">\(\mathbf{A} \cdot \mathbf{A} \ge 0\)</li>
+<li data-fragment-index="3" class="fragment">\(\mathbf{A} \cdot \mathbf{A} = 0\) if and only if \(\mathbf{A} = \mathbf{0}\)</li>
+<li data-fragment-index="4" class="fragment">\(\mathbf{A} \cdot \mathbf{B} = \mathbf{B} \cdot \mathbf{A}\)</li>
+<li data-fragment-index="5" class="fragment">\((\mathbf{A} + \mathbf{B}) \cdot \mathbf{C} = \mathbf{A} \cdot \mathbf{C} + \mathbf{B} \cdot \mathbf{C}\)</li>
+<li data-fragment-index="6" class="fragment">\((a \mathbf{A})\cdot \mathbf{B} = \mathbf{A} \cdot (a \mathbf{B}) = a(\mathbf{A} \cdot \mathbf{B})\)</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgab11334">
+<h4 id="orgab11334">Scalar Product in Physics</h4>
+<div>
+\begin{align*}
+\text{Work} = \mathbf{F} \cdot \mathbf{D},
+  \end{align*}
+
+</div>
+<p>
+where \(\mathbf{F}\) is a constant force acting through a displacement \(\mathbf{D}\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org9c353a2">
+<h4 id="org9c353a2">Example 1.13</h4>
+<p class="fragment">
+Find the scalar product of \(4 \mathbf{i} - 5 \mathbf{j} - \mathbf{k}\) and \(\mathbf{i} + 2 \mathbf{j} + 3 \mathbf{k}\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+
+<div class="fragment">
+\begin{align*}
+4 \cdot 1 + (-5) \cdot 2 + (-1) \cdot 3 = - 9.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga2810d6">
+<h4 id="orga2810d6">Example 1.14</h4>
+<p data-fragment-index="1" class="fragment">
+Find the angle between the vectors \(\mathbf{A} = 2 \mathbf{i} + 2 \mathbf{j} - \mathbf{k}\) and \(\mathbf{B} = 3 \mathbf{i} + 4 \mathbf{j}\).
+</p>
+
+<p data-fragment-index="2" class="fragment">
+<i>Solution</i>
+</p>
+<ul>
+<li data-fragment-index="3" class="fragment">\(|\mathbf{A}| = 3\) and \(|\mathbf{B}| = 5\).</li>
+
+<li data-fragment-index="4" class="fragment">\(\mathbf{A} \cdot \mathbf{B} = 14\).</li>
+
+<li data-fragment-index="5" class="fragment">\(\cos \theta = \mathbf{A} \cdot \mathbf{B} / |\mathbf{A}| |\mathbf{B}| = 14/15\).</li>
+
+<li data-fragment-index="6" class="fragment">\(\theta = \cos^{-1}(14/ 15)\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org096362e">
+<h4 id="org096362e">Example 1.16 (A Maximal Principle)</h4>
+<p class="fragment">
+<i>The unit vector \(\mathbf{n}\) making \(\mathbf{D}\cdot \mathbf{n}\) a maximum is the unit vector pointing in the same direction as \(\mathbf{D}\).</i>
+</p>
+
+<p class="fragment">
+Why?
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{D} \cdot \mathbf{n} = |\mathbf{D}||\mathbf{n}| \cos \theta = |\mathbf{D}| \cos \theta.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+This will be a maximum when \(\cos \theta = 1\), i.e., \(\theta = 0\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org2aad34a">
+<h4 id="org2aad34a">Example 1.17</h4>
+<p class="fragment">
+The scalar product can be used to express components along the axes.
+</p>
+
+<p class="fragment">
+For any vector \(\mathbf{A} = x \mathbf{i} + y \mathbf{j} + z \mathbf{k}\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+x = \mathbf{A} \cdot \mathbf{i}, y = \mathbf{A} \cdot \mathbf{j}, z = \mathbf{A} \cdot \mathbf{k},
+  \end{align*}
+
+</div>
+<p class="fragment">
+and thus
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{A} = (\mathbf{A} \cdot \mathbf{i}) \mathbf{i} + (\mathbf{A} \cdot \mathbf{j}) \mathbf{j} + (\mathbf{A} \cdot \mathbf{k}) \mathbf{k}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org350d72e">
+<h4 id="org350d72e">Parallel and Perpendicular Decomposition</h4>
+<p class="fragment">
+Given two vectors \(\mathbf{A}\) and \(\mathbf{B}\), and we would like to decompose \(\mathbf{B}\) as follows:
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{B} = \mathbf{B}_{\|} + \mathbf{B}_\perp,
+  \end{align*}
+
+</div>
+<p class="fragment">
+where \(\mathbf{B}_{\|}\) is parallel to \(\mathbf{A}\) and \(\mathbf{B}_\perp\) is perpendicular to \(\mathbf{A}\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org92d117a">
+<h4 id="org92d117a">Parallel Component</h4>
+<p class="fragment">
+By the geometric interpretation of the scalar product,
+</p>
+<div class="fragment">
+    \begin{align*}
+& \text{The (signed) length of component of $\mathbf{B}$ along $\mathbf{A}$}\\
+ = &\vert \mathbf{B}\vert \cos \theta
+ =  \frac{\mathbf{B} \cdot \mathbf{A}}{|\mathbf{A}|}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Now we would like to construct a vector of the length above, but in the direction of \(\mathbf{A}\) (so it will be parallel to \(\mathbf{A}\)).
+</p>
+
+<p class="fragment">
+We just simply take the unit vector along \(\mathbf{A}\) and multiply by the length, and we have the following:
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{B}_{\|} = \frac{\mathbf{B}\cdot \mathbf{A}}{|\mathbf{A}|} \frac{\mathbf{A}}{|\mathbf{A}|} = \frac{\mathbf{B}\cdot \mathbf{A}}{\mathbf{A} \cdot \mathbf{A}} \mathbf{A}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga7392e3">
+<h4 id="orga7392e3">Parallel Component - Continued</h4>
+
+<div id="org407e8c1" class="figure">
+<p><img src="../img/math4100/fig1-25.jpeg" alt="fig1-25.jpeg" width="350px" class="fragment middle" />
+</p>
+</div>
+
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note:</span>
+The length of the parallel component is
+</p>
+
+<div class="fragment">
+\begin{align*}
+  |\mathbf{B}_{\|}| = \frac{|\mathbf{B} \cdot \mathbf{A}|}{|\mathbf{A}|^2} |\mathbf{A}| = \frac{|\mathbf{B}\cdot \mathbf{A}|}{|\mathbf{A}|}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org30b74a0">
+<h4 id="org30b74a0">Perpendicular Component</h4>
+<p class="fragment">
+Then we see that \(\mathbf{B}_\perp\) is just the rest of \(\mathbf{B}\):
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{B}_\perp = \mathbf{B} - \mathbf{B}_{\|} = \mathbf{B} - \frac{\mathbf{B}\cdot \mathbf{A}}{\mathbf{A} \cdot \mathbf{A}} \mathbf{A}.
+\end{align*}
+
+</div>
+
+
+<div id="orgdbdb897" class="figure">
+<p><img src="../img/math4100/fig1-25.jpeg" alt="fig1-25.jpeg" width="350px" class="fragment middle" />
+</p>
+</div>
+
+<p class="fragment">
+It is easy to check that \(\mathbf{B}_{\|}\perp \mathbf{B}_\perp\) directly.
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: This is also the basic idea of the <i>Gram-Schmidt</i> process to orthogonalize a set of vectors.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgdd30cac">
+<h4 id="orgdd30cac">Example 1.18</h4>
+<p class="fragment">
+Decompose the vector \(6 \mathbf{i}+2 \mathbf{j} - 2 \mathbf{k}\) into vectors parallel and perpendicular to \(\mathbf{i} + \mathbf{j} + \mathbf{k}\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+The parallel vector is
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{6 + 2 - 2}{1 + 1 + 1}(\mathbf{i} + \mathbf{j} + \mathbf{k}) = 2(\mathbf{i} + \mathbf{j} + \mathbf{k}).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+The perpendicular vector is
+</p>
+<div class="fragment">
+\begin{align*}
+6 \mathbf{i}+2 \mathbf{j} - 2 \mathbf{k} - 2(\mathbf{i} + \mathbf{j} + \mathbf{k}) = 4 \mathbf{i} - 4 \mathbf{k}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7d3984b">
+<h3 id="org7d3984b">1.10 Equations of a Plane</h3>
+<div class="outline-text-3" id="text-org7d3984b">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org72bb696">
+<h4 id="org72bb696">Parametric Equation of a Plane</h4>
+<p class="fragment">
+Recall that in Section 1.8, we specified a straight line by giving a point \(\mathbf{R}_0\) on the line and a vector \(\mathbf{V}\) parallel to the line:
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R} - \mathbf{R}_0 = t \mathbf{V}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+Similarly, we specify a plane by giving a point \(\mathbf{R}_0\) in the plane, and <i>two</i> vectors \(\mathbf{A}\) and \(\mathbf{B}\) parallel to the plane:
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R} - \mathbf{R}_0 = s \mathbf{A} + t \mathbf{B},
+  \end{align*}
+
+</div>
+<p class="fragment">
+for \(-\infty < s, t < \infty\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: The expressions \(s \mathbf{A} + t \mathbf{B}\) is called a <i>linear combination</i> of \(\mathbf{A}\) and \(\mathbf{B}\), which <i>spans</i> the plane.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgab01369">
+<h4 id="orgab01369">Non-parametric Equation of a Plane</h4>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Key observation</span> : can use one <i>normal</i> (or <i>perpendicular</i>) vector \(\mathbf{N}\) to the plane, instead of \(\mathbf{A}\) and \(\mathbf{B}\).
+</p>
+
+<div class="column" style="float:left; width: 55%">
+<p class="fragment">
+If \(\mathbf{R}\) is the position vector to a point in the plane, then
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R} - \mathbf{R}_0 \perp \mathbf{N},
+\end{align*}
+
+</div>
+<p class="fragment">
+or equivalently,
+</p>
+<div class="fragment">
+\begin{align*}
+(\mathbf{R} - \mathbf{R}_0) \cdot \mathbf{N} = 0.
+\end{align*}
+
+</div>
+
+</div>
+<div class="column" style="float:right; width: 40%">
+
+<div id="orgca76b63" class="figure">
+<p><img src="../img/math4100/fig1-28.jpeg" alt="fig1-28.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgc7cac59">
+<h4 id="orgc7cac59">Non-parametric Equation of a Plane - Continued</h4>
+<p class="fragment">
+Assume that \(\mathbf{R} = x \mathbf{i} + y \mathbf{j} + z \mathbf{k}, \mathbf{R}_0 = x_0 \mathbf{i} + y_0 \mathbf{j} + z_0 \mathbf{k}\) , and \(\mathbf{N} = a \mathbf{i} + b \mathbf{j} + c \mathbf{k}\), then
+</p>
+<div class="fragment">
+\begin{align*}
+(\mathbf{R} - \mathbf{R}_0) \cdot \mathbf{N} = 0 \Leftrightarrow a(x - x_0) + b(y - y_0) + c(z - z_0) = 0,
+\end{align*}
+
+</div>
+<p class="fragment">
+or equivalently,
+</p>
+<div class="fragment">
+\begin{align*}
+    a x + by + cz = d,
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(d = \mathbf{R}_0 \cdot \mathbf{N} = a x_0 + b y_0 + c z_0\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orga636b5d">
+<h4 id="orga636b5d">Example 1.20</h4>
+<p class="fragment">
+Find an equation of the plane passing through \((1, 3, -6)\) perpendicular to the vector \(3 \mathbf{i} - 2 \mathbf{j} + 7 \mathbf{k}\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<div class="fragment">
+\begin{align*}
+3(x -1) -2(y - 3) + 7 (z + 6)=0,
+\end{align*}
+
+</div>
+
+<p class="fragment">
+or,
+</p>
+<div class="fragment">
+\begin{align*}
+3x - 2y + 7 z = -45.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org301d9f8">
+<h4 id="org301d9f8">Example 1.21</h4>
+<p class="fragment">
+Find an equation of the plane passing through \((1, 2, 3)\) perpendicular to the line
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{x - 1}{4} = \frac{y}{5} = \frac{z + 5}{6}.
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+A vector parallel to the given line above can be read off the coefficients in the denominator:
+</p>
+<div class="fragment">
+\begin{align*}
+4 \mathbf{i} + 5 \mathbf{j} + 6 \mathbf{k}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+This vector is perpendicular to the desired plane, so
+</p>
+<div class="fragment">
+\begin{align*}
+4(x - 1) + 5 (y -2) + 6(z -3) = 0.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga5c29a2">
+<h4 id="orga5c29a2">Example 1.23</h4>
+<p class="fragment">
+Find the angle between the two planes \(3x + 4y = 0\) and \(2x + y - 2z = 5\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+Key observation:
+</p>
+<div class="fragment">
+\begin{align*}
+& ~\text{The angle between two planes}\\
+= & ~\text{The angle between normal vectors to the two planes}
+\end{align*}
+
+</div>
+
+<p class="fragment">
+The normal vectors are
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{N}_1 = 3 \mathbf{i} + 4 \mathbf{j}, \quad \mathbf{N}_2 = 2 \mathbf{i} + \mathbf{j} - 2 \mathbf{k}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+The angle is obtained via
+</p>
+<div class="fragment">
+\begin{align*}
+    \cos \theta = \frac{\mathbf{N}_1 \cdot \mathbf{N}_2}{|\mathbf{N}_1| |\mathbf{N}_2|} = \frac{6 + 4}{5 \cdot 3} = \frac{2}{3}.
+\end{align*}
+
+</div>
+
+<div class="fragment">
+\begin{align*}
+\theta = \cos^{-1}(2/3) \approx 48^\circ.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbbca306">
+<h4 id="orgbbca306">Example 1.24</h4>
+<p class="fragment">
+Show that the distance between an arbitrary point \((x_1, y_1, z_1)\) and the plane \(ax + by + cz = d\) is given by
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{|a x_1 + b y_1 + c z_1 - d|}{(a^2 + b^2 + c^2)^{1/2}}.
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+The desired distance is the <i>absolute value</i> of the (signed) length of the component of \(\mathbf{R}_1 - \mathbf{R}_0\) along the normal vector, where \(\mathbf{R}_1\) is the position vector of the point \((x_1, y_1, z_1)\), and \(\mathbf{R}_0\) is the position vector of the point \((x, y, z)\) in the plane.
+</p>
+
+<p class="fragment">
+Thus, the distance is
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{|(\mathbf{R}_1 - \mathbf{R}_0) \cdot \mathbf{N}|}{|\mathbf{N}|} = \frac{|\mathbf{R}_1 \cdot \mathbf{N} - d|}{|\mathbf{N}|}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4819cf1">
+<h4 id="org4819cf1">Example 1.25</h4>
+<p class="fragment">
+Find the distance between the parallel planes \(x + y + z = 5\) and \(x + y + z = 10\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+We first pick an arbitrary point in the first plane, say \((1, 1, 3)\).
+</p>
+<p class="fragment">
+Then we desired distance is the distance between this point and the second plane:
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{|1 \cdot 1 + 1 \cdot 1 + 3 \cdot 1 - 10|}{(1^2 + 1^2 + 1^2)^{1/2}} = \frac{|5 - 10|}{\sqrt{3}} = \frac{5\sqrt{3}}{3}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org348846c">
+<h3 id="org348846c">1.11 Orientation</h3>
+<div class="outline-text-3" id="text-org348846c">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf743d19">
+<h4 id="orgf743d19">Right-handed System</h4>
+<div class="column" style="float:right; width: 50%">
+
+<div id="org3e62391" class="figure">
+<p><img src="../img/math4100/fig1-30.jpeg" alt="fig1-30.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+
+<div class="column" style="float:left; width: 50%">
+<p class="fragment">
+Let \(\mathbf{A}, \mathbf{B}\) and \(\mathbf{C}\) be nonzero vectors, not all parallel to the same plane.
+</p>
+<p class="fragment">
+The vectors \(\mathbf{A}\) and \(\mathbf{B}\) determine a plane passing through the origin.
+</p>
+<p class="fragment">
+The rotation of \(\mathbf{A}\) into \(\mathbf{B}\) will advance a right-handed screw into the general direction of \(\mathbf{C}\).
+</p>
+<p class="fragment">
+The triple \(\{\mathbf{A}, \mathbf{B}, \mathbf{C}\}\) forms a <b>right-handed</b> system.
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5e9fd9e">
+<h3 id="org5e9fd9e">1.12 Vector Products</h3>
+<div class="outline-text-3" id="text-org5e9fd9e">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf0feba3">
+<h4 id="orgf0feba3">Review of Scalar Product</h4>
+<p class="fragment">
+Recall that
+</p>
+<div class="fragment">
+\begin{align*}
+    \mathbf{A}\cdot \mathbf{B}
+  & = (\text{length of $\mathbf{A}$})(\text{signed component of $\mathbf{B}$ parallel to $\mathbf{A}$})\\
+  & = |\mathbf{A}| |\mathbf{B}| \cos \theta
+  \end{align*}
+
+</div>
+<div class="fragment">
+\begin{align*}\mathbf{A}\cdot \mathbf{B} = \text{The work done by a force $\mathbf{B}$ exerted through a displacement $\mathbf{A}$}\end{align*}
+
+</div>
+
+<div class="column" style="float:left; width: 50%">
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>:
+</p>
+
+<p class="fragment">
+Is it natural to define another kind of product, given by the length of \(\mathbf{A}\) times the component of \(\mathbf{B}\) <i>perpendicular</i> to \(\mathbf{A}\)?<br />
+</p>
+<p class="fragment">
+If yes, is there any applications in physics too?
+</p>
+</div>
+<div class="column" style="float:right; width: 48%">
+
+<div id="orge639f1b" class="figure">
+<p><img src="../img/math4100/fig1-32.jpeg" alt="fig1-32.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org09b04d2">
+<h4 id="org09b04d2">Definition (Vector Product)</h4>
+<p class="fragment">
+The <b>vector product</b> (or <b>cross product</b>) of two nonzero vectors \(\mathbf{A}\) and \(\mathbf{B}\), is defined by
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{A} \times \mathbf{B} = |\mathbf{A}||\mathbf{B}| \sin \theta \mathbf{n},
+  \end{align*}
+
+</div>
+<p class="fragment">
+where \(\mathbf{n}\) is the unit vector perpendicular to both \(\mathbf{A}\) and \(\mathbf{B}\) and such that the triple \(\{\mathbf{A}, \mathbf{B}, \mathbf{n}\}\) is a right-handed system.
+</p>
+
+
+<div id="org95ec56c" class="figure">
+<p><img src="../img/math4100/fig1-33.jpeg" alt="fig1-33.jpeg" width="50%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgadb85ce">
+<h4 id="orgadb85ce">Magnitude of Vector Product</h4>
+<div class="fragment">
+\begin{align*}
+ \vert \mathbf{A}\times \mathbf{B} \vert
+   & =  (\text{length of $\mathbf{A}$})(\text{the component of $\mathbf{B}$ perpendicular to $\mathbf{A}$})\\
+   & = \text{The area of the parallelogram formed by $\mathbf{A}$ and $\mathbf{B}$}
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Why?</span>
+</p>
+
+
+<div id="org455ff57" class="figure">
+<p><img src="../img/math4100/fig1-32.jpeg" alt="fig1-32.jpeg" width="70%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7de0730">
+<h4 id="org7de0730">Application in Physics</h4>
+<div class="fragment">
+\begin{align*}
+\mathbf{A} \times \mathbf{B} = \text{The torque due to the force $\mathbf{B}$ applied at the point $\mathbf{A}$}.
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+The torque is the rotational equivalent of linear force and represents the capability to produce the change in the rotational motion of a (rigid) body.
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: The direction of the torque \(\mathbf{A} \times \mathbf{B}\) is perpendicular to the plane spanned by \(\mathbf{A}\) and \(\mathbf{B}\).
+</p>
+
+
+<div id="orgc2eb707" class="figure">
+<p><img src="../img/math4100/torque.gif" alt="torque.gif" width="40%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge281c84">
+<h4 id="orge281c84">Properties of Vector Product</h4>
+<div class="fragment">
+\begin{align*}
+\mathbf{A} \times \mathbf{A} = \mathbf{0}
+\end{align*}
+
+</div>
+<div class="fragment">
+\begin{align*}
+\mathbf{A} \times \mathbf{B} = - \mathbf{B} \times \mathbf{A}
+\end{align*}
+
+</div>
+<div class="fragment">
+\begin{align*}
+(\mathbf{A} + \mathbf{B}) \times \mathbf{C} = \mathbf{A} \times  \mathbf{C} + \mathbf{B} \times \mathbf{C}
+\end{align*}
+
+</div>
+<div class="fragment">
+\begin{align*}
+    (a \mathbf{A}) \times \mathbf{B} = \mathbf{A} \times (a \mathbf{B}) = a(\mathbf{A} \times \mathbf{B})
+\end{align*}
+
+</div>
+<p class="fragment">
+\(\mathbf{A} \times \mathbf{B} = \mathbf{0}\) if and only if one of the vectors are zero or they are parallel.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgc77d768">
+<h4 id="orgc77d768">Properties of Vector Product - Continued</h4>
+<p data-fragment-index="1" class="fragment">
+In particular, the vector product of orthogonal unit vectors \(\mathbf{i}\) and \(\mathbf{j}\) is
+</p>
+<div data-fragment-index="2" class="fragment">
+\begin{align*}
+  \mathbf{i} \times \mathbf{j} = \mathbf{k}
+  \end{align*}
+
+</div>
+<p data-fragment-index="3" class="fragment">
+such that the triple \(\{\mathbf{i}, \mathbf{j}, \mathbf{k}\}\) is a right-handed coordinate system.
+</p>
+
+<ul>
+<li data-fragment-index="4" class="fragment">\(\mathbf{j} \times \mathbf{k} = \mathbf{i}\), \(\mathbf{k} \times \mathbf{i} = \mathbf{j}\)</li>
+<li data-fragment-index="5" class="fragment">\(\mathbf{i} \times \mathbf{k} = - \mathbf{j}\), \(\mathbf{j} \times \mathbf{i} = - \mathbf{k}\), \(\mathbf{k} \times \mathbf{j} = - \mathbf{i}\)</li>
+<li data-fragment-index="6" class="fragment">\(\mathbf{i} \times \mathbf{i} = \mathbf{j} \times \mathbf{j} = \mathbf{k} \times \mathbf{k} = \mathbf{0}\)</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgd3abd18">
+<h4 id="orgd3abd18">Determinant Form of Vector Product</h4>
+<p class="fragment">
+If \(\mathbf{A} = A_1 \mathbf{i} + A_2 \mathbf{j} + A_3 \mathbf{k}\) and \(\mathbf{B} = B_1 \mathbf{i} + B_2 \mathbf{j} + B_3 \mathbf{k}\), by the distributive property,
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{A} \times \mathbf{B} = (A_2B_3 - A_3B_2) \mathbf{i} + (A_3 B_1 - A_1 B_3) \mathbf{j} + (A_1 B_2 - A_2 B_1) \mathbf{k}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+This is equivalent to the <i>determinant</i> form:
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{A} \times \mathbf{B} = \begin{vmatrix}
+\mathbf{i} & \mathbf{j} & \mathbf{k}\\
+A_1 & A_2 & A_3\\
+B_1 & B_2 & B_3
+\end{vmatrix}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4ded269">
+<h4 id="org4ded269">Digression to Matrices and Determinants</h4>
+<p class="fragment">
+We define a \(2\times 2\) <i>matrix</i> to be an array
+</p>
+<div class="fragment">
+\begin{align*}\begin{bmatrix}
+    a_{11} & a_{12}\\
+    a_{21} & a_{22}
+    \end{bmatrix},
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(a_{11}, a_{12}, a_{21}\) and \(a_{22}\) are four scalars.
+</p>
+
+<p class="fragment">
+The <i>determinant</i>
+</p>
+<div class="fragment">
+\begin{align*}\begin{vmatrix}
+a_{11} & a_{12}\\
+    a_{21} & a_{22}
+\end{vmatrix} \triangleq a_{11} a_{22} - a_{12} a_{21}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org2d30114">
+<h4 id="org2d30114">Example</h4>
+<div class="fragment">
+\begin{align*}\begin{vmatrix}
+1 & 1 \\
+1 & 1
+\end{vmatrix} = 1 - 1 =  0
+\end{align*}
+
+</div>
+<div class="fragment">
+\begin{align*}\begin{vmatrix}
+1 & 2 \\
+3 & 4
+\end{vmatrix} = 4 - 6 = -2
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org241157a">
+<h4 id="org241157a">\(3 \times 3\) Matrices</h4>
+<p class="fragment">
+A \(3 \times 3\) matrix is an array
+</p>
+<div class="fragment">
+\begin{align*}\begin{bmatrix}
+    a_{11} & a_{12} & a_{13}\\
+    a_{21} & a_{22} & a_{23}\\
+    a_{31} & a_{32} & a_{33}
+    \end{bmatrix},
+\end{align*}
+
+</div>
+<p class="fragment">
+where, again, each \(a_{ij}\) is a scalar denoting the entry in the array that is the \(i\text{-th}\) row and the \(j\text{-th}\) column.
+</p>
+<p class="fragment">
+We define the <i>determinant</i> of a \(3\times 3\) matrix by the rule
+</p>
+<div class="fragment">
+\begin{align*}\begin{vmatrix}
+a_{11} & a_{12} & a_{13}\\
+    a_{21} & a_{22} & a_{23}\\
+    a_{31} & a_{32} & a_{33}
+\end{vmatrix} \triangleq a_{11} \begin{vmatrix}
+a_{22} & a_{23}\\
+    a_{32} & a_{33}
+\end{vmatrix}  - a_{12} \begin{vmatrix}
+a_{21} & a_{23}\\
+    a_{31} & a_{33}
+\end{vmatrix} + a_{13}\begin{vmatrix}
+a_{21} & a_{22}\\
+    a_{31} & a_{32}
+\end{vmatrix}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org20a1c30">
+<h4 id="org20a1c30">\(3 \times 3\) Matrices - Continued</h4>
+<p class="fragment">
+In fact, we can <i>expand</i> a \(3 \times 3\) determinant <b>along any row or column</b> using the signs in the following checkerboard pattern:
+</p>
+<div class="fragment">
+\begin{align*}\begin{vmatrix}
+  \texttt{+} & \texttt{-} &\texttt{+}  \\
+  \texttt{-}&   \texttt{+} & \texttt{-}\\
+  \texttt{+} &  \texttt{-} & \texttt{+}
+\end{vmatrix}
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgee203e6">
+<h4 id="orgee203e6">\(3 \times 3\) Matrices - Continued</h4>
+<p class="fragment">
+Expand along the first row.
+</p>
+<div class="fragment">
+\begin{align*}\begin{vmatrix}
+  1 & 2 & 3 \\
+  4&   5 & 6\\
+  7 &  8 & 9
+\end{vmatrix} = 1 \begin{vmatrix}
+5 & 6 \\
+8 & 9
+\end{vmatrix} - 2 \begin{vmatrix}
+4 & 6 \\
+7 & 9
+\end{vmatrix} + 3 \begin{vmatrix}
+4 & 5 \\
+7 & 8
+\end{vmatrix} = -3 + 12 - 9 = 0.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Expand along the second column.
+</p>
+<div class="fragment">
+\begin{align*}\begin{vmatrix}
+  1 & 2 & 3 \\
+  4&   5 & 6\\
+  7 &  8 & 9
+\end{vmatrix} = - 2 \begin{vmatrix}
+4 & 6 \\
+7 & 9
+\end{vmatrix} + 5 \begin{vmatrix}
+1 & 3 \\
+7 & 9
+\end{vmatrix} -8 \begin{vmatrix}
+1 & 3 \\
+4 & 6
+\end{vmatrix} = 12 - 60 + 48 = 0.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5e33957">
+<h4 id="org5e33957">Determinant Form (Revisited)</h4>
+<div class="fragment">
+\begin{align*}
+\mathbf{A} \times \mathbf{B} = \begin{vmatrix}
+\mathbf{i} & \mathbf{j} & \mathbf{k}\\
+A_1 & A_2 & A_3\\
+B_1 & B_2 & B_3
+\end{vmatrix} = \begin{vmatrix}
+A_2 & A_3 \\
+B_2 & B_3
+\end{vmatrix} \mathbf{i} - \begin{vmatrix}
+A_1 & A_3 \\
+B_1 & B_3
+\end{vmatrix} \mathbf{j} + \begin{vmatrix}
+A_1 & A_2 \\
+B_1 & B_2
+\end{vmatrix} \mathbf{k}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5856460">
+<h4 id="org5856460">Example 1.26</h4>
+<p class="fragment">
+Find the vector product \(\mathbf{A} \times \mathbf{B}\) if \(\mathbf{A} = 3 \mathbf{i} + 4 \mathbf{j}\) and \(\mathbf{B} = \mathbf{i} - 2 \mathbf{j} + 5 \mathbf{k}\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+
+<div class="fragment">
+\begin{align*}
+\mathbf{A} \times \mathbf{B} = \begin{vmatrix}
+  \mathbf{i} & \mathbf{j} &  \mathbf{k} \\
+  3 & 4 & 0 \\
+  1 & -2 & 5
+  \end{vmatrix} = 20 \mathbf{i} - 15 \mathbf{j} -10 \mathbf{k}.
+      \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org8d63d97">
+<h4 id="org8d63d97">Example 1.27</h4>
+<p class="fragment">
+Find two unit vectors perpendicular to both \(\mathbf{A} = 2 \mathbf{i} + 2 \mathbf{j} - 3 \mathbf{k}\) and \(\mathbf{B} = \mathbf{i} + 3 \mathbf{j} + \mathbf{k}\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+\(\mathbf{A} \times \mathbf{B}\) is perpendicular to both \(\mathbf{A}\) and \(\mathbf{B}\), and
+</p>
+<div class="fragment">
+\begin{align*}
+ \mathbf{A} \times \mathbf{B} = \begin{vmatrix}
+\mathbf{i} & \mathbf{j} &  \mathbf{k} \\
+2 & 2 & -3 \\
+1 & 3 & 1
+\end{vmatrix} = 11 \mathbf{i} - 5 \mathbf{j} + 4 \mathbf{k}.
+    \end{align*}
+
+</div>
+
+<p class="fragment">
+One desired unit vector is
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{\mathbf{A} \times \mathbf{B}}{|\mathbf{A} \times \mathbf{B}|} = \frac{\mathbf{A} \times \mathbf{B}}{9 \sqrt{2}} = \frac{11}{9\sqrt{2}} \mathbf{i} - \frac{5}{9\sqrt{2}} \mathbf{j} + \frac{4}{9\sqrt{2}} \mathbf{k}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org794e4b8">
+<h4 id="org794e4b8">Example 1.27 - Continued</h4>
+<p>
+How to find another perpendicular vector?
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{\mathbf{B} \times \mathbf{A}}{|\mathbf{A} \times \mathbf{B}|} = - \frac{\mathbf{A} \times \mathbf{B}}{|\mathbf{A} \times \mathbf{B}|}  = - \frac{11}{9\sqrt{2}} \mathbf{i} + \frac{5}{9\sqrt{2}} \mathbf{j} - \frac{4}{9\sqrt{2}} \mathbf{k}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgd62c4b6">
+<h4 id="orgd62c4b6">Example 1.28</h4>
+<p class="fragment">
+Find the area of the parallelogram determined by \(\mathbf{A} = \mathbf{i} + \mathbf{j} - 3 \mathbf{k}\) and \(\mathbf{B} = -6 \mathbf{j} + 5 \mathbf{k}\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<div class="fragment">
+\begin{align*}
+ \mathbf{A} \times \mathbf{B} = \begin{vmatrix}
+    \mathbf{i} & \mathbf{j} &  \mathbf{k} \\
+    1 & 1 & -3 \\
+    0 & -6 & 5
+    \end{vmatrix} = -13 \mathbf{i} - 5 \mathbf{j} -6 \mathbf{k}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+The desired area is \(|\mathbf{A} \times \mathbf{B}| = \sqrt{13^2 + 5^2 + 6^2} = \sqrt{230}\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgdffca69">
+<h4 id="orgdffca69">Example 1.29</h4>
+<p class="fragment">
+Find the equation of the line passing through \((3, 2, -4)\) parallel to the line of intersection of the two planes \(x + 3y - 2z =8\) and \(x-3y + z =0\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<ul class="fragment">
+<li>Recall from Sec 1.8 that the non-parametric equation of the line that passing through a point \((x_0, y_0, z_0)\) and parallel to a nonzero vector \(\mathbf{V} = a \mathbf{i} + b \mathbf{j} + c \mathbf{k}\) is</li>
+
+</ul>
+<div class="fragment">
+\begin{align*}
+\frac{x - x_0}{a} = \frac{y - y_0}{b} = \frac{z - z_0}{c}.
+\end{align*}
+
+</div>
+
+<ul class="fragment">
+<li>Now we only need to find a nonzero vector parallel to the line of the intersection of the two planes, which is parallel to the desired line.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org7b85ef8">
+<h4 id="org7b85ef8">Example 1.29 - Continued</h4>
+<p class="fragment">
+Note that
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{A} = \mathbf{i} + 3 \mathbf{j} - 2 \mathbf{k}, \quad \mathbf{B} = \mathbf{i} - 3 \mathbf{j} + \mathbf{k}
+\end{align*}
+
+</div>
+<p class="fragment">
+are the normal vectors to the two planes.
+</p>
+
+<p class="fragment">
+\(\mathbf{A} \times \mathbf{B}\) is perpendicular to both \(\mathbf{A}\) and \(\mathbf{B}\), and so it is parallel to the two planes. Hence, \(\mathbf{A} \times \mathbf{B}\) is parallel to the line of intersection.
+</p>
+<div class="fragment">
+\begin{align*}
+ \mathbf{A} \times \mathbf{B} = \begin{vmatrix}
+    \mathbf{i} & \mathbf{j} &  \mathbf{k} \\
+    1 & 3 & -2 \\
+    1 & -3 & 1
+    \end{vmatrix} = -3 \mathbf{i} - 3 \mathbf{j} -6 \mathbf{k}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org3d44c8c">
+<h4 id="org3d44c8c">Example 1.29 - Continued</h4>
+<p class="fragment">
+The equation of the desired line:
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{x - 3}{-3} = \frac{y - 2}{-3} = \frac{z + 4}{-6},
+\end{align*}
+
+</div>
+<p class="fragment">
+or, equivalently,
+</p>
+<div class="fragment">
+\begin{align*}
+x - 3 = y - 2 = \frac{z + 4}{2}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org28435ba">
+<h4 id="org28435ba">Angular Velocity</h4>
+<p class="fragment">
+Consider a rigid body rotating about a fixed axis with a constant angular speed \(\omega\). Then the velocity of the particle at the point \(\mathbf{R}\) is
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{v} = \vec{\omega} \times \mathbf{R},
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(\vec{\omega}\) is directed along the axis of rotation and with the magnitude \(|\vec{\omega}| = \omega\).
+</p>
+
+<div class="column" style="float:left; width: 50%">
+<p class="fragment">
+The speed (magnitude of the velocity) of the particle is
+</p>
+<div class="fragment">
+\begin{align*}
+\vert \mathbf{v} \vert = \omega | \mathbf{R} | \sin \theta,
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(\theta\) is the angle between \(\mathbf{R}\) and the axis of rotation.
+</p>
+
+</div>
+<div class="column" style="float:right; width: 45%">
+
+<div id="org9dd356a" class="figure">
+<p><img src="../img/math4100/fig1-34.jpeg" alt="fig1-34.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbd54d30">
+<h3 id="orgbd54d30">1.13 Triple Scalar Product</h3>
+<div class="outline-text-3" id="text-orgbd54d30">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org373dd10">
+<h4 id="org373dd10">Definition</h4>
+<p data-fragment-index="1" class="fragment">
+The <b>triple scalar product</b> of three vectors \(\mathbf{A}, \mathbf{B}\) and \(\mathbf{C}\) is defined by
+</p>
+<div data-fragment-index="2" class="fragment">
+\begin{align*}
+[\mathbf{A}, \mathbf{B}, \mathbf{C}] = \mathbf{A} \cdot (\mathbf{B} \times \mathbf{C}).
+  \end{align*}
+
+</div>
+<p data-fragment-index="3" class="fragment">
+Determinant form:
+</p>
+<div data-fragment-index="4" class="fragment">
+\begin{align*}
+[\mathbf{A}, \mathbf{B}, \mathbf{C}] = \mathbf{A} \cdot \begin{vmatrix}
+  \mathbf{i} & \mathbf{j} &  \mathbf{k} \\
+  B_1 & B_2 & B_3 \\
+  C_1 & C_2 & C_3
+  \end{vmatrix}  = \begin{vmatrix}
+  A_1 & A_2 &  A_3 \\
+  B_1 & B_2 & B_3 \\
+  C_1 & C_2 & C_3
+  \end{vmatrix}.
+  \end{align*}
+
+</div>
+<p data-fragment-index="5" class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>:
+</p>
+<ul>
+<li data-fragment-index="6" class="fragment">\([\mathbf{i}, \mathbf{j}, \mathbf{k}] = 1\).</li>
+<li data-fragment-index="7" class="fragment">\([\mathbf{A}, \mathbf{B}, \mathbf{C}]\) is positive if and only if \(\{\mathbf{A}, \mathbf{B}, \mathbf{C}\}\) forms a right-handed system.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org8abf1ae">
+<h4 id="org8abf1ae">Geometric Interpretation</h4>
+<p class="fragment">
+The <i>volume</i> of the parallelepiped with coterminal edges \(\mathbf{A}, \mathbf{B}\) and \(\mathbf{C}\) is given, up to sign, by \([\mathbf{A}, \mathbf{B}, \mathbf{C}]\).
+</p>
+
+
+<div id="orgf33b2f9" class="figure">
+<p><img src="../img/math4100/fig1-38.jpeg" alt="fig1-38.jpeg" class="fragment middle" width="60%" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1f9770b">
+<h4 id="org1f9770b">Example 1.33</h4>
+<p class="fragment">
+Compute \([\mathbf{A}, \mathbf{B}, \mathbf{C}]\) if \(\mathbf{A} = 2 \mathbf{i} + \mathbf{k}, \mathbf{B} = 3 \mathbf{i} + \mathbf{j} + \mathbf{k}\), and \(\mathbf{C} = \mathbf{i} + \mathbf{j} + 4 \mathbf{k}\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<div class="fragment">
+\begin{align*}
+[\mathbf{A}, \mathbf{B}, \mathbf{C}] = \begin{vmatrix}
+  2 & 0 &  1 \\
+  3 & 1 & 1 \\
+  1 & 1 & 4
+  \end{vmatrix} = 8 + 3 - 1 - 2 = 8.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1295a31">
+<h4 id="org1295a31">Properties of the Triple Scalar Product</h4>
+<p class="fragment">
+\([\mathbf{A}, \mathbf{B}, \mathbf{C}] = [\mathbf{B}, \mathbf{C}, \mathbf{A}] = [\mathbf{C}, \mathbf{A}, \mathbf{B}]= - [\mathbf{B}, \mathbf{A}, \mathbf{C}] = - [\mathbf{C}, \mathbf{B}, \mathbf{A}]= - [\mathbf{A}, \mathbf{C}, \mathbf{B}]\).
+</p>
+
+<p class="fragment">
+\([\mathbf{A}, \mathbf{B}, \mathbf{C}] = 0\) if and only if three vectors are coplanar, i.e., on the same plane.
+</p>
+
+<p class="fragment">
+\([\mathbf{A}, \mathbf{B}, \mathbf{C}]\) is <b>linear</b> in each argument.
+</p>
+
+<p class="fragment">
+For example,
+</p>
+<div class="fragment">
+\begin{align*}
+    [s \mathbf{A} +  \mathbf{B}, \mathbf{C}, \mathbf{D}] = s [\mathbf{A}, \mathbf{C}, \mathbf{D}] + [\mathbf{B}, \mathbf{C}, \mathbf{D}].
+    \end{align*}
+
+</div>
+
+<p class="fragment">
+All these properties can be proved by the properties of determinant of matrices.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org8c53589">
+<h3 id="org8c53589">1.14 Vector Identities</h3>
+<p class="fragment">
+Of the following identities, the first is the most important because the other three can be derived from it fairly easily:
+</p>
+<div class="fragment">
+\begin{align}
+  \mathbf{A} \times (\mathbf{B} \times \mathbf{C})
+  & = (\mathbf{A} \cdot \mathbf{C}) \mathbf{B} - (\mathbf{A} \cdot \mathbf{B})\mathbf{C}\label{eq:1.30}\tag{1.30}\\
+  (\mathbf{A} \times \mathbf{B}) \times \mathbf{C}
+  & = (\mathbf{A} \cdot \mathbf{C}) \mathbf{B} - (\mathbf{B} \cdot \mathbf{C})\mathbf{A}\label{eq:1.31}\tag{1.31}\\
+  (\mathbf{A} \times \mathbf{B}) \times (\mathbf{C} \times \mathbf{D})
+  & = [\mathbf{A}, \mathbf{C}, \mathbf{D}]\mathbf{B} - [\mathbf{B}, \mathbf{C}, \mathbf{D}] \mathbf{A}\label{eq:1.32}\tag{1.32}\\
+  (\mathbf{A} \times \mathbf{B}) \cdot (\mathbf{C} \times \mathbf{D})
+  & = (\mathbf{A} \cdot \mathbf{C}) (\mathbf{B} \cdot \mathbf{D}) - (\mathbf{A} \cdot \mathbf{D})(\mathbf{B} \cdot \mathbf{C})\label{eq:1.33}\tag{1.33}.
+  \end{align}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6772080">
+<h4 id="org6772080">Intuitive Interpretation of Identity \eqref{eq:1.30}</h4>
+<div>
+\begin{align*}
+  \mathbf{A} \times (\mathbf{B} \times \mathbf{C})
+     = (\mathbf{A} \cdot \mathbf{C}) \mathbf{B} - (\mathbf{A} \cdot \mathbf{B})\mathbf{C}
+\end{align*}
+
+</div>
+<ul>
+<li data-fragment-index="1" class="fragment">\(\mathbf{V} = \mathbf{A} \times (\mathbf{B} \times \mathbf{C})\) (if not the zero vector) must be perpendicular to \(\mathbf{B} \times \mathbf{C}\).</li>
+<li data-fragment-index="2" class="fragment">\(\mathbf{B}\times \mathbf{C}\) is perpendicular to both \(\mathbf{B}\) and \(\mathbf{C}\).</li>
+<li data-fragment-index="3" class="fragment">\(\mathbf{V}\) must be in the plane spanned by \(\mathbf{B}\) and \(\mathbf{C}\), i.e. \(\mathbf{V} = m \mathbf{B} + n \mathbf{C}\), for suitable scalars \(m\) and \(n\).</li>
+<li data-fragment-index="4" class="fragment">The fact that \(m = \mathbf{A} \cdot \mathbf{C}\) and \(n = - \mathbf{A} \cdot \mathbf{B}\) is not obvious here, but please read Sec 1.15.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org6fd636e">
+<h4 id="org6fd636e">For Identity \eqref{eq:1.31}:</h4>
+<div>
+\begin{align*}
+  (\mathbf{A} \times \mathbf{B}) \times \mathbf{C}
+ = (\mathbf{A} \cdot \mathbf{C}) \mathbf{B} - (\mathbf{B} \cdot \mathbf{C})\mathbf{A}
+\end{align*}
+
+</div>
+<p class="fragment">
+Note that
+</p>
+<div class="fragment">
+\begin{align*}
+(\mathbf{A} \times \mathbf{B}) \times \mathbf{C} = - \mathbf{C} \times (\mathbf{A} \times \mathbf{B}).
+\end{align*}
+
+</div>
+<p class="fragment">
+Then by using identity \eqref{eq:1.30}, we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \texttt{$-$}  \mathbf{C} \times (\mathbf{A} \times \mathbf{B}) = - [ (\mathbf{C} \cdot \mathbf{B}) \mathbf{A} - (\mathbf{C} \cdot \mathbf{A}) \mathbf{B}] = (\mathbf{A} \cdot \mathbf{C}) \mathbf{B} - (\mathbf{A} \cdot \mathbf{B})\mathbf{C}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org82cb14b">
+<h4 id="org82cb14b">For Identity \eqref{eq:1.32}:</h4>
+<div>
+\begin{align*}
+   (\mathbf{A} \times \mathbf{B}) \times (\mathbf{C} \times \mathbf{D})
+= [\mathbf{A}, \mathbf{C}, \mathbf{D}]\mathbf{B} - [\mathbf{B}, \mathbf{C}, \mathbf{D}] \mathbf{A}
+\end{align*}
+
+</div>
+<p class="fragment">
+Let \(\mathbf{U} = \mathbf{C} \times \mathbf{D}\), then by identity \eqref{eq:1.31},
+</p>
+<div class="fragment">
+\begin{align*}
+(\mathbf{A} \times \mathbf{B}) \times \mathbf{U}
+ = (\mathbf{A} \cdot \mathbf{U}) \mathbf{B} - (\mathbf{B} \cdot \mathbf{U})\mathbf{A}.
+\end{align*}
+
+</div>
+<p class="fragment">
+By the definition of the triple scalar product, we have
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{A}\cdot \mathbf{U} = \mathbf{A} \cdot \mathbf{C} \times \mathbf{D} = [\mathbf{A}, \mathbf{C}, \mathbf{D}], \quad \mathbf{B}\cdot \mathbf{U} = \mathbf{B} \cdot \mathbf{C} \times \mathbf{D} = [\mathbf{B}, \mathbf{C}, \mathbf{D}].
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org2c6757d">
+<h4 id="org2c6757d">For Identity \eqref{eq:1.33}:</h4>
+<div>
+\begin{align*}
+  (\mathbf{A} \times \mathbf{B}) \cdot (\mathbf{C} \times \mathbf{D})
+= (\mathbf{A} \cdot \mathbf{C}) (\mathbf{B} \cdot \mathbf{D}) - (\mathbf{A} \cdot \mathbf{D})(\mathbf{B} \cdot \mathbf{C})
+\end{align*}
+
+</div>
+<div class="fragment">
+\begin{align*}
+(\mathbf{A} \times \mathbf{B}) \cdot \mathbf{U}
+& = [\mathbf{A}, \mathbf{B}, \mathbf{U}] = \mathbf{A} \cdot (\mathbf{B} \times \mathbf{U}) = \mathbf{A} \cdot [\mathbf{B} \times (\mathbf{C} \times \mathbf{D})]\\
+& = \mathbf{A} \cdot [(\mathbf{B} \cdot \mathbf{D}) \mathbf{C} - (\mathbf{B} \cdot \mathbf{C}) \mathbf{D}]\\
+& = (\mathbf{B}\cdot \mathbf{D})(\mathbf{A}\cdot \mathbf{C}) - (\mathbf{B} \cdot \mathbf{C})(\mathbf{A}\cdot \mathbf{D}).
+  \end{align*}
+
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/markdown/markdown.js"></script>
+<script src="../plugin/notes/notes.js"></script>
+<script src="../plugin/search/search.js"></script>
+<script src="../plugin/zoom/zoom.js"></script>
+<script src="../plugin/reveal.js-menu/menu.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: false,
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'none',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom, RevealMenu, RevealChalkboard ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+,chalkboard: {storage: "chalkboard-demo", toggleChalkboardButton: { left: "80px" },	toggleNotesButton: { left: "130px" },	colorButtons: 5}});
+</script>
+</body>
+</html>

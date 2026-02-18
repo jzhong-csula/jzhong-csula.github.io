@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>MATH 4100 - Vector Analysis</title>
+<meta name="author" content="\\
+Jie Zhong \\
+Department of Mathematics \\
+California State University, Los Angeles"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+
+<link rel="stylesheet" href="../dist/theme/serif.css" id="theme"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+
+<link rel="stylesheet" href="../gnohz.css"/>
+<script>window.MathJax = { TeX: {Macros: {range: "\\text{Range}", ow: "\\text{otherwise}"}} }</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1>MATH 4100 - Vector Analysis</h1><h2></h2><h6> <br />
+Jie Zhong <br />
+Department of Mathematics <br />
+California State University, Los Angeles</h6>
+</section>
+<section>
+<section id="slide-org1826443">
+<h2 id="org1826443">Chapter 2 Vector Functions of a Single Variable</h2>
+<div class="outline-text-2" id="text-org1826443">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgc6c52ce">
+<h3 id="orgc6c52ce">2.1 Differentiation</h3>
+<div class="outline-text-3" id="text-orgc6c52ce">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbcf19ac">
+<h4 id="orgbcf19ac">Definition</h4>
+<p class="fragment">
+A <b>vector-valued function</b> \(\mathbf{F}\) of a single variable is a rule that associate a vector \(\mathbf{F}(t)\) to each real number \(t\) in some set, usually an interval \(t \in [t_1, t_2]\) or a collection of intervals:
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbf{F}:\  \mathbb{R} &\mapsto \mathbb{R}^3\\
+ t &\mapsto  P(t) \mathbf{i} + Q(t) \mathbf{j} + R(t) \mathbf{k}
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Example:
+</p>
+
+<p class="fragment">
+\(\mathbf{F}(t) = (1/t) \mathbf{i}\) defined for \(t \neq 0\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org6873f97">
+<h4 id="org6873f97">Limits</h4>
+<p class="fragment">
+We say that a vector-valued function \(\mathbf{F}\) has a <b>limit</b> \(\mathbf{A}\) at \(t_0\) and write
+</p>
+<div class="fragment">
+\begin{align*}
+  \lim_{t\to t_0} \mathbf{F}(t) = \mathbf{A}, \quad\text{or}\quad \mathbf{F}(t) \to \mathbf{A}\, \text{as}~t \to t_0,
+  \end{align*}
+
+</div>
+<p class="fragment">
+if the real-valued function \(f(t) = |\mathbf{F}(t) - \mathbf{A}|\) has a limit \(0\) at \(t_0\), i.e.,
+</p>
+<div class="fragment">
+\begin{align*}
+\lim_{t \to t_0} |\mathbf{F}(t) - \mathbf{A}| = 0,
+\end{align*}
+
+</div>
+<p class="fragment">
+which means that for any \(\varepsilon >0\), there is \(\delta >0\) such that
+</p>
+<div class="fragment">
+\begin{align*}
+\vert \mathbf{F}(t)  - \mathbf{A} \vert < \varepsilon \quad \text{whenever}\quad | t - t_0 | < \delta.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgdef993b">
+<h4 id="orgdef993b">Limits - Continued</h4>
+<div class="column" style="float:left; width: 55%">
+<p data-fragment-index="1" class="fragment">
+Intuitively, this means that the magnitude and the direction of the vector \(\mathbf{F}(t)\) approaches the magnitude and direction of the vector \(\mathbf{A}\).
+</p>
+
+<p data-fragment-index="3" class="fragment">
+Consequently, this also means that the components of the vector \(\mathbf{F}(t)\) approach the components of the vector \(\mathbf{A}\), i.e.,
+</p>
+<div data-fragment-index="4" class="fragment">
+ \begin{align*}
+\lim_{t \to t_0} \mathbf{F}^i(t) =  \mathbf{A}^i,
+\end{align*}
+
+</div>
+<p data-fragment-index="5" class="fragment">
+where \(\mathbf{F}^1 = P, \mathbf{F}^2 = Q, \mathbf{F}^3 = R\), and \(\mathbf{A}^i = A_i\).
+</p>
+
+</div>
+
+<div class="column" style="float:right; width: 43%">
+
+<div id="org4b821de" class="figure">
+<p><img src="../img/math4100/fig2-1.jpeg" alt="fig2-1.jpeg" data-fragment-index="2" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga67048d">
+<h4 id="orga67048d">Continuity</h4>
+<p class="fragment">
+We say that a vector-valued function \(\mathbf{F}\) is <b>continuous</b> at \(t_0\) if
+</p>
+<div class="fragment">
+\begin{align*}
+ \lim_{t\to t_0} \mathbf{F}(t) = \mathbf{F}(t_0).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+This means that the components and the magnitude of the vector \(\mathbf{F}(t)\) are continuous at \(t_0\), i.e.,
+</p>
+<div class="fragment">
+\begin{align*}
+ \lim_{t \to t_0 } \mathbf{F}^i(t)
+ & = \mathbf{F}^i(t_0),\\
+ \lim_{t \to t_0} |\mathbf{F}(t)|
+ & = |\mathbf{F}(t_0)|.
+ \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgec9930a">
+<h4 id="orgec9930a">Derivatives</h4>
+<p class="fragment">
+We say that a vector-valued function \(\mathbf{F}\) is <b>differentiable</b> at \(t_0\) if the limit
+</p>
+<div class="fragment">
+\begin{align*}
+\lim_{\Delta t \to 0} \frac{\mathbf{F}(t_0 + \Delta t) - \mathbf{F}(t_0)}{\Delta t}
+\end{align*}
+
+</div>
+<p class="fragment">
+exists; this limit is then called the <b>derivative</b> of \(\mathbf{F}(t)\) at \(t_0\) and is written as
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{F}'(t_0)\quad\text{or}\quad \frac{d \mathbf{F}}{dt}(t_0).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org585585f">
+<h4 id="org585585f">Properties of derivatives</h4>
+<div class="fragment">
+\begin{align*}
+\frac{d}{dt}(\mathbf{F}+ \mathbf{G})
+& = \frac{d \mathbf{F}}{dt} + \frac{d \mathbf{G}}{dt} \label{eq:2.4}\tag{2.4}\\
+\frac{d}{dt}(s \mathbf{F})
+& = \frac{ds }{dt} \mathbf{F} + s \frac{d \mathbf{F}}{dt} \label{eq:2.5}\tag{2.5}\\
+\frac{d}{dt}(\mathbf{F} \cdot \mathbf{G})
+& = \frac{d \mathbf{F}}{dt} \cdot \mathbf{G} + \mathbf{F} \cdot \frac{d \mathbf{G}}{dt} \label{eq:2.6}\tag{2.6}\\
+\frac{d}{dt}(\mathbf{F} \times \mathbf{G})
+& = \frac{d \mathbf{F}}{dt} \times \mathbf{G} + \mathbf{F} \times \frac{d \mathbf{G}}{dt} \label{eq:2.7}\tag{2.7}\\
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb2a588c">
+<h4 id="orgb2a588c">Proof of Eq. \eqref{eq:2.7}:</h4>
+<p class="fragment">
+With the definition of the derivative in mind, we write
+</p>
+<div class="fragment">
+\begin{align*}
+& \frac{\mathbf{F}(t + \Delta t) \times \mathbf{G}(t + \Delta t)  - \mathbf{F}(t) \times \mathbf{G}(t)}{\Delta t}\\
+=\, & \frac{[\mathbf{F}(t + \Delta t) - \mathbf{F}(t)] \times \mathbf{G}(t+\Delta t)}{\Delta t} + \frac{\mathbf{F}(t) \times [\mathbf{G}(t + \Delta t) - \mathbf{G}(t)]}{\Delta t}.
+\end{align*}
+
+</div>
+<p class="fragment">
+As \(\Delta t \to 0\), the right-hand side approaches a limiting value given by
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{d \mathbf{F}}{dt} \times \mathbf{G} + \mathbf{F} \times \frac{d \mathbf{G}}{dt},
+\end{align*}
+
+</div>
+<p class="fragment">
+and the limit of the left-hand side is nothing but
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{d}{dt}(\mathbf{F} \times \mathbf{G}).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org311f6e6">
+<h4 id="org311f6e6">Differentiation By Components</h4>
+<p class="fragment">
+From the definition and properties of derivatives, <i>vector differentiation is like scalar differentiation</i>, treating \(\mathbf{i}, \mathbf{j}\) and \(\mathbf{k}\) as constants. If
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{F}(t) = P(t) \mathbf{i} + Q(t) \mathbf{j} + R(t) \mathbf{k},
+\end{align*}
+
+</div>
+<p class="fragment">
+then
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{F}'(t) = P'(t) \mathbf{i} + Q'(t) \mathbf{j} + R'(t) \mathbf{k}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Examples
+</p>
+<p class="fragment">
+Find the derivative of the following vector-valued functions.
+</p>
+<ul class="fragment">
+<li>\(\mathbf{F}(t) = t^3 \mathbf{j} - \mathbf{k}\).</li>
+<li>\(\mathbf{F}(t) = \sin t \mathbf{i} + \cos t \mathbf{j} + t \mathbf{k}\).</li>
+<li>\(\mathbf{F}(t) = \mathbf{i} + 2 \mathbf{j} - \mathbf{k}\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orge58306d">
+<h4 id="orge58306d">Example 2.7</h4>
+<p class="fragment">
+Prove that, if \(\mathbf{F}(t)\) has constant nonzero magnitude (varies only in direction), then \(\mathbf{F}'(t)\) is either the zero vector or it is a nonzero vector perpendicular to \(\mathbf{F}(t)\).
+</p>
+
+<p class="fragment">
+<i>Proof</i>
+</p>
+<p class="fragment">
+If \(|\mathbf{F}(t)|\) is a constant, then \(\mathbf{F} \cdot \mathbf{F}\) is also a constant.
+</p>
+
+<p class="fragment">
+Thus, the derivative of \(\mathbf{F} \cdot \mathbf{F}\) should be zero.
+</p>
+
+<p class="fragment">
+But using Eq. \eqref{eq:2.6}, we have
+</p>
+<div class="fragment">
+\begin{align*}
+0 = \frac{d \mathbf{F}\cdot \mathbf{F}}{dt} = \frac{d \mathbf{F}}{dt} \cdot \mathbf{F} + \mathbf{F} \cdot \frac{d \mathbf{F}}{dt} = 2 \mathbf{F} \cdot \frac{d \mathbf{F}}{dt}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Therefore, we have \(\displaystyle \mathbf{F} \cdot \frac{d \mathbf{F}}{dt} = 0\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgfdece04">
+<h3 id="orgfdece04">2.2 Space Curve, Velocities, and Tangents</h3>
+<div class="outline-text-3" id="text-orgfdece04">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbbe6bf8">
+<h4 id="orgbbe6bf8">Space Curves</h4>
+<p class="fragment">
+Recall that we represent a line in vector form:
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R}(t) = \mathbf{R}_0 + t \mathbf{V}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+In this section, we consider parametric equations of the form
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R} = \mathbf{R}(t),
+  \end{align*}
+
+</div>
+<p class="fragment">
+where \(\mathbf{R}(t)\) is a (continuous) vector-valued function called a <b>space curve</b> or an <b>arc</b>.
+</p>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: Different functions may parameterize the same curve.
+  For example,
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R}_1(t)
+&  = \mathbf{R}_0 + t \mathbf{W}, && t \in \mathbb{R}\\
+ \mathbf{R}_2(t)
+&  = \mathbf{R}_0 + \tan t \mathbf{W}, && t \in (-\pi/2, \pi/2).
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga99e3e7">
+<h4 id="orga99e3e7">Circle</h4>
+<p class="fragment">
+Parametric equation of the circle \(x^2 + y^2 = 1\) in the \(z = 0\) plane:
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R}(t) = \cos t \mathbf{i} + \sin t \mathbf{j}.
+\end{align*}
+
+</div>
+
+
+<div id="orgcf02209" class="figure">
+<p><img src="../img/math4100/fig2-3.jpeg" alt="fig2-3.jpeg" width="40%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org224c3eb">
+<h4 id="org224c3eb">Circle - Continued</h4>
+<p class="fragment">
+Parametric equation of the circle centered at \(\mathbf{R}_0 = x_0 \mathbf{i} + y_0 \mathbf{j} + z_0 \mathbf{k}\), with radius \(\rho\), lying in the plane \(z = z_0\):
+</p>
+<div class="fragment">
+\begin{align*}
+x & = \rho \cos t + x_0,\\
+y & = \rho \sin t + y_0,\\
+z & = z_0,
+\end{align*}
+
+</div>
+<p class="fragment">
+or simply,
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R}(t) = \mathbf{R}_0 + \rho \cos t \mathbf{i} + \rho \sin t \mathbf{j}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgff90937">
+<h4 id="orgff90937">Circle - Continued</h4>
+<p class="fragment">
+Parametric equation of the circle centered at \(\mathbf{R}_0\) with radius \(\rho\) lying in the plane spanned by the orthonormal vectors \((\mathbf{e}_1, \mathbf{e}_2)\):
+</p>
+<div class="fragment">
+\begin{equation}
+\label{eq:2.13}
+\tag{2.13}
+ \mathbf{R}(t) = \mathbf{R}_0 + \rho \cos t \mathbf{e}_1 + \rho \sin t \mathbf{e}_2.
+\end{equation}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgdf943d5">
+<h4 id="orgdf943d5">Example 2.8</h4>
+<p class="fragment">
+Parametrize the circle of radius \(2\), parallel to the \(xz\) plane, centered at \((0, 1, 0)\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+We use \(\mathbf{R}_0 = \mathbf{j}, \mathbf{e}_1 = \mathbf{i}\) and \(\mathbf{e}_2 = \mathbf{k}\) in Eq. \eqref{eq:2.13} to derive
+</p>
+<div class="fragment">
+\begin{align*}
+   \mathbf{R}(t) = \mathbf{j} + 2 \cos t \mathbf{i} + 2 \sin t \mathbf{k}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5c12ad3">
+<h4 id="org5c12ad3">Example 2.9</h4>
+<p class="fragment">
+Parametrize the circle cutting the axes at the points \(x=1, y=1\), and \(z=1\) respectively.
+</p>
+
+
+<div id="org6a75497" class="figure">
+<p><img src="../img/math4100/fig2-4.jpeg" alt="fig2-4.jpeg" width="35%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4729313">
+<h4 id="org4729313">Example 2.9 - Continued</h4>
+<p>
+<i>Solution</i>
+</p>
+<p class="fragment">
+The circle should lie in the plane \(x + y + z = 1\).
+</p>
+
+<p class="fragment">
+The midpoint of the equilateral triangle formed by \(\mathbf{i}, \mathbf{j}\) and \(\mathbf{k}\) is the center of the circle, which is given by
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{1}{3} (\mathbf{i} + \mathbf{j} + \mathbf{k}).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+The radius of the circle is the distance from the midpoint to, say, \(\mathbf{i}\):
+</p>
+<div class="fragment">
+\begin{align*}
+\rho = \left|\mathbf{i} - \frac{1}{3}(\mathbf{i} + \mathbf{j} + \mathbf{k}) \right| = \frac{\sqrt{6}}{3}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1db7b03">
+<h4 id="org1db7b03">Example 2.9 - Continued</h4>
+<p class="fragment">
+Two orthonormal vectors on the plane:
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{e}_1 = \frac{\mathbf{i} - \mathbf{j}}{\sqrt{2}}, \quad \mathbf{e}_2 = \frac{\mathbf{i} + \mathbf{j} - 2 \mathbf{k}}{\sqrt{6}}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+By Eq. \eqref{eq:2.13}, we have
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R}(t)
+& = \frac{1}{3}(\mathbf{i} + \mathbf{j} + \mathbf{k}) + \frac{\sqrt{6}}{3} \cos t \frac{(\mathbf{i} - \mathbf{j})}{\sqrt{2}} + \frac{\sqrt{6}}{3} \sin t \frac{(\mathbf{i} + \mathbf{j} - 2 \mathbf{k})}{\sqrt{6}}\\
+& = \frac{1}{3}(\mathbf{i} + \mathbf{j} + \mathbf{k}) + \frac{\sqrt{3}}{3} \cos t (\mathbf{i} - \mathbf{j}) + \frac{1}{3} \sin t (\mathbf{i} + \mathbf{j} - 2 \mathbf{k}).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org03669bf">
+<h4 id="org03669bf">Helix</h4>
+<p class="fragment">
+Let \((\mathbf{e}_1, \mathbf{e}_2, \mathbf{e}_3)\) be a right-handed orthonormal system. The <b>helix</b> of radius \(\rho\) and pitch \(2 \pi |a|\) with axis passing through \(\mathbf{R}_0\) and parallel to \(\mathbf{e}_3\) is described by
+</p>
+<div class="fragment">
+\begin{equation}
+  \label{eq:2.15}
+  \tag{2.15}
+  \mathbf{R}(t) = \mathbf{R}_0 + \rho \cos t \mathbf{e}_1 + \rho \sin t \mathbf{e}_2 + a t \mathbf{e}_3.
+  \end{equation}
+
+</div>
+<p class="fragment">
+The helix is right-handed for \(a > 0\) and left-handed for \(a<0\).
+</p>
+
+
+<div id="orgd555ff3" class="figure">
+<p><img src="../img/math4100/fig2-5.jpeg" alt="fig2-5.jpeg" width="28%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1cbe62f">
+<h4 id="org1cbe62f">Example 2.10</h4>
+<p class="fragment">
+Describe the helix generated by \(x = \cos t, y = 2t, z = \sin t\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+This has the form of Eq. \eqref{eq:2.15}, with \(\mathbf{R}_0 = \mathbf{0}\), radius \(\rho = 1\), \(\mathbf{e}_1 = \mathbf{i}\), and \(\mathbf{e}_2 = \mathbf{k}\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: \(\mathbf{i}, \mathbf{k}, \mathbf{j}\) is <i>not</i> a right-handed system, so we must take \(\mathbf{e}_3 = - \mathbf{j}\).
+</p>
+
+<p class="fragment">
+The parametric equation of the helix is
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R}(t) = \cos t \mathbf{i} + \sin t \mathbf{k} - 2t \mathbf{j}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+This helix is left-handed and has pitch \(4 \pi\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org741e2a8">
+<h4 id="org741e2a8">Example 2.11</h4>
+<p class="fragment">
+Describe the helix of Example 2.10 using nonparametric equations.
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+Recall that
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R}(t) = \cos t \mathbf{i} + \sin t \mathbf{k} - 2t \mathbf{j}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+We can eliminate \(t\) in favor of \(y\) using \(t = y/2\). This results in
+</p>
+<div class="fragment">
+\begin{align*}
+x = \cos (y/2), \quad z = \sin (y/2)
+  \end{align*}
+
+</div>
+<p class="fragment">
+as a nonparametric form.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgbf1b03d">
+<h4 id="orgbf1b03d">Velocity</h4>
+<p class="fragment">
+If the space curve \(\mathbf{R}(t)\) is differentiable, the (instantaneous) <b>velocity</b> \(\mathbf{v}\) is defined as the derivative of \(\mathbf{R}(t)\), i.e.
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{v}(t) = \lim_{\Delta t \to 0} \frac{\Delta \mathbf{R}}{\Delta t} = \mathbf{R}'(t).
+  \end{align*}
+
+</div>
+<p class="fragment">
+The magnitude \(|\mathbf{v}|\) of \(\mathbf{v}\) is called the <b>speed</b>, denoted by \(\nu\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org13b0a60">
+<h4 id="org13b0a60">Velocity - Continued</h4>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: The velocity vector \(\mathbf{v} = d \mathbf{R}/ dt\) is <b>tangent</b> to the curve.
+</p>
+
+
+<div id="org98ce1ef" class="figure">
+<p><img src="../img/math4100/fig2-6.jpeg" alt="fig2-6.jpeg" width="40%" class="fragment middle" />
+</p>
+</div>
+
+<p class="fragment">
+We use the letter \(\mathbf{T}\) to denote the unit tangent vector:
+</p>
+<div class="fragment">
+\begin{equation}
+\label{eq:2.19}
+\tag{2.19}
+\mathbf{T} = \frac{\mathbf{v}}{\nu} = \frac{(dx/dt) \mathbf{i} + (dy/dt) \mathbf{j} + (dz/dt) \mathbf{k}}{\sqrt{(dx/dt)^2 + (dy/dt)^2 + (dz/dt)^2}}.
+\end{equation}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org37195aa">
+<h4 id="org37195aa">Example 2.12</h4>
+<p>
+Determine the unit vector tangent to the circle \(x = \cos t, y = \sin t, z = 0\) at
+(a) \(t = 0\);
+(b) \(t = \pi/2\).
+</p>
+
+
+<div id="orgdcd3854" class="figure">
+<p><img src="../img/math4100/fig2-8.jpeg" alt="fig2-8.jpeg" width="40%" class="fragment middle" />
+</p>
+</div>
+
+<p class="fragment">
+<i>Solution</i> From Fig. 2.8, it is obvious that (a) \(\mathbf{j}\), (b) \(-\mathbf{i}\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5ed352e">
+<h4 id="org5ed352e">Example 2.12 - Continued</h4>
+<p class="fragment">
+We can also see this by Eq. \eqref{eq:2.19}:
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{T} = \frac{-\sin t \mathbf{i} + \cos t \mathbf{j}}{\sqrt{\sin^2 t + \cos^2 t}} = - \sin t \mathbf{i} + \cos t \mathbf{j}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+For (a), \(t = 0\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{T} = - \sin 0 \mathbf{i} + \cos 0 \mathbf{j}  = \mathbf{j}.
+\end{align*}
+
+</div>
+<p class="fragment">
+For (b), \(t = \pi/2\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{T} = - \sin (\pi/2) \mathbf{i} + \cos (\pi/2) \mathbf{j}  = - \mathbf{i}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgc4c402d">
+<h4 id="orgc4c402d">Example 2.13</h4>
+<p>
+Find the unit vector tangent to the curve \(x = t, y = t^2, z = t^3\), at the point \((2, 4, 8)\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+The unit tangent vector is
+</p>
+<div class="fragment">
+\begin{align*}
+ \mathbf{T} = \frac{\mathbf{i} + 2t \mathbf{j} + 3t^2 \mathbf{k}}{\sqrt{1 + 4t^2 + 9t^4}}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+The point \((2, 4, 8)\) corresponds to \(t = 2\), so we have
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{T} = \frac{1}{\sqrt{161}}( \mathbf{i} + 4 \mathbf{j} + 12 \mathbf{k} ).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org3478baa">
+<h4 id="org3478baa">Nomenclature to Describe Curves</h4>
+<ul>
+<li>A curve is <b>smooth</b> if there is parametrization \(\mathbf{R}(t), t \in [t_1, t_2]\), satisfying
+<ol>
+<li>the velocity is continuous;</li>
+
+<li>there are no self-crossings;</li>
+
+<li>the velocity is non-zero.</li>
+
+</ol></li>
+
+<li>A curve is a <b>closed loop</b> if \(\mathbf{R}(t_1) = \mathbf{R}(t_2)\).</li>
+
+<li>A curve is <b>regular</b> if it consists of a finite number of smooth arcs joined together without self-crossings.</li>
+
+<li>A curve is <b>oriented</b> if a direction is specified along it, usually described by the direction of increasing parameter.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org2ece236">
+<h4 id="org2ece236">Nomenclature to Describe Curves - Continued</h4>
+
+<div id="org91ddf16" class="figure">
+<p><img src="../img/math4100/fig2-9-12.jpeg" alt="fig2-9-12.jpeg" width="70%" class="middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4ce5a55">
+<h4 id="org4ce5a55">Arc length</h4>
+<p class="fragment">
+Suppose \(C\) is a smooth space curve, which is parametrized by \(\mathbf{R}(t)\), for, say \(a \le t \le b\). The <b>length</b> of the smooth curve is given by
+</p>
+<div class="fragment">
+\begin{align*}
+\int_a^b \left|\frac{d \mathbf{R}}{dt}\right|\, dt = \int_a^b \left[ \left( \frac{dx}{dt} \right)^2 + \left( \frac{dy}{dt} \right)^2 + \left( \frac{dz}{dt} \right)^2 \right]^{1/2}\, dt.
+\end{align*}
+
+</div>
+
+
+<div id="org339c283" class="figure">
+<p><img src="../img/math4100/fig2-15.jpeg" alt="fig2-15.jpeg" width="35%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org00c01ec">
+<h4 id="org00c01ec">Arc length - Continued</h4>
+<p class="fragment">
+The expression of the arc length is sometimes written as
+</p>
+<div class="fragment">
+\begin{align*}
+\int_C [(dx)^2 + (dy)^2 + (dz)^2]^{1/2}\quad \text{or}  \quad \int_C |d \mathbf{R}|,
+\end{align*}
+
+</div>
+<p class="fragment">
+which emphasizes that the arc length is <b>independent</b> of a particular parametrization.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgbb8c1ab">
+<h4 id="orgbb8c1ab">Example 2.14</h4>
+<p>
+Find the arc length between \((0, 0, 1)\) and \((1, 0, 1)\) of the helix \(y = \sin (2\pi x), z = \cos (2 \pi x)\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+First, note that if we set \(x = t / (2\pi)\), we can parametrized the helix as in Eq. \eqref{eq:2.15}.
+</p>
+
+<p class="fragment">
+Since here \(y\) and \(z\) are functions of \(x\), we can re-write
+</p>
+<div class="fragment">
+\begin{align*}
+  (dx)^2 + (dy)^2 + (dz)^2 = (dx)^2 + 4\pi^2 \cos^2 (2\pi x)\, (dx)^2 + 4\pi^2 \sin^2 (2\pi x)(dx)^2.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Thus, the arc length desired is
+</p>
+<div class="fragment">
+\begin{align*}
+\int_0^1 (1 + 4 \pi^2)^{1/2}\, dx = (1 + 4\pi^2)^{1/2}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb6a868d">
+<h4 id="orgb6a868d">Natural parametrization</h4>
+<p class="fragment">
+We can use the arc length as a parameter of a space curve:
+</p>
+<div class="fragment">
+\begin{align*}
+s = s(t) = \int_{t_1}^t \left| \frac{d \mathbf{R}}{d\tau}\right|\, d\tau \quad (t\ge t_1).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+This suggests the possibility of using \(s\) itself as the parameter. In principle, at least, we may invert the above equation to get \(t\) in terms of \(s\); substituting into the function \(\mathbf{R}(t)\) given \(\mathbf{R}\) as a function of \(t\).
+</p>
+
+<p class="fragment">
+However, in practice, the direct computation of \(\mathbf{R}(s)\) is not easy.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgf4247de">
+<h4 id="orgf4247de">Example 2.15</h4>
+<p>
+Reparametrize the curve (i) \(\displaystyle \mathbf{R}(t) = \frac{t^2}{2}\mathbf{i} + \frac{t^3}{3} \mathbf{k}, (0 \le t \le 2)\)
+in terms of arc length.
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+Choosing \(t_1 = 0\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+s = \int_0^t \left| \frac{d \mathbf{R}}{d\tau}\right|\, d\tau = \int_0^t (\tau^2 + \tau^4)^{1/2} \, d\tau = \frac{(t^2 + 1)^{3/2} - 1}{3}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Solving the equation for \(t\), and we \(t = [(3s + 1)^{2/3} - 1]^{1/2}\).
+</p>
+
+<p class="fragment">
+The new parametrization is
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R}(s) = \frac{(3s + 1)^{2/3} -1}{2} \mathbf{i} + \frac{[(3s + 1)^{2/3} - 1]^{3/2}}{3} \mathbf{k}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org732fdeb">
+<h4 id="org732fdeb">Natural parametrization - Continued</h4>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question:</span> Why bother?
+</p>
+
+<p class="fragment">
+By the fundamental theorem of calculus, we have
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{ds}{dt} = \left| \frac{d \mathbf{R}}{dt}\right| = |\mathbf{v}|,
+\end{align*}
+
+</div>
+<p class="fragment">
+which identifies the <i>speed</i> with the rate of change of arc length, a reassuring fact.
+</p>
+
+<p class="fragment">
+In component form, this becomes
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{ds}{dt} = \left[ \left( \frac{dx}{dt} \right)^2 + \left( \frac{dy}{dt} \right)^2 + \left( \frac{dz}{dt} \right)^2 \right]^{1/2}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4a53b31">
+<h4 id="org4a53b31">Natural parametrization - Continued</h4>
+<p data-fragment-index="1" class="fragment">
+Since the curve is smooth, the velocity is not zero, i.e, \(ds/dt \neq 0\), by the chain rule,
+</p>
+<div data-fragment-index="2" class="fragment">
+\begin{align*}
+\frac{d \mathbf{R}}{ds} = \frac{d \mathbf{R}/dt}{ds/dt}.
+\end{align*}
+
+</div>
+
+<p data-fragment-index="3" class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>:
+</p>
+<ol>
+<li data-fragment-index="4" class="fragment">\(d \mathbf{R}/ds\) is <i>tangent</i> to the curve, since \(d \mathbf{R}/dt\) (or the velocity) is.</li>
+<li data-fragment-index="5" class="fragment">Moreover, \(d \mathbf{R}/ds\) is a <i>unit</i> tangent vector, so</li>
+
+</ol>
+<div data-fragment-index="6" class="fragment">
+\begin{align*}
+\mathbf{T} = \frac{d \mathbf{R}}{ds}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org41b7e09">
+<h4 id="org41b7e09">Example 2.15 - Revisit</h4>
+<p>
+Reparametrize the curve (i) \(\displaystyle \mathbf{R}(t) = \frac{t^2}{2}\mathbf{i} + \frac{t^3}{3} \mathbf{k}, (0 \le t \le 2)\) in terms of arc length.
+</p>
+<p class="fragment">
+The new parametrization is
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R}(s) = \frac{(3s + 1)^{2/3} -1}{2} \mathbf{i} + \frac{[(3s + 1)^{2/3} - 1]^{3/2}}{3} \mathbf{k}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Furthermore, we can compute
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{d \mathbf{R}}{ds} = (3s + 1)^{-1/2} \mathbf{i} + [(3s + 1)^{2/3} -1]^{1/2}(3s + 1)^{-1/3} \mathbf{k},
+\end{align*}
+
+</div>
+<p class="fragment">
+which is a unit tangent vector to the curve.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orga7dc787">
+<h3 id="orga7dc787">2.3 Acceleration and Curvature</h3>
+<div class="outline-text-3" id="text-orga7dc787">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgc4d0be2">
+<h4 id="orgc4d0be2">Acceleration</h4>
+<p class="fragment">
+The <b>acceleration</b> \(\mathbf{a}\) of a particle is defined to be the <i>time rate of change</i> of its velocity.
+</p>
+
+<p class="fragment">
+Acceleration is associated with a change in either the magnitude or the direction of the velocity, or both.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org8473aa9">
+<h4 id="org8473aa9">Change of Speed Only</h4>
+<p class="fragment">
+First, we suppose that the particle moves along a straight line, i.e., the direction of the velocity is constant. In this case, the magnitude of the acceleration is just the rate of change of <i>speed</i>:
+</p>
+<div class="fragment">
+\begin{align*}
+\vert \mathbf{a} \vert = \frac{d}{dt} \vert \mathbf{v} \vert = \frac{d^2 s}{dt^2},
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(s\) is the arc length along the curve.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1fc7f97">
+<h4 id="org1fc7f97">Change of Direction Only</h4>
+<p class="fragment">
+On the other hand, let's assume the particle moves at constant speed around a circle of radius \(\rho\), it is well known that it undergoes a "centripetal" acceleration of magnitude
+</p>
+<div class="fragment">
+\begin{align*}
+\vert \mathbf{a}\vert = \frac{|\mathbf{v}|^2}{\rho} = \frac{1}{\rho} \left( \frac{ds}{dt} \right)^2,
+\end{align*}
+
+</div>
+<p class="fragment">
+directed toward the center of the circle. This is due solely to the change of direction.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgf7e4bce">
+<h4 id="orgf7e4bce">Acceleration - Continued</h4>
+<p class="fragment">
+In general, the acceleration vector can be expressed as the linear combination of two <i>orthonormal</i> vectors, one giving the rate of change of speed and the other giving the instantaneous centripetal acceleration corresponding to a related circular trajectory:
+</p>
+<div class="fragment">
+\begin{equation}
+\label{eq:2.30}
+\tag{2.30}
+\mathbf{a} = a_t \mathbf{T} + a_n \mathbf{N},
+\end{equation}
+
+</div>
+<p class="fragment">
+where \(\mathbf{T}\) is the unit tangent vector, and
+</p>
+<div class="fragment">
+\begin{align*}
+a_t = \frac{d^2 s}{d t^2}, \quad a_n = \kappa |\mathbf{v}|^2.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org291229c">
+<h4 id="org291229c">Curvature</h4>
+<p class="fragment">
+We define the <b>curvature</b> \(\kappa\) as the rate at which the <i>unit</i> tangent vector turns, with respect to arc length along the curve:
+</p>
+<div class="fragment">
+\begin{align*}
+\kappa = \left| \frac{d \mathbf{T}}{ds} \right|.
+\end{align*}
+
+</div>
+<p class="fragment">
+We can also write
+</p>
+<div class="fragment">
+\begin{align*}
+\kappa = \frac{|d \mathbf{T}/ dt|}{ds /dt} = \frac{|d \mathbf{T}/ dt|}{|d \mathbf{R}/ dt|} = \frac{|d \mathbf{T}/ dt|}{\nu}.
+\end{align*}
+
+</div>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: What does this give for the curvature of a circle of radius \(\rho\)?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org37cdb3f">
+<h4 id="org37cdb3f">Curvature of Circles</h4>
+<div class="column" style="float:left; width: 48%">
+
+<div id="org3be03d2" class="figure">
+<p><img src="../img/math4100/fig2-16-17.jpeg" alt="fig2-16-17.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+
+<div class="column" style="float:right; width: 50%">
+<p class="fragment">
+In Fig. 2.16, the arc length between \(P_1\) and \(P_2\) on the circle is
+</p>
+<div class="fragment">
+\begin{align*}
+\Delta s = \rho \Delta \theta.
+  \end{align*}
+
+</div>
+<p class="fragment">
+The change of magnitude of the unit tangent vector is
+</p>
+<div class="fragment">
+\begin{align*}
+\vert \Delta \mathbf{T} \vert = \vert  \mathbf{T}_2 - \mathbf{T}_1 \vert = \Delta \theta.
+  \end{align*}
+
+</div>
+<p class="fragment">
+Thus, \(\displaystyle \left| \frac{\Delta \mathbf{T}}{\Delta s}\right| \approx  \frac{\Delta \theta}{\Delta s} = \frac{1}{\rho}\).
+</p>
+<p class="fragment">
+The curvature of a circle as we have defined it is the reciprocal of its radius:
+</p>
+<div class="fragment">
+\begin{align*}
+\kappa = \frac{1}{\rho}.
+  \end{align*}
+
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb3649d1">
+<h4 id="orgb3649d1">Normals</h4>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: \(d \mathbf{T}/dt = \mathbf{0}\) or \(d \mathbf{T}/dt \perp \mathbf{T}\) since \(|\mathbf{T}| = 1\) (see Example 2.7).
+</p>
+
+<p class="fragment">
+If \(d \mathbf{T}/dt \neq \mathbf{0}\), we define the unit vector
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{N} = \frac{d \mathbf{T}/ dt}{|d \mathbf{T}/dt|}
+\end{align*}
+
+</div>
+<p class="fragment">
+to be the <b>principal normal</b>.
+</p>
+<p class="fragment">
+In natural parametrization, we have \(\displaystyle \mathbf{N} = \frac{d \mathbf{T}/ ds}{|d \mathbf{T}/ ds |}\).
+</p>
+<p class="fragment">
+Thus, \(\displaystyle \frac{d \mathbf{T}}{ds} = \kappa \mathbf{N}\).
+</p>
+<p class="fragment">
+In other words, \(\mathbf{T}\) turns in the direction \(\mathbf{N}\), at a rate \(\kappa\) (with respect to arc length).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org3979222">
+<h4 id="org3979222">Orthonormal Decomposition of Acceleration</h4>
+<div class="column" style="float:left; width: 40%">
+
+<div id="org91bcdbd" class="figure">
+<p><img src="../img/math4100/fig2-18.jpeg" alt="fig2-18.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+
+<div class="column" style="float:left; width: 58%">
+<div class="fragment">
+\begin{align*}
+\mathbf{a}
+& = \frac{d \mathbf{v}}{dt} = \frac{d}{dt}(\nu \mathbf{T})\\
+& = \frac{d \nu}{dt} \mathbf{T} + \nu \frac{d \mathbf{T}}{dt}\\
+& = \frac{d^2s}{dt^2} \mathbf{T} + \kappa \nu^2 \mathbf{N},
+  \end{align*}
+
+</div>
+<p class="fragment">
+which gives us the Eq. \eqref{eq:2.30}.
+</p>
+
+<p class="fragment">
+The last equality uses the fact that
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{d \mathbf{T}}{dt} = \left| \frac{d \mathbf{T}}{dt}\right| \mathbf{N} = \kappa \left| \frac{d \mathbf{R}}{dt}\right| \mathbf{N} = \kappa \nu \mathbf{N}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Also, we by the pythagorean theorem,
+</p>
+<div class="fragment">
+\begin{equation}
+  \label{eq:2.42}
+  \tag{2.42}
+  \vert \mathbf{a} \vert^2 = a_t^2 + a^2_n.
+  \end{equation}
+
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org3e36818">
+<h4 id="org3e36818">Example 2.16</h4>
+<p class="fragment">
+The position of a particle moving around the circle \(x^2 + y^2 = r^2\) in the \(xy\) plane, with angular velocity \(\omega\), is
+</p>
+<div class="fragment">
+\begin{align*}
+  x = r \cos (\omega t), \quad y = r \sin (\omega t), \quad z = 0.
+  \end{align*}
+
+</div>
+<p class="fragment">
+Find the normal and tangential components of acceleration of the particle, and determine the curvature of the circle.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org3790fd8">
+<h4 id="org3790fd8">Example 2.16 - Continued</h4>
+<p>
+<i>Solution</i>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(\mathbf{R}(t) = r \cos (\omega t) \mathbf{i} + r \sin (\omega t) \mathbf{j}\).</li>
+
+<li data-fragment-index="2" class="fragment">\(d \mathbf{R}/ dt = - r \omega \sin(\omega t) \mathbf{i} + r \omega \cos(\omega t) \mathbf{j}\).</li>
+
+<li data-fragment-index="3" class="fragment">\(d^2 \mathbf{R}/dt^2 = - r \omega^2 \cos(\omega t) \mathbf{i} - r \omega^2 \sin(\omega t) \mathbf{j}\).</li>
+
+<li data-fragment-index="4" class="fragment">\(\nu = |d \mathbf{R}/dt| = (r^2 \omega^2 \sin^2(\omega t) + r^2 \omega^2 \cos^2(\omega t))^{1/2} = \omega r\).</li>
+
+<li data-fragment-index="5" class="fragment">\(a_t = d\nu/ dt = 0\).</li>
+
+<li data-fragment-index="6" class="fragment">\(|\mathbf{a}| = |d^2 \mathbf{R}/dt^2| = \omega^2 r\).</li>
+
+<li data-fragment-index="7" class="fragment">\(|\mathbf{a}| = (a_t^2 + a_n^2)^{1/2} = a_n = \kappa \nu^2\).</li>
+
+<li data-fragment-index="8" class="fragment">\(a_n = \omega^2 r\), and \(\kappa = a_n/ \nu^2 = \omega^2 r / \omega^2 r^2 = 1 /r\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgffcc719">
+<h4 id="orgffcc719">Example 2.17</h4>
+<p class="fragment">
+The coordinate of a particle at time \(t\) are
+</p>
+<div class="fragment">
+\begin{align*}
+x = \sin t - t \cos t, \quad y = \cos t + t \sin t, \quad z = t^2.
+  \end{align*}
+
+</div>
+<p class="fragment">
+Find the speed, the normal and tangential components of acceleration, and the curvature of the path, in terms of \(t\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orga4a5e9c">
+<h4 id="orga4a5e9c">Example 2.17 - Continued</h4>
+<p>
+<i>Solution</i>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(\mathbf{R}(t) = (\sin t - t \cos t) \mathbf{i} + (\cos t + t \sin t) \mathbf{j} + t^2 \mathbf{k}\).</li>
+
+<li data-fragment-index="2" class="fragment">\(d \mathbf{R}/ dt = (t \sin t) \mathbf{i} + (t \cos t) \mathbf{j} + 2t \mathbf{k}\).</li>
+
+<li data-fragment-index="3" class="fragment">\(d^2 \mathbf{R}/dt^2 = (t \cos t + \sin t) \mathbf{i} + (- t \sin t + \cos t) \mathbf{j} + 2 \mathbf{k}\).</li>
+
+<li data-fragment-index="4" class="fragment">\(\nu = |d \mathbf{R}/dt| = (t^2 \sin^2 t + t^2 \cos^2 t + 4t^2)^{1/2} = \sqrt{5}t\).</li>
+<li data-fragment-index="5" class="fragment">\(a_t = d\nu/ dt = \sqrt{5}\).</li>
+
+<li data-fragment-index="6" class="fragment"><p>
+By the Eq. \eqref{eq:2.42},
+</p>
+<div>
+\begin{align*}
+a_n & = (|\mathbf{a}|^2 - a_t^2)^{1/2}\\
+& = [(t \cos t + \sin t)^2 + (-t \sin t + \cos t)^2 + 2^2 - 5]^{1/2} = t.
+\end{align*}
+
+</div></li>
+
+<li data-fragment-index="7" class="fragment">\(\kappa = a_n/ \nu^2 = t / (5t^2) = 1 /(5t)\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgcf824f5">
+<h4 id="orgcf824f5">Another Formula to Compute the Curvature</h4>
+<div class="fragment">
+\begin{align*}
+\kappa = \frac{| \mathbf{v} \times \mathbf{a}|}{\nu^3}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+First of all,
+</p>
+<div class="fragment">
+\begin{align*}
+    \mathbf{v} \times \mathbf{a} & = \nu \mathbf{T} \times (a_t \mathbf{T} + a_n \mathbf{N})\\
+    & = \nu a_n (\mathbf{T} \times \mathbf{N})\\
+    & = \kappa \nu^3 (\mathbf{T} \times \mathbf{N}).
+\end{align*}
+
+</div>
+<p class="fragment">
+Note that \(\mathbf{T}\) and \(\mathbf{N}\) are perpendicular to each other and they are unit vectors, so
+</p>
+<div class="fragment">
+\begin{align*}
+\vert \mathbf{T} \times \mathbf{N}\vert = 1.
+    \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgec12c71">
+<h4 id="orgec12c71">Binormal Vector and Torsion</h4>
+<p class="fragment">
+We call the unit vector \(\mathbf{B} = \mathbf{T}\times \mathbf{N}\) the <b>binormal</b>.
+</p>
+<p class="fragment">
+The triple \(\{\mathbf{T}, \mathbf{N}, \mathbf{B}\}\) forms a right-handed orthonormal system.
+</p>
+
+<p class="fragment">
+The <b>torsion</b> is defined by
+</p>
+<div class="fragment">
+\begin{align*}
+\tau = \mathbf{B} \cdot \frac{d \mathbf{N}}{ds}
+\end{align*}
+
+</div>
+<p class="fragment">
+which measures the rate at which the curve <i>twists</i>.
+</p>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: Although many of the formulas we have learned involve derivatives with respect to arc length \(s\), one never actually needs to compute the natural parametrization \(\mathbf{R}(s)\), because of the chain rule:
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{d}{ds} = \frac{1}{|\mathbf{v}|}\frac{d}{dt}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org774edae">
+<h3 id="org774edae">2.4 Planar Motion in Polar Coordinates</h3>
+<div class="outline-text-3" id="text-org774edae">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org715a064">
+<h4 id="org715a064">Polar Coordinates</h4>
+<p class="fragment">
+In this section, we consider the motion of a particle in the \(xy\) plane where the position of the particle is given in <i>polar coordinates</i>, \(r\) and \(\theta\):
+</p>
+<div class="fragment">
+\begin{align*}
+x  = r \cos \theta, \quad y  = r \sin \theta, \quad r  = (x^2 + y^2)^{1/2}
+  \end{align*}
+
+</div>
+
+<div class="column" style="float:left; width: 50%">
+<p class="fragment">
+In order to work directly with polar coordinates, it is convenient to introduce unit vectors \(\mathbf{u}_r\) and \(\mathbf{u}_\theta\):
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{u}_r & = \cos \theta \mathbf{i} + \sin \theta \mathbf{j}\\
+\mathbf{u}_\theta & = - \sin \theta \mathbf{i} + \cos \theta \mathbf{j}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+Accordingly, \(\displaystyle \frac{d \mathbf{u}_r}{d \theta} = \mathbf{u}_\theta, \frac{d \mathbf{u}_\theta}{d\theta} = - \mathbf{u}_r\).
+</p>
+<p class="fragment">
+The position vector of a particle located at a point \((r, \theta)\) is \(\mathbf{R} = r \mathbf{u}_r\).
+</p>
+</div>
+
+<div class="column" style="float:right; width: 48%">
+
+<div id="org1927952" class="figure">
+<p><img src="../img/math4100/fig2-22.jpeg" alt="fig2-22.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org718e7be">
+<h4 id="org718e7be">Velocity in Polar Coordinates</h4>
+<p class="fragment">
+The position vector of a particle located at a point \((r, \theta)\) is \(\mathbf{R} = r \mathbf{u}_r\).
+</p>
+
+<div class="fragment">
+\begin{align*}
+\mathbf{v} & = \frac{d \mathbf{R}}{dt} = \frac{d r}{dt}\mathbf{u}_r + r \frac{d \mathbf{u}_r}{dt}\\
+& = \frac{d r}{dt} \mathbf{u}_r + r \frac{d \mathbf{u}_r}{d\theta} \frac{d \theta}{dt}\\
+& = \frac{d r}{dt} \mathbf{u}_r + r \frac{d \theta }{d t} \mathbf{u}_\theta.
+  \end{align*}
+
+</div>
+<p class="fragment">
+This expresses the velocity as the sum of a radial component, directed away from or toward the origin with magnitude \(|dr /dt|\), and a transverse component with magnitude \(|r d\theta/dt|\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org40206af">
+<h4 id="org40206af">Example 2.18</h4>
+<p>
+A particle moves around the circle \(r = 2\) with angular velocity \(d \theta /dt = 5\) rad/sec. Find its speed.
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+Since \(r\) is a constant, \(dr/dt =0\). Hence,
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{v} = \frac{d r}{dt} \mathbf{u}_r + r \frac{d \theta}{dt} \mathbf{u}_\theta = 10 \mathbf{u}_\theta.
+  \end{align*}
+
+</div>
+<p class="fragment">
+Therefore, \(|\mathbf{v}| = 10\).
+</p>
+</section>
+</section>
+</div>
+</div>
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/markdown/markdown.js"></script>
+<script src="../plugin/notes/notes.js"></script>
+<script src="../plugin/search/search.js"></script>
+<script src="../plugin/zoom/zoom.js"></script>
+<script src="../plugin/reveal.js-menu/menu.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: false,
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'none',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom, RevealMenu, RevealChalkboard ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+,chalkboard: {storage: "chalkboard-demo", toggleChalkboardButton: { left: "80px" },	toggleNotesButton: { left: "130px" },	colorButtons: 5}});
+</script>
+</body>
+</html>

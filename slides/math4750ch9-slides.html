@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>MATH 4750 - Introduction to Mathematical Statistics</title>
+<meta name="author" content="\\
+Jie Zhong \\
+Department of Mathematics \\
+California State University, Los Angeles"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+
+<link rel="stylesheet" href="../dist/theme/serif.css" id="theme"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+
+<link rel="stylesheet" href="../gnohz.css"/>
+<script>window.MathJax = { TeX: {Macros: {range: "\\text{Range}", ow: "\\text{otherwise}"}} }</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1>MATH 4750 - Introduction to Mathematical Statistics</h1><h2></h2><h6> <br />
+Jie Zhong <br />
+Department of Mathematics <br />
+California State University, Los Angeles</h6>
+</section>
+<section>
+<section id="slide-org041cd73">
+<h2 id="org041cd73">Chapter 9 Testing Hypotheses</h2>
+<div class="outline-text-2" id="text-org041cd73">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5f252b0">
+<h3 id="org5f252b0">9.1 Problems of Testing Hypotheses</h3>
+<p>
+In general, hypothesis testing concerns trying to decide whether a parameter \(\theta\) lies in one subset of the parameter space or in its complement. When \(\theta\) is one-dimensional, at least one of the two subsets will typically be an interval, possibly degenerate. In this section, we introduce the notation and some common methodology associated with hypothesis testing.
+</p>
+
+<p>
+We recommend to read the part of an equivalence between hypothesis tests and confidence intervals.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org6e6c455">
+<h4 id="org6e6c455">The Null and Alternative Hypotheses</h4>
+<p class="fragment">
+Consider a statistical problem involving a parameter \(\theta \in \Omega\), where \(\Omega\) is a certain parameter space.
+</p>
+<p class="fragment">
+Suppose that
+</p>
+<div class="fragment">
+\begin{align*}
+  \Omega = \Omega_0 \cup \Omega_1, \quad \Omega_0 \cap \Omega_1 = \varnothing.
+\end{align*}
+
+</div>
+<p class="fragment">
+Let
+</p>
+<div class="fragment">
+\begin{align*}
+  H_0: \theta \in \Omega_0, \quad H_1: \theta \in \Omega_1.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Goal</span>: To decide which of hypothesis \(H_0\) or \(H_1\) appears to be true.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5908501">
+<h4 id="org5908501">The Null and Alternative Hypotheses - Continued</h4>
+<p>
+<span style="color: rgb(24,116,205)">Goal</span>: To decide which of hypothesis \(H_0\) or \(H_1\) appears to be true.
+</p>
+
+<p class="fragment">
+A problem of this type, in which there are only two possible decisions, is called a problem of <i>testing hypotheses</i>.
+</p>
+
+<p class="fragment">
+A procedure for deciding which hypothesis to choose is called a <i>test procedure</i> or simply a <i>test</i>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1e54e35">
+<h4 id="org1e54e35">Definition</h4>
+<p class="fragment">
+The hypothesis \(H_0\) is called the <i>null hypothesis</i> and the hypothesis \(H_1\) is called the <i>alternative hypothesis</i>.
+</p>
+
+<p class="fragment">
+When performing a test, if we decide that \(\theta\) lies in \(\Omega_1\), we are said to <i>reject</i> \(H_0\). If we decide that \(\theta\) lies in \(\Omega_0\), we are said <i>not to reject</i> \(H_0\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org8ebfdce">
+<h4 id="org8ebfdce">Example 9.1.2</h4>
+<p>
+<span style="color: rgb(24,116,205)">Egyptian Skulls</span>
+</p>
+
+<p class="fragment">
+Observations: breadth measurements (in mm) of the skulls found in Egypt from various time periods
+</p>
+<p class="fragment">
+Model: \(\mathcal{N}(\mu, \sigma^2)\).
+</p>
+<p class="fragment">
+Goal: Interest might lie in how \(\mu\) compares to the breadth of a modern-day skull, about 140mm.
+</p>
+<p class="fragment">
+Hypotheses setup:
+</p>
+<div class="fragment">
+\begin{align*}
+  & H_0: \mu \ge 140,\\
+  & H_1: \mu < 140.
+\end{align*}
+
+</div>
+
+</section>
+<section>
+<p>
+<span style="color: rgb(24,116,205)">Question</span>: How did we decide that the null hypothesis should be \(H_0: \mu \ge 140\) rather than \(\mu < 140\)? Would we be led to the same conclusion either way?
+</p>
+<p class="fragment">
+We can address these issues after we introduce the possible errors that can arise in hypothesis testing.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgd4fc365">
+<h4 id="orgd4fc365">Simple and Composite Hypotheses</h4>
+<p class="fragment">
+For \(i = 0\) or \(i=1\), if \(\Omega_i\) contains just a single value of \(\theta\), then \(H_i\) is a <i>single hypothesis</i>.
+</p>
+
+<p class="fragment">
+If the set \(\Omega_i\) contains more than one value of \(\theta\), then \(H_i\) is a <i>composite hypothesis</i>.
+</p>
+<p class="fragment">
+For example, a simple null hypothesis \(H_0\) must have the form
+</p>
+<div class="fragment">
+\begin{align*}
+  H_0: \theta = \theta_0.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb656fc7">
+<h4 id="orgb656fc7">Definition</h4>
+<p>
+Let \(\theta\) be a one-dimensional parameter. <i>One-sided</i> null hypotheses are of the form \(H_0 : \theta \le \theta_0\) or \(H_0 : \theta \ge \theta_0\), with the corresponding one-sided alternative hypotheses being \(H_1 : \theta>\theta_0\) or \(H_1: \theta < \theta_0\).
+</p>
+
+<p class="fragment">
+When the null hypothesis is simple, the alternative hypothesis is usually two-sided, \(H_1: \theta \neq \theta_0\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org703d70b">
+<h4 id="org703d70b">The Critical Region and Test Statistic</h4>
+<p>
+<span style="color: rgb(24,116,205)">Example 9.1.3</span>
+Suppose that \(\vec{X} = (X_1, \dots, X_n)\) is random sample from \(\mathcal{N}(\mu, \sigma^2)\).
+</p>
+<p class="fragment">
+We wish to test the hypotheses:
+</p>
+<div class="fragment">
+\begin{align*}
+  & H_0: \mu = \mu_0,\\
+  & H_1: \mu \neq \mu_0.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>:
+What is a reasonable criterion to reject \(H_0\)?
+</p>
+<p class="fragment">
+Reject \(H_0\) if \(\overline{X}_n\) is far from \(\mu_0\).
+</p>
+
+</section>
+<section>
+<p>
+For example, we could choose a number \(c\) and reject \(H_0\) if
+</p>
+<div>
+\begin{align*}
+  |\overline{X}_n - \mu_0| \ge c.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Alternatively, we can also based on theoretical considerations, choose a number \(c\) and reject \(H_0\) if \(|U| \ge c\), where
+</p>
+<div class="fragment">
+\begin{align*}
+  U = \frac{n^{1/2}(\overline{X}_n - \mu_0)}{\sigma'}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org3a77977">
+<h4 id="org3a77977">The Critical Region and Test Statistic - Continued</h4>
+<p>
+In such a way, we actually divide the sample space \(S\) into two sets
+</p>
+<div class="fragment">
+\begin{align*}
+  S_0 = \{\vec{x}: - c < \overline{X}_n -\mu_0< c\}, \quad \text{and}\quad S_1 = S^C_0.
+\end{align*}
+
+</div>
+<p class="fragment">
+We then reject \(H_0\) if \(\vec{X}\in S_1\), and we don't reject \(H_0\) if \(\vec{X}\in S_0\).
+</p>
+
+<p class="fragment">
+A simpler way to express the procedure is to define the statistic \(T = |\overline{X}_n - \mu_0|\), and reject \(H_0\) if \(T\ge c\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgd70ae21">
+<h4 id="orgd70ae21">The Critical Region and Test Statistic - Continued</h4>
+<p>
+In general, we can specify a test procedure by partitioning \(S\) into two subsets:
+</p>
+<div class="fragment">
+\begin{align*}
+  S_1 = \{\vec{x}: ~\text{reject } H_0\},\quad \text{and}\quad S_1 = S^C_0.
+\end{align*}
+
+</div>
+<p class="fragment">
+The set defined above is called the <i>critical region</i> of the test.
+</p>
+
+<p class="fragment">
+In summary, a test procedure is determined by specifying the critical region of the test. In most hypothesis-testing problems, the critical region is defined in terms of a statistic, \(T = r(\vec{X})\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org8731e09">
+<h4 id="org8731e09">Definition</h4>
+<p>
+Let \(\vec{X}\) be a random sample from a distribution that depends on a parameter \(\theta\).
+</p>
+
+<p class="fragment">
+Let \(T = r(\vec{X})\) be a statistic, and let \(R\) be a subset of the real line. Suppose that a test procedure for the hypotheses is of the form "reject \(H_0\) if \(T \in R\)."
+</p>
+
+<p class="fragment">
+Then we call \(T\) a <i>test statistic</i>, and we call \(R\) the <i>rejection region</i> of the test.
+</p>
+
+<p class="fragment">
+When a test is defined in terms of a test statistic \(T\) and rejection region \(R\), the set \(S_1 = \{\vec{x}: r(\vec{x}) \in R\}\) is the critical region.
+</p>
+
+<p class="fragment">
+In Example 9.1.3, we reject \(H_0\) if \(T = |\overline{X}_n - \mu_0| \ge c\), and the rejection region \(R = [c, \infty]\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5b50c1f">
+<h4 id="org5b50c1f">Definition</h4>
+<p>
+Let \(\delta\) be a test procedure, and \(S_1\) be the critical region of \(\delta\), we call the probability given a \(\theta\in \Omega\) that the test \(\delta\) will reject \(H_0\), i.e.,
+</p>
+<div class="fragment">
+\begin{align*}
+  \pi(\theta|\delta) = \mathbb{P}(\vec{X} \in S_1 |\theta)
+\end{align*}
+
+</div>
+<p class="fragment">
+the <i>power function</i> of the test \(\delta\).
+</p>
+<p class="fragment">
+If \(\delta\) is described in terms of a test statistic \(T\) and rejection region \(R\), the power function is
+</p>
+<div class="fragment">
+\begin{align*}
+  \pi(\theta|\delta) = \mathbb{P}(T\in R|\theta).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org106bb58">
+<h4 id="org106bb58">Example 9.1.5</h4>
+<p>
+<span style="color: rgb(24,116,205)">Testing Hypotheses about the Mean of a Normal Distribution with Known Variance</span>
+</p>
+<p class="fragment">
+In Example 9.1.3, the test \(\delta\) is based on the test statistic \(T = |\overline{X}_n - \mu_0|\) with rejection region \(R = [c, \infty)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org04813ea">
+<h4 id="org04813ea">Example 9.1.5 - Continued</h4>
+<p>
+Note that \(\overline{X}_n \sim \mathcal{N}(\mu, \sigma^2/n)\), then the power function
+</p>
+<div class="fragment">
+\begin{align*}
+  \pi(\mu|\delta) & = \mathbb{P}(T\in R|\mu)\\
+& = \mathbb{P}(|\overline{X}_n-\mu_0| \ge c|\mu)\\
+& = \mathbb{P}(\overline{X}_n \ge \mu_0 + c |\mu) + \mathbb{P}(\overline{X}_n \le \mu_0 - c |\mu)\\
+& = 1 - \Phi \left( \frac{\mu_0 + c - \mu}{\sigma/\sqrt{n}} \right) + \Phi \left( \frac{\mu_0 - c - \mu}{\sigma/\sqrt{n}} \right).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbc74091">
+<h4 id="orgbc74091">Example 9.1.5 - Continued</h4>
+<p>
+The following figure plots the power functions of three different tests with \(c = 1, 2, 3\) in the specific example in which \(\mu_0 =4, n=15\), and \(\sigma^2 =9\).
+</p>
+
+<div id="orgbbd0b4c" class="figure">
+<p><img src="../img/math4750/fig9-1.png" alt="fig9-1.png" width="65%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4f3e0a6">
+<h4 id="org4f3e0a6">Ideal Power Function?</h4>
+<p>
+Recall that the power function \(\pi(\theta|\delta)\) specifies, for each possible value of the parameter \(\theta\), the probability that \(\delta\) will reject \(H_0\), it follows that the ideal power function would be one for which
+</p>
+<div class="fragment">
+\begin{align*}
+  \pi(\theta|\delta) = \begin{cases}
+0, & \text{for each } \theta \in \Omega_0,\\
+1, & \text{for each } \theta \in \Omega_1.
+\end{cases}
+\end{align*}
+
+</div>
+
+<p class="fragment">
+"Ideal" here means that test \(\delta\) would lead to the correct decision with probability \(1\).
+</p>
+
+<p class="fragment">
+In a practical problem, however, there would seldom exist any test procedure having such an ideal power function.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgf945fd2">
+<h4 id="orgf945fd2">Definition</h4>
+<p>
+An erroneous decision to reject a true null hypothesis is a <i>type I error</i>, and an erroneous decision not to reject a false null hypothesis is called a <i>type II error</i>.
+</p>
+
+<p class="fragment">
+In terms of the power function,
+</p>
+<div class="fragment">
+\begin{align*}
+  \pi(\theta|\delta) & = \mathbb{P}(\text{type I error}), & \theta \in \Omega_0\\
+  1 - \pi(\theta|\delta) & = \mathbb{P}(\text{type II error}), & \theta \in \Omega_1\\
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Now our goal is to choose a test \(\delta\) so that the power function \(\pi(\theta|\delta)\) is low for \(\theta\in \Omega_0\), and high for \(\theta\in \Omega_1\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orga3b997e">
+<h4 id="orga3b997e">Example</h4>
+<p>
+Consider the test \(\delta_0\) that <b>never rejects</b> \(H_0\), then we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \pi(\theta|\delta_0) = 0, \quad \text{for all }  \theta \in \Omega.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: What are the probabilities of making type I and type II errors, respectively?
+</p>
+
+
+<p class="fragment">
+Consider the test \(\delta_1\) that <b>always rejects</b> \(H_0\), then we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \pi(\theta|\delta_0) = 1, \quad \text{for all }  \theta \in \Omega.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: What are the probabilities of making type I and type II errors, respectively?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org050f3af">
+<h4 id="org050f3af">Definition</h4>
+<p>
+Given a number \(\alpha_0\in (0, 1)\), the test \(\delta\) such that
+</p>
+<div class="fragment">
+\begin{align*}
+  \pi(\theta|\delta) \le \alpha_0, \quad \text{for all }  \theta\in \Omega_0
+\end{align*}
+
+</div>
+<p class="fragment">
+is called a <i>level \(\alpha_0\) test</i>,  and we say that the test has <i>level of significance \(\alpha_0\)</i>.
+</p>
+<p class="fragment">
+In addition, the <i>size \(\alpha(\delta)\) of a test \(\delta\)</i> is defined as follows:
+</p>
+<div class="fragment">
+\begin{align*}
+  \alpha(\delta) = \sup_{\theta\in \Omega_0}\pi(\theta|\delta).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga528eb3">
+<h4 id="orga528eb3">Corollary</h4>
+<p>
+A test \(\delta\) is a level \(\alpha_0\) test if and only if its size is at most \(\alpha_0\) (i.e. \(\alpha(\delta)\le \alpha_0\)). If the null hypothesis is simple, that is, \(H_0: \theta = \theta_0\), then the size of \(\delta\) will be \(\alpha(\delta) = \pi(\theta_0|\delta)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org7930fe2">
+<h4 id="org7930fe2">Example 9.1.7</h4>
+<p>
+Observations: \(X_1, \dots, X_n \sim \text{Unif}([0, \theta])\), with \(\theta\) unknown.
+</p>
+<p class="fragment">
+Hypotheses:
+</p>
+<div class="fragment">
+\begin{align*}
+  H_0: & 3 \le \theta \le 4,\\
+  H_1: & \theta < 3 ~\text{or}~ \theta>4.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+We know (from Example 7.5.7) that the M.L.E. of \(\theta\) is
+</p>
+<div class="fragment">
+\begin{align*}
+  Y_n = \max\{X_1, \dots, X_n\}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Since \(Y_n \to \theta\) as \(n\to \infty\) in probability, we can define a test \(\delta\) such that it does not reject \(H_0\) if \(2.9< Y_n < 4\) and rejects \(H_0\) if \(Y_n\) does not lie in this interval.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org6343eb8">
+<h4 id="org6343eb8">Example 9.1.7 - Continued</h4>
+<p>
+<span style="color: rgb(24,116,205)">Question</span>:
+</p>
+<p class="fragment">
+What is the critical region, rejection region, power function, size of the test, level of significance?
+</p>
+
+
+<p class="fragment">
+Critical region:
+</p>
+<div class="fragment">
+\begin{align*}
+  S_1 = \{\vec{x}: Y_n \le 2.9, ~ \text{or}~ Y_n \ge 4\}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Rejection region:
+</p>
+<div class="fragment">
+\begin{align*}
+  R = (-\infty, 2.9]\cup [4, \infty).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+The power function:
+</p>
+<div class="fragment">
+\begin{align*}
+  \pi(\theta|\delta) = \mathbb{P}(Y_n \le 2.9|\theta) + \mathbb{P}(Y_n\ge 4|\theta).
+\end{align*}
+
+</div>
+
+</section>
+<section>
+<p>
+If \(\theta \le 2.9\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(Y_n \le 2.9|\theta) = 1, \quad \mathbb{P}(Y_n\ge 4|\theta) = 0.
+\end{align*}
+
+</div>
+<p class="fragment">
+So in this case,
+</p>
+<div class="fragment">
+\begin{align*}
+  \pi(\theta|\delta) = 1.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+If \(2.9 < \theta \le 4\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(Y_n \le 2.9|\theta) = \left( \frac{2.9}{\theta} \right)^n, \quad \mathbb{P}(Y_n\ge 4|\theta) = 0.
+\end{align*}
+
+</div>
+<p class="fragment">
+So in this case,
+</p>
+<div class="fragment">
+\begin{align*}
+  \pi(\theta|\delta) = \left( \frac{2.9}{\theta} \right)^n.
+\end{align*}
+
+</div>
+
+</section>
+<section>
+<p>
+If \(\theta > 4\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(Y_n \le 2.9|\theta) = \left( \frac{2.9}{\theta} \right)^n, \quad \mathbb{P}(Y_n\ge 4|\theta) = 1 - \left( \frac{4}{\theta} \right)^n.
+\end{align*}
+
+</div>
+<p class="fragment">
+So in this case,
+</p>
+<div class="fragment">
+\begin{align*}
+  \pi(\theta|\delta) = \left( \frac{2.9}{\theta} \right)^n + 1 - \left( \frac{4}{\theta} \right)^n.
+\end{align*}
+
+</div>
+
+<div id="org34218d9" class="figure">
+<p><img src="../img/math4750/fig9-2.png" alt="fig9-2.png" width="80%" class="fragment middle" />
+</p>
+</div>
+
+</section>
+<section>
+<p>
+The size of \(\delta\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \alpha(\delta) = \sup_{3\le \theta \le 4}\pi(\theta|\delta) = \pi(3|\delta) = \left( \frac{29}{30} \right)^n.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+In particular, if the sample size \(n=68\), then the size of \(\delta\) is
+</p>
+<div class="fragment">
+\begin{align*}
+  \left( \frac{29}{30} \right)^{68} = 0.0997,
+\end{align*}
+
+</div>
+<p class="fragment">
+and so \(\delta\) is a level \(\alpha_0\) test for every level of significance
+</p>
+<div class="fragment">
+\begin{align*}
+  \alpha_0 \ge 0.0997.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgcd529a3">
+<h4 id="orgcd529a3">Making a Test Have a Specific Significance Level</h4>
+<p>
+<span style="color: rgb(24,116,205)">Example 9.1.8</span>
+In Example 9.1.5, our test is
+</p>
+<div class="fragment">
+\begin{align*}
+  \text{reject} ~ H_0: \mu = \mu_0 \quad \text{if}~ T = |\overline{X}_n - \mu_0| \ge c.
+\end{align*}
+
+</div>
+<p class="fragment">
+To specify this test is to specify the value of \(c\).
+</p>
+
+<p class="fragment">
+Now suppose we desire our test to have the level of significance \(\alpha_0\). That is,
+</p>
+<div class="fragment">
+\begin{align*}
+  \sup_{\theta\in \Omega_0} \pi(\theta|\delta) = \sup_{\theta\in \Omega_0} \mathbb{P}(T\ge c|\theta) \le \alpha_0.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Since the null hypothesis here is <b>simple</b>, the above inequality becomes
+</p>
+<div class="fragment">
+\begin{align*}
+    \mathbb{P}(|\overline{X}_n-\mu_0|\ge c |\mu_0) \le \alpha_0.
+\end{align*}
+
+</div>
+
+</section>
+<section>
+<p>
+Also we have \(\overline{X}_n \sim \mathcal{N}(\mu_0, \sigma^2/n)\), so we can find a value of \(c\) that makes the size of the test exactly \(\alpha_0\) for each \(\alpha_0\).
+</p>
+<div class="fragment">
+\begin{align*}
+    \mathbb{P}(|\overline{X}_n-\mu_0|\ge c |\mu_0) & = \mathbb{P}\left(\left| \frac{\overline{X}_n-\mu_0}{\sigma/\sqrt{n}}\right| \ge \frac{c}{\sigma/\sqrt{n}}\bigg|\mu_0 \right)\\
+& = \mathbb{P}(|Z|\ge \sqrt{n}c/\sigma) = 2 \Phi(-\sqrt{n}c/\sigma) = 2 - 2 \Phi(\sqrt{n}c/\sigma),
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(Z\sim \mathcal{N}(0, 1)\), and \(\Phi\) is the C.D.F. of \(Z\).
+</p>
+
+<div id="orge27c8c2" class="figure">
+<p><img src="../img/math4750/fig9-3.png" alt="fig9-3.png" width="45%" class="fragment middle" />
+</p>
+</div>
+
+
+</section>
+<section>
+<p>
+In other words, we need
+</p>
+<div class="fragment">
+\begin{align*}
+  2 - 2 \Phi(\sqrt{n}c/\sigma)  = \alpha_0,
+\end{align*}
+
+</div>
+<p class="fragment">
+which gives
+</p>
+<div class="fragment">
+\begin{align*}
+  c = \frac{\sigma \Phi^{-1}(1 - \alpha_0/2)}{\sqrt{n}}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Therefore, the desired test is
+</p>
+<div class="fragment">
+\begin{align*}
+  \text{reject} ~ H_0: \mu = \mu_0 \quad \text{if}~ |Z| \ge \Phi^{-1}(1 - \alpha_0/2),
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(Z = \sqrt{n}(\overline{X}_n - \mu_0)/\sigma\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1aa9ab1">
+<h4 id="org1aa9ab1">Example 9.1.10</h4>
+<p>
+In Example 9.1.8, suppose that we choose to test the null hypothesis at level \(\alpha_0 = 0.05\).
+</p>
+<p class="fragment">
+Then
+</p>
+<div class="fragment">
+\begin{align*}
+  \Phi^{-1}(1- 0.05/2) = 1.96.
+\end{align*}
+
+</div>
+<p class="fragment">
+So the test is
+</p>
+<div class="fragment">
+\begin{align*}
+  \text{reject} ~ H_0: \mu = \mu_0 \quad \text{if}~ |Z| \ge 1.96.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: Any issues with the result of this test?
+</p>
+
+<p class="fragment">
+Please read about the <i>\(p\) value</i> up to Example 9.1.12.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org3523d46">
+<h3 id="org3523d46">9.2 Testing Simple Hypotheses</h3>
+<p>
+The simplest hypothesis-testing situation is that in which there are only two possible values of the parameter.
+</p>
+
+<p class="fragment">
+In such cases, it is possible to identify a collection of test procedures that have certain optimal properties.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org8d3edb1">
+<h4 id="org8d3edb1">Example 9.2.1</h4>
+<p>
+In Example 3.7.5, we modeled the service times \(\vec{X} = (X_1, \dots, X_n)\) of \(n\) customers in a queue having the joint p.d.f.
+</p>
+<div class="fragment">
+\begin{align*}
+  f_1(\vec{x}) = \begin{cases}
+\frac{2(n!)}{\left( 2+ \sum_{i=1}^n x_i \right)^{n+1}}, & \mbox{for all}~x_i>0,\\
+0, & \mbox{otherwise}.
+\end{cases}
+\end{align*}
+
+</div>
+<p class="fragment">
+Another model using the exponential distribution is proposed:
+</p>
+<div class="fragment">
+\begin{align*}
+  f_0(\vec{x}) = \begin{cases}
+    \frac{1}{2^n} \exp\left(- \frac{1}{2} \sum_{i=1}^n x_i \right), & \mbox{for all}~x_i>0,\\
+    0, & \mbox{otherwise}.
+\end{cases}
+\end{align*}
+
+</div>
+
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>:
+</p>
+<p class="fragment">
+If the manager observes several service times, how can she test which of the two distributions appears to describe the data?
+</p>
+
+</section>
+<section>
+<p>
+In general, we assume
+</p>
+<div class="fragment">
+\begin{align*}
+  \vec{X} = (X_1, \dots, X_n) \sim f_0(\vec{x}) \, \text{or} \, f_1(\vec{x}).
+\end{align*}
+
+</div>
+<p class="fragment">
+In this case, we  use the notation
+</p>
+<div class="fragment">
+\begin{align*}
+  \Omega = \{\theta_0, \theta_1\},
+\end{align*}
+
+</div>
+<p class="fragment">
+for the parameter space, where
+</p>
+<div class="fragment">
+\begin{align*}
+  \theta = \theta_i \, \text{means }
+ \vec{X} \sim f_i(\vec{x})  \, \text{for }  i = 0, 1.
+\end{align*}
+
+</div>
+<p class="fragment">
+Then we are interested in testing the following simple hypotheses:
+</p>
+<div class="fragment">
+\begin{align*}
+  &H_0: \theta = \theta_0,\\
+  &H_1: \theta = \theta_1.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5547c46">
+<h4 id="org5547c46">The Two Types of Errors</h4>
+<p>
+We denote by
+</p>
+<div class="fragment">
+\begin{align*}
+  \alpha(\delta) & = \mathbb{P}(\text{reject } H_0 |\theta = \theta_0 ),\\
+  \beta(\delta) & = \mathbb{P}(\text{not reject } H_0 |\theta = \theta_1 ).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgc2d2bf0">
+<h4 id="orgc2d2bf0">Example 9.2.2</h4>
+<p>
+Below are the two p.d.f.'s for the case of \(n=1\) in Example 9.2.1.
+</p>
+<div class="fragment">
+\begin{align*}
+  f_1(x) & = \begin{cases}
+\frac{2}{\left( 2+ x \right)^2}, & \mbox{for}~x>0,\\
+0, & \mbox{otherwise}.
+\end{cases}, \\
+  f_0(x) & = \begin{cases}
+    \frac{1}{2} \exp\left( -\frac{1}{2} x \right), & \mbox{for all}~x_i>0,\\
+    0, & \mbox{otherwise}.
+\end{cases}
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: If the manager observes one service time, \(X_1\). What is a reasonable test?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org49c2792">
+<h4 id="org49c2792">Example 9.2.2 - Continued</h4>
+<p>
+The figure below shows two p.d.f.'s for the case of \(n=1\) in Example 9.2.1.
+</p>
+
+<div id="org7c4671f" class="figure">
+<p><img src="../img/math4750/fig9-5.png" alt="fig9-5.png" width="65%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org128ed07">
+<h4 id="org128ed07">Example 9.2.2 - Continued</h4>
+<p>
+Assume the test that she chooses is
+</p>
+<div class="fragment">
+\begin{align*}
+  \text{reject} \, H_0, \, \text{if} ~X_1 \ge 4.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Please compute the type I and type II error probabilities for this test.
+</p>
+<div class="fragment">
+\begin{align*}
+  f_1(x) & = \begin{cases}
+\frac{2}{\left( 2+ x \right)^2}, & \mbox{for}~x>0,\\
+0, & \mbox{otherwise}.
+\end{cases}, \\
+  f_0(x) & = \begin{cases}
+    \frac{1}{2} \exp\left( -\frac{1}{2} x \right), & \mbox{for all}~x_i>0,\\
+    0, & \mbox{otherwise}.
+\end{cases}
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org8c19665">
+<h4 id="org8c19665">Example 9.2.2 - Continued</h4>
+<p>
+<i>Solution</i>
+</p>
+<p class="fragment">
+To compute \(\alpha(\delta)\), we assume \(\theta= \theta_0\), i.e., use \(f_0\) as the p.d.f. of \(X_1\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \alpha(\delta) & = \mathbb{P}(X_1 \ge 4|\theta_0)\\
+& = e^{-0.5 \cdot 4} = 0.135.
+\end{align*}
+
+</div>
+<p class="fragment">
+To compute \(\beta(\delta)\), we assume \(\theta= \theta_1\), i.e., use \(f_1\) as the p.d.f. of \(X_1\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \beta(\delta) & = \mathbb{P}(X_1 < 4|\theta_1)\\
+& = \int_0^4 \frac{2}{(2+x)^2}\, dx = \frac{2}{3}=0.667.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9affcbf">
+<h4 id="org9affcbf">Minimizing a Linear Combination</h4>
+<p>
+<span style="color: rgb(24,116,205)">Theorem 9.2.1</span>
+</p>
+<p class="fragment">
+Suppose \(a\) and \(b\) are specified positive constants. Let \(\delta^\ast\) denote a test such that
+</p>
+<div class="fragment">
+\begin{align*}
+  \text{not reject } H_0, & \text{ if } b f_1(\vec{x})< a f_0(\vec{x}),\\
+\text{reject } H_0, & \text{ if } b f_1(\vec{x}) > a f_0(\vec{x}),\\
+\text{undetermined}, & \text{ if } b f_1(\vec{x}) = a f_0(\vec{x}).
+\end{align*}
+
+</div>
+<p class="fragment">
+Then for every other test \(\delta\),
+</p>
+<div class="fragment">
+\begin{align*}
+  a \alpha(\delta^\ast) + b \beta(\delta^\ast) \le a \alpha(\delta) + b \beta(\delta).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4fb07e2">
+<h4 id="org4fb07e2">Proof</h4>
+<p>
+For simplicity, we assume that the samples follow a <b>discrete</b> distribution.
+</p>
+
+<p class="fragment">
+Let \(S_1\) be the critical region, so if \(\vec{x}\in S_1\), then reject \(H_0\); if \(\vec{x}\in S_1^C=S_0\), then not reject \(H_0\).
+</p>
+<div class="fragment">
+\begin{align*}
+  a \alpha(\delta) + b \beta(\delta)
+& = a \sum_{\vec{x} \in S_1} f_0(\vec{x}) + b \sum_{\vec{x}\in S_0} f_1(\vec{x})\\
+& = a\sum_{\vec{x} \in S_1} f_0(\vec{x}) + b \left( 1 - \sum_{\vec{x}\in S_1} f_1(\vec{x})\right)\\
+& = b + \sum_{\vec{x}\in S_1} \left[ a f_0(\vec{x}) - bf_1(\vec{x}) \right].
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org581ac04">
+<h4 id="org581ac04">Proof - Continued</h4>
+<p>
+Now note that to specify a test \(\delta^\ast\) is equivalent to choosing \(S_1\).
+</p>
+<p class="fragment">
+In order to minimize the linear combination \(\alpha(\delta) + b \beta(\delta)\), we choose
+</p>
+<div class="fragment">
+\begin{align*}
+  S_1 = \{\vec{x}: a f_0(\vec{x}) < bf_1(\vec{x})\}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org17a33fb">
+<h4 id="org17a33fb">Likelihood Ratio</h4>
+<p>
+If we define by \(f_1(\vec{x})/f_0(\vec{x})\), the <i>likelihood ratio</i> of the sample, then Theorem 9.2.1 can be reworded as follows.
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Corollary 9.2.1</span>
+</p>
+<p class="fragment">
+Assume the condition of Theorem 9.2.1, and assume that \(a>0\) and \(b>0\). Then the test \(\delta\) for which the value of \(a\alpha(\delta)+ b \beta(\delta)\) is a minimum
+</p>
+<div class="fragment">
+\begin{align*}
+ \text{not reject } H_0, & \text{ if } \frac{f_1(\vec{x})}{f_0(\vec{x})}< \frac{a}{b},\\
+\text{reject } H_0, & \text{ if } \frac{f_1(\vec{x})}{f_0(\vec{x})}> \frac{a}{b},\\
+\text{undetermined}, &  \text{ if } a f_0(\vec{x}) = b f_1(\vec{x}).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb101b61">
+<h4 id="orgb101b61">Example 9.2.3</h4>
+<p>
+Instead of rejecting \(H_0\) if \(X_1 \ge 4\) in Example 9.2.2, the manager could apply Theorem 9.2.1.
+</p>
+<p class="fragment">
+Suppose that she chooses the test such that it rejects \(H_0\) if \(f_1(x_1)/f_0(x_1)>1\). That is, if
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{4}{(2+x_1)^2}\exp \left( \frac{x_1}{2} \right)>1.
+\end{align*}
+
+</div>
+<p class="fragment">
+By numerical approximation, we solve the inequality above and obtain
+</p>
+<div class="fragment">
+\begin{align*}
+  x_1 > 5.025725.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgff81736">
+<h4 id="orgff81736">Example 9.2.3 - Continued</h4>
+<p>
+Then
+</p>
+<div class="fragment">
+\begin{align*}
+  \alpha(\delta^\ast) & = 1 - F_0(5.025725) = \exp(-2.513) = 0.081,\\
+\beta(\delta^\ast) & = F_1(5.025725) = 1 - \frac{2}{7.026} = 0.715,
+\end{align*}
+
+</div>
+<p class="fragment">
+and
+</p>
+<div class="fragment">
+\begin{align*}
+  \alpha(\delta^\ast) + \beta(\delta^\ast) = 0.796 < 0.802,
+\end{align*}
+
+</div>
+<p class="fragment">
+where the latter is the sum of the two error probabilities in Example 9.2.2.
+</p>
+<p class="fragment">
+In this sense, the test that rejects \(H_0\) if \(X_1 > 5.025725\) is better than the test that rejects \(H_0\) if \(X_1 \ge 4\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgc50ecd2">
+<h4 id="orgc50ecd2">Example</h4>
+<p>
+Suppose \(\vec{X} = (X_1, \dots, X_n)\) ia a random sample from \(\mathcal{N}(\mu, \sigma^2)\), with unknown mean \(\mu\) but known variance \(\sigma^2=1\).
+</p>
+
+<p class="fragment">
+Hypotheses to be tested:
+</p>
+<div class="fragment">
+\begin{align*}
+  H_0: \quad \mu = 0,\\
+  H_1: \quad \mu = 1.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Determine the test \(\delta_0\) for which the value of \(2\alpha(\delta_0) + \beta(\delta_0)\) is a minimum.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org24f3ad3">
+<h4 id="org24f3ad3">Example - Continued</h4>
+<p class="fragment">
+When \(H_0\) is true, the joint p.d.f. is
+</p>
+<div class="fragment">
+\begin{align*}
+  f_0(\vec{x}) = \frac{1}{(2\pi)^{n/2}} \exp \left( -\frac{1}{2} \sum_{i=1}^n x_i^2 \right);
+\end{align*}
+
+</div>
+<p class="fragment">
+When \(H_1\) is true, the joint p.d.f. is
+</p>
+<div class="fragment">
+\begin{align*}
+  f_1(\vec{x}) = \frac{1}{(2\pi)^{n/2}} \exp \left( -\frac{1}{2} \sum_{i=1}^n (x_i-1)^2 \right).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org39169b4">
+<h4 id="org39169b4">Example - Continued</h4>
+<p>
+The likelihood ratio is
+</p>
+<div>
+\begin{align*}
+  \frac{f_1(\vec{x})}{f_0(\vec{x})}
+& = \frac{\exp \left( -\frac{1}{2} \sum_{i=1}^n x_i^2 \right)}{\exp \left( -\frac{1}{2} \sum_{i=1}^n (x_i-1)^2 \right)} = e^{\sum_{i=1}^n [x_i^2 - (x_i-1)^2]/2}\\
+& = e^{\sum_{i=1}^n (2x_i -1)/2} = e^{\sum_{i=1}^n x_i -n/2}\\
+& = e^{n\cdot \overline{x}_n -n/2} = e^{n( \overline{x}_n - 1/2)}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org265d608">
+<h4 id="org265d608">Example - Continued</h4>
+<p>
+Then by Corollary 9.2.1, the desired test \(\delta_0\) rejects \(H_0\) if
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{f_1(\vec{x})}{f_0(\vec{x})} = e^{n(2 \overline{x}_n - 1)} > 2,
+\end{align*}
+
+</div>
+<p class="fragment">
+which is equivalent to
+</p>
+<div class="fragment">
+\begin{align*}
+ \overline{X}_n > k' = \frac{1}{2} + \frac{1}{n}\log 2.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgec1b5f7">
+<h4 id="orgec1b5f7">Example - Continued</h4>
+<p>
+For example, if \(n=9\), the optimal test \(\delta_0\) rejects \(H_0\) when \(\overline{X}_n > 0.577\).
+</p>
+<p class="fragment">
+Therefore,
+</p>
+<div class="fragment">
+\begin{align*}
+  \alpha(\delta_0) & = \mathbb{P}(\overline{X}_n> 0.577|\mu =0)\\
+& = 1 - \Phi \left( \frac{0.577  - 0}{1/3} \right) = 1 - \Phi(1.731) = 0.0417.
+\end{align*}
+
+</div>
+<div class="fragment">
+\begin{align*}
+  \beta(\delta_0) & = \mathbb{P}(\overline{X}_n< 0.577|\mu =1)\\
+& = \Phi \left( \frac{0.577  - 1}{1/3} \right) = \Phi(-1.269) = 0.1022.
+\end{align*}
+
+</div>
+<p class="fragment">
+The minimum value of the linear combination is
+</p>
+<div class="fragment">
+\begin{align*}
+  2\alpha(\delta_0) + \beta(\delta_0) = 2(0.0417)+0.1022=0.1856.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgcb557e6">
+<h4 id="orgcb557e6">Neyman-Pearson Lemma</h4>
+<p>
+Next, we consider another type of optimal tests where the probability \(\alpha(\delta)\) is upper bounded, and we seek a test \(\delta\) for which \(\beta(\delta)\) will be minimized.
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Theorem 9.2.2</span>
+</p>
+<p class="fragment">
+Suppose that \(\delta'\) is a test that has the following form for some constant \(k>0\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \text{not reject } H_0, & \text{ if } f_1(\vec{x})< kf_0(\vec{x}),\\
+\text{reject } H_0, & \text{ if } f_1(\vec{x}) > k f_0(\vec{x}),\\
+\text{undetermined}, & \text{ if }f_1(\vec{x}) = k f_0(\vec{x}).
+\end{align*}
+
+</div>
+<p class="fragment">
+If \(\delta\) is another test, then
+</p>
+<div class="fragment">
+\begin{align*}
+  \alpha(\delta) \le \alpha(\delta') & \Longrightarrow \beta(\delta) \ge \beta(\delta'),\\
+  \alpha(\delta) < \alpha(\delta') & \Longrightarrow \beta(\delta) > \beta(\delta').
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6c96155">
+<h4 id="org6c96155">Proof</h4>
+<p class="fragment">
+Apply Theorem 9.2.1 and set \(a=k, b = 1\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+  k \alpha(\delta') + \beta(\delta') \le k \alpha(\delta) + \beta(\delta).
+\end{align*}
+
+</div>
+<p class="fragment">
+If \(\alpha(\delta) \le \alpha(\delta')\), the we must have \(\beta(\delta)\ge \beta(\delta')\).
+</p>
+
+</section>
+<section>
+<p>
+<span style="color: rgb(24,116,205)">Question</span>: How to make use of the Neyman-Pearson lemma?
+</p>
+
+<p class="fragment">
+Suppose our goal is to find a test for which \(\alpha(\delta) = \alpha_0\), and \(\beta(\delta)\) is a minimum.
+</p>
+
+<p class="fragment">
+According to the lemma, you only need to find a value of \(k\) for which
+</p>
+<div class="fragment">
+\begin{align*}
+  \alpha(\delta') = \alpha_0.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgfb7976a">
+<h4 id="orgfb7976a">Example 9.2.5</h4>
+<p>
+Suppose \(\vec{X} = (X_1, \dots, X_n)\) ia a random sample from \(\mathcal{N}(\mu, \sigma^2)\), with unknown mean \(\mu\) but known variance \(\sigma^2=1\).
+</p>
+
+<p class="fragment">
+Hypotheses to be tested:
+</p>
+<div class="fragment">
+\begin{align*}
+  H_0: \quad \mu = 0,\\
+  H_1: \quad \mu = 1.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Find a test \(\delta\) to minimize \(\beta(\delta)\) such that \(\alpha(\delta)\le 0.05\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org7b10419">
+<h4 id="org7b10419">Example 9.2.5 - Continued</h4>
+<p>
+The likelihood ratio is
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{f_1(\vec{x})}{f_0(\vec{x})}
+& = \frac{\exp \left( -\frac{1}{2} \sum_{i=1}^n x_i^2 \right)}{\exp \left( -\frac{1}{2} \sum_{i=1}^n (x_i-1)^2 \right)} = e^{\sum_{i=1}^n [x_i^2 - (x_i-1)^2]/2}\\
+& = e^{\sum_{i=1}^n (2x_i -1)/2} = e^{\sum_{i=1}^n x_i -n/2}\\
+& = e^{n\cdot \overline{x}_n -n/2} = e^{n( \overline{x}_n - 1/2)}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Then
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{f_1(\vec{x})}{f_0(\vec{x})} > k \Longleftrightarrow \overline{x}_n > k',
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(k' = 1/2 + 1/(2n) \cdot \log k\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgcba4a69">
+<h4 id="orgcba4a69">Example 9.2.5 - Continued</h4>
+<p>
+Suppose that we can find a value of \(k'\) such that
+</p>
+<div>
+\begin{align*}
+  \mathbb{P}(\overline{X}_n > k' |\mu = 0) = 0.05.
+\end{align*}
+
+</div>
+<p class="fragment">
+Then the test \(\delta'\), which rejects \(H_0\) when \(\overline{X}_n > k'\), will satisfy \(\alpha(\delta') = 0.05\).
+</p>
+
+<p class="fragment">
+Now it suffices to find \(k'\).
+</p>
+<p class="fragment">
+In fact,
+</p>
+<div class="fragment">
+\begin{align*}
+  \overline{X}_n | \mu =0 \sim \mathcal{N}(0, 1/n).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9676a50">
+<h4 id="org9676a50">Example 9.2.5 - Continued</h4>
+<p>
+In other words,
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(\overline{X}_n > k' |\mu = 0) = \mathbb{P}(Z > \sqrt{n} \cdot k') = 0.05,
+\end{align*}
+
+</div>
+<p class="fragment">
+and thus
+</p>
+<div class="fragment">
+\begin{align*}
+  1 - \Phi(\sqrt{n} \cdot k') = 0.05.
+\end{align*}
+
+</div>
+<p class="fragment">
+So
+</p>
+<div class="fragment">
+\begin{align*}
+  k' =\frac{\Phi^{-1}(0.95)}{\sqrt{n}} = \frac{1.645}{\sqrt{n}}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+In summary, among all tests for which \(\alpha(\delta) \le 0.05\), the test \(\delta'\) that rejects \(H_0\) when \(\overline{X}_n>1.645 n^{-1/2}\) has the smallest probability of type II error.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgc7342fd">
+<h4 id="orgc7342fd">Example 9.2.5 - Continued</h4>
+<p>
+<span style="color: rgb(24,116,205)">Question</span>: What is this smallest \(\beta(\delta')\)?
+</p>
+
+<p class="fragment">
+Recall that
+</p>
+<div class="fragment">
+\begin{align*}
+  \beta(\delta') = \mathbb{P}(\overline{X}_n < 1.645 n^{-1/2}|\mu =1).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Given \(\mu = 1\), we have \(\overline{X}_n | \mu =1 \sim \mathcal{N}(1, 1/n)\).
+</p>
+<p class="fragment">
+Thus,
+</p>
+<div class="fragment">
+\begin{align*}
+  \beta(\delta') = \Phi \left( \frac{1.645 n^{-1/2}-1}{n^{-1/2}} \right) = \Phi(1.645 - n^{1/2}).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+For instance, when \(n=9\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \beta(\delta') = \Phi(-1.355)= 1 - \Phi(1.355) = 0.0877.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge8718a1">
+<h3 id="orge8718a1">9.3 Uniformly Most Powerful Tests</h3>
+<p>
+When the null and/or alternative hypothesis is composite, we can still find a class of tests that has optimal properties in certain circumstances.
+</p>
+
+<p class="fragment">
+In particular, the null and alternative hypotheses must be of the form \(H_0: \theta \le \theta_0\) and \(H_1: \theta > \theta_0\), or \(H_0: \theta \ge \theta_0\) and \(H_1: \theta< \theta_0\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">In addition</span>, the family of distributions of the data must have a property called "monotone likelihood ratio," which is defined in this section.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgb883d70">
+<h4 id="orgb883d70">Exercise 12 in Sec 9.2</h4>
+<p>
+A random sample \(X_1, \dots, X_n \sim \text{Exp}(\theta)\), with unknown parameter \(\theta\).
+</p>
+<p class="fragment">
+Wish to test
+</p>
+<div class="fragment">
+\begin{align*}
+  H_0: \theta = \theta_0, \quad H_1: \theta = \theta_1,
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(0<\theta_0<\theta_1\).
+</p>
+
+<p class="fragment">
+Given \(\alpha_0\in (0, 1)\), find the level \(\alpha_0\) test that has the smallest probability of type II error.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org4a0b9b8">
+<h4 id="org4a0b9b8">Solution</h4>
+<p class="fragment">
+For \(i=0, 1\),
+</p>
+<div class="fragment">
+\begin{align*}
+  f_i(\vec{x}) = \theta_i^n \exp \left( -\theta_i \sum_{i=1}^n x_i \right),
+\end{align*}
+
+</div>
+<p class="fragment">
+so the likelihood ratio
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{f_1(\vec{x})}{f_0(\vec{x})} = \frac{\theta_1^n}{\theta_0^n} \exp \left( (\theta_0-\theta_1)\sum_{i=1}^n x_i \right).
+\end{align*}
+
+</div>
+<p class="fragment">
+Since \(\theta_0< \theta_1\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{f_1(\vec{x})}{f_0(\vec{x})} > k \Longleftrightarrow \sum_{i=1}^n x_i < c.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgced5a27">
+<h4 id="orgced5a27">Solution - Continued</h4>
+<p>
+The constant \(c\) is chosen so that
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(\sum_{i=1}^n X_i < c |\theta=\theta_0) = \alpha_0.
+\end{align*}
+
+</div>
+<p class="fragment">
+Note that
+</p>
+<div class="fragment">
+\begin{align*}
+  \sum_{i=1}^n  X_i|\theta=\theta_0 \sim \text{Gamma}(n, \theta_0),
+\end{align*}
+
+</div>
+<p class="fragment">
+hence, \(c\) must be the \(\alpha_0\) quantile of \(\text{Gamma}(n, \theta_0)\).
+</p>
+<p class="fragment">
+Therefore, the desired test is to reject \(H_0\) when \(\sum_{i=1}^n X_i < c\).
+</p>
+
+</section>
+<section>
+<p>
+<span style="color: rgb(24,116,205)">Question</span>: Anything interesting about this test?
+</p>
+
+<p class="fragment">
+The desired level \(\alpha_0\) test that has the minimum probability \(\beta\) of Type II error is <b>independent</b> of the value of \(\theta_1\)!
+</p>
+
+<p class="fragment">
+In other words, for all \(\theta_1>\theta_0\), the same test with the significance level \(\alpha_0\) has the minimum probability of Type II error.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5828c3b">
+<h4 id="org5828c3b">Definition</h4>
+<p class="fragment">
+A test \(\delta^\ast\) is a <i>uniformly most powerful (UMP) test</i> of the hypotheses
+</p>
+<div class="fragment">
+\begin{align*}
+  H_0: \theta \in \Omega_0, \quad H_1: \theta \in \Omega_1.
+\end{align*}
+
+</div>
+<p class="fragment">
+at the level of significance \(\alpha_0\) if \(\alpha(\delta^\ast) \le \alpha_0\) and, for every other test \(\delta\) such that \(\alpha(\delta)\le \alpha_0\), it is true that
+</p>
+<div class="fragment">
+\begin{align*}
+  \pi(\theta|\delta) \le \pi(\theta |\delta^\ast) \quad \text{for every value of } \theta\in \Omega_1.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7534f5c">
+<h4 id="org7534f5c">Example 9.3.2</h4>
+<p>
+<span style="color: rgb(24,116,205)">Service Times in a Queue (revisited)</span>
+</p>
+<p class="fragment">
+Suppose that the manager observes a random sample \(\vec{X} = (X_1, \dots, X_n)\) of service times and tries to find the level \(\alpha_0\) test of \(H_0' : \theta = 1/2\) versus \(H_1': \theta = \theta'\) that has the largest power at \(\theta=\theta'>1/2\).
+</p>
+<p class="fragment">
+Note that test itself does not depend on the \(\theta'>1/2\).
+</p>
+<p class="fragment">
+That is, for every \(\theta'>1/2\), the test to reject \(H_0\) when \(\sum_{i=1}^n X_i < c\) is UMP at the level of significance \(\alpha_0\) for testing
+</p>
+<div class="fragment">
+\begin{align*}
+  H_0': \theta=1/2, \quad H_1: \theta>1/2.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org89d4136">
+<h4 id="org89d4136">Theorem 9.3.1</h4>
+<p>
+Suppose that the joint distribution of \(\vec{X}\) has increasing <b>monotone likelihood ratio</b> in the statistic \(T = r(\vec{X})\). Let \(c\) and \(\alpha_0\) be constants such that
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(T\ge c|\theta=\theta_0) = \alpha_0.
+\end{align*}
+
+</div>
+<p class="fragment">
+Then the test \(\delta^\ast\) that rejects \(H_0\) if \(T\ge c\) is a UMP test of the hypotheses
+</p>
+<div class="fragment">
+\begin{align*}
+  H_0: \theta\le \theta_0\quad H_1: \theta>\theta_0.
+\end{align*}
+
+</div>
+<p class="fragment">
+at the level of significance \(\alpha_0\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org7af49be">
+<h4 id="org7af49be">Definition</h4>
+<p>
+Let \(f_n(\vec{x}|\theta)\) be the likelihood function of the observations \(\vec{X}=(X_1, \dots, X_n)\).
+Let \(T = r(\vec{X})\) be a statistic.
+</p>
+
+<p class="fragment">
+It is said that the joint distribution of \(\vec{X}\) has an <i>increasing (decreasing) monotone likelihood ratio (MLR) in the statistic \(T\)</i> if for \(\theta_1, \theta_2\in \Omega\), with \(\theta_1<\theta_2\), the ratio
+</p>
+<div class="fragment">
+\begin{align*}
+    \frac{f_n(\vec{x}|\theta_2)}{f_n(\vec{x}|\theta_1)} ~ \text{depends on $\vec{x}$ only through $T$},
+\end{align*}
+
+</div>
+<p class="fragment">
+and this ratio is an increasing (decreasing) function of \(r(\vec{X})\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orga019234">
+<h4 id="orga019234">Example 9.3.4</h4>
+<p>
+<span style="color: rgb(24,116,205)">Sampling from an Exponential Distribution</span>
+</p>
+<p class="fragment">
+Suppose a random sample \(X_1, \dots, X_n \sim \text{Exp}(\theta)\), with unknown parameter \(\theta>0\).
+</p>
+<p class="fragment">
+The joint p.d.f.
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\theta) & = \prod_{i=1}^n \theta \exp(-\theta x_i)\\
+& = \theta^n \exp(-\theta y),
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(y = \sum_{i=1}^n x_i\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgec1c664">
+<h4 id="orgec1c664">Example 9.3.4 - Continued</h4>
+<p>
+For \(0<\theta_1<\theta_2\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{f_n(\vec{x}|\theta_2)}{f_n(\vec{x}|\theta_1)} & = \frac{\theta_2^n \exp(-\theta_2 y)}{\theta_1^n \exp(-\theta_1 y)}\\
+& = \left( \frac{\theta_2}{\theta_1} \right)^n \exp \left( [\theta_1 - \theta_2]y \right).
+\end{align*}
+
+</div>
+<p class="fragment">
+Since \(\theta_2>\theta_1\), the ratio is decreasing in \(y = \sum_{i=1}^n x_i\) , the joint distribution has decreasing MLR in \(T= \sum_{i=1}^n X_i\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org3c1c224">
+<h4 id="org3c1c224">Example 9.3.3</h4>
+<p>
+<span style="color: rgb(24,116,205)">Sampling from a Bernoulli Distribution</span>
+</p>
+
+<p class="fragment">
+Suppose a random sample \(X_1, \dots, X_n \sim \text{Ber}(p)\), with unknown parameter \(p \in (0, 1)\).
+</p>
+<p class="fragment">
+The joint p.m.f.
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|p) & = \prod_{i=1}^n p^{x_i}(1-p)^{1-x_i}\\
+& = p^y (1 - p)^{n - y},
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(y = \sum_{i=1}^n x_i\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org06fbd6f">
+<h4 id="org06fbd6f">Example 9.3.3 - Continued</h4>
+<p>
+For \(0< p_1 < p_2 < 1\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{f_n(\vec{x}|p_2)}{f_n(\vec{x}|p_1)} & = \frac{p_2^y(1-p_2)^{n-y}}{p_1^y(1-p_1)^{n-y}}\\
+& = \frac{p_2^y (1 - p_2)^{-y} (1 - p_2)^n}{p_1^y (1 - p_1)^{-y} (1 - p_1)^n}\\
+& = \left( \frac{p_2}{1-p_2}\cdot \frac{1-p_1}{p_1} \right)^y \left( \frac{1-p_2}{1-p_1} \right)^n.
+\end{align*}
+
+</div>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: Is this ratio monotone in \(y\)?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org9691ed4">
+<h4 id="org9691ed4">Example 9.3.3 - Continued</h4>
+<p>
+Note that
+</p>
+<div class="fragment">
+\begin{align*}
+  \log\left( \frac{p_2}{1-p_2}\cdot \frac{1-p_1}{p_1} \right)^y = y \log \left( \frac{p_2}{1-p_2}\cdot \frac{1-p_1}{p_1} \right).
+\end{align*}
+
+</div>
+<div class="fragment">
+\begin{align*}
+  & \log \left( \frac{p_2}{1-p_2}\cdot \frac{1-p_1}{p_1} \right) > 0\\
+ \Longleftrightarrow &\, \frac{p_2}{1-p_2}\cdot \frac{1-p_1}{p_1} > 1\\
+\Longleftrightarrow & \,p_2 (1 - p_1) > (1 - p_2) p_1\\
+\Longleftrightarrow & \,p_2 - p_1p_2 > p_1 - p_1p_2\\
+\Longleftrightarrow & \,p_2 > p_1.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Therefore, the joint p.m.f. \(f_n(\vec{x}|p)\) has increasing monotone likelihood ratio in the statistic \(Y = \sum_{i=1}^n X_i\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org81ffdbd">
+<h4 id="org81ffdbd">Example 9.3.5</h4>
+<p>
+<span style="color: rgb(24,116,205)">Sampling from a Normal Distribution</span>
+</p>
+<p class="fragment">
+Suppose a random sample \(X_1, \dots, X_n \sim \mathcal{N}(\mu, \sigma^2)\), with unknown \(\mu\) but known \(\sigma^2\).
+</p>
+<p class="fragment">
+The joint p.d.f.
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\mu) = \frac{1}{(\sqrt{2\pi \sigma^2})^n} \exp \left[ -\frac{1}{2\sigma^2} \sum_{i=1}^n (x_i-\mu)^2  \right].
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7f21e36">
+<h4 id="org7f21e36">Example 9.3.5 - Continued</h4>
+<p>
+For \(\mu_1<\mu_2\),
+</p>
+<div style="font-size: 60%;">
+<div>
+\begin{align*}
+  \frac{f_n(\vec{x}|\mu_2)}{f_n(\vec{x}|\mu_1)} & = \frac{\exp \left[ -\frac{1}{2\sigma^2} \sum_{i=1}^n (x_i-\mu_2)^2\right] }{\exp \left[ -\frac{1}{2\sigma^2} \sum_{i=1}^n (x_i-\mu_1)^2\right]}\\
+& = \exp \left( \frac{1}{2\sigma^2} \sum_{i=1}^n [(x_i-\mu_1)^2 - (x_i-\mu_2)^2] \right)\\
+& = \exp \left( \frac{1}{2\sigma^2} \sum_{i=1}^n [x_i^2-2x_i\mu_1 + \mu_1^2 - x_i^2 + 2x_i\mu_2 - \mu^2] \right)\\
+& = \exp \left( \frac{1}{2\sigma^2} \sum_{i=1}^n [2x_i(\mu_2-\mu_1) + \mu_1^2 - \mu_2^2] \right)\\
+& = \exp \left( \frac{1}{2\sigma^2}  [2(\mu_2-\mu_1) \sum_{i=1}^n x_i + n(\mu_1^2 - \mu_2^2)]\right)
+\end{align*}
+
+</div>
+</div>
+<p>
+is increasing in \(\overline{x}_n\), and thus, the joint distribution has an increasing MLR in the statistic \(\overline{X}_n\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orga95bd78">
+<h4 id="orga95bd78">Example 9.3.7</h4>
+<p>
+Suppose that the proportion \(p\) of defective items in a large manufactured lot is unknown, \(20\) items are to be selected at random from the lot and inspected.
+</p>
+<p class="fragment">
+Hypotheses to test:
+</p>
+<div class="fragment">
+\begin{align*}
+  H_0: p \le 0.1 \quad H_1: p > 0.1.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Observations: \(X_1, \dots, X_n \sim \text{Ber}(p)\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Known</span>: From Example 9.3.3, the joint p.m.f. has increasing MLR in \(Y= \sum_{i=1}^n X_i\).
+</p>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Fact</span>: By Theorem 9.3.1, a test that rejects \(H_0\) when \(Y \ge c\) is a UMP test.
+</p>
+
+</section>
+<section>
+<p>
+How to find \(c\)?
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(Y \ge c |p=0.1) = \alpha_0 = 0.01.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Note that given \(p=0.1\),
+</p>
+<div class="fragment">
+\begin{align*}
+  Y = ~ \text{number of defective items} ~ \sim \text{Bin}(20, 0.1)
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Using the Table, we find
+</p>
+<p class="fragment">
+If \(c=7\), \(\mathbb{P}(Y \ge 7 |p=0.1) = 0.0024 < 0.01\).
+</p>
+<p class="fragment">
+If \(c=6\), \(\mathbb{P}(Y \ge 6 |p=0.1) = 0.013 > 0.01\).
+</p>
+
+<p class="fragment">
+Thus, we choose \(c=7\), so the test that rejects \(H_0\) if \(\sum_{i=1}^n X_i \ge 7\) is a UMP test with significance level \(\alpha_0 = 0.01\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1d333b0">
+<h4 id="org1d333b0">Exercise 11</h4>
+<p>
+Suppose \(X_1, \dots, X_n \sim \text{Poisson}(\lambda)\), with \(\lambda\) unknown.
+</p>
+<p class="fragment">
+Hypotheses to test:
+</p>
+<div class="fragment">
+\begin{align*}
+  H_0: \lambda \le 1 \quad H_1: \lambda>1.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+If \(n=10\), find a UMP test with \(\alpha_0 = 0.0143\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org226b375">
+<h4 id="org226b375">Exercise 11 - Continued</h4>
+<p>
+The joint p.m.f.
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\lambda) = \prod_{i=1}^n \frac{e^{-\lambda} \lambda^{x_i}}{x_i!}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+For \(\lambda_2>\lambda_1>0\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{f_n(\vec{x}|\lambda_2)}{f_n(\vec{x}|\lambda_1)}  = \frac{\prod_{i=1}^n \frac{e^{-\lambda_2} \lambda_2^{x_i}}{x_i!}}{\prod_{i=1}^n \frac{e^{-\lambda_1} \lambda_1^{x_i}}{x_i!}}
+ = \prod_{i=1}^n e^{\lambda_1-\lambda_2} \prod_{i=1}^n \left(\frac{\lambda_2}{\lambda_1}\right)^{x_i}
+ = e^{n(\lambda_1 - \lambda_2)} \left( \frac{\lambda_2}{\lambda_1} \right)^y
+\end{align*}
+
+</div>
+<p class="fragment">
+is increasing in \(y = \sum_{i=1}^n x_i\), and thus, the joint distribution has an increasing MLR in the statistic \(Y = \sum_{i=1}^n X_i\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org9a6dfd1">
+<h4 id="org9a6dfd1">Exercise 11 - Continued</h4>
+<p>
+By Theorem 9.3.1, the test that
+</p>
+<div class="fragment">
+\begin{align*}
+  \text{rejects } H_0 ~ \text{when } Y \ge c
+\end{align*}
+
+</div>
+<p class="fragment">
+is a UMP test.
+</p>
+
+<p class="fragment">
+To determine the value of \(c\), we use
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}( Y \ge c | \lambda = 1) \le 0.0143.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgfc5e012">
+<h4 id="orgfc5e012">Exercise 11 - Continued</h4>
+<p>
+By Theorem 5.4.4 (page 290), we know that \(Y \sim \text{Poisson}(10\lambda)\).
+</p>
+<p class="fragment">
+From the Table (page 857),
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(Y \ge 18|\lambda=1)
+& = 0.0071+0.0037+0.0019+0.0009\\
+& \, +0.0004+0.0002+0.0001\\
+& = 0.0143.
+\end{align*}
+
+</div>
+<p class="fragment">
+Therefore, the test that rejects \(H_0\) if \(\sum_{i=1}^n X_i \ge 18\) is a UMP test with significance level \(\alpha_0 = 0.0143\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org919cc04">
+<h4 id="org919cc04">Summary</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">Sec 9.2: Simple \(H_0\) and \(H_1\), Theorem 9.2.1 or Neyman-Pearson Lemma</li>
+<li data-fragment-index="2" class="fragment">Sec 9.3: UMP test &#x2013; one-sided hypotheses and MLR</li>
+
+</ul>
+
+<p data-fragment-index="3" class="fragment">
+What about other cases of hypotheses, for example, two-sided?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org717ef53">
+<h4 id="org717ef53">Likelihood Ratio Test (LR Test)</h4>
+<p>
+<span style="color: rgb(24,116,205)">Example 9.5.12 (page 583-585)</span>
+</p>
+<p class="fragment">
+Suppose \(X_1, \dots, X_n \sim \mathcal{N}(\mu, \sigma^2)\) with both \(\mu\) and \(\sigma^2\) unknown.
+</p>
+<p class="fragment">
+Hypotheses to test
+</p>
+<div class="fragment">
+\begin{align*}
+  H_0: \mu = 0, \sigma^2>0 \quad H_1: \mu\neq 0, \sigma^2>0.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Key problem here</span>:
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{f_n(\vec{x}|\mu=0, \sigma^2)}{f_n(\vec{x}|\mu\neq 0, \sigma^2)}
+\end{align*}
+
+</div>
+<p class="fragment">
+depends on parameters \(\mu\) and \(\sigma^2\), cannot be used directly for a test.
+</p>
+</section>
+<section>
+<p>
+<span style="color: rgb(24,116,205)">Fix</span>:
+</p>
+<div class="fragment">
+\begin{align*}
+  \lambda \triangleq \frac{\sup_{(\mu, \sigma^2)\in \Omega_0} f_n(\vec{x}|0, \sigma^2)}{\sup_{(\mu, \sigma^2)\in \Omega}f_n(\vec{x}|\mu, \sigma^2)} = \frac{f_n(\vec{x}|0, \widehat{\sigma_0^2})}{f_n(\vec{x}|\hat{\mu}, \widehat{\sigma^2})}.
+\end{align*}
+
+</div>
+<p class="fragment">
+We know that
+</p>
+<div class="fragment">
+\begin{align*}
+  & \widehat{\sigma^2_0} = \frac{1}{n}\sum_{i=1}^n (x_i-0)^2\\
+& \hat{\mu} = \overline{x}_n, \, \widehat{\sigma^2} = \frac{1}{n} \sum_{i=1}^n (x_i - \overline{x}_n)^2.
+\end{align*}
+
+</div>
+
+</section>
+<section>
+<p>
+So we reject \(H_0\) if
+</p>
+<div class="fragment">
+\begin{align*}
+  \lambda = \frac{1}{\left( 1 + \frac{n \overline{X}_n^2}{\sum_{i=1}^n (X_i-\overline{X}_n)^2} \right)^{n/2}}\le \lambda_0,
+\end{align*}
+
+</div>
+<p class="fragment">
+which is equivalent to
+</p>
+<div class="fragment">
+\begin{align*}
+  U = \frac{\sqrt{n} \overline{X}_n}{\sqrt{\frac{1}{n-1}\sum_{i=1}^n (X_i-\overline{X}_n)^2}}\ge c.
+\end{align*}
+
+</div>
+<p class="fragment">
+Recall that \(U \sim t(n-1)\), so if \(\alpha_0 = 0.05, n= 6\), then we can find
+</p>
+<div class="fragment">
+\begin{align*}
+  c = 2.571.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+More information, please read Sec 9.5: The \(t\) test.
+</p>
+</section>
+</section>
+</div>
+</div>
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/markdown/markdown.js"></script>
+<script src="../plugin/notes/notes.js"></script>
+<script src="../plugin/search/search.js"></script>
+<script src="../plugin/zoom/zoom.js"></script>
+<script src="../plugin/reveal.js-menu/menu.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: false,
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'none',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom, RevealMenu, RevealChalkboard ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+,chalkboard: {storage: "chalkboard-demo", toggleChalkboardButton: { left: "80px" },	toggleNotesButton: { left: "130px" },	colorButtons: 5}});
+</script>
+</body>
+</html>

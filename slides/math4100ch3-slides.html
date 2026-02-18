@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>MATH 4100 - Vector Analysis</title>
+<meta name="author" content="\\
+Jie Zhong \\
+Department of Mathematics \\
+California State University, Los Angeles"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+
+<link rel="stylesheet" href="../dist/theme/serif.css" id="theme"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+
+<link rel="stylesheet" href="../gnohz.css"/>
+<script>window.MathJax = { TeX: {Macros: {range: "\\text{Range}", ow: "\\text{otherwise}"}} }</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1>MATH 4100 - Vector Analysis</h1><h2></h2><h6> <br />
+Jie Zhong <br />
+Department of Mathematics <br />
+California State University, Los Angeles</h6>
+</section>
+<section>
+<section id="slide-orgc4f9713">
+<h2 id="orgc4f9713">Chapter 3 Scalar and Vector Fields</h2>
+<div class="outline-text-2" id="text-orgc4f9713">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgfc347ff">
+<h3 id="orgfc347ff">3.1 Scalar Fields; Isotimic Surface; Gradients</h3>
+<p>
+This section, we mainly follow Sec 2.6 in (??, ????), but still use the notations from our textbook (to be consistent).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org56b05cd">
+<h4 id="org56b05cd">Scalar Fields</h4>
+<p class="fragment">
+A <b>scalar field</b> \(f\) is a rule that assigns a number (or scalar) \(f(x, y, z)\) to each point \((x, y, z)\) of a region in space. In other words, a scalar field is simply a scalar-valued function of three variables:
+</p>
+<div class="fragment">
+ \begin{align*}
+ f:\  \mathbb{R}^3 &\mapsto \mathbb{R}\\
+(x, y, z) &\mapsto  f(x, y, z)
+   \end{align*}
+
+</div>
+
+<p class="fragment">
+Examples of Scalar Fields
+</p>
+<ul class="fragment">
+<li>mass density of the atmosphere</li>
+<li>temperature at each point in an insulated wall</li>
+<li>water pressure at each point in the ocean</li>
+<li>gravitational potential of points in astronomical space</li>
+<li>electrostatic potential of the region between two condenser plates</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgb188372">
+<h4 id="orgb188372">Examples of Scalar Fields</h4>
+<ol class="fragment">
+<li>\(f(x, y, z) = x + 2y - 3z\)</li>
+<li>\(f(x, y, z) = x^2 + y^2 + z^2\)</li>
+<li>\(f(x, y, z) = x^2 + y^2\)</li>
+<li>\(\displaystyle f(x, y, z) = \frac{x^2}{4} + \frac{y^2}{9} + z^2\)</li>
+<li>\(f(x, y, z) = \sqrt{x^2 + y^2} - z\)</li>
+<li>\(\displaystyle f(x, y, z) = \frac{1}{x^2 + y^2}\)</li>
+
+</ol>
+</section>
+</section>
+<section>
+<section id="slide-orgcb4a86d">
+<h4 id="orgcb4a86d">Isotimic Surface (Level Set)</h4>
+<p class="fragment">
+If \(f\) is scalar field, any surface defined by \(f(x, y, z) = C\), where \(C\) is a constant, is called an <b>isotimic surface</b> (or level set as in (??, )).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org7952145">
+<h4 id="org7952145">Examples of Isotimic Surfaces</h4>
+<ol class="fragment">
+<li>\(f(x, y, z) = x + 2y - 3z = C\): all planes perpendicular to the vector \(\mathbf{i} + 2 \mathbf{j} - 3 \mathbf{k}\).</li>
+<li>\(f(x, y, z) = x^2 + y^2 + z^2= C\): all spheres with center at the origin.</li>
+<li>\(f(x, y, z) = x^2 + y^2= C\): all right circular cylinders with the \(z\) axis as axis of symmetry</li>
+<li>\(\displaystyle f(x, y, z) = \frac{x^2}{4} + \frac{y^2}{9} + z^2= C\): a family of ellipsoids.</li>
+<li>\(f(x, y, z) = \sqrt{x^2 + y^2} - z= C\): a family of cones.</li>
+<li>\(\displaystyle f(x, y, z) = \frac{1}{x^2 + y^2}= C\): same as Example 3.</li>
+
+</ol>
+</section>
+</section>
+<section>
+<section id="slide-org256ac13">
+<h4 id="org256ac13">Examples of Isotimic Surfaces - Continued</h4>
+
+<div id="org0c10094" class="figure">
+<p><img src="../img/math4100/fig3-1.jpeg" alt="fig3-1.jpeg" width="50%" class="middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org41e13c4">
+<h4 id="org41e13c4">Gradient</h4>
+<p>
+Next, we use the methods of <i>calculus</i> to study the surfaces. Specifically, gradients will be used to obtain a formula for the plane tangent to an isotimic surface.
+</p>
+<p class="fragment">
+<b>Definition</b>
+</p>
+<p class="fragment">
+If \(f\) is a differentiable scalar field, the <b>gradient</b> of \(f\) at the point \((x, y, z)\) is a vector in space given by
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{grad} f = \frac{\partial f}{\partial x}\mathbf{i} + \frac{\partial f}{\partial y} \mathbf{j} + \frac{\partial f}{\partial z} \mathbf{k}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4efca32">
+<h4 id="org4efca32">Example 1</h4>
+<p class="fragment">
+Let \(f(x, y, z) = \sqrt{x^2 + y^2 + z^2} = r\), the distance from \(\mathbf{0}\) to the point \((x, y, z)\). Then
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{grad} f & =\frac{\partial f}{\partial x}\mathbf{i} + \frac{\partial f}{\partial y} \mathbf{j} + \frac{\partial f}{\partial z} \mathbf{k}\\
+& = \frac{x}{r} \mathbf{i} + \frac{y}{r} \mathbf{j} + \frac{z}{r} \mathbf{k}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+Thus, the gradient of \(f\) in this example is the unit vector in the direction of \((x, y, z)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orge5f92e4">
+<h4 id="orge5f92e4">Example 2</h4>
+<p class="fragment">
+If \(f(x, y, z) = xy + z\), then
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{grad} f & =\frac{\partial f}{\partial x}\mathbf{i} + \frac{\partial f}{\partial y} \mathbf{j} + \frac{\partial f}{\partial z} \mathbf{k}\\
+& = y \mathbf{i} + x \mathbf{j} + \mathbf{k}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgcae5098">
+<h4 id="orgcae5098">Directional Derivatives</h4>
+<p>
+To understand the geometric significance of the gradient, let's study the function restricted to a line.
+</p>
+
+<ul>
+<li class="fragment">\(f\) is a scalar field.</li>
+<li class="fragment">\(\mathbf{v}\) and \(\mathbf{x}\) are fixed vectors in space.</li>
+<li class="fragment">The set of points of the form \(\mathbf{x} + s \mathbf{v}, s\in \mathbb{R}\) is the line \(L\) through the point \(\mathbf{x}\) parallel to the vector \(\mathbf{v}\).</li>
+<li class="fragment">The function \(s \mapsto f(\mathbf{x} + s \mathbf{v})\) represents the function \(f\) restricted to the line \(L\).</li>
+<li class="fragment"><span style="color: rgb(24,116,205)">Question</span>: How fast are the values of \(f\) changing along the line \(L\) at the point \(\mathbf{x}\)?</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgd82e0c8">
+<h4 id="orgd82e0c8">Directional Derivatives - Continued</h4>
+
+<div id="orgbf9c89f" class="figure">
+<p><img src="../img/math4100/fig-m-261.png" alt="fig-m-261.png" width="75%" class="middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgea877f0">
+<h4 id="orgea877f0">Definition</h4>
+<p class="fragment">
+If \(f\) is a scalar field, the <b>directional derivative</b> of \(f\) at \(\mathbf{x}\) along the vector \(\mathbf{v}\) is given by
+</p>
+<div class="fragment">
+\begin{align*}
+\left. \frac{d}{ds} f(\mathbf{x} + s \mathbf{v})\right|_{s = 0} = \lim_{s \to 0} \frac{f(\mathbf{x} + s \mathbf{v}) - f(\mathbf{x})}{s}.
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: By convention, we always take \(\mathbf{v}\) as a <i>unit</i> vector. Please refer to page 136 in (??, ) for intuition on why a unit vector is chosen in the definition.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgc4a9bab">
+<h4 id="orgc4a9bab">Gradient and Directional Derivative</h4>
+<p class="fragment">
+<b>Theorem</b>
+</p>
+<p class="fragment">
+If \(f\) is a differentiable scalar field, then all directional derivatives exist. The directional derivative of \(f\) at the point \(\mathbf{x}\) in the direction \(\mathbf{v}\) is given by
+</p>
+<div class="fragment">
+\begin{align*}
+  \dfrac{df}{ds} = \mathbf{grad} f \cdot \mathbf{v}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgd8707b4">
+<h4 id="orgd8707b4">Gradient and Directional Derivative - Continued</h4>
+<p class="fragment">
+<i>Proof</i>
+</p>
+
+<p class="fragment">
+Let \(\mathbf{c}(s) = \mathbf{x} + s \mathbf{v}\), so that \(f(\mathbf{x} + s \mathbf{v}) = f(\mathbf{c}(s))\). By the chain rule,
+</p>
+<div class="fragment">
+\begin{align*}
+\dfrac{d}{ds}f(\mathbf{c}(s)) = \mathbf{grad} f(\mathbf{c}(s))\cdot \mathbf{c}'(s).
+  \end{align*}
+
+</div>
+<p class="fragment">
+However, \(\mathbf{c}(0) = \mathbf{x}\) and \(\mathbf{c}'(0) = \mathbf{v}\), and so
+</p>
+<div class="fragment">
+ \begin{align*}
+\left. \frac{d}{ds} f(\mathbf{x} + s \mathbf{v})\right|_{s = 0} = \mathbf{grad} f(\mathbf{x}) \cdot \mathbf{v}.
+ \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4250f4b">
+<h4 id="org4250f4b">Example 3</h4>
+<p class="fragment">
+Let \(f(x, y, z) = x^2 e^{-yz}\). Compute the rate of change of \(f\) in the direction of the unit vector
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{v} = \frac{1}{\sqrt{3}} ( \mathbf{i} + \mathbf{j} + \mathbf{k} )\quad\text{at the point } (1, 0, 0).
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+<i>Solution</i> The desired rate of change is the directional derivative
+</p>
+<div class="fragment">
+\begin{align*}
+\frac{df}{ds} = \mathbf{grad} f \cdot \mathbf{v} = (2x e^{-yz} \mathbf{i} -x^2 z e^{-yz} \mathbf{j} - x^2 y e^{-yz} \mathbf{k})\cdot \frac{1}{\sqrt{3}} ( \mathbf{i} + \mathbf{j} + \mathbf{k} ),
+  \end{align*}
+
+</div>
+<p class="fragment">
+which, at the point \((1, 0, 0)\), becomes
+</p>
+<div class="fragment">
+\begin{align*}
+2 \mathbf{i} \cdot \frac{1}{\sqrt{3}} ( \mathbf{i} + \mathbf{j} + \mathbf{k} ) = \frac{2}{\sqrt{3}}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge4f661f">
+<h4 id="orge4f661f">Example 3.1</h4>
+<p class="fragment">
+Find \(df/ds\) in the direction of the vector \(4 \mathbf{i} + 4 \mathbf{j} - 2 \mathbf{k}\) at the point \((1, 1, 2)\) if \(f(x, y, z) = x^2 + y^2 - z\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<ul>
+<li class="fragment">\(\mathbf{grad} f = 2x \mathbf{i} + 2y \mathbf{j} - \mathbf{k} = 2 \mathbf{i} + 2 \mathbf{j} - \mathbf{k}\) at \((1, 1, 2)\).</li>
+
+<li class="fragment">A unit vector in the desired direction is \(\displaystyle \mathbf{v} = \frac{2}{3} \mathbf{i} + \frac{2}{3}\mathbf{j} - \frac{1}{3} \mathbf{k}\).</li>
+
+<li class="fragment">By Theorem, \(\displaystyle \frac{df}{ds} = \mathbf{v} \cdot \mathbf{grad} f = \frac{4}{3} + \frac{4}{3} + \frac{1}{3} = 3\).</li>
+
+<li class="fragment">This means that the value of the function \(f\) is increasing \(3\) units per unit distance if we proceed from \((1, 1, 2)\) in the direction stated.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org22e5872">
+<h4 id="org22e5872">Direction of Fastest Increase</h4>
+<p class="fragment">
+<b>Theorem</b> Assume \(\mathbf{grad} f \neq 0\). Then \(\mathbf{grad} f\) points in the direction along which \(f\) is increasing the fastest.
+</p>
+
+<p class="fragment">
+<i>Proof</i>
+</p>
+<ul>
+<li class="fragment">By Theorem, \(\displaystyle \frac{df}{ds} = \mathbf{grad} f \cdot \mathbf{v} = |\mathbf{grad} f| \cos \theta\),
+where \(\theta\) is the angle between \(\mathbf{grad} f\) and the unit vector \(\mathbf{v}\).</li>
+
+<li class="fragment">This is maximum when \(\theta = 0\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org57e4b4d">
+<h4 id="org57e4b4d">Example 3.2</h4>
+<p class="fragment">
+The temperature of points in space is given by \(f(x, y, z) = x^2 + y^2 - z\). A mosquito located at \((1, 1, 2)\) desires to fly in such a direction that he will get cool as soon as possible. In what direction should he move?
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<ul>
+<li class="fragment">As we saw in Example 3.1, \(\mathbf{grad} f = 2 \mathbf{i} + 2 \mathbf{j} - \mathbf{k}\) at \((1, 1, 2)\).</li>
+
+<li class="fragment">The mosquito should move in the direction \(- \mathbf{grad} f\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgeb7bb47">
+<h4 id="orgeb7bb47">Gradients and Tangent Planes to Isotimic Surfaces</h4>
+<p class="fragment">
+Intuitively, the gradient points in the direction in which the values of \(f\) change most rapidly, whereas an isotimic surface lies in the direction in which they do not change at all. If \(f\) is reasonably well behaved, the gradient and the isotimic surface will be <i>perpendicular</i>.
+</p>
+
+
+
+<div id="org54f936f" class="figure">
+<p><img src="../img/math4100/fig-m-262.png" alt="fig-m-262.png" width="70%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf7ad816">
+<h4 id="orgf7ad816">Theorem</h4>
+<p class="fragment">
+Let \(f\) be a \(C^1\) scalar function and let \((x_0, y_0, z_0)\) lie on the isotimic surface \(S\) defined by \(f(x, y, z) = C\), for \(C\) a constant. Then \(\mathbf{grad} f\) is normal to the isotimic surface in the following sense: If \(\mathbf{v}\) is the tangent vector at \(t=0\) of a path \(\mathbf{c}(t)\) in \(S\) with \(\mathbf{c}(0) = (x_0, y_0, z_0)\), then \(\mathbf{grad} f(x_0, y_0, z_0) \cdot \mathbf{v} = 0\).
+</p>
+
+<p class="fragment">
+<i>Proof</i>
+</p>
+<p class="fragment">
+Let \(\mathbf{c}(t)\) lie in \(S\); then \(f(\mathbf{c}(t)) = C\). Let \(\mathbf{v}\) be the tangent vector in the assumption, then \(\mathbf{v} = \mathbf{c}'(0)\). Hence, the fact that \(f(\mathbf{c}(t))\) is constant in \(t\), and the chain rule give
+</p>
+<div class="fragment">
+\begin{align*}
+0 = \left.\frac{d}{dt} f(\mathbf{c}(t))\right|_{t=0} = \mathbf{grad} f(\mathbf{c}(0)) \cdot \mathbf{v}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org3fd0e01">
+<h4 id="org3fd0e01">Example 3.5</h4>
+<p>
+Find a unit vector normal to the surface \(x^2 + y^2 - z = 6\) at the point \((2, 3, 7)\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<ul>
+<li class="fragment">This is an isotimic surface for the function \(\displaystyle f(x, y, z) = x^2 + y^2 - z\).</li>
+
+<li class="fragment">At \((2, 3, 7)\), we have \(\displaystyle \mathbf{grad} f = 2 x \mathbf{i} + 2 y \mathbf{j} - \mathbf{k} = 4 \mathbf{i} + 6 \mathbf{j} - \mathbf{k}\).</li>
+
+<li class="fragment">Since \(|\mathbf{grad} f| = \sqrt{53}\), the answer is \(\displaystyle \frac{\sqrt{53}}{53} (4 \mathbf{i} + 6 \mathbf{j} - \mathbf{k})\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgb720055">
+<h4 id="orgb720055">Tangent Planes to Isotimic Surfaces</h4>
+<p class="fragment">
+<b>Definition</b>
+</p>
+<p class="fragment">
+Let \(S\) be the isotimic surface defined by \(f(x, y, z) = C\), for \(C\) a constant. The <b>tangent plane</b> of \(S\) at a point \((x_0, y_0, z_0)\) of \(S\) is defined by the equation
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbf{grad} f(x_0, y_0, z_0) \cdot (x - x_0, y- y_0, z - z_0) = 0.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgc89aab9">
+<h4 id="orgc89aab9">Example 6</h4>
+<p>
+Compute the equation of the plane tangent to the surface defined by \(3xy + z^2 = 4\) at \((1, 1, 1)\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<ul>
+<li class="fragment">Here \(f(x, y, z) = 3xy + z^2\), and \(\mathbf{grad}f = 3y \mathbf{i} + 3x \mathbf{j} + 2z \mathbf{k} = 3\mathbf{i} + 3\mathbf{j} + 2 \mathbf{k}\) at \((1, 1, 1)\).</li>
+
+<li class="fragment">The tangent plane is
+\((3, 3, 2) \cdot (x-1, y-1, z -1) = 0\),
+or equivalently,</li>
+<li class="fragment">\(3x + 3y + 2 z = 8\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orga8edfc8">
+<h3 id="orga8edfc8">3.2 Vector Fields and Flow Lines</h3>
+<p>
+This section, we also follow Sec 4.3 in (??, ), but still use the notations from our textbook (to be consistent).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgf5e190e">
+<h4 id="orgf5e190e">Vector Field</h4>
+<p class="fragment">
+<b>Definition</b>
+</p>
+<p class="fragment">
+A <b>vector field</b> is a rule associating with each point \((x, y, z)\) in a region a vector \(\mathbf{F}(x, y, z)\). In other words, a vector field is a vector-valued function of three variables.
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbf{F}:\  \mathbb{R}^3 &\mapsto \mathbb{R}^3\\
+  (x, y, z) &\mapsto  F_1(x, y, z) \mathbf{i} + F_2(x, y, z) \mathbf{j} + F_3(x, y, z) \mathbf{k}.
+  \end{align*}
+
+</div>
+
+<div class="column" style="float:left; width: 28%">
+<p class="fragment">
+Picture \(\mathbf{F}\) as attaching an <i>arrow</i> to each point (Figure 4.3.1).
+</p>
+</div>
+
+<div class="column" style="float:right; width: 60%">
+
+<div id="org08973aa" class="figure">
+<p><img src="../img/math4100/fig-m-431.png" alt="fig-m-431.png" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1089ca2">
+<h4 id="org1089ca2">Velocity Field</h4>
+<p class="fragment">
+The flow of water through a pipe is said to be <i>steady</i> if, at each point inside the pipe, the velocity of the fluid passing through that point does not change with time. (Note that this is quite different from saying that the water in the pipe is not moving.) Attaching to each point the fluid velocity at that point, we obtain the <b>velocity field</b> \(\mathbf{V}\) of the fluid (see Figure 4.3.2). Notice that the length of the arrows (the speed), as well as the direction of flow, may change from point to point.
+</p>
+
+
+<div id="orgb216a25" class="figure">
+<p><img src="../img/math4100/fig-m-432.png" alt="fig-m-432.png" width="80%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgfc48cbf">
+<h4 id="orgfc48cbf">Gradient Vector Fields</h4>
+<p class="fragment">
+In Sec 3.1, we introduced the gradient of a scalar field by
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{grad} f = \frac{\partial f}{\partial x} \mathbf{i} + \frac{\partial f}{\partial y} \mathbf{j} + \frac{\partial f}{\partial z} \mathbf{k}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+Now we want to think of this as an example of a vector field &#x2013; it assigns a vector to each point \((x, y, z)\). As such, we refer to \(\mathbf{grad} f\) as a <b>gradient vector field</b>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org2690e47">
+<h4 id="org2690e47">Flux Vector Field</h4>
+<p class="fragment">
+A piece of material is heated on one side and cooled on another. The temperature at each point within the body is described at a given moment by a scalar field \(T(x, y, z)\). The flow of heat may be marked by a field of arrows indicating the direction and magnitude of the flow (Figure 4.3.5). This <b>energy</b> or <b>heat flux vector field</b> is given by \(\mathbf{J} = - k \nabla T\), where \(k > 0\) is a constant called the <b>conductivity</b>. Isotimic surfaces of \(T\) are called <b>isotherms</b>. Note that the heat flows from hot regions toward cold ones, since \(- \nabla T\) points in the direction of decreasing \(T\).
+</p>
+
+
+<div id="org1487ff1" class="figure">
+<p><img src="../img/math4100/fig-m-435.png" alt="fig-m-435.png" width="80%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org93ae456">
+<h4 id="org93ae456">Gravitational Force Field</h4>
+<p class="fragment">
+The force of attraction of the earth on a mass \(m\) can be described by a vector field called the gravitational force field. Place the origin of a coordinate system at the center of the earth (assumed spherical). According to Newton’s law of gravity, this field is given by
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{F} = - \frac{m M G}{r^3} \mathbf{r}.
+  \end{align*}
+
+</div>
+
+<div id="orgc0b5bf4" class="figure">
+<p><img src="../img/math4100/fig-m-436.png" alt="fig-m-436.png" width="60%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1ead168">
+<h4 id="org1ead168">Flow Lines</h4>
+<p>
+If \(\mathbf{F}\) is a vector field, a <b>flow line</b> for \(\mathbf{F}\) is a curve \(\mathbf{R}(t)\) such that
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{R}'(t) = \mathbf{F}(\mathbf{R}(t)).
+  \end{align*}
+
+</div>
+
+<div class="column" style="float:left; width: 48%">
+<p class="fragment">
+In other words, a curve passing through the region is called a flow line of \(\mathbf{F}\), if at every point on the curve, \(\mathbf{F}\) is <i>tangent</i> to the curve.
+</p>
+
+<p class="fragment">
+Flow lines are also called <i>stream lines</i> or <i>characteristic curves</i> of \(\mathbf{F}\).
+</p>
+</div>
+
+<div class="column" style="float:right; width: 50%">
+
+<div id="orgc558843" class="figure">
+<p><img src="../img/math4100/fig3-4.jpeg" alt="fig3-4.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org0473b9c">
+<h4 id="org0473b9c">How to Find Flow Lines</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">Assume \(\mathbf{R}(t)\) is the flow line of \(\mathbf{F}\).</li>
+<li data-fragment-index="2" class="fragment">Then the unit vector \(\mathbf{T}\) tangent to \(\mathbf{R}\) have the same direction as \(\mathbf{F}\), so \(\mathbf{T} = \beta \mathbf{F}\).</li>
+<li data-fragment-index="3" class="fragment">From Sec 2.2, we have \(\displaystyle \mathbf{T} = \frac{d \mathbf{R}}{ds} = \frac{dx}{ds} \mathbf{i} + \frac{dy}{ds} \mathbf{j} + \frac{dz}{ds} \mathbf{k}\).</li>
+<li data-fragment-index="4" class="fragment">Comparing the components: \(\displaystyle \beta F_1 = \frac{dx}{ds}, \beta F_2 = \frac{dy}{ds}, \beta F_3 = \frac{dz}{ds}\).</li>
+<li data-fragment-index="5" class="fragment">Eliminating \(s\), we have the differential equations: \(\displaystyle \frac{dx}{F_1} = \frac{dy}{F_2} = \frac{dz}{F_3}\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org70ff25f">
+<h4 id="org70ff25f">Example 3.10</h4>
+<p>
+If \(\mathbf{F} = x \mathbf{i} + y \mathbf{j} + \mathbf{k}\), find the flow lines.
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<i>Solution</i>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(F_1 = x, F_2 = y, F_3 = 1\).</li>
+<li data-fragment-index="2" class="fragment">Solving the differential equations \(\displaystyle \frac{dx}{x} = dz, \frac{dy}{y} = dz\), we obtain \(x = C_1 e^z, y = C_2 e^z\).</li>
+<li data-fragment-index="3" class="fragment">If the flow line passing through the point \((3, 4, 7)\), we have \(\displaystyle x = 3 e^{z - 7}, y = 4 e^{z - 7}\).</li>
+<li data-fragment-index="4" class="fragment">If the flow line passing through the origin, then \(x = y = 0\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org3dcd844">
+<h4 id="org3dcd844">Example 3.12</h4>
+<p>
+If \(\mathbf{F} = - y \mathbf{i} + x \mathbf{j}\), find the flow lines.
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<i>Solution</i>
+</p>
+<div class="column" style="float:left; width: 64%">
+<ul>
+<li data-fragment-index="1" class="fragment">Since \(\mathbf{T} = \beta \mathbf{F}\), we have \(\displaystyle -\beta y = \frac{dx}{ds}, \quad \beta x = \frac{dy}{ds}, \quad 0 = \frac{dz}{ds}\).</li>
+<li data-fragment-index="2" class="fragment">Thus, \(\displaystyle - \frac{dx}{y} = \frac{dy}{x}\), and hence \(x^2 + y^2 = \text{constant}\).</li>
+
+<li data-fragment-index="3" class="fragment">Also, \(z = \text{constant}\).</li>
+
+<li data-fragment-index="4" class="fragment">The flow lines are circles surrounding the \(z\) axis and are parallel to the \(xy\) plane.</li>
+
+</ul>
+</div>
+
+<div class="column" style="float:right; width: 35%">
+
+<div id="orgc4555bd" class="figure">
+<p><img src="../img/math4100/fig3-11.jpeg" alt="fig3-11.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org471f094">
+<h3 id="org471f094">3.3 Divergence</h3>
+<div class="outline-text-3" id="text-org471f094">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf46253a">
+<h4 id="orgf46253a">Introduction</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">The concept of <i>gradient</i>, as we have presented it, describes the rate of change of a scalar field.</li>
+<li data-fragment-index="2" class="fragment">We now consider the more complicated problem of describing the rate of change of a <i>vector</i> field.</li>
+<li data-fragment-index="3" class="fragment">There are two fundamental measures of this rate of change: the <i>divergence</i> and the <i>curl</i>.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org0a076d7">
+<h4 id="org0a076d7">Introduction - Continued</h4>
+<p class="fragment">
+Roughly speaking, the divergence of a vector field is a scalar field that tells us, at each point, the extent to which the field <i>explodes</i>, or diverges, from that point. The curl of a vector field is a vector field that gives us, at each point, an indication of how the field swirls in the vicinity of that point.
+</p>
+
+
+<div id="orgba71699" class="figure">
+<p><img src="../img/math4100/fig3-5.jpeg" alt="fig3-5.jpeg" width="50%" class="fragment middle" />
+</p>
+</div>
+
+<p class="fragment">
+In this section, we consider only the divergence. We begin by presenting a heuristic derivation, which will serve to motivate the formal definition.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org300fc7e">
+<h4 id="org300fc7e">Motivation</h4>
+<p class="fragment">
+As usual, the vector field will be denoted by
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{F} = F_1 \mathbf{i} + F_2 \mathbf{j} + F_3 \mathbf{k}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+To define the divergence of the field \(\mathbf{F}\), we imagine an infinitesimal rectangular parallelepiped having corners at \((x, y, z), (x + \Delta x, y, z), (x, y+\Delta y, z), (x, y, z + \Delta z)\) and so on (Fig 3.7).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgca5bd31">
+<h4 id="orgca5bd31">Motivation - Continued</h4>
+
+<div id="orgcd31c97" class="figure">
+<p><img src="../img/math4100/fig3-7.jpeg" alt="fig3-7.jpeg" width="50%" class="fragment middle" />
+</p>
+</div>
+
+<p class="fragment">
+We shall compute the total flux of the field \(\mathbf{F}\) through the six sides of this box in the outward direction (i.e., on each side we choose \(\mathbf{n}\) to be the outward normal). We then divide this flux by the volume of the box and take the limit as the dimensions of the box go to zero. This limit is called the <i>divergence</i> of \(\mathbf{F}\) at the point \((x, y, z)\). In other words, the divergence is the net out-flux per unit volume.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org4b3a3fe">
+<h4 id="org4b3a3fe">Derivation</h4>
+<p>
+The computation of this limit proceeds as follows:
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">The total flux out of faces I and II as \([F_1(x + \Delta x, y z) - F_1(x, y, z)]\Delta y \Delta z\).</li>
+<li data-fragment-index="2" class="fragment">The difference in these values of \(F_1\) is given by \(\displaystyle \frac{\partial F_1}{\partial x} \Delta x\).</li>
+<li data-fragment-index="3" class="fragment">Thus the contribution to the net outward flux from faces I and II is \(\displaystyle \frac{\partial F_1}{\partial x} \Delta x \Delta y \Delta z\).</li>
+<li data-fragment-index="4" class="fragment">Adding the contribution of the four remaining faces, we see that the net outward flux is approximately \(\displaystyle  \left( \frac{\partial F_1}{\partial x} + \frac{\partial F_2}{\partial y} + \frac{\partial F_3}{\partial z} \right) \Delta x \Delta y \Delta z\).</li>
+<li data-fragment-index="5" class="fragment">After we divide by the volume \(\Delta x \Delta y \Delta z\), our approximations becomes accurate as we take the limit.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgeb14443">
+<h4 id="orgeb14443">Definition</h4>
+<p>
+The <b>divergence</b> of a vector field
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{F} = F_1 \mathbf{i} + F_2 \mathbf{j} + F_3 \mathbf{k}
+  \end{align*}
+
+</div>
+<p class="fragment">
+is a scalar field, denoted \(\text{div} \mathbf{F}\), defined by
+</p>
+<div class="fragment">
+\begin{align*}
+\text{div} \mathbf{F} = \frac{\partial F_1}{\partial x} + \frac{\partial F_2}{\partial y} + \frac{\partial F_3}{\partial z}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9dd586d">
+<h4 id="org9dd586d">Example 3.13</h4>
+<p>
+Find \(\text{div}\mathbf{F}\) if \(\mathbf{F} = x \mathbf{i} + y^2 z \mathbf{j} + x z^3 \mathbf{k}\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<div class="fragment">
+\begin{align*}
+\text{div} \mathbf{F} & = \frac{\partial}{\partial x}(x) + \frac{\partial}{\partial y}(y^2 z) + \frac{\partial}{\partial z}(x z^3)\\
+& = 1 + 2 y z + 3 x z^2.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4084d43">
+<h4 id="org4084d43">Example 3.14</h4>
+<p>
+Find \(\text{div}\mathbf{F}\) if \(\mathbf{F} = x e^y \mathbf{i} + e^{xy} \mathbf{j} + \sin(yz) \mathbf{k}\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<div class="fragment">
+\begin{align*}
+\text{div} \mathbf{F} & = \frac{\partial}{\partial x}(x e^y) + \frac{\partial}{\partial y}(e^{xy}) + \frac{\partial}{\partial z}(\sin(yz))\\
+& = e^y + x e^{xy} + y \cos (yz).
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9efecee">
+<h4 id="org9efecee">Example 3.16</h4>
+<p data-fragment-index="0" class="fragment">
+In Figure 3.8, is the divergence of \(\mathbf{F}\) at point \(P\) positive or negative? Assume no variation of \(\mathbf{F}\) in the \(z\) direction and that \(F_3\) is identically zero.
+</p>
+
+<div class="column" style="float:left; width: 60%">
+<p data-fragment-index="2" class="fragment">
+<i>Solution</i>
+</p>
+<ul>
+<li data-fragment-index="3" class="fragment">Heuristically, the flux through \(x\) faces at \(P\) will cancel, while there is definitely flux <i>out</i> of both \(y\) faces. No flux in \(z\) direction, so the total divergence is positive.</li>
+
+<li data-fragment-index="4" class="fragment">Rigorously, \(\displaystyle \frac{\partial F_1}{\partial x} = \frac{\partial F_3}{\partial z} = 0\), but \(\displaystyle \frac{\partial F_2}{\partial y} > 0\), so \(\text{div}\mathbf{F}>0\) at \(P\).</li>
+
+</ul>
+
+</div>
+
+<div class="column" style="float:right; width: 38%">
+
+<div id="org99e044b" class="figure">
+<p><img src="../img/math4100/fig3-8.jpeg" alt="fig3-8.jpeg" data-fragment-index="0" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb10524c">
+<h4 id="orgb10524c">Example 3.17</h4>
+<p data-fragment-index="0" class="fragment">
+In Figure 3.9, is the divergence of \(\mathbf{F}\) at the point \(P\) positive or negative? Assume no variation of \(\mathbf{F}\) in the \(z\) direction and that \(F_3\) is identically zero.
+</p>
+<div class="column" style="float:left; width: 60%">
+<p data-fragment-index="2" class="fragment">
+<i>Solution</i>
+</p>
+<ul>
+<li data-fragment-index="3" class="fragment">Heuristically, no flux in either \(y\) or \(z\) direction; and the flux in the \(x\) direction <i>decreases</i> as we move to the right, so the net flux through the sides of a box at \(P\) is inward, and the total divergence is negative.</li>
+
+<li data-fragment-index="4" class="fragment">Rigorously, \(\displaystyle \frac{\partial F_2}{\partial y} = \frac{\partial F_3}{\partial z} = 0\), but \(\displaystyle \frac{\partial F_1}{\partial x} < 0\), so \(\text{div}\mathbf{F}<0\) at \(P\).</li>
+
+</ul>
+</div>
+
+<div class="column" style="float:right; width: 38%">
+
+<div id="orge458bce" class="figure">
+<p><img src="../img/math4100/fig3-9.jpeg" alt="fig3-9.jpeg" data-fragment-index="0" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1ee82a3">
+<h3 id="org1ee82a3">3.4 Curl</h3>
+<div class="outline-text-3" id="text-org1ee82a3">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbcc7ee9">
+<h4 id="orgbcc7ee9">Definition</h4>
+<p>
+The <b>curl</b> of a vector field \(\mathbf{F} = F_1 \mathbf{i} + F_2 \mathbf{j} + F_3 \mathbf{k}\) is the vector field
+</p>
+<div class="fragment">
+\begin{align*}
+\left( \frac{\partial F_3}{\partial y} - \frac{\partial F_2}{\partial z}\right) \mathbf{i} - \left( \frac{\partial F_3}{\partial x} - \frac{\partial F_1}{\partial z} \right)
+  \mathbf{j} + \left( \frac{\partial F_2}{\partial x} - \frac{\partial F_1}{\partial y} \right)\mathbf{k}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+or equivalently, the determinant form
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{curl}\, \mathbf{F} =
+\begin{vmatrix}
+\mathbf{i} & \mathbf{j} & \mathbf{k}\\
+\frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z}\\
+F_1 & F_2 & F_3
+\end{vmatrix}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9b3c562">
+<h4 id="org9b3c562">Example 7</h4>
+<p>
+If \(\mathbf{F} = x \mathbf{i} + xy \mathbf{j} + \mathbf{k}\), find the curl of \(\mathbf{F}\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{curl}\, \mathbf{F} = \begin{vmatrix}
+  \mathbf{i} & \mathbf{j} & \mathbf{k}\\
+  \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z}\\
+  x & xy & 1
+  \end{vmatrix} = (0 - 0) \mathbf{i} - (0 - 0) \mathbf{j} + (y - 0)\mathbf{k} = y \mathbf{k}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org476af29">
+<h4 id="org476af29">Example 8</h4>
+<p>
+If \(\mathbf{F} = x y\mathbf{i} - \sin z \mathbf{j} + \mathbf{k}\), find the curl of \(\mathbf{F}\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{curl}\, \mathbf{F}
+  & = \begin{vmatrix}
+  \mathbf{i} & \mathbf{j} & \mathbf{k}\\
+  \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z}\\
+  xy & -\sin z& 1
+  \end{vmatrix}\\
+  & = (0 + \cos z) \mathbf{i} - (0 - 0) \mathbf{j} + (0 - x)\mathbf{k}\\
+  & = \cos z \mathbf{i} - x \mathbf{k}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5158f8c">
+<h4 id="org5158f8c">Example 10</h4>
+<p>
+If \(\displaystyle \mathbf{F} = \frac{y \mathbf{i}-x \mathbf{j}}{x^2+y^2}\), find the curl of \(\mathbf{F}\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{curl}\, \mathbf{F}
+  & = \begin{vmatrix}
+  \mathbf{i} & \mathbf{j} & \mathbf{k}\\
+  \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z}\\
+  \frac{y}{x^2+y^2} & - \frac{x}{x^2+y^2} & 0
+  \end{vmatrix}\\
+  & = 0 \mathbf{i} - 0 \mathbf{j} + \left[ \frac{\partial}{\partial x}\left( \frac{-x}{x^2+y^2} \right) - \frac{\partial}{\partial y} \left( \frac{y}{x^2+y^2} \right)  \right]\mathbf{k}\\
+  & = \mathbf{0}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: We say a vector field is <b>irrotational</b> if its curl is zero, which means if a <i>small</i> rigid paddle wheel is placed in the fluid, it will move with the fluid but will not rotate around its own axis.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org33bc8d4">
+<h4 id="org33bc8d4">Example 3.21</h4>
+<p>
+In what direction is \(\mathbf{curl}\, \mathbf{F}\), if \(\mathbf{F}\) is as shown in Figure 3.15?
+</p>
+
+<div class="column" style="float:left; width: 60%">
+<p data-fragment-index="0" class="fragment">
+<i>Solution</i>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(\mathbf{F}\) is directed parallel to the \(y\) axis.</li>
+
+<li data-fragment-index="2" class="fragment">Also, the magnitude of \(\mathbf{F}\) seems proportional to \(x\).</li>
+
+<li data-fragment-index="3" class="fragment">Guess that \(\mathbf{F} = C x \mathbf{j}\), where \(C\) is a negative constant.</li>
+
+<li data-fragment-index="4" class="fragment">\(\displaystyle \mathbf{curl}\, \mathbf{F} = \begin{vmatrix}
+    \mathbf{i} & \mathbf{j} & \mathbf{k}\\
+    \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z}\\
+    0 & Cx & 0
+    \end{vmatrix} = C \mathbf{k}\).</li>
+
+<li data-fragment-index="5" class="fragment">Since \(C\) is negative, the curl is directed into the page (negative \(z\) direction).</li>
+
+</ul>
+</div>
+
+<div class="column" style="float:right; width: 38%">
+
+<div id="org4ede3f1" class="figure">
+<p><img src="../img/math4100/fig3-15.jpeg" alt="fig3-15.jpeg" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org8b88658">
+<h4 id="org8b88658">The Curl and Rotations</h4>
+<p class="fragment">
+Recall that in Sec 1.12 (Vector Products), a rigid body rotating about a fixed axis with a constant angular speed \(\omega\). Then the velocity of the particle at the point \(\mathbf{R}\) is
+</p>
+<p class="fragment">
+\[
+    \mathbf{v} = \vec{\omega} \times \mathbf{R},
+    \]
+</p>
+<p class="fragment">
+where \(\vec{\omega}\) is directed along the axis of rotation and with the magnitude \(|\mathbf{\omega}| = \omega\).
+</p>
+
+<p class="fragment">
+The speed (magnitude of the velocity) of the particle is
+</p>
+<p class="fragment">
+\[
+    \vert \mathbf{v} \vert = \omega | \mathbf{R} | \sin \theta,
+    \]
+</p>
+<p class="fragment">
+where \(\theta\) is the angle between \(\mathbf{R}\) and the axis of rotation.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org3df617d">
+<h4 id="org3df617d">The Curl and Rotations - Continued</h4>
+<div class="column" style="float:left; width: 60%">
+<p data-fragment-index="0" class="fragment">
+If we choose a coordinate system such that \(\vec{\omega} = \omega \mathbf{k}\), and \(\mathbf{R} = x \mathbf{i} + y \mathbf{j} + z \mathbf{k}\), then
+</p>
+<div data-fragment-index="1" class="fragment">
+\begin{align*}
+  \mathbf{v} = \vec{\omega} \times \mathbf{R} = - \omega y \mathbf{i} + \omega x \mathbf{j},
+  \end{align*}
+
+</div>
+<p data-fragment-index="3" class="fragment">
+and so
+</p>
+<div data-fragment-index="4" class="fragment">
+\begin{align*}
+\mathbf{curl}\, \mathbf{F} = \begin{vmatrix}
+  \mathbf{i} & \mathbf{j} & \mathbf{k}\\
+  \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z}\\
+  -\omega y & \omega x & 0
+  \end{vmatrix} = 2 \omega  \mathbf{k} = 2 \vec{\omega}.
+  \end{align*}
+
+</div>
+<p data-fragment-index="5" class="fragment">
+Hence, for the rotation of a rigid body, the curl of the velocity vector field is a vector field whose value is the same at each point. It is directed along the axis of rotation with magnitude <i>twice</i> the angular speed.
+</p>
+
+</div>
+<div class="column" style="float:right; width: 38%">
+
+<div id="org1ad338a" class="figure">
+<p><img src="../img/math4100/fig1-34.jpeg" alt="fig1-34.jpeg" data-fragment-index="2" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf94aaa9">
+<h3 id="orgf94aaa9">3.5 Del Notation</h3>
+<div class="outline-text-3" id="text-orgf94aaa9">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org04b50e4">
+<h4 id="org04b50e4">Motivation</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">Up to now, we have functions that associate numbers with numbers (the function of elementary calculus), vectors with numbers (Chapter 2), numbers with points in space (scalar fields), and vectors with points in space (vector fields).</li>
+<li data-fragment-index="2" class="fragment">But we can also define <i>functions</i> that associate functions with functions.</li>
+<li data-fragment-index="3" class="fragment">We call such functions, <i>operators</i>, which are rules that associate a new function with each member of a particular class of functions.</li>
+<li data-fragment-index="4" class="fragment">To take an example from elementary calculus, the process of differentiation defines what is called the derivative operator. This is the operator that associates with every differential function \(f\) its derivative \(df/dx\), and we sometimes denote it by \(D\), and write \(\displaystyle D(f) =  \frac{df}{dx}\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgb28ff06">
+<h4 id="orgb28ff06">Example of Differential Operator</h4>
+<p>
+Consider
+</p>
+<div>
+\begin{align*}
+L = \frac{d^2}{dx^2} + 2 \frac{d}{dx} + 4,
+  \end{align*}
+
+</div>
+<p class="fragment">
+which means for a function \(f \in C^2\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+L(f) = \frac{d^2 f}{dx^2} + 2 \frac{d f}{dx} + 4 f.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org8fad8d8">
+<h4 id="org8fad8d8">Matrices as Operators</h4>
+<p class="fragment">
+Let \(M\) be a \(n\times n\) matrix, then it associates an \(n\) dimensional vector \(\mathbf{v}\) with an \(n\) dimensional vector \(\mathbf{u}\), i.e.,
+</p>
+<div class="fragment">
+\begin{align*}
+M \mathbf{u} = \mathbf{v}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org264b4c6">
+<h4 id="org264b4c6">Linear Operators</h4>
+<p class="fragment">
+An operator \(L\) is <b>linear</b> if for any \(\varphi\) and \(\psi\) in the domain of \(L\), and a constant \(c\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+L(\varphi + \psi) &  = L(\varphi) + L(\psi)\\
+L(c \varphi) & = c L(\varphi).
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: Both differential and matrix operators are linear.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org4d5ae5e">
+<h4 id="org4d5ae5e">Gradient, Divergence, and Curl</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">The operator \(\nabla\), is called "del" (sometimes "nabla"), which is an abbreviation for \(\displaystyle \mathbf{i} \frac{\partial}{\partial x} + \mathbf{j} \frac{\partial}{\partial y} + \mathbf{k} \frac{\partial}{\partial z}\).</li>
+
+<li data-fragment-index="2" class="fragment">\(\mathbf{grad} f = \nabla f\).</li>
+
+<li data-fragment-index="3" class="fragment">\(\text{div} \mathbf{F} = \nabla \cdot \mathbf{F}\).</li>
+
+<li data-fragment-index="4" class="fragment">\(\mathbf{curl\, F} = \nabla \times \mathbf{F}\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgff6ee0d">
+<h3 id="orgff6ee0d">3.6 The Laplacian</h3>
+<div class="outline-text-3" id="text-orgff6ee0d">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf0da8b2">
+<h4 id="orgf0da8b2">Definition</h4>
+<p class="fragment">
+The <b>Laplacian</b> is a differential operator that assigns a scalar field
+</p>
+<div class="fragment">
+\begin{align*}
+\Delta f = \text{div}\, \mathbf{grad} f = \nabla \cdot (\nabla f)
+  \end{align*}
+
+</div>
+<p class="fragment">
+to a scalar field \(f\).
+</p>
+<p class="fragment">
+In other words, the Laplacian is the composite of the two operators \(\mathbf{grad}\) and div, and some times we also denote it by \(\nabla^2\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org8efb4a3">
+<h4 id="org8efb4a3">Properties of Laplacian</h4>
+<p class="fragment">
+Laplacian is a linear operator.
+</p>
+<p class="fragment">
+Laplacian can also be applied to vector fields, for example, if
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{F} = x^2 y \mathbf{i} + y^2 z^3 \mathbf{j} + xy z^4 \mathbf{k},
+\end{align*}
+
+</div>
+<p class="fragment">
+then we have
+</p>
+<div class="fragment">
+\begin{align*}
+\Delta \mathbf{F} = \frac{\partial^2 \mathbf{F}}{\partial x^2} + \frac{\partial^2 \mathbf{F}}{\partial y^2} + \frac{\partial^2 \mathbf{F}}{\partial z^2} = 2 y \mathbf{i} + (2z^3 + 6y^2 z) \mathbf{j} + 12 xyz^2 \mathbf{k}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+A scalar field \(f\) such that \(\Delta f = 0\) is called <b>harmonic</b>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgbc8561a">
+<h4 id="orgbc8561a">Example</h4>
+<p>
+Find \(\Delta f\), given that \(f(x, y, z) = 1/(x^2 + y^2 + z^2)^{1/2}\). Express you answer in terms of \(R = \sqrt{x^2 + y^2 + z^2}\).
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<i>Solution</i>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(\displaystyle \frac{\partial R}{\partial x} = \frac{x}{R}\).</li>
+
+<li data-fragment-index="2" class="fragment">\(\displaystyle \frac{\partial f}{\partial x} = - \frac{1}{R^2} \cdot \frac{x}{R} = - \frac{x}{R^3}\).</li>
+
+<li data-fragment-index="3" class="fragment">\(\displaystyle \frac{\partial^2 f}{\partial x^2} =  \frac{\partial}{\partial x} \left(- \frac{x}{R^3} \right) = - \frac{1}{R^3} + \frac{3x^2}{R^5}\).</li>
+
+<li data-fragment-index="4" class="fragment">\(\displaystyle \Delta f = - \frac{3}{R^3} + \frac{3(x^2+y^2+z^2)}{R^5} = 0\).</li>
+
+<li data-fragment-index="5" class="fragment">Thus, the scalar field \(1/R\) is harmonic.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org9a00acf">
+<h4 id="org9a00acf">Example</h4>
+<p>
+Assume \(f\) is a scalar field, the \(R = \sqrt{x^2 + y^2 + z^2}\), find \(\Delta f(R)\).
+</p>
+
+<p>
+<i>Solution</i>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(\displaystyle \frac{\partial f(R)}{\partial x} = \frac{\partial f(R)}{\partial R} \cdot \frac{\partial R}{\partial x}\).</li>
+
+<li data-fragment-index="2" class="fragment">\(\displaystyle \frac{\partial^2 f(R)}{\partial x^2} = \frac{\partial^2 f(R)}{\partial R^2} \cdot \left(\frac{\partial R}{\partial x}\right)^2 + \frac{\partial f(R)}{\partial R}\cdot \frac{\partial^2R}{\partial x^2}\).</li>
+
+<li data-fragment-index="3" class="fragment">\(\displaystyle \frac{\partial^2 R}{\partial x^2} = \frac{\partial}{\partial x}\left( \frac{x}{R} \right) =  \frac{1}{R} - \frac{x^2}{R^3}\).</li>
+
+<li data-fragment-index="4" class="fragment">\(\displaystyle \Delta f(R) =  \frac{\partial^2 f(R)}{\partial R^2} + \frac{2}{R}\cdot \frac{\partial f(R)}{\partial R}\).</li>
+
+<li data-fragment-index="5" class="fragment">In particular, if \(f(x) = x^n\), then \(\Delta R^n = n(n+1) R^{n-2}\).</li>
+
+<li data-fragment-index="6" class="fragment">When \(n = -1\), we arrive at the same answer that \(\Delta (1/R)  = 0\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org6307e6f">
+<h3 id="org6307e6f">3.8 Vector Identities</h3>
+<p class="fragment">
+Let's first consider what possible <i>composite operators</i> there are from \(\mathbf{grad}\), div, and \(\mathbf{curl}\).
+</p>
+<div class="fragment">
+\begin{align*}
+ \mathbf{grad}\, \mathbf{grad} && \mathbf{grad}\, \text{div} \, &&\mathbf{grad} \, \mathbf{curl}\\
+ \text{div}\, \mathbf{grad} && \text{div}\, \text{div} \, && \text{div}  \, \mathbf{curl}\\
+ \mathbf{curl}\, \mathbf{grad} && \mathbf{curl}\, \text{div} \, && \mathbf{curl} \, \mathbf{curl}
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga439e3a">
+<h4 id="orga439e3a">Gradient Are Curl Free</h4>
+<p class="fragment">
+<b>Theorem</b> For any \(C^2\) function \(f\),
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{curl}\, \mathbf{grad} f = \nabla \times (\nabla f) = \mathbf{0}.
+\end{align*}
+
+</div>
+<p class="fragment">
+That is, the curl of any gradient is the zero vector.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgb193f5f">
+<h4 id="orgb193f5f">Proof</h4>
+<div class="fragment">
+\begin{align*}
+\nabla \times (\nabla f)
+& = \begin{vmatrix}
+  \mathbf{i} & \mathbf{j} & \mathbf{k}\\
+  \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\
+  \frac{\partial f}{\partial x} & \frac{\partial f}{\partial y} & \frac{\partial f}{\partial z}
+  \end{vmatrix}\\
+& = \left( \frac{\partial^2 f}{\partial y \partial z} - \frac{\partial^2 f}{\partial z \partial y} \right) \mathbf{i} + \left( \frac{\partial^2 f}{\partial z \partial x} - \frac{\partial^2 f}{\partial x \partial z}  \right) \mathbf{j} + \left( \frac{\partial^2 f}{\partial x \partial y} - \frac{\partial^2 f}{\partial y \partial x}  \right) \mathbf{k}\\
+& = \mathbf{0}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf1be6f9">
+<h4 id="orgf1be6f9">Example 11</h4>
+<p>
+Let \(\mathbf{F} = y \mathbf{i} - x \mathbf{j}\), show that \(\mathbf{F}\) is not a gradient field; that is, there is no \(f\) with \(\mathbf{grad} f = \mathbf{F}\).
+</p>
+<p data-fragment-index="0" class="fragment">
+<i>Solution</i>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">If \(\mathbf{F}\) were a gradient field, then it would satisfy \(\mathbf{curl}\, \mathbf{F} = \mathbf{0}\) by Theorem.</li>
+
+<li data-fragment-index="2" class="fragment">But \(\displaystyle \mathbf{curl}\, \mathbf{F} = \begin{vmatrix}
+    \mathbf{i} & \mathbf{j} & \mathbf{k}\\
+    \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z}\\
+    y & -x & 0\end{vmatrix} = -2 \mathbf{k} \neq \mathbf{0}\).</li>
+
+<li data-fragment-index="3" class="fragment">So \(\mathbf{F}\) cannot be a gradient of any scalar field.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org3ad4731">
+<h4 id="org3ad4731">Curls Are Divergence Free</h4>
+<p class="fragment">
+<b>Theorem</b> For any \(C^2\) vector field \(\mathbf{F}\),
+</p>
+<div class="fragment">
+\begin{align*}
+\text{div} \, \mathbf{curl}\, \mathbf{F} = \nabla \cdot (\nabla \times \mathbf{F}) = 0.
+  \end{align*}
+
+</div>
+<p class="fragment">
+That is, the divergence of any curl is zero.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org792d05f">
+<h4 id="org792d05f">Proof</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">Heuristically, \(\displaystyle \nabla \cdot (\nabla \times \mathbf{F}) =  \begin{vmatrix} \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z}\\
+    \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z}\\
+    F_1 & F_2 & F_3\end{vmatrix} = 0\).</li>
+
+<li data-fragment-index="2" class="fragment"><p>
+Rigorously,
+</p>
+<div>
+\begin{align*}
+\nabla \cdot (\nabla \times \mathbf{F}) & =  \frac{\partial}{\partial x} \left( \frac{\partial F_3}{\partial y} - \frac{\partial F_2}{\partial z} \right) - \frac{\partial}{\partial y} \left( \frac{\partial F_3}{\partial x} - \frac{\partial F_1}{\partial z} \right) \\
+& \quad  + \frac{\partial}{\partial z} \left( \frac{\partial F_2}{\partial x} - \frac{\partial F_1}{\partial y} \right) = 0.
+\end{align*}
+
+</div></li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org5e03d6b">
+<h4 id="org5e03d6b">Example</h4>
+<p>
+Show that for any vector field \(\mathbf{F}\),
+</p>
+<div>
+\begin{align*}
+\mathbf{curl}\, \mathbf{curl}\, \mathbf{F} = \mathbf{grad}\, \text{div}\, \mathbf{F} - \Delta \mathbf{F}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgcdbfa03">
+<h4 id="orgcdbfa03">Proof</h4>
+<div class="fragment">
+ \begin{align*}
+ \nabla \times (\nabla \times \mathbf{F})
+ & = \nabla \times \begin{vmatrix} \mathbf{i} & \mathbf{j} & \mathbf{k}\\
+   \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z}\\
+   F_1 & F_2 & F_3\end{vmatrix} =  \begin{vmatrix} \mathbf{i} & \mathbf{j} & \mathbf{k}\\
+   \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z}\\
+   \frac{\partial F_3}{\partial y} - \frac{\partial F_2}{\partial z} & \frac{\partial F_1}{\partial z} - \frac{\partial F_3}{\partial x} & \frac{\partial F_2}{\partial x} - \frac{\partial F_1}{\partial y}\end{vmatrix}\\
+ & = \left[ \left( \frac{\partial^2 F_2}{\partial x\partial y} - \frac{\partial^2 F_1}{\partial y^2} \right) - \left( \frac{\partial^2 F_1}{\partial z^2} - \frac{\partial^2 F_3}{\partial x \partial z} \right) \right]\\
+& -  \left[ \left( \frac{\partial^2 F_2}{\partial x^2} - \frac{\partial^2 F_1}{\partial x \partial y} \right) - \left( \frac{\partial^2 F_3}{\partial y \partial z} - \frac{\partial^2 F_2}{\partial z^2} \right) \right]\\
+& +  \left[ \left( \frac{\partial^2 F_1}{\partial x\partial z} - \frac{\partial^2 F_3}{\partial x^2} \right) - \left( \frac{\partial^2 F_3}{\partial y^2} - \frac{\partial^2 F_2}{\partial y \partial z} \right) \right].
+   \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge0d5c98">
+<h4 id="orge0d5c98">Proof - Continued</h4>
+<div class="fragment">
+\begin{align*}
+\nabla (\nabla \cdot \mathbf{F})
+& = \nabla \left( \frac{\partial F_1}{\partial x} + \frac{\partial F_2}{\partial y} + \frac{\partial F_3}{\partial z} \right)\\
+& = \left( \frac{\partial^2 F_1}{\partial x^2} + \frac{\partial^2 F_2}{\partial x \partial y} + \frac{\partial^2 F_3}{\partial x \partial z} \right) \mathbf{i}\\
+&\quad \left( \frac{\partial^2 F_1}{\partial x \partial y} + \frac{\partial^2 F_2}{\partial y^2} + \frac{\partial^2 F_3}{\partial y \partial z} \right) \mathbf{j}\\
+&\quad \left( \frac{\partial^2 F_1}{\partial x \partial z} + \frac{\partial^2 F_2}{\partial y \partial z} + \frac{\partial^2 F_3}{\partial z^2} \right) \mathbf{k}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org48528a1">
+<h4 id="org48528a1">Proof - Continued</h4>
+<div class="fragment">
+\begin{align*}
+\Delta \mathbf{F}
+& = \left( \frac{\partial^2 F_1}{\partial x^2} + \frac{\partial^2 F_1}{\partial y^2} + \frac{\partial^2 F_1}{\partial z^2} \right) \mathbf{i}\\
+ &\quad \left( \frac{\partial^2 F_2}{\partial x^2} + \frac{\partial^2 F_2}{\partial y^2} + \frac{\partial^2 F_2}{\partial z^2} \right) \mathbf{j}\\
+ &\quad \left( \frac{\partial^2 F_3}{\partial x^2} + \frac{\partial^2 F_3}{\partial y^2} + \frac{\partial^2 F_3}{\partial z^2} \right) \mathbf{k}.
+ \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5131108">
+<h4 id="org5131108">Some Product Rules</h4>
+<p class="fragment">
+Suppose \(f, g\) are scalar fields, and \(\mathbf{F}, \mathbf{G}\) are vector fields. Then
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{grad}(fg) & = (\mathbf{grad} f) g + f \mathbf{grad} g\\
+\text{div} (f \mathbf{F}) & = (\mathbf{grad} f) \cdot \mathbf{F} + f \text{div} \mathbf{F}\\
+\mathbf{curl}(f \mathbf{F}) & = (\mathbf{grad}f) \times \mathbf{F} + f \mathbf{curl}\, \mathbf{F}\\
+\text{div} (\mathbf{F}\times \mathbf{G}) & = (\mathbf{curl}\, \mathbf{F})\cdot \mathbf{G} - \mathbf{F} \cdot \mathbf{curl}\, \mathbf{G}.
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+In particular,
+</p>
+<div class="fragment">
+\begin{align*}
+\text{div} (\mathbf{grad} f \times \mathbf{grad} g) = 0.
+\end{align*}
+
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/markdown/markdown.js"></script>
+<script src="../plugin/notes/notes.js"></script>
+<script src="../plugin/search/search.js"></script>
+<script src="../plugin/zoom/zoom.js"></script>
+<script src="../plugin/reveal.js-menu/menu.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: false,
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'none',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom, RevealMenu, RevealChalkboard ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+,chalkboard: {storage: "chalkboard-demo", toggleChalkboardButton: { left: "80px" },	toggleNotesButton: { left: "130px" },	colorButtons: 5}});
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+.reveal p {
+    text-align: left;
+    font-size: 0.8em;
+}
+
+/* table font size */
+.reveal td {
+    font-size: 0.8em;
+}
+
+/* table color */
+.reveal section table th {
+  background-color: rgba(230, 230, 250, 1);
+  font-size: 0.8em;
+  text-align: center;}
+
+.reveal section table tr:nth-child(even) {
+  background-color:  rgba(230, 230, 250, 0.7); }
+
+.reveal section table tr:nth-child(odd) {
+  background-color:  rgba(230, 230, 250, 0.3); }
+
+
+/* Make the image centered but the text sill align left */
+img.middle{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Need the following to make aligned equations have similar font size */
+.reveal div {
+    font-size: 90%;
+}
+
+
+.reveal li {
+    text-align: left;
+    font-size: 0.8em;
+}
+
+.reveal h1 { font-size: 1.5em; }
+
+.reveal h2 { font-size: 1.2em; }
+
+.reveal h3 { font-size: 1.2em; }
+
+/* title for each slide */
+.reveal h4 { font-size: 1.0em;
+             font-weight: bold;
+             text-align: left;
+             line-height: 3;}
+
+
+.reveal h6 { font-size: 0.8em; }
+
+/* author */
+.reveal h6 { font-size: 0.9em;}
+

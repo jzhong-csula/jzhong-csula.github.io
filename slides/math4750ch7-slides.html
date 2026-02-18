@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>MATH 4750 - Introduction to Mathematical Statistics</title>
+<meta name="author" content="\\
+Jie Zhong \\
+Department of Mathematics \\
+California State University, Los Angeles"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+
+<link rel="stylesheet" href="../dist/theme/serif.css" id="theme"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+
+<link rel="stylesheet" href="../gnohz.css"/>
+<script>window.MathJax = { TeX: {Macros: {range: "\\text{Range}", ow: "\\text{otherwise}"}} }</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1>MATH 4750 - Introduction to Mathematical Statistics</h1><h2></h2><h6> <br />
+Jie Zhong <br />
+Department of Mathematics <br />
+California State University, Los Angeles</h6>
+</section>
+<section>
+<section id="slide-orgd5e3b76">
+<h2 id="orgd5e3b76">Chapter 7 Estimation</h2>
+<div class="outline-text-2" id="text-orgd5e3b76">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6031aff">
+<h3 id="org6031aff">7.1 Statistical Inference</h3>
+<div class="outline-text-3" id="text-org6031aff">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgca8237b">
+<h4 id="orgca8237b">Example 7.1.1 (Lifetimes of Electronic Components)</h4>
+<p data-fragment-index="1" class="fragment">
+<span style="color: rgb(24,116,205)">Goal</span>: know as much as possible about how long each component is likely to last
+</p>
+<ul>
+<li data-fragment-index="2" class="fragment">Collect data: \(X_1, X_2, \dots\) (observations)</li>
+<li data-fragment-index="3" class="fragment">Choose the family of exponential distributions to model the length of time</li>
+<li data-fragment-index="4" class="fragment">If the failure rate \(\theta\) is known, then \(X_i \sim \text{Exp}(\theta)\)</li>
+<li data-fragment-index="5" class="fragment">We are also interested \(\theta\) itself because \(\mathbb{E}(X_i) = 1/\theta\)</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orge86663f">
+<h4 id="orge86663f">How to Estimate \(\theta\)?</h4>
+<p class="fragment">
+By LLN,
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{1}{n} \sum_{i=1}^n X_i \xrightarrow{\mathbb{P}} \frac{1}{\theta},
+\end{align*}
+
+</div>
+
+<p class="fragment">
+and Theorem 6.2.5 says
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{n}{\sum_{i=1}^n X_i} \xrightarrow{\mathbb{P}} \theta.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org928f1b4">
+<h4 id="org928f1b4">Statistical Model</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">Identification of random variable of interest</li>
+<li data-fragment-index="2" class="fragment">Specification of a joint distribution</li>
+<li data-fragment-index="3" class="fragment">Identification of unknown parameters, and their distributions</li>
+
+</ul>
+
+<p data-fragment-index="4" class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: When we treat the unknown parameter(s) \(\theta\) as random, then the joint distribution of the observable random variables indexed by \(\theta\) is understood as the <b>conditional distribution</b> of the observable
+random variables given \(\theta\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orge3c0186">
+<h4 id="orge3c0186">Definitions</h4>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Statistical inference</span>:
+</p>
+<p class="fragment">
+A procedure that produce a probabilistic statement about some or all parts of a statistical model.
+</p>
+
+<p class="fragment">
+In a problem of statistical inference, a characteristic or combination of characteristics that determine the joint distribution for the random variables of interest is called a <i>parameter</i> of the distribution. The set \(\Omega\) of all possible values of a parameter \(\theta\) or of a vector of parameters \((\theta_1, \theta_2, \dots, \theta_k)\) is called the
+<i>parameter space</i>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgd4e57cc">
+<h4 id="orgd4e57cc">Statistic</h4>
+<p class="fragment">
+Suppose \(X_1, X_2, \dots, X_n\) are observable random variables. Let \(r\) be an arbitrary real-valued function of \(n\) real variables. Then the random variable \(T = r(X_1, X_2, \dots, X_n)\) is called a <i>statistic</i>.
+</p>
+
+<p class="fragment">
+For example,
+</p>
+<div class="fragment">
+\begin{align*}
+  \overline{X}_n & = \frac{1}{n} \sum_{i=1}^n X_i\\
+Y_n & = \max\{ X_1, \dots, X_n\} ~\text{or} ~ \min\{X_1, \dots, X_n\}\\
+C_n & = 3
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbec7737">
+<h4 id="orgbec7737">General Classes of Inference Problems</h4>
+<ul>
+<li>Prediction (Chapter 7 and 8)</li>
+<li>Statistical decision problems (Chapter 9)</li>
+<li>Experimental design</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org4a67ce6">
+<h3 id="org4a67ce6">7.2 Prior and Posterior Distributions</h3>
+<div class="outline-text-3" id="text-org4a67ce6">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgcf58f90">
+<h4 id="orgcf58f90">Example 7.1.1 (Revisited)</h4>
+<p>
+Suppose before observing any data, the company believes the failure rate is around \(0.5\) per year but not sure.
+</p>
+<p class="fragment">
+They model \(\theta\) as a random variable which has the exponential distribution, i.e. \(\theta \sim \text{Exp}(0.5)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org4194b54">
+<h4 id="org4194b54">Definition</h4>
+<p class="fragment">
+Suppose one has a statistical model with parameter \(\theta\). If one treats \(\theta\) as a random variable, then the distribution that one assigns to \(\theta\) <b>before</b> observing any other random variables of interest is called its <i>prior distribution</i>.
+</p>
+
+<p class="fragment">
+We use \(\xi(\theta)\) to denote the prior p.m.f. or p.d.f. as a function of \(\theta\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org50e97db">
+<h4 id="org50e97db">Example 7.2.2</h4>
+<p>
+Let \(\theta\) denote the probability of obtaining a head when a certain coin is tossed, and suppose that it is known that the coin either is fair or has a head on each side: \(\theta =1/2\) or \(\theta = 1\).
+</p>
+
+<p class="fragment">
+If the prior probability that the coin is fair is \(0.8\), then the prior p.m.f. of \(\theta\) is
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(1/2)  = 0.8, \quad \xi(1) = 0.2.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org613c8a1">
+<h4 id="org613c8a1">Example 7.2.3</h4>
+<p>
+Suppose that the proportion \(\theta\) of defective items in a large manufactured lot is unknown and that the prior distribution assigned to \(\theta\) is the uniform distribution on the interval \([0, 1]\).
+</p>
+
+<p class="fragment">
+Then the prior p.d.f. of \(\theta\) is
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(\theta) = \begin{cases}
+1, & \mbox{for } 0 < \theta < 1,\\
+0, & \mbox{otherwise.}
+\end{cases}
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge13f965">
+<h4 id="orge13f965">Example 7.2.4</h4>
+<p>
+Lifetimes of Fluorescent Lamps
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">Suppose the lifetimes (in hours)  of fluorescent lamps are to be observed.</li>
+<li data-fragment-index="2" class="fragment">Assume that the lifetime \(\sim \text{Exp}(\theta)\).</li>
+<li data-fragment-index="3" class="fragment">Prior distribution of \(\theta\): gamma distribution with \(\mu =0.0002\) and \(\sigma = 0.0001\).</li>
+
+</ul>
+
+<p data-fragment-index="4" class="fragment 4">
+Determine the prior p.d.f. of \(\theta\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org35dc2bd">
+<h4 id="org35dc2bd">Example 7.2.4 - Continued</h4>
+<p>
+<i>Solution</i>
+</p>
+<p class="fragment">
+Recall that if \(\theta \sim \text{Gamma} (\alpha, \lambda)\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(\theta) = \frac{\alpha}{\lambda}, \quad \text{Var} (\theta) = \frac{\alpha}{\lambda^2}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Therefore, we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{\alpha}{\lambda} = 0.0002, \quad \frac{\alpha}{\lambda^2} = 0.0001^2,
+\end{align*}
+
+</div>
+<p class="fragment">
+and thus,
+</p>
+<div class="fragment">
+\begin{align*}
+  \alpha = 4, \quad \lambda = 20,000.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb74f03b">
+<h4 id="orgb74f03b">Example 7.2.4 - Continued</h4>
+<p>
+So the prior p.d.f. of \(\theta\) is
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(\theta) = \begin{cases}
+\frac{20,000^4}{3!} \theta^3 e^{-20,000 \theta}, & \theta>0,\\
+0, & \theta \le 0.
+\end{cases}
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbd42836">
+<h4 id="orgbd42836">The Posterior Distribution</h4>
+<p>
+Suppose in Example 7.2.4 that we observe a collection of \(n\) lifetimes of fluorescent lamps, how would we change the distribution of \(\theta\) to take account of the observed data?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org76fd7ea">
+<h4 id="org76fd7ea">Definition</h4>
+<p>
+Consider a statistical inference problem with parameter \(\theta\) and random variables \(X_1, \dots, X_n\) to be observed. The conditional distribution of \(\theta\) given \(X_1, \dots, X_n\) is called the <i>posterior distribution</i> of \(\theta\).
+</p>
+
+<p class="fragment">
+The conditional p.m.f or p.d.f. of \(\theta\) given \(X_1 = x_1, \dots, X_n = x_n\) is typically denoted \(\xi(\theta|x_1, \dots, x_n)\) or \(\xi(\theta|\vec{x}), \vec{x} = (x_1, \dots, x_n)\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: How to find the posterior distribution?
+</p>
+<p class="fragment">
+Answer: Bayes' theorem.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org65f8616">
+<h4 id="org65f8616">Theorem 7.2.1</h4>
+<p>
+Suppose that the \(n\) random variables \(X_1, \dots, X_n\) form a random sample from a distribution for which the p.d.f. or the p.m.f. is \(f(x|\theta)\). Suppose also that the value of the parameter \(\theta\) is unknown and the prior p.d.f. or p.m.f. of \(\theta\) is \(\xi(\theta)\).
+</p>
+<p class="fragment">
+Then the posterior p.d.f. or p.m.f. of \(\theta\) is
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(\theta|\vec{x}) = \frac{f_n(\vec{x}|\theta)\xi(\theta)}{g_n(\vec{x})},\quad \text{for all} ~ \theta\in \Omega,
+\end{align*}
+
+</div>
+<p class="fragment">
+where
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\theta) & = f(x_1|\theta)\cdots f(x_n|\theta),\\
+  g_n(\vec{x}) & =  \int_\Omega f_n(\vec{x}|\theta) \xi(\theta)\, d\theta.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgeaf7082">
+<h4 id="orgeaf7082">Example 7.2.6</h4>
+<p>
+Lifetimes of Fluorescent Lamps (Revisited)
+</p>
+<p class="fragment">
+Suppose also that the lifetimes \(X_1,\dots, X_n\) of a random sample of \(n\) lamps are observed.
+</p>
+
+<p class="fragment">
+We shall determine the posterior p.d.f. of \(\theta\) given that \(X_1 = x_1, \dots , X_n = x_n\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Have</span>: \(X_i\sim \text{Exp} (\theta)\), and the prior p.d.f. \(\xi(\theta)\) of \(\theta\), i.e.,
+</p>
+<div class="fragment">
+\begin{align*}
+f(x|\theta) = \begin{cases}
+\theta e^{-\theta x}, & x > 0,\\
+0, & x \le 0.
+\end{cases} \quad
+  \xi(\theta) = \begin{cases}
+\frac{20,000^4}{3!} \theta^3 e^{-20,000 \theta}, & \theta>0,\\
+0, & \theta \le 0.
+\end{cases}
+\end{align*}
+
+</div>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Want</span>: the posterior p.d.f. \(\xi(\theta|\vec{x})\).
+</p>
+
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Need</span>: \(f_n(\vec{x}|\theta)\) and \(g_n(\vec{x})\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org72beb4d">
+<h4 id="org72beb4d">Example 7.2.6 - Continued</h4>
+<p>
+The conditional joint p.d.f. of \(X_1, \dots, X_n\) can be written in the following form, for \(x_i>0\, (i=1, \dots, n)\):
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\theta) = \prod_{i=1}^n \theta e^{-\theta x_i} = \theta^n e^{-\theta y},
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(y = \sum_{i=1}^n x_i\).
+</p>
+
+<p class="fragment">
+The \(n \text{-dimensional}\) marginal joint p.d.f. of \(X_1, \dots, X_n\) is
+</p>
+<div class="fragment">
+\begin{align*}
+  g_n(\vec{x}) & = \int_0^{\infty} \theta^n e^{-\theta y} \frac{20,000^4}{3!} \theta^3 e^{-20,000 \theta}\, d\theta \\
+& = C  \int_0^{\infty} \theta^{n+3} e^{-(y+20,000)\theta} \, d\theta \\
+& = \frac{C \Gamma(n+4)}{(y+20,000)^{n+4}}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga1b523f">
+<h4 id="orga1b523f">Example 7.2.6 - Continued</h4>
+<p>
+Finally,
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(\theta|\vec{x}) & = \frac{f_n(\vec{x}|\theta)\xi(\theta)}{g_n(\vec{x})}\\
+& = \frac{\theta^n e^{-\theta y} \cdot C \theta^3 e^{-20,000 \theta}}{\frac{C \Gamma(n+4)}{(y+20,000)^{n+4}}}\\
+& = \frac{(y+20,000)^{n+4} \theta^{n+3}}{\Gamma(n+4)} e^{-(y+20,000)\theta},
+\end{align*}
+
+</div>
+<p class="fragment">
+for \(\theta>0\).
+</p>
+
+<p class="fragment">
+In other words, \(\xi(\theta|\vec{x})\sim \text{Gamma} (n+4, y+20,000)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgfa8cbaf">
+<h4 id="orgfa8cbaf">Example 7.2.6 - Continued</h4>
+<p>
+For example, suppose that we observe the following \(n=5\) lifetimes in hours: \(2911, 3403, 3237, 3509\) and \(3118\). Then \(y = 16,178\), and the posterior p.d.f. of \(\theta\) is the gamma distribution with parameters \(9\) and \(36,178\).
+</p>
+
+
+<div id="org8eb749b" class="figure">
+<p><img src="../img/math4750/fig7-1.png" alt="fig7-1.png" width="75%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org0470f98">
+<h4 id="org0470f98">Example (Exercise 7.2.3)</h4>
+<p>
+Suppose that the number of defects on a roll of magnetic recording tape has a Poisson distribution for which the mean \(\lambda\) is either \(1.0\) or \(1.5\), and the prior p.m.f. of \(\lambda\) is as follows:
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(1.0) = 0.4, \quad \xi(1.5) = 0.6.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+If a roll of tape selected at random is found to have three defects, what is the posterior p.m.f. of \(\lambda\)?
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+Let \(X\) be the number of defects, and observed \(x = 3\).
+</p>
+<p class="fragment">
+The (conditional) p.m.f. of \(X\):
+</p>
+<div class="fragment">
+\begin{align*}
+  f(x|\theta) = \frac{e^{-\theta} \theta^x}{x!}, \quad \text{for } x>0.
+\end{align*}
+
+</div>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Want</span>: \(\xi(\theta|x)\)?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org339d622">
+<h4 id="org339d622">Example (Exercise 7.2.3) - Continued</h4>
+<p>
+Note here we only one sample, that is, \(n=1\).
+</p>
+
+<p class="fragment">
+The marginal p.m.f. of \(X\) is
+</p>
+<div class="fragment">
+\begin{align*}
+  g_1(x) & = f(x|\theta = 1.0) \xi(1.0) + f(x|\theta =1.5)\xi(1.5)\\
+& = \frac{e^{-1.0}\cdot 1.0^x}{x!}\cdot 0.4 + \frac{e^{-1.5}\cdot 1.5^x}{x!}\cdot 0.6,
+\end{align*}
+
+</div>
+<p class="fragment">
+and thus \(g_1(3) = 0.09983\dots\)
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org107073f">
+<h4 id="org107073f">Example (Exercise 7.2.3) - Continued</h4>
+<p>
+Therefore,
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(1.0|3) = \frac{f_1(3|1.0)\xi(1.0)}{g_1(3)} = \frac{\frac{e^{-1.0}\cdot 1.0^3}{3!}\cdot 0.4}{0.09983} = 0.2456,
+\end{align*}
+
+</div>
+<p class="fragment">
+and
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(1.5|3) = 1 - \xi(1.0|3) = 0.7544.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Try \(X = 0\)?
+</p>
+
+</section>
+<section>
+<p>
+What if \(n>1\)?
+</p>
+
+<p class="fragment">
+Say we observed \(X_1 = x_1, X_2 = x_2\). Then
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(\theta|x_1, x_2) & = \frac{f_2(x_1, x_2|\theta)\xi(\theta)}{g_2(x_1, x_2)}\\
+& = \frac{f(x_2|\theta)f(x_1|\theta)\xi(\theta)}{g_2(x_1, x_2)}\\
+& \propto f(x_2|\theta) \xi(\theta|x_1),
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(\propto\) means "proportional to (up to a constant, but nothing to do with \(\theta\))".
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org974dc42">
+<h4 id="org974dc42">Example 7.2.7</h4>
+<p>
+Proportion of Defective Items (Revisited)
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">Observations: \(X_1 = x_1, \dots, X_n = x_n\).</li>
+<li data-fragment-index="2" class="fragment">\(X_i \sim \text{Ber} (\theta)\), where \(\theta\) is the (unknown) proportion of defective items.</li>
+<li data-fragment-index="3" class="fragment">The prior distribution of \(\theta\): \(\xi(\theta) \sim \text{Unif} ([0,1])\).</li>
+
+</ul>
+
+<p class="fragment">
+What is the posterior distribution?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org13bee77">
+<h4 id="org13bee77">Example 7.2.7 - Continued</h4>
+<p>
+We first re-write the p.m.f. of \(X_i\) as follows:
+</p>
+<div class="fragment">
+\begin{align*}
+  f(x|\theta) = \begin{cases}
+\theta^x (1 - \theta)^{1-x}, & 0< \theta < 1,\\
+0, & \text{otherwise}.
+\end{cases}
+\end{align*}
+
+</div>
+<p class="fragment">
+Then
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\theta) & = \prod_{i=1}^n f(x_i|\theta) = \prod_{i=1}^n \theta^{x_i}(1- \theta)^{1-x_i}\\
+& = \theta^y (1- \theta)^{n-y}, \quad y = \sum_{i=1}^n x_i.
+\end{align*}
+
+</div>
+
+<div class="fragment">
+\begin{align*}
+  g_n(\vec{x}) & = \int_0^1 f_n(\vec{x}|\theta) \xi(\theta)\, d\theta = \int_0^1 \theta^y (1 - \theta)^{n-y}\cdot 1 \, d\theta\\
+& = B(y+1, n-y+1).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org719138f">
+<h4 id="org719138f">Example 7.2.7 - Continued</h4>
+<p>
+Therefore,
+</p>
+<div>
+\begin{align*}
+  \xi(\theta|\vec{x})
+& = \frac{f_n(\vec{x}|\theta)\xi(\theta)}{g_n(\vec{x})} = \frac{\theta^y (1 - \theta)^{n-y}}{B(y+1, n-y+1)}\\
+& \sim \text{Beta} (y + 1, n - y +1).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org659b3e1">
+<h4 id="org659b3e1">Remark</h4>
+<p class="fragment">
+(1) Recall the p.d.f. of \(\text{Beta} (\alpha, \beta)\): for \(x\in (0,1)\)
+</p>
+<div class="fragment">
+\begin{align*}
+    f(x| \alpha, \beta) =
+    \frac{x^{\alpha -1}(1 - x)^{\beta -1}}{B(\alpha, \beta)}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+If \(\alpha =1, \beta = 1\), then for \(x\in (0,1)\),
+</p>
+<div class="fragment">
+\begin{align*}
+  f(x|1, 1) = 1.
+\end{align*}
+
+</div>
+<p class="fragment">
+Thus, \(\text{Beta}(1, 1) = \text{Unif}([0,1])\).
+</p>
+
+</section>
+<section>
+<p>
+(2) Sequential observations
+</p>
+<div class="fragment">
+\begin{align*}
+  \text{Beta} (1, 1) & \xrightarrow{x_1} ~ \text{Beta} (x_1+1, 1 - x_1 + 1)\\
+& \xrightarrow{x_2} ~ \text{Beta} (x_1+x_2+1, 2 - x_1-x_2 + 1)\\
+& \quad \vdots\\
+& \xrightarrow{x_n} ~ \text{Beta} (y+1, n-y + 1).
+\end{align*}
+
+</div>
+
+</section>
+<section>
+<p>
+(3) When the joint p.d.f. or p.m.f. \(f_n(\vec{x}|\theta)\) of the observations in a random sample is regarded as a function of \(\theta\) fro given values of \(x_1, \dots, x_n\), it is called the <i>likelihood function</i>.
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(\theta|\vec{x}) = \frac{f_n(\vec{x}|\theta)\xi(\theta)}{g_n(\vec{x})} \propto f_n(\vec{x}|\theta)\xi(\theta).
+\end{align*}
+
+</div>
+<p class="fragment">
+Thus, the posterior is proportional to the product of the likelihood function and the prior.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org09333ff">
+<h3 id="org09333ff">7.3 Conjugate Prior Distributions</h3>
+<p>
+For each of the most popular statistical models, there exists a family of distributions for the parameter with a very special property. If the prior distribution is chosen to be a member of that family, then the posterior distribution will also be a member of that family. Such a family of distributions is called a <i>conjugate</i> family. Choosing a prior distribution from a conjugate family will typically make it particularly simple to calculate the posterior distribution.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org4ecd4e3">
+<h4 id="org4ecd4e3">Sampling from a Bernoulli Distribution</h4>
+<p>
+<span style="color: rgb(24,116,205)">Theorem 7.3.1</span>
+Suppose that \(X_1, \dots , X_n\) form a random sample from the Bernoulli distribution with parameter \(\theta\), which is unknown (\(0 < \theta < 1\)). Suppose also that the prior distribution of \(\theta\) is the beta distribution with parameters \(\alpha>0\) and \(\beta>0\).
+</p>
+<p class="fragment">
+Then the posterior distribution of \(\theta\) given that \(X_i =x_i \, (i=1,\dots,n)\) is the beta distribution with parameters \(\alpha + \sum_{i=1}^n x_i\) and \(\beta + n - \sum_{i=1}^n x_i\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgf5986d4">
+<h4 id="orgf5986d4">Sampling from a Bernoulli Distribution - Continued</h4>
+<p>
+Proof.
+</p>
+<p class="fragment">
+Prior p.d.f. of \(\theta\): \(\xi(\theta) = C \theta^{\alpha -1} ( 1- \theta )^{\beta-1}, \quad 0<\theta< 0\).
+</p>
+
+<p class="fragment">
+The joint p.m.f. of \(X_1, \dots, X_n\):
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\theta) = \theta^y (1 - \theta)^{n-y}, \quad y =  \sum_{i=1}^n x_i.
+\end{align*}
+
+</div>
+<p class="fragment">
+The posterior distribution of \(\theta\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(\theta|\vec{x}) & \propto f_n(\vec{x}|\theta) \xi(\theta) \propto \theta^y(1 - \theta)^{n-y}\cdot \theta^{\alpha -1}(1 - \theta)^{\beta - 1} \propto \theta^{\alpha + y -1}(1 - \theta)^{n + \beta - y - 1}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Therefore, \(\xi(\theta|\vec{x}) \sim \text{Beta} (\alpha + y, n + \beta - y)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgd6101fe">
+<h4 id="orgd6101fe">Remark</h4>
+<p class="fragment">
+The family of beta distributions is called a <i>conjugate</i> family of prior distribution, for samples from a Bernoulli distribution.
+</p>
+
+<p class="fragment">
+The family of beta distribution is <i>closed</i> under sampling from a Bernoulli distribution.
+</p>
+
+<div class="fragment">
+\begin{align*}
+  \text{Beta} (\alpha, \beta) \xrightarrow{\text{Ber}(\theta)} \text{Beta} (\alpha + y, \beta + n - y).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgfe49812">
+<h4 id="orgfe49812">Sampling from a Poisson Distribution</h4>
+<p>
+<span style="color: rgb(24,116,205)">Theorem 7.3.2</span>
+Suppose that \(X_1, \dots , X_n\) form a random sample from the Poisson distribution with parameter \(\theta>0\), which is unknown. Suppose also that the prior distribution of \(\theta\) is the gamma distribution with parameters \(\alpha>0\) and \(\lambda>0\).
+</p>
+<p class="fragment">
+Then the posterior distribution of \(\theta\) given that \(X_i =x_i \, (i=1,\dots,n)\) is the gamma distribution with parameters \(\alpha + \sum_{i=1}^n x_i\) and \(\lambda + n\).
+</p>
+<div class="fragment">
+\begin{align*}
+  \text{Gamma} (\alpha, \lambda) \xrightarrow{\text{Poisson}(\theta)} \text{Gamma} (\alpha + y, \lambda + n).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+For the proof, similar to Theorem 7.3.1, also check the textbook.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgc3ebd45">
+<h4 id="orgc3ebd45">Sampling from a Normal Distribution</h4>
+<p>
+<span style="color: rgb(24,116,205)">Theorem 7.3.3</span>
+Suppose that \(X_1, \dots , X_n\) form a random sample from a normal distribution for which the value of the mean \(\theta\) is unknown and the value of the variance \(\sigma^2>0\) is known. Suppose also that the prior distribution of \(\theta\) is the normal distribution with mean \(\mu_0\) and variance \(v_0^2\).
+</p>
+
+<p class="fragment">
+Then the posterior distribution of \(\theta\) given that \(X_i =x_i \, (i=1,\dots,n)\) is the normal distribution with \(\mu_1\) and variance \(v_1^2\), where
+</p>
+<div class="fragment">
+\begin{align*}
+  \mu_1 & = \frac{\sigma^2 \mu_0 + n v^2_0 \overline{x}_n}{\sigma^2 + n v_0^2}\\
+   v_1^2 & = \frac{\sigma^2 v_0^2}{\sigma^2 + n v_0^2}.
+\end{align*}
+
+</div>
+
+<div class="fragment">
+ \begin{align*}
+  \mathcal{N}(\mu_0, v_0^2) \xrightarrow{\mathcal{N}(\theta, \sigma^2)} \mathcal{N}(\mu_1, v_1^2).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge772b49">
+<h4 id="orge772b49">Sampling from a Normal Distribution - Continued</h4>
+<p>
+Proof.
+</p>
+<p class="fragment">
+The prior:
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(\theta) = \frac{1}{\sqrt{2\pi v_0^2}} e^{-\frac{(\theta - \mu_0)^2}{2 v_0^2}} \propto e^{-\frac{(\theta - \mu_0)^2}{2 v_0^2}}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+The likelihood function:
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\theta) = \prod_{i=1}^n f(x_i|\theta) \propto e^{-\frac{\sum_{i=1}^n  (x_i - \theta)^2}{2\sigma^2}}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org79d0146">
+<h4 id="org79d0146">Sampling from a Normal Distribution - Continued</h4>
+<p>
+Next, we use the following fact (see Exercise 24 on page 316):
+</p>
+<div class="fragment">
+\begin{align*}
+  \sum_{i=1}^n  (x_i - \theta)^2 = n (\theta - \overline{x}_n)^2 + \sum_{i=1}^n (x_i - \overline{x}_n)^2,
+\end{align*}
+
+</div>
+<p class="fragment">
+and so
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\theta) \propto e^{-\frac{n(\theta - \overline{x}_n)^2}{2\sigma^2}}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Thus, the posterior:
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(\theta|\vec{x}) & \propto f_n(\vec{x}|\theta) \xi(\theta) \\
+& \propto e^{-\frac{n(\theta - \overline{x}_n)^2}{2\sigma^2}}\cdot e^{-\frac{(\theta - \mu_0)^2}{2 v_0^2}}\\
+& \propto  e^{-\frac{(\theta- \mu_1)^2}{2v_1^2}}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org79aa64c">
+<h4 id="org79aa64c">Sampling from an Exponential Distribution</h4>
+<p>
+<span style="color: rgb(24,116,205)">Theorem 7.3.4</span>
+Suppose that \(X_1, \dots , X_n\) form a random sample from the exponential distribution with parameter \(\theta>0\), which is unknown. Suppose also that the prior distribution of \(\theta\) is the gamma distribution with parameters \(\alpha>0\) and \(\lambda>0\).
+</p>
+
+<p class="fragment">
+Then the posterior distribution of \(\theta\) given that \(X_i =x_i \, (i=1,\dots,n)\) is the gamma distribution with parameters \(\alpha + n\) and \(\lambda + \sum_{i=1}^n x_i\).
+</p>
+<div class="fragment">
+\begin{align*}
+  \text{Gamma} (\alpha, \lambda) \xrightarrow{\text{Exp}(\theta)} \text{Gamma} (\alpha + n, \lambda + \sum_{i=1}^n x_i).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+For the proof, check the textbook.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org74521b2">
+<h3 id="org74521b2">7.4 Bayes Estimators</h3>
+<div class="outline-text-3" id="text-org74521b2">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org0226980">
+<h4 id="org0226980">Example</h4>
+<p>
+Assume in a (giant) box, there are either red or blue balls. You might wish to estimate the (true) proportion \(\theta\) of red balls without specifying the entire distribution.
+</p>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: How to choose such a single-number estimate?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5aaa54f">
+<h4 id="org5aaa54f">Definition</h4>
+<p>
+Let \(X_1, \dots X_n\) form a random sample from a distribution with p.d.f. or p.m.f. \(f(x|\theta)\), where \(\theta\) is unknown.
+</p>
+
+<p class="fragment">
+An <i>estimator</i> of the parameter \(\theta\), based on the random sample \(X_1, \dots, X_n\), is a real-valued function \(\delta(X_1, \dots, X_n)\).
+</p>
+
+<p class="fragment">
+If \(X_1 = x_1, \dots, X_n = x_n\) are observed, then \(\delta(x_1, \dots, x_n)\) is called the <i>estimate</i> of \(\theta\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: Every estimator is, by nature of being of a function of data, is a statistic in the sense of Definition 7.1.4.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org3a96c36">
+<h4 id="org3a96c36">Example</h4>
+<p>
+Let \(X_1, \dots, X_n\) be a random sample such that
+</p>
+<div>
+\begin{align*}
+  X_i = \begin{cases}
+1, & \mbox{if $i\text{-th}$ ball is red}, \\
+0, & \mbox{if $i\text{-th}$ ball is blue}.
+\end{cases}
+\end{align*}
+
+</div>
+<p class="fragment">
+Then the sample mean
+</p>
+<div class="fragment">
+\begin{align*}
+  \overline{X}_n = \frac{\sum_{i=1}^n X_i}{n}
+\end{align*}
+
+</div>
+<p class="fragment">
+is an estimator of the proportion \(\theta\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org0271e7f">
+<h4 id="org0271e7f">Example - Continued</h4>
+<p>
+If \(X_1 = 1, X_2=1, X_3 = 0\) are observed, then
+</p>
+<div class="fragment">
+\begin{align*}
+  \overline{x}_3 = \frac{1 + 1 + 0}{3} = \frac{2}{3}
+\end{align*}
+
+</div>
+<p class="fragment">
+is an estimate of \(\theta\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: The estimator \(\delta(X_1,\dots, X_n)\) is a random variable, but the estimate \(\delta(x_1, \dots, x_n)\) is a real value.
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question:</span> How good is the estimator/estimate?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org4ceea7e">
+<h4 id="org4ceea7e">Definition (Loss Function)</h4>
+<p>
+A <i>loss function</i> is a real-valued function of two variables, \(L(\theta, a)\), where \(\theta\in \Omega\), and \(a\) is a real number.
+</p>
+
+<p class="fragment">
+The interpretation is that the statistician loses \(L(\theta, a)\) if the parameter equals \(\theta\), and the estimate equals \(a\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org98311e5">
+<h4 id="org98311e5">Different Loss Functions</h4>
+<ul>
+<li>The <i>absolute error loss</i>: \(L(\theta, a) = |\theta - a|\)</li>
+<li>The <i>square error loss</i>: \(L(\theta, a) = (\theta - a)^2\).</li>
+
+</ul>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question:</span>
+If we would like to find the best estimate, then what do we mean by the "best"?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orga400003">
+<h4 id="orga400003">Bayes Estimator</h4>
+<p class="fragment">
+Let \(\vec{x} = (x_1, \dots, x_n)\) be the observed values, and \(\xi(\theta|\vec{x})\) be the posterior distribution of \(\theta\). Then the (conditional) <i>expected loss</i> is
+</p>
+<div class="fragment">
+\begin{align}
+    \label{eq:7-4-2}
+    \mathbb{E}(L(\theta, a)|\vec{x}) = \int_{\Omega} L(\theta, a) \xi(\theta | \vec{x})\, d\theta\tag{7.4.2}
+\end{align}
+
+</div>
+
+<p class="fragment">
+We would like to choose an \(a\) which minimizes \eqref{eq:7-4-2}.
+</p>
+<p class="fragment">
+Clearly, the value of \(a\) depends on the observations \(\vec{x}\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1ee0fc1">
+<h4 id="org1ee0fc1">Bayes Estimator - Continued</h4>
+<p>
+We call \(\delta^\ast(\vec{x})\), a value of \(a\) such that \(\mathbb{E}(L(\theta| a)|\vec{x})\) is minimized, a <i>Bayes estimate</i> of \(\theta\), and \(\delta^\ast(\vec{X})\), a <i>Bayes estimator</i> of \(\theta\).
+</p>
+
+<p class="fragment">
+That is, for any \(\vec{x}\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(L(\theta, \delta^\ast(\vec{x}))|\vec{x}) = \min_{a\in \Omega} \mathbb{E}(L(\theta, a)| \vec{x}).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org60631d9">
+<h4 id="org60631d9">Estimate the Parameter of a Bernoulli Distribution</h4>
+<p class="fragment">
+Assume random sample \(X_1, \dots, X_n\) such that \(X_i\sim \text{Ber}(\theta)\)
+</p>
+<p class="fragment">
+Prior distribution of \(\theta\): \(\xi(\theta)\sim \text{Beta}(5, 10)\).
+</p>
+
+<p class="fragment">
+Let \(Y = \sum_{i=1}^n X_i\), and observe \(y = 1, n = 20\).
+</p>
+
+<p class="fragment">
+Find the Bayes estimate of \(\theta\) using the square error loss function, i.e., to find a value of \(a\) which minimizes
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}((\theta - a)^2 | \vec{x}).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb341b29">
+<h4 id="orgb341b29">Estimate the Parameter of a Bernoulli Distribution - Continued</h4>
+<p>
+<span style="color: rgb(24,116,205)">Fact:</span> (check Theorem 4.7.3 on page 260-261)
+</p>
+<p class="fragment">
+Suppose that the square error loss function is used and that the posterior mean of \(\theta\), \(\mathbb{E}(\theta|\vec{X})\), is finite. Then, a Bayes estimator of \(\theta\) is \(\delta^\ast(\vec{X}) = \mathbb{E}(\theta|\vec{X})\).
+</p>
+
+<p class="fragment">
+Back to the previous example.
+</p>
+<p class="fragment">
+By Theorem 7.3.1 (page 394 - 395),
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(\theta | \vec{x}) \sim \text{Beta}(\alpha + y, n - y + \beta) = \text{Beta} (6, 29).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgd49576d">
+<h4 id="orgd49576d">Estimate the Parameter of a Bernoulli Distribution - Continued</h4>
+<p>
+Recall that
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(X) = \frac{\alpha}{\alpha + \beta}\quad \text{if}~X \sim \text{Beta} (\alpha, \beta).
+\end{align*}
+
+</div>
+<p class="fragment">
+Therefore,
+</p>
+<div class="fragment">
+\begin{align*}
+  \delta^\ast(\vec{x}) = \mathbb{E}(\theta|\vec{x}) = \frac{6}{6+29} = \frac{6}{35}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+In general, a Bayes estimator in this case is
+</p>
+<div class="fragment">
+\begin{align*}
+  \delta^\ast(\vec{x}) = \mathbb{E}(\theta|\vec{x}) = \frac{\alpha + Y}{\alpha + \beta + n}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org971de35">
+<h4 id="org971de35">Estimate the Parameter of a Poisson Distribution</h4>
+<p class="fragment">
+Assume random sample \(X_1, \dots, X_n\) such that \(X_i\sim \text{Poisson}(\theta)\).
+</p>
+<p class="fragment">
+Prior distribution of \(\theta\): \(\xi(\theta)\sim \text{Gamma}(3, 1)\).
+</p>
+
+<p class="fragment">
+Observed:
+</p>
+<div class="fragment">
+\begin{align*}
+  (X_1, \dots, X_5) = (2, 2, 6, 0, 3).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Find the Bayes estimate of \(\theta\) using the square error loss function.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgf62d656">
+<h4 id="orgf62d656">Estimate the Parameter of a Poisson Distribution - Continued</h4>
+<p class="fragment">
+By Theorem 7.3.2 (page 397),
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(\theta | \vec{x}) \sim \text{Gamma}(\alpha + y, \lambda + n) = \text{Gamma} (16, 6).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Recall that
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(X) = \frac{\alpha}{\lambda}\quad \text{if}~X \sim \text{Gamma} (\alpha, \lambda).
+\end{align*}
+
+</div>
+<p class="fragment">
+Therefore,
+</p>
+<div class="fragment">
+\begin{align*}
+  \delta^\ast(\vec{x}) = \mathbb{E}(\theta|\vec{x}) = \frac{16}{6} = \frac{8}{3}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org98b3b5f">
+<h4 id="org98b3b5f">Estimate the Mean of a Normal Distribution</h4>
+<p class="fragment">
+Assume random sample \(X_1, \dots, X_n\) such that \(X_i\sim \mathcal{N}(\theta, \sigma^2)\), where \(\theta\) is unknown, but \(\sigma^2\) is known.
+</p>
+
+<p class="fragment">
+Prior distribution of \(\theta\): \(\xi(\theta)\sim \mathcal{N}(\mu_0, v_0^2)\).
+</p>
+
+<p class="fragment">
+Find the Bayes estimate of \(\theta\) using the square error loss function.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org2a6cef1">
+<h4 id="org2a6cef1">Estimate the Mean of a Normal Distribution - Continued</h4>
+<p class="fragment">
+By Theorem 7.3.3 (page 398),
+</p>
+<div class="fragment">
+\begin{align*}
+  \xi(\theta | \vec{x}) \sim \mathcal{N}(\mu_1, v_1^2).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Therefore,
+</p>
+<div class="fragment">
+\begin{align*}
+  \delta^\ast(\vec{x}) = \mathbb{E}(\theta|\vec{x}) = \mu_1 =\frac{\sigma^2 \mu_0 + n v^2_0 \overline{x}_n}{\sigma^2 + n v_0^2}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbc64cb0">
+<h4 id="orgbc64cb0">What if we choose the absolute error loss function?</h4>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Fact:</span>
+</p>
+<p class="fragment">
+When the absolute error loss function is used, a Bayes estimator is \(\delta^\ast(\vec{X})\) equal to to a <b>median</b> of the posterior distribution of \(\theta\).
+</p>
+
+<p class="fragment">
+For normal distribution, since the mean is the same as the median, \(\delta^\ast(\vec{X})\) is the same for both \(L(\theta, a) = (\theta - a)^2\), and \(L(\theta, a) = |\theta - a|\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgda2839f">
+<h4 id="orgda2839f">Consistency of the Bayes Estimator</h4>
+<p class="fragment">
+If \(\delta^\ast(\vec{X}) \to \theta\) as \(n \to \infty\), the sequence of estimators \(\delta^\ast(\vec{X})\) is called a <i>consistent</i> sequence of Bayes estimators.
+</p>
+
+<p class="fragment">
+In most cases, the Bayes estimators form a consistence sequence.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org2aaa37d">
+<h3 id="org2aaa37d">7.5 Maximum Likelihood Estimators</h3>
+<div class="outline-text-3" id="text-org2aaa37d">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5792f52">
+<h4 id="org5792f52">Limitations of Bayes Estimators</h4>
+<p class="fragment">
+Recall that
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(L(\theta, \delta^\ast(\vec{x}))|\vec{x}) & = \min_{a\in \Omega}\mathbb{E}(L(\theta, a)|\vec{x}),\\
+\mathbb{E}(L(\theta, a)|\vec{x}) & = \int_\Omega L(\theta, a) \xi(\theta|\vec{x})\, d\theta.
+\end{align*}
+
+</div>
+<p class="fragment">
+Limitations of Bayes estimator: \(L(\theta, a)\) and \(\xi(\theta)\) must be specified.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgddf361c">
+<h4 id="orgddf361c">Definition</h4>
+<p class="fragment">
+Recall that when the joint p.d.f. or p.m.f. \(f_n(\vec{x}|\theta)\) of the observations in a random sample is regarded as a function of \(\theta\) for given values of \(x_1, \dots, x_n\), it is called the <i>likelihood function</i>.
+</p>
+
+<p class="fragment">
+For each possible observed vector \(\vec{x}\), let \(\delta(\vec{x})\in \Omega\) denote a value of \(\theta\in \Omega\) for which the likelihood function \(f_n(\vec{x}|\theta)\) is a maximum, and let \(\hat{\theta} =\hat{\delta}(\vec{X})\) be the estimator of \(\theta\) defined in this way. The estimator \(\hat{\theta}\) is called a <i>maximum likelihood estimator</i> of \(\theta\). After \(\vec{X} = \vec{x}\) is observed, the value \(\delta(\vec{x})\) is called a <i>maximum likelihood estimate</i> of \(\theta\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org0b7ae61">
+<h4 id="org0b7ae61">Example 7.5.4</h4>
+<p>
+<span style="color: rgb(24,116,205)">Sampling from a Bernoulli Distribution</span>
+</p>
+<p class="fragment">
+Observations: \(X_1, \dots, X_n \sim \text{Ber} (\theta), 0 \le \theta \le 1\), unknown.
+</p>
+<p class="fragment">
+Likelihood function:
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\theta) & = f(x_1|\theta)\cdots f(x_n|\theta)\\
+& = \theta^{x_1}(1 - \theta)^{1 - x_1} \cdots \theta^{x_n}(1 - \theta)^{1 - x_n}\\
+& = \theta^y(1 - \theta)^{n- y}, \quad y = \sum_{i=1}^n x_i.
+\end{align*}
+
+</div>
+<p class="fragment">
+Goal: To find \(\hat{\theta}\in \Omega\) such that
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\hat{\theta}) = \max_{\theta\in \Omega}f_n(\vec{x}|\theta).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9767a71">
+<h4 id="org9767a71">Example 7.5.4 - Continued</h4>
+<p>
+<span style="color: rgb(24,116,205)">Trick</span>: The maximizers of \(f_n(\vec{x}|\theta)\) and \(\log f_n(\vec{x}|\theta)\) are the same, and the latter is much easier to find.
+</p>
+
+<p class="fragment">
+Let
+</p>
+<div class="fragment">
+\begin{align*}
+  h(\theta) & = \log f_n(\vec{x}|\theta) = \log \left( \theta^y (1-\theta)^{n-y} \right)\\
+& = y\log \theta + (n- y)\log(1 - \theta).
+\end{align*}
+
+</div>
+<p class="fragment">
+Now we take the derivative of \(h(\theta)\), and set the derivative to \(0\):
+</p>
+<div class="fragment">
+\begin{align*}
+  h'(\theta) = \frac{y}{\theta} - \frac{n - y}{1-\theta} = 0,
+\end{align*}
+
+</div>
+<p class="fragment">
+or equivalently,
+</p>
+<div class="fragment">
+\begin{align*}
+  (1 - \theta)y = \theta(n - y).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org266b907">
+<h4 id="org266b907">Example 7.5.4 - Continued</h4>
+<p>
+Therefore, the M.L.E.
+</p>
+<div class="fragment">
+\begin{align*}
+    \hat{\theta} = \frac{y}{n} = \frac{\sum_{i=1}^n x_i}{n} = \overline{x}_n.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org3a46015">
+<h4 id="org3a46015">Example 7.5.5</h4>
+<p>
+<span style="color: rgb(24,116,205)">Sampling from a Normal Distribution with Unknown Mean</span>
+</p>
+<p class="fragment">
+Observations: \(X_1, \dots, X_n \sim \mathcal{N} (\mu, \sigma^2)\), where \(\sigma\) is known.
+</p>
+<p class="fragment">
+Likelihood function:
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\mu) & = f(x_1|\mu)\cdots f(x_n|\mu)\\
+& = \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x_1-\mu)^2}{2\sigma^2}} \cdots \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x_n-\mu)^2}{2\sigma^2}} \\
+& = \frac{1}{(\sqrt{2\pi\sigma^2})^n} e^{-\frac{1}{2\sigma^2} \sum_{i=1}^n (x_i-\mu)^2}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Goal: To find \(\hat{\mu}\in \Omega\) such that
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\hat{\mu}) = \max_{\mu\in \Omega}f_n(\vec{x}|\mu).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7cbfaf6">
+<h4 id="org7cbfaf6">Example 7.5.5 - Continued</h4>
+<p>
+This is equivalent to finding \(\hat{\mu}\) which minimizes
+</p>
+<div class="fragment">
+\begin{align*}
+  Q(\mu) = \sum_{i=1}^n (x_i - \mu)^2.
+\end{align*}
+
+</div>
+<p class="fragment">
+It is easy check that \(\hat{\mu} = \overline{x}_n\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org48f02a6">
+<h4 id="org48f02a6">Example 7.5.6</h4>
+<p>
+<span style="color: rgb(24,116,205)">Sampling from a Normal Distribution with Unknown Mean and Variance</span>
+</p>
+<p class="fragment">
+Observations: \(X_1, \dots, X_n \sim \mathcal{N} (\mu, \sigma^2)\), both \(\mu\) and \(\sigma\) are unknown.
+</p>
+<p class="fragment">
+Parameter of interest: \(\theta = (\mu, \sigma^2)\).
+</p>
+<p class="fragment">
+Likelihood function:
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\mu, \sigma^2) & = f(x_1|\mu, \sigma^2)\cdots f(x_n|\mu, \sigma^2)\\
+& = \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x_1-\mu)^2}{2\sigma^2}} \cdots \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x_n-\mu)^2}{2\sigma^2}} \\
+& = \frac{1}{(\sqrt{2\pi\sigma^2})^n} e^{-\frac{1}{2\sigma^2} \sum_{i=1}^n (x_i-\mu)^2}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org8fe7129">
+<h4 id="org8fe7129">Example 7.5.6 - Continued</h4>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Goal</span>: To find \(\hat{\theta} = (\hat{\mu}, \widehat{\sigma^2})\in \Omega\) such that
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\hat{\mu}, \widehat{\sigma^2}) = \max_{(\mu, \sigma^2) \in \Omega}f_n(\vec{x}|\mu, \sigma^2).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Again, it is easier to maximize \(\log f_n(\vec{x}|\mu, \sigma^2)\). We have
+</p>
+<div class="fragment">
+\begin{align*}
+  L(\theta) & = \log f_n(\vec{x}|\mu, \sigma^2)\\
+& = -\frac{n}{2}\log(2\pi) - \frac{n}{2} \log \sigma^2 - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i - \mu)^2.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org256ded3">
+<h4 id="org256ded3">Example 7.5.6 - Continued</h4>
+<p>
+To maximize \(L(\theta)\), we require that
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{\partial L}{\partial \mu} = \frac{\partial L}{\partial (\sigma^2)} = 0.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Then
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{\partial L}{\partial \mu} & = - \frac{1}{2\sigma^2} \sum_{i=1}^n 2 (x_i - \mu)( -1 )\\
+& = \frac{1}{\sigma^2} \left( \sum_{i=1}^n x_i - n \mu \right) = 0,
+\end{align*}
+
+</div>
+<p class="fragment">
+which yields \(\hat{\mu}= \overline{x}_n\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org6976acb">
+<h4 id="org6976acb">Example 7.5.6 - Continued</h4>
+<div>
+\begin{align*}
+  \frac{\partial L}{\partial (\sigma^2)} & = - \frac{n}{2\sigma^2} + \frac{1}{2\sigma^4}\sum_{i=1}^n  (x_i - \mu)^2 = 0,
+\end{align*}
+
+</div>
+<p class="fragment">
+which yields
+</p>
+<div class="fragment">
+\begin{align*}
+  \widehat{\sigma^2} = \frac{1}{n} \sum_{i=1}^n (x_i - \mu)^2.
+\end{align*}
+
+</div>
+<p class="fragment">
+Therefore, the M.L.E. of \(\theta = (\mu, \sigma^2)\) is
+</p>
+<div class="fragment">
+\begin{align*}
+  \hat{\theta} = (\hat{\mu}, \widehat{\sigma^2}) = \left( \overline{x}_n, \frac{1}{n} \sum_{i=1}^n (x_i - \overline{x}_n)^2\right).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge557b70">
+<h4 id="orge557b70">Example 7.5.7</h4>
+<p>
+<span style="color: rgb(24,116,205)">Sampling from a Uniform Distribution</span>
+</p>
+<p class="fragment">
+Observations: \(X_1, \dots, X_n \sim \text{Unif}([0,\theta])\), where \(\theta\) is unknown.
+</p>
+<p class="fragment">
+The (conditional) probability density function is
+</p>
+<div class="fragment">
+\begin{align*}
+  f(x|\theta) = \begin{cases}
+\frac{1}{\theta}, & 0 \le x \le \theta,\\
+0, & \text{otherwise}.
+\end{cases}
+\end{align*}
+
+</div>
+<p class="fragment">
+The likelihood function
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\theta) = \begin{cases}
+\frac{1}{\theta^n}, & 0\le x_i\le \theta, ~ \text{for all } i \in \{1, \dots, n\},\\
+0, & \text{otherwise}.
+\end{cases}
+\end{align*}
+
+</div>
+<p class="fragment">
+Find a value of \(\theta\) which maximizes \(f_n(\vec{x}|\theta)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgcfacbea">
+<h4 id="orgcfacbea">Example 7.5.7 - Continued</h4>
+<p class="fragment">
+On one hand, \(f_n(\vec{x}|\theta)\) is non-zero, only when \(\theta \ge x_i\) for all \(i \in \{1, \dots, n\}\), or equivalently,
+</p>
+<div class="fragment">
+\begin{align*}
+  \theta \ge \max\{x_1, \dots, x_n\}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+On the other hand, \(1/\theta^n\) is a decreasing function \(\theta\).
+</p>
+
+<p class="fragment">
+Thus, the M.L.E. will be the smallest value of \(\theta\) such that \(\theta \ge \max\{x_1, \dots, x_n\}\), and so
+</p>
+<div class="fragment">
+\begin{align*}
+  \hat{\theta} = \max\{x_1, \dots, x_n\}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga4764a8">
+<h4 id="orga4764a8">Example 7.5.8</h4>
+<p>
+<span style="color: rgb(24,116,205)">Non-existence of an M.L.E.</span>
+</p>
+<p class="fragment">
+Observations: \(X_1, \dots, X_n \sim \text{Unif}((0,\theta))\), where \(\theta\) is unknown.
+</p>
+<p class="fragment">
+The (conditional) probability density function is
+</p>
+<div class="fragment">
+\begin{align*}
+  f(x|\theta) = \begin{cases}
+\frac{1}{\theta}, & 0 < x < \theta,\\
+0, & \text{otherwise}.
+\end{cases}
+\end{align*}
+
+</div>
+<p class="fragment">
+The likelihood function
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\theta) = \begin{cases}
+\frac{1}{\theta^n}, & 0< x_i< \theta, ~ \text{for all } i \in \{1, \dots, n\},\\
+0, & \text{otherwise}.
+\end{cases}
+\end{align*}
+
+</div>
+<p class="fragment">
+Find a value of \(\theta\) which maximizes \(f_n(\vec{x}|\theta)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgedb6f09">
+<h4 id="orgedb6f09">Example 7.5.8 - Continued</h4>
+<p>
+Similar (but not identical) to the previous example, we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \theta > \max\{x_1, \dots, x_n\}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+It should be note that the <span style="color: rgb(24,116,205)">open</span> interval
+</p>
+<div class="fragment">
+\begin{align*}
+  (\max\{x_1, \dots, x_n\}, \infty)
+\end{align*}
+
+</div>
+<p class="fragment">
+does not have a minimum!
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgfe1e393">
+<h4 id="orgfe1e393">Example 7.5.8 - Continued</h4>
+<p>
+For example, \(n =3, x_1 = 2, x_2=3, x_3 = 0.5\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  \max\{2, 3, 0.5\} = 3,
+\end{align*}
+
+</div>
+<p class="fragment">
+and there is no smallest value of \(\theta\) such that \(\theta > 3\).
+</p>
+
+<p class="fragment">
+In this case, we conclude that an M.L.E. does not exist!
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org7f0aca3">
+<h4 id="org7f0aca3">Example 7.5.9</h4>
+<p>
+<span style="color: rgb(24,116,205)">Non-uniqueness of an M.L.E.</span>
+</p>
+<p class="fragment">
+Observations: \(X_1, \dots, X_n \sim \text{Unif}([\theta,\theta + 1])\), where \(\theta\) is unknown.
+</p>
+<p class="fragment">
+The (conditional) probability density function is
+</p>
+<div class="fragment">
+\begin{align*}
+  f(x|\theta) = \begin{cases}
+1, & \theta \le x \le \theta+1,\\
+0, & \text{otherwise}.
+\end{cases}
+\end{align*}
+
+</div>
+<p class="fragment">
+The likelihood function
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\theta) = \begin{cases}
+1, & 0< x_i< \theta, ~ \text{for all } i \in \{1, \dots, n\},\\
+0, & \text{otherwise}.
+\end{cases}
+\end{align*}
+
+</div>
+<p class="fragment">
+Find a value of \(\theta\) which maximizes \(f_n(\vec{x}|\theta)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org8e78473">
+<h4 id="org8e78473">Example 7.5.9 - Continued</h4>
+<p>
+In this example, we require that
+</p>
+<div class="fragment">
+\begin{align*}
+  \theta \le x_i, \quad \text{for all } ~ i\in \{1, \dots, n\},
+\end{align*}
+
+</div>
+<p class="fragment">
+or equivalently,
+</p>
+<div class="fragment">
+\begin{align*}
+  \theta \le \min\{x_1, \dots, x_n\},
+\end{align*}
+
+</div>
+<p class="fragment">
+and
+</p>
+<div class="fragment">
+\begin{align*}
+  \theta + 1 \ge x_i, \quad \text{for all } ~ i\in \{1, \dots, n\},
+\end{align*}
+
+</div>
+<p class="fragment">
+or equivalently,
+</p>
+<div class="fragment">
+\begin{align*}
+  \theta \ge \max\{x_1, \dots, x_n\} - 1,
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org993263c">
+<h4 id="org993263c">Example 7.5.9 - Continued</h4>
+<p>
+Therefore, any \(\theta\) in the interval \([\max\{x_1, \dots, x_n\}-1, \min\{x_1, \dots, x_n\} ]\) maximizes \(f_n(\vec{x}|\theta) \equiv 1\), and any such a \(\theta\) is an M.L.E.
+</p>
+
+<p class="fragment">
+For example, \(n = 3, x_1 = 1, x_2 = 1.2, x_3 = 0.9\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  0.2 \le \theta \le 0.9.
+\end{align*}
+
+</div>
+<p class="fragment">
+Try \(\theta = 0.5\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org104295c">
+<h3 id="org104295c">7.6 Properties of Maximum Likelihood Estimators</h3>
+<div class="outline-text-3" id="text-org104295c">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgdf70ad4">
+<h4 id="orgdf70ad4">Invariance</h4>
+<p>
+<span style="color: rgb(24,116,205)">Example</span>
+Assume \(X_1, \dots, X_n\) form a random sample from the exponential distribution with the parameter \(\beta\).
+</p>
+<p class="fragment">
+Find an M.L.E. of \(\beta\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1d86858">
+<h4 id="org1d86858">Example - Continued</h4>
+<p>
+<i>Solution</i>
+</p>
+<p class="fragment">
+The p.d.f. is
+</p>
+<div class="fragment">
+\begin{align*}
+  f(x|\beta) = \begin{cases}
+\beta e^{-\beta x}, & x >0,\\
+0, & x \le 0.
+\end{cases}
+\end{align*}
+
+</div>
+<p class="fragment">
+The likelihood function is
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\beta) = \begin{cases}
+\beta^n e^{-\beta \sum_{i=1}^n x_i}, & x_i>0, ~\text{for all }~i,\\
+0, & \text{otherwise}.
+\end{cases}
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org04e142b">
+<h4 id="org04e142b">Example - Continued</h4>
+<p>
+Let
+</p>
+<div class="fragment">
+\begin{align*}
+  h(\beta) = \log f_n(\vec{x}|\beta) = n \log \beta - \beta \sum_{i=1}^n x_i,
+\end{align*}
+
+</div>
+<p class="fragment">
+then
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{d}{d\beta}(h(\beta)) = \frac{n}{\beta} - \sum_{i=1}^n x_i = 0.
+\end{align*}
+
+</div>
+<p class="fragment">
+Therefore,
+</p>
+<div class="fragment">
+\begin{align*}
+  \hat{\beta} = \frac{n}{\sum_{i=1}^n x_i} = \frac{1}{\overline{x}_n}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org428424d">
+<h4 id="org428424d">Example - Continued</h4>
+<p>
+Assume \(X \sim \text{Exp}(\beta)\), find the <b>median</b> of the distribution.
+</p>
+
+<p class="fragment">
+The median \(m\) is a number such that
+</p>
+<div class="fragment">
+\begin{align*}
+  F_X(m)= 0.5，
+\end{align*}
+
+</div>
+<p class="fragment">
+or equivalently,
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(X \le m) = 0.5, \quad \text{or} \quad \mathbb{P}(X > m) = 0.5.
+\end{align*}
+
+</div>
+<p class="fragment">
+Recall the C.D.F. of \(\text{Exp}(\beta)\):
+</p>
+<div class="fragment">
+\begin{align*}
+  F_X(t) = \int_0^t \beta e^{-\beta x}\, dx = 1 - e^{-\beta t}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1b20689">
+<h4 id="org1b20689">Example - Continued</h4>
+<p>
+<span style="color: rgb(24,116,205)">Want</span>:  \(1 - e^{-\beta m} = 0.5\).
+</p>
+<p class="fragment">
+Solve the equation for \(m\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+  m = \frac{\log 2}{\beta}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Recall that we obtain an M.L.E. of \(\beta\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \hat{\beta} = \frac{n}{\sum_{i=1}^n x_i} = \frac{1}{\overline{x}_n}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: Can we say that an M.L.E. of the median \(m\) is
+</p>
+<div class="fragment">
+\begin{align*}
+  \hat{m} = \frac{\log 2}{\hat{\beta}} = (\log 2) \overline{x}_n?
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgeb02c75">
+<h4 id="orgeb02c75">Theorem 7.6.1</h4>
+<p class="fragment">
+If \(\hat{\theta}\) is the M.L.E. of \(\theta\), and \(g\) is a one-to-one function, then \(g(\hat{\theta})\) is the M.L.E. of \(g(\theta)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org152933b">
+<h4 id="org152933b">Example 7.6.3</h4>
+<p>
+Estimating the Standard Deviation and the Second Moment
+</p>
+<p class="fragment">
+Assume \(X_1, \dots, X_n\) form a random sample from a normal distribution with both mean \(\mu\) and the variance \(\sigma^2\) unknown.
+</p>
+<p class="fragment">
+Find the M.L.E. of the standard deviation \(\sigma\) and the M.L.E. of the second moment \(\mathbb{E}(X^2)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org851adee">
+<h4 id="org851adee">Example 7.6.3 - Continued</h4>
+<p>
+Recall that the M.L.Es of the mean and variance:
+</p>
+<div class="fragment">
+\begin{align*}
+  \hat{\mu} = \overline{X}_n, \quad \widehat{\sigma^2} = \frac{1}{n} \sum_{i=1}^n (X_i - \hat{\mu})^2.
+\end{align*}
+
+</div>
+<p class="fragment">
+So, \(\hat{\sigma} = \sqrt{(\hat{\sigma})^2} = \sqrt{\widehat{\sigma^2}} = \sqrt{\frac{1}{n} \sum_{i=1}^n (X_i - \hat{\mu})^2}\).
+</p>
+<p class="fragment">
+Also,
+</p>
+<div class="fragment">
+\begin{align*}
+  \widehat{\mathbb{E}(X^2)} & = \widehat{\sigma^2 + \mu^2} = \widehat{\sigma^2} + (\hat{\mu})^2\\
+& = \frac{1}{n} \sum_{i=1}^n (X_i - \hat{\mu})^2 + (\overline{X}_n)^2.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgdec4aae">
+<h4 id="orgdec4aae">Consistency</h4>
+<p class="fragment">
+If the sequence of M.L.E.'s converges in probability to the unknown value of \(\theta\) as \(n\to \infty\), then we say the sequence of M.L.E's is <i>consistent</i>.
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Example</span>
+</p>
+<p class="fragment">
+Recall if a random sample \(X_1, \dots, X_n \sim \text{Exp} (\beta)\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \widehat{\beta_n} = \frac{1}{\overline{X}_n} \xrightarrow[n\to\infty]{\text{LLN}}\frac{1}{\mu} = \beta.
+\end{align*}
+
+</div>
+<p class="fragment">
+Therefore, the sequence \(\{\widehat{\beta_n}\}\) is consistent.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5058eb3">
+<h4 id="org5058eb3">Numerical Computation</h4>
+<p>
+<span style="color: rgb(24,116,205)">Example 7.6.4</span>
+</p>
+<p class="fragment">
+Sampling from a Gamma Distribution
+</p>
+<p class="fragment">
+Suppose that \(X_1, \dots, X_n\) form a random sample from the gamma distribution for which the p.d.f. is as follows:
+</p>
+<div class="fragment">
+\begin{align*}
+  f(x|\alpha) = \frac{1}{\Gamma(\alpha)} x^{\alpha - 1} e^{-x}, ~\text{for}~x>0.
+\end{align*}
+
+</div>
+<p class="fragment">
+Suppose that the value of \(\alpha\) is unknown and is to be estimated.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org22fcc4d">
+<h4 id="org22fcc4d">Numerical Computation - Continued</h4>
+<p>
+The likelihood function is
+</p>
+<div class="fragment">
+\begin{align*}
+  f_n(\vec{x}|\alpha) = \frac{1}{\Gamma^n(\alpha)} \left( \prod_{i=1}^n x_i \right)^{\alpha -1} \exp \left( - \sum_{i=1}^n x_i \right).
+\end{align*}
+
+</div>
+<p class="fragment">
+Set
+</p>
+<div class="fragment">
+\begin{align*}
+  h(\alpha) = \log f_n(\vec{x}|\alpha) = - n \log \Gamma(\alpha) + (\alpha -1) \left( \sum_{i=1}^n \log x_i \right) - \sum_{i=1}^n x_i,
+\end{align*}
+
+</div>
+<p class="fragment">
+and then the M.L.E. of \(\alpha\) will be the value of \(\alpha\) such that \(h'(\alpha) = 0\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5d6baa2">
+<h4 id="org5d6baa2">Numerical Computation - Continued</h4>
+<p>
+Thus, we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{\Gamma'(\alpha)}{\Gamma(\alpha)} = \frac{1}{n} \sum_{i=1}^n \log x_i.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+It is impossible here to find an exact closed form to \(\alpha\).
+</p>
+</section>
+</section>
+</div>
+</div>
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/markdown/markdown.js"></script>
+<script src="../plugin/notes/notes.js"></script>
+<script src="../plugin/search/search.js"></script>
+<script src="../plugin/zoom/zoom.js"></script>
+<script src="../plugin/reveal.js-menu/menu.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: false,
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'none',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom, RevealMenu, RevealChalkboard ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+,chalkboard: {storage: "chalkboard-demo", toggleChalkboardButton: { left: "80px" },	toggleNotesButton: { left: "130px" },	colorButtons: 5}});
+</script>
+</body>
+</html>

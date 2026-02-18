@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>MATH 4750 - Introduction to Mathematical Statistics</title>
+<meta name="author" content="\\
+Jie Zhong \\
+Department of Mathematics \\
+California State University, Los Angeles"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+
+<link rel="stylesheet" href="../dist/theme/serif.css" id="theme"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+
+<link rel="stylesheet" href="../gnohz.css"/>
+<script>window.MathJax = { TeX: {Macros: {range: "\\text{Range}", ow: "\\text{otherwise}"}} }</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1>MATH 4750 - Introduction to Mathematical Statistics</h1><h2></h2><h6> <br />
+Jie Zhong <br />
+Department of Mathematics <br />
+California State University, Los Angeles</h6>
+</section>
+<section>
+<section id="slide-org1f8c868">
+<h2 id="org1f8c868">Chapter 5 Special Distributions</h2>
+<div class="outline-text-2" id="text-org1f8c868">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org8504b7c">
+<h3 id="org8504b7c">5.2 The Bernoulli and Binomial Distributions</h3>
+<div class="outline-text-3" id="text-org8504b7c">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgd31212c">
+<h4 id="orgd31212c">Definition</h4>
+<p class="fragment">
+A random variable \(X\)  has <i>Bernoulli distribution</i> with parameter \(p\in [0, 1]\) if it can take only two values \(\{0, 1\}\), and
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(X = 1) = p, \quad \mathbb{P}(X = 0 ) = 1 - p.
+\end{align*}
+
+</div>
+<p class="fragment">
+Written as \(X \sim \text{Ber}(p)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgd35198d">
+<h4 id="orgd35198d">What are \(\mathbb{E}(X), \text{Var} (X)\) and \(\psi_X(t)\)?</h4>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(X) & = 1 \cdot p + 0 \cdot (1 - p) = p.
+\end{align*}
+
+</div>
+
+<div class="fragment">
+\begin{align*}
+\text{Var} (X) & = \mathbb{E}(X^2) - (E(X))^2 = p - p^2 = p(1-p).
+\end{align*}
+
+</div>
+<div class="fragment">
+\begin{align*}
+\psi_X(t) & = \mathbb{E}(e^{tX}) = e^{t \cdot 1} \cdot p + e^{t \cdot 0}\cdot (1 - p)\\
+& = p e^t + (1 - p).
+\end{align*}
+
+</div>
+<p class="fragment">
+What is \(\mathbb{E}(X^{100})\)?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org390b6b3">
+<h4 id="org390b6b3">Bernoulli Trials (Process)</h4>
+<p>
+We say \(X_1, X_2, \dots\) are Bernoulli trials with parameter \(p\), if \(X_1, X_2, \dots\) are i.i.d., with \(X_1 \sim \text{Ber} (p)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org47d86d3">
+<h4 id="org47d86d3">Example</h4>
+<p class="fragment">
+(1) Tossing a fair coin.
+</p>
+<div class="fragment">
+\begin{align*}
+X_i = ~\text{outcome of } i^{\text{th}}~ \text{trial} ~ =
+\begin{cases}
+ 0, & \text{tail} \\
+ 1, & \text{head}
+ \end{cases}
+ \end{align*}
+
+</div>
+<p class="fragment">
+So \(X_1, X_2, \dots\) are Bernoulli trials with \(p = 1/2\).
+</p>
+<p class="fragment">
+(2) Defective parts (suppose the probability of the defective is \(1/100\)).
+</p>
+<div class="fragment">
+   \begin{align*}
+X_i &  = ~\text{inspection outcome of } i^{\text{th}}~ \text{item produced}\\
+    &  =    \begin{cases}
+ 0, & \text{non-defective} \\
+ 1, & \text{defective}
+ \end{cases}
+ \end{align*}
+
+</div>
+<p class="fragment">
+Then \(X_1, X_2, \dots X_n\) form \(n\) Bernoulli trials with \(p = 1/100\).
+</p>
+<p class="fragment">
+(3) Clinical trials (See Example 4.7.8)
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org6223fec">
+<h4 id="org6223fec">Binomial Distribution</h4>
+<p>
+<span style="color: rgb(24,116,205)">Definition</span>
+</p>
+<p class="fragment">
+A random variable \(X\) has the <i>binomial distribution</i> with parameters \(n\) and \(p\), if
+</p>
+<div class="fragment">
+\begin{align*}
+  p_X(k) = \mathbb{P}(X = k) = \binom{n}{k}p^k (1-p)^{n-k},
+\end{align*}
+
+</div>
+<p class="fragment">
+for \(k = 0, 1, \dots, n\).
+</p>
+<p class="fragment">
+Written as \(X \sim \text{Bin} (n, p)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org8ea7efb">
+<h4 id="org8ea7efb">Theorem (relation between Bernoulli and Binomial)</h4>
+<p class="fragment">
+If \(X_1, X_2, \dots, X_n\) are i.i.d. \(\text{Ber}(p)\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  X = X_1 + X_2 + \cdots + X_n \sim \text{Bin} (n, p).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+What are \(\mathbb{E}(X), \text{Var} (X)\) and \(\psi_X(t)\)?
+</p>
+
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(X) & = np\\
+    \text{Var} (X) & = np(1 - p)\\
+\psi_X(t) & = \mathbb{E}(e^{tX}) = \mathbb{E}\left(e^{t(X_1 + \cdots + X_n)}\right)\\
+& = ( p e^t + (1 - p) )^n
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbc5ccd7">
+<h4 id="orgbc5ccd7">Example</h4>
+<p>
+We have \(15\) red balls, and \(18\) blue ones. Then  we repeatedly select \(8\) balls with replacement.
+</p>
+<div class="fragment">
+\begin{align*}
+  X = \#~ \text{of red ball selected} ~ \sim \text{Bin} (n, p).
+\end{align*}
+
+</div>
+<p class="fragment">
+What are \(\mathbb{E}(X)\) and \(\text{Var}(X)\)?
+</p>
+
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(X) & = n p = 8 \cdot \frac{15}{33}\\
+    \text{Var} (X) & = np(1 - p) = 8 \cdot \frac{15}{33}\cdot \frac{18}{33}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9388973">
+<h4 id="org9388973">Theorem</h4>
+<p class="fragment">
+If \(X_i \sim \text{Bin} (n_i, p), i = 1, \dots, m\), independent, then
+</p>
+<div class="fragment">
+\begin{align*}
+  Y = X_1 + \cdots + X_m \sim \text{Bin} (n_1 + \cdots + n_m, p).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga29667a">
+<h4 id="orga29667a">Example</h4>
+<p>
+If \(X \sim \text{Bin} (10, 0.5)\), \(Y \sim \text{Bin}(6, 0.5)\), independent, then
+</p>
+<div class="fragment">
+\begin{align*}
+  X + Y \sim \text{Bin} (16, 0.5).
+\end{align*}
+
+</div>
+<p class="fragment">
+So
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(X + Y = 7) = \binom{16}{7}0.5^7 0.5^9.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgddcdd23">
+<h3 id="orgddcdd23">5.4 The Poisson Distribution</h3>
+<div class="outline-text-3" id="text-orgddcdd23">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org44ddd78">
+<h4 id="org44ddd78">Example</h4>
+<p class="fragment">
+A certain computer server receives \(3\) requests per second on average.
+</p>
+
+<p class="fragment">
+Estimate the probability that the server receives \(5\) requests in a given second.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org395a8fe">
+<h4 id="org395a8fe">Example - continued</h4>
+<p>
+Divide the second into \(n = 10\) tenth of a second. At each tenth second, there is an independent trial where "success" means the request received.
+</p>
+
+<p class="fragment">
+For each trail, the success probability \(p = 3/10\). Then
+</p>
+<div class="fragment">
+\begin{align*}
+  S_{10} = \#~ \text{of requests received in}~ 1~\text{second}~ \sim \text{Bin}(10, 3/10).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+We want to estimate \(\mathbb{P}(S_{10} = 5)\).
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(S_{10} = 5) & \approx \binom{10}{5}\left( \frac{3}{10} \right)^5 \left( 1- \frac{3}{10} \right)^{10-5}\\
+& = 0.102919\dots
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgaa0b277">
+<h4 id="orgaa0b277">Example - continued</h4>
+<p>
+Divide the second into \(n = 1000\) milliseconds.
+</p>
+
+<p class="fragment">
+This time
+</p>
+<div class="fragment">
+\begin{align*}
+  p = \frac{3}{1000}, \quad S_{1000} \sim \text{Bin}(1000, 3/1000),
+\end{align*}
+
+</div>
+<p class="fragment">
+and thus,
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(S_{1000} = 5) & \approx \binom{1000}{5}\left( \frac{3}{1000} \right)^5 \left( 1- \frac{3}{1000} \right)^{1000-5}\\
+& = 0.100869\dots
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7a3f0b4">
+<h4 id="org7a3f0b4">Poisson Limit Theorem (approximation by Binomial)</h4>
+<p class="fragment">
+Assume \(S_n \sim \text{Bin} (n, p)\), where \(\mathbb{E}(S_n) = np = \lambda = ~\text{constant}\). Then
+</p>
+<div class="fragment">
+\begin{align*}
+  \lim_{n\to \infty} \mathbb{P}(S_n = k) = \frac{e^{-\lambda} \lambda^k}{k!} = \mathbb{P}(Y = k).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+When \(\lambda = 3\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(Y = 5) = \frac{e^{-3}3^5}{5!} = 0.1008188\dots
+\end{align*}
+
+</div>
+<p class="fragment">
+Recall that
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(S_{10} = 5) & = 0.102919\dots\\
+  \mathbb{P}(S_{1000} = 5) & = 0.100869\dots\\
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org052af44">
+<h4 id="org052af44">Poisson Random Variables</h4>
+<p class="fragment">
+Let \(\lambda \ge 0\). The random variable \(Y\) has the <i>Poisson distribution</i> with parameter \(\lambda\) if
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(Y = k) = \frac{e^{-\lambda} \lambda^k}{k!},
+\end{align*}
+
+</div>
+<p class="fragment">
+for \(k = 0, 1, 2, \dots\)
+</p>
+<p class="fragment">
+Write \(Y \sim \text{Poisson} (\lambda)\), where \(\lambda\) is often interpreted as the <i>rate</i> of rare events happened.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgdeec6e6">
+<h4 id="orgdeec6e6">Facts</h4>
+<div class="fragment">
+\begin{align*}
+  \sum_{k=0}^{\infty} \frac{e^{-\lambda}\lambda^k }{k!} = 1 \Leftrightarrow e^{\lambda} = \sum_{k=0}^\infty \frac{\lambda^k}{k!}
+\end{align*}
+
+</div>
+
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(Y) = \text{Var} (Y) = \lambda.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org395ee74">
+<h4 id="org395ee74">Applicability</h4>
+<p class="fragment">
+In a system with a large number of possible events, each of which is rare, then the number of events that occur in a fixed interval is often well modeled by a Poisson random variable.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org779d935">
+<h4 id="org779d935">Poisson Process</h4>
+<p class="fragment">
+Recall Bernoulli process (trials): (infinite) sequence of independent \(\text{Ber} (p)\) trials \(X_1, X_2, \cdots\)
+</p>
+
+<p class="fragment">
+<i>Poisson process</i> (continuous time analogue of Bernoulli process):
+sequence of events occurring randomly over a <i>continuous</i> time period, starting at \(0\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgeb57bdb">
+<h4 id="orgeb57bdb">Example</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">Requests to a computer server</li>
+<li data-fragment-index="2" class="fragment">Arrivals at a post office</li>
+<li data-fragment-index="3" class="fragment">Calls received at a call center</li>
+<li data-fragment-index="4" class="fragment">Delays of radioactive atoms</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org985fac3">
+<h4 id="org985fac3">Notations</h4>
+<p class="fragment">
+For a time interval \(I\), we denote the length by \(|I|\).
+</p>
+
+<div class="fragment">
+\begin{align*}
+  N(I) = ~\text{number of occurrences in the time interval } I.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org2f491e8">
+<h4 id="org2f491e8">Definition</h4>
+<p>
+Poisson process with parameter \(\lambda\) satisfies:
+</p>
+<p class="fragment">
+(1) \(N(I) \sim ~\text{Poisson} (\lambda |I|)\), i.e.,
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(N(I) = k) = \frac{e^{-\lambda |I|} (\lambda |I|)^k}{k!}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+(2) If \(I_1, I_2, \dots I_n\) are "disjoint" intervals, then \(N(I_1), N(I_2), \dots N(I_n)\) are independent.
+</p>
+
+<p class="fragment">
+Here, for example, we consider the intervals \([9, 10]\) and \([10, 12]\) are disjoint time intervals.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgfae7115">
+<h4 id="orgfae7115">Example</h4>
+<p>
+Calls come into a call center according to a Poisson process at rate \(20\) calls/hour. Starting at midnight \(t=0\).
+Find the probability that there are no calls between 9 am and 10 am, but \(60\) calls between 10 am and noon.
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Have</span>: \(\lambda = 20\) calls per hour
+</p>
+<div class="fragment">
+\begin{align*}
+  N(I) = ~\text{number of calls in the time interval } I.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Want</span>:
+</p>
+<div class="fragment">
+\begin{align*}
+   & \mathbb{P}(N([9, 10]) =0, ~\text{and} ~N([10, 12]) =60)\\
+     = & \mathbb{P}(N([9, 10]) = 0) \mathbb{P}(N[10, 12]) = 60)\\
+     = & \frac{e^{-\lambda \cdot 1}(\lambda \cdot 1)^0}{0!} \cdot \frac{e^{-\lambda \cdot 2}(\lambda \cdot 2)^{60}}{60!}\\
+     = & e^{-20} \cdot \frac{e^{-40}40^{60}}{60!} \approx  0.000678651\dots
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org3ddfcbe">
+<h3 id="org3ddfcbe">5.6 The Normal (Gaussian) Distribution</h3>
+
+<div id="orga6f3c1c" class="figure">
+<p><img src="../img/math4750/normal-histogram.png" alt="normal-histogram.png" class="middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org0ca24b0">
+<h4 id="org0ca24b0">Definition</h4>
+<p class="fragment">
+Let \(\mu \in \mathbb{R}, \sigma^2 > 0\). A random variable \(X\) with p.d.f.
+</p>
+<div class="fragment">
+\begin{align*}
+  f_X(x) = \frac{1}{\sqrt{2\pi \sigma^2}} e^{- \frac{(x - \mu)^2}{2\sigma^2}}
+\end{align*}
+
+</div>
+<p class="fragment">
+has the <i>normal distribution</i> with parameter \(\mu\) and \(\sigma^2\), and we write \(X \sim \mathcal{N}(\mu, \sigma^2)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgb539599">
+<h4 id="orgb539599">Facts</h4>
+<p class="fragment">
+(1) \(f_X\) indeed is a p.d.f.
+</p>
+<div class="fragment">
+\begin{align*}
+    \int_{-\infty}^{\infty} f_X(x)\, dx = 1.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+(2) Moment generating function:
+</p>
+<div class="fragment">
+\begin{align*}
+  \psi_X(t) = \mathbb{E}(e^{tX}) = \exp(\mu t + \sigma^2 t^2 /2).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+(3) \(\mathbb{E}(X) = \mu, \text{Var} (X) = \sigma^2\).
+</p>
+<p class="fragment">
+Why?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org2b04480">
+<h4 id="org2b04480">Linear Transformation</h4>
+<p class="fragment">
+If \(X \sim \mathcal{N}(\mu, \sigma^2), Y = aX + b\), where \(a \neq 0\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  Y \sim \mathcal{N}(a \mu + b, a^2 \sigma^2).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Proof.
+</p>
+<p class="fragment">
+Need to check if
+</p>
+<div class="fragment">
+\begin{align*}
+  \psi_Y(t) = \exp((a \mu + b) t + a^2 \sigma^2 t^2 /2).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org412fc54">
+<h4 id="org412fc54">Proof - Continued</h4>
+<div class="fragment">
+\begin{align*}
+  \psi_{aX + b}(t)
+& = \mathbb{E}(e^{t (a X + b)}) = \mathbb{E}(e^{t a X + t b})\\
+& = e^{tb} \mathbb{E}(e^{ta X}) = e^{tb} \psi_X(at)\\
+& = e^{tb} \exp(\mu \cdot at + \sigma^2 \cdot (at)^2 /2).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org77648df">
+<h4 id="org77648df">Example</h4>
+<p>
+Suppose \(X\) has its m.g.f. as
+</p>
+<div data-fragment-index="1" class="fragment">
+\begin{align*}
+  \psi_X(t) = \exp(t/2 + t^2/4).
+\end{align*}
+
+</div>
+<p data-fragment-index="2" class="fragment">
+So what is \(X\)?
+</p>
+
+<p data-fragment-index="3" class="fragment">
+Solution:
+</p>
+<ul>
+<li data-fragment-index="4" class="fragment">\(\mu = 1/2\)</li>
+<li data-fragment-index="5" class="fragment">\(\sigma^2/2 = 1/4\), so \(\sigma^2 = 1/2\)</li>
+<li data-fragment-index="6" class="fragment">\(X\sim \mathcal{N}(1/2, 1/2)\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org3b96410">
+<h4 id="org3b96410">Standard Normals</h4>
+<p class="fragment">
+Recall: If \(X\sim \mathcal{N}(\mu, \sigma^2)\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  f_X(x) = \frac{1}{\sqrt{2\pi \sigma^2}} e^{- \frac{(x - \mu)^2}{2\sigma^2}},
+\end{align*}
+
+</div>
+<p class="fragment">
+and
+</p>
+<div class="fragment">
+\begin{align*}
+  \psi_X(t) = \mathbb{E}(e^{tX}) = \exp(\mu t + \sigma^2 t^2 /2).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9822a3d">
+<h4 id="org9822a3d">Standard Normals - Continued</h4>
+<p>
+In particular, when \(\mu = 0, \sigma = 1\), we call \(Z \sim \mathcal{N}(0, 1)\) has the <i>standard normal</i> distribution, and
+</p>
+<div class="fragment">
+\begin{align*}
+  \phi(x) = \frac{1}{\sqrt{2\pi}} e^{-\frac{x^2}{2}}, \quad \psi_Z(t) = e^{\frac{1}{2}t^2}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Its C.D.F. is
+</p>
+<div class="fragment">
+\begin{align*}
+  \Phi(t) = \mathbb{P}(Z \le t) = \int_{-\infty}^t \phi(x)\, dx.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgae95a30">
+<h4 id="orgae95a30">Useful Fact</h4>
+<div>
+\begin{align*}
+  \Phi(-t) = 1 - \Phi(t).
+\end{align*}
+
+</div>
+
+<div id="org5642fdf" class="figure">
+<p><img src="../img/math4750/normal-cdf-pdf.png" alt="normal-cdf-pdf.png" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org93c7c74">
+<h4 id="org93c7c74">Example</h4>
+<p>
+Assume \(Z\sim \mathcal{N}(0, 1)\). Please use the Table to compute
+</p>
+<p class="fragment">
+(1) \(\mathbb{P}(Z \le 1.04)\)
+</p>
+<p class="fragment">
+(2) \(\mathbb{P}(-1 < Z < 1.5)\)
+</p>
+
+<p class="fragment">
+For (1):
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(Z \le 1.04) = \Phi(1.04) = 0.8508.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb060c50">
+<h4 id="orgb060c50">Example - Continued</h4>
+<p>
+For (2):
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(-1 < Z < 1.5)
+& = \mathbb{P}(Z < 1.5) - \mathbb{P}(Z \le -1)\\
+& = \Phi(1.5) - \Phi(-1) = \Phi(1.5) - ( 1- \Phi(1) )\\
+& = 0.9332 - (1 - 0.8413) = 0.7745.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgdb521c7">
+<h4 id="orgdb521c7">Example</h4>
+<p>
+If \(X\sim \mathcal{N}(7, 4)\), find \(\mathbb{P}(5 < X < 10)\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(255,0,0)">Warning</span>:
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(5 < X < 10) \neq \Phi(10) - \Phi(5).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org22005a8">
+<h4 id="org22005a8">Standardization</h4>
+<p class="fragment">
+If \(X \sim \mathcal{N}(\mu, \sigma^2)\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  Z = \frac{X - \mu}{\sigma} \sim \mathcal{N}(0, 1).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org92d6332">
+<h4 id="org92d6332">Example - Continued</h4>
+<p>
+Back to the previous example, \(\mu = 7, \sigma = 2\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  Z = \frac{X - 7}{2} \sim \mathcal{N}(0, 1).
+\end{align*}
+
+</div>
+<p class="fragment">
+Therefore,
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(5 < X < 10)
+& = \mathbb{P} \left( \frac{5-7}{2} < \frac{X - 7}{2} < \frac{10 - 7}{2} \right)\\
+& = \mathbb{P}(-1 < Z < 1.5) = 0.7745.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org047c816">
+<h4 id="org047c816">Theorem (linear combination of normals)</h4>
+<p class="fragment">
+If \(X_1, X_2, \dots, X_k\) are independent, and \(X_i \sim \mathcal{N}(\mu_i, \sigma_i^2)\), for \(i = 1, 2, \dots, k\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  X & =  \sum_{i=1}^k a_i X_i + b = a_1 X_1 + a_2 X_2 + \cdots + a_k X_k + b\\
+      & \sim \mathcal{N} \left( \sum_{i=1}^k a_i \mu_i + b, \sum_{i=1}^k a_i^2 \sigma^2_i \right).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgcb7a94f">
+<h4 id="orgcb7a94f">Example</h4>
+<p>
+If \(X \sim \mathcal{N}(1, 2), Y \sim \mathcal{N}(0, 7)\), and \(X \perp Y\).
+What's the standard deviation of \(X + Y\)?
+</p>
+
+<p class="fragment">
+Solution:
+</p>
+<div class="fragment">
+\begin{align*}
+  X + Y \sim \mathcal{N}(1, 9), \quad \sigma_{X + Y} = \sqrt{9} = 3.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Try
+</p>
+<div class="fragment">
+\begin{align*}
+  2 X - 3 Y \sim \mathcal{N}(?, ?)
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5574409">
+<h4 id="org5574409">Sample Mean</h4>
+<p class="fragment">
+Let \(X_1, X_2, \dots, X_n\) be random variables, then
+</p>
+<div class="fragment">
+\begin{align*}
+  \overline{X}_n = \frac{\sum_{i=1}^n X_i}{n}
+\end{align*}
+
+</div>
+<p class="fragment">
+is called the <i>sample mean</i>.
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: The sample mean is a random variable!
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org63ab662">
+<h4 id="org63ab662">Theorem</h4>
+<p class="fragment">
+If \(X_1, X_2, \dots, X_n\) form a random sample (i.i.d.) from a normal distribution with mean \(\mu\), and variance \(\sigma^2\). Then
+</p>
+<div class="fragment">
+\begin{align*}
+  \overline{X}_n \sim \mathcal{N}(\mu, \sigma^2/n).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org0e12bc9">
+<h4 id="org0e12bc9">Example 5.6.7</h4>
+<p>
+Determine a sample size.
+</p>
+<p class="fragment">
+Suppose \(X_1, X_2, \dots, X_n\) form a random sample (i.i.d.) from a normal distribution with mean \(\mu\), and variance \(9\). Find a minimum value of \(n\), i.e. the number of samples such that
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(|\overline{X}_n - \mu| \le 1) \ge 0.95.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org017a115">
+<h4 id="org017a115">Example 5.6.7 - Continued</h4>
+<p>
+First,
+</p>
+<div class="fragment">
+\begin{align*}
+  Z = \frac{\overline{X}_n - \mu}{\sigma / \sqrt{n}} = \frac{\sqrt{n} (\overline{X}_n - \mu)}{3},
+\end{align*}
+
+</div>
+<p class="fragment">
+or
+</p>
+<div class="fragment">
+\begin{align*}
+  \overline{X}_n - \mu = \frac{3 Z}{\sqrt{n}}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Then
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(|\overline{X}_n - \mu| \le 1)
+& = \mathbb{P}(|Z| \le \sqrt{n}/3) = \Phi(\sqrt{n}/3) - \Phi(-\sqrt{n}/ 3)\\
+& = 2 \Phi(\sqrt{n}/ 3) - 1 \ge 0.95.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7dad2ba">
+<h4 id="org7dad2ba">Example 5.6.7 - Continued</h4>
+<p>
+So we require
+</p>
+<div class="fragment">
+\begin{align*}
+  \Phi(\sqrt{n}/ 3)
+& \ge \frac{1.95}{2} = 0.975\\
+\Leftrightarrow  \frac{\sqrt{n}}{3} & \ge \Phi^{-1}(0.975) \approx 1.96\\
+\Leftrightarrow  \sqrt{n} & \ge 3 \times 1.96\\
+\Leftrightarrow  n & \ge 34.6
+\end{align*}
+
+</div>
+<p class="fragment">
+We choose \(n = 35\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgf8c4908">
+<h4 id="orgf8c4908">Another interpretation: <i>confidence interval</i> (see Sec. 8.5)</h4>
+<div class="fragment">
+\begin{align*}
+  0.95 = \mathbb{P}(|Z|<1.96) = \mathbb{P}\left(|\overline{X}_n - \mu| < 1.96 \frac{3}{\sqrt{n}}\right) ,
+\end{align*}
+
+</div>
+<p class="fragment">
+which means with probability at least \(0.95\), the (random) interval
+</p>
+<div class="fragment">
+\begin{align*}
+  \left( \overline{X}_n - 1.96 \cdot \frac{3}{\sqrt{n}},  \overline{X}_n + 1.96 \cdot \frac{3}{\sqrt{n}}\right)
+\end{align*}
+
+</div>
+<p class="fragment">
+contain the true mean \(\mu\).
+</p>
+
+<p class="fragment">
+For example, choose \(n = 36\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  \left( \overline{X}_{36} - 0.98,  \overline{X}_{36} + 0.98\right)
+\end{align*}
+
+</div>
+<p class="fragment">
+contains \(\mu\) with probability at least \(0.95\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org988a9b2">
+<h4 id="org988a9b2">The Lognormal Distribution</h4>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Definition</span>
+If \(\log (Y) \sim \mathcal{N}(\mu, \sigma^2)\), then we say \(Y\) has the <i>lognormal</i> distribution with parameters \(\mu\) and \(\sigma^2\).
+</p>
+
+<p class="fragment">
+How to find \(\mathbb{E}(Y)\) and \(\text{Var} (Y)\)?
+</p>
+
+<p class="fragment">
+Let \(X = \log(Y)\), then \(Y = e^X\).
+</p>
+
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(Y) & = \mathbb{E}(e^X) = \int_{-\infty}^{\infty} e^x \cdot \frac{1}{\sqrt{2\pi \sigma^2}} e^{- \frac{(x - \mu)^2}{2\sigma^2}}\, dx\\
+& = ~ \text{too complicated !}
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgfc8bc88">
+<h4 id="orgfc8bc88">The Lognormal Distribution - Continued</h4>
+<p>
+However, we know that
+</p>
+<div class="fragment">
+\begin{align*}
+  \psi_X(t) = \mathbb{E}(e^{tX}) = \exp(\mu t + \sigma^2 t^2 /2),
+\end{align*}
+
+</div>
+<p class="fragment">
+so
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(Y) = \mathbb{E}(e^{X}) = \psi_X(1) = e^{\mu + \sigma^2/2}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Similarly,
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(Y^2) = \mathbb{E}(e^{2X}) = \psi_X(2) = e^{2\mu + 2\sigma^2}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Therefore,
+</p>
+<div class="fragment">
+\begin{align*}
+  \text{Var} (Y) & = \mathbb{E}(Y^2) - (\mathbb{E}(Y))^2\\
+                 & = e^{2\mu + \sigma^2}(e^{\sigma^2} -1).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga72d1ea">
+<h3 id="orga72d1ea">5.7 The Gamma Distributions</h3>
+<div class="outline-text-3" id="text-orga72d1ea">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org0b44c44">
+<h4 id="org0b44c44">Exponential Distribution</h4>
+<p>
+<span style="color: rgb(24,116,205)">Definition</span>
+</p>
+<p class="fragment">
+Let \(\lambda >0\). A random variable \(X\) has the exponential distribution with parameter \(\lambda\), if its p.d.f. is
+</p>
+<div class="fragment">
+\begin{align*}
+  f_X(x) = \begin{cases}
+\lambda e^{-\lambda x}, & x > 0,\\
+0, & x \le 0.
+\end{cases}
+\end{align*}
+
+</div>
+<p class="fragment">
+We write \(X \sim \text{Exp} (\lambda)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org16fa4ee">
+<h4 id="org16fa4ee">Facts</h4>
+<p class="fragment">
+(1)
+</p>
+<div class="fragment">
+\begin{align*}
+  F_X(t) = \mathbb{P}(X \le t) = \int_0^t \lambda e^{-\lambda x}\, dx = 1 - e^{-\lambda t}.
+\end{align*}
+
+</div>
+<p class="fragment">
+(2)
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(X) = \frac{1}{\lambda}, \quad \text{Var} (X) = \frac{1}{\lambda^2}.
+\end{align*}
+
+</div>
+<p class="fragment">
+(3)
+</p>
+<div class="fragment">
+\begin{align*}
+  \psi_X(t) = \mathbb{E}(e^{tX}) = \frac{\lambda}{\lambda - t}, \, t < \lambda.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge2435cb">
+<h4 id="orge2435cb">Memoryless Property</h4>
+<p class="fragment">
+Assume \(X \sim \text{Exp} (\lambda)\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(X \ge t + h) | X \ge t) = \mathbb{P}(X \ge h), \, t>0, h>0.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Proof.
+</p>
+<div class="fragment">
+\begin{align*}
+  \text{LHS} ~ & = \frac{\mathbb{P}(X \ge t + h, X \ge t)}{\mathbb{P}(X \ge t)}\\
+& = \frac{\mathbb{P}(X \ge t + h)}{\mathbb{P}(X \ge t)} = \frac{e^{-\lambda(t + h)}}{e^{-\lambda t}} \\
+& = e^{-\lambda h} = ~ \text{RHS}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org26f9edf">
+<h4 id="org26f9edf">Applicability ("waiting time")</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">time until a light bulb fails</li>
+<li data-fragment-index="2" class="fragment">time until an earthquake occurs</li>
+<li data-fragment-index="3" class="fragment">time until a new car breaks out</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org910a710">
+<h4 id="org910a710">What is the gamma distribution?</h4>
+<p class="fragment">
+Recall: For a Poisson process with parameter \(\lambda\), we have \(N(I)\sim ~\text{Poisson} (\lambda |I|)\), i.e.,
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(N(I) = k) = \frac{e^{-\lambda |I|} (\lambda |I|)^k}{k!}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Let \(T_1\) be the waiting time until the first occurrence.
+</p>
+<p class="fragment">
+Fact: \(T_1 \sim \text{Exp}(\lambda)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org2ce3f2f">
+<h4 id="org2ce3f2f">Proof</h4>
+<p class="fragment">
+It suffices to show that the C.D.F. of \(T_1\) is \(1 - e^{-\lambda t}\).
+</p>
+<p class="fragment">
+If \(t \ge 0\), consider the event \(\{T_1 >t\}\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \{T_1 > t\} & = \{ \text{zero occurrence at or before time $t$}\}\\
+& = \{ N([0,t]) = 0\}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Then
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(T_1 > t) = \mathbb{P}(N([0, t]) = 0) = \frac{e^{-\lambda t}(\lambda t)^0}{0!} = e^{-\lambda t},
+\end{align*}
+
+</div>
+<p class="fragment">
+which is the same as
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(T_1 \le t) = 1 - e^{-\lambda t}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org56a3e58">
+<h4 id="org56a3e58">Gamma Distribution</h4>
+<p>
+Now let \(T_k\) be the waiting time until \(k\) th occurrence, \(k = 1, 2, 3, \dots\)
+</p>
+<p class="fragment">
+Find the C.D.F. and then p.d.f. of \(T_k\).
+</p>
+
+<p class="fragment">
+C.D.F. of \(T_k\): \(\mathbb{P}(T_k \le t)\).
+</p>
+
+<p class="fragment">
+If \(t < 0, \mathbb{P}(T_k \le t) = 0\).
+</p>
+
+<p class="fragment">
+If \(t \ge 0\), consider the event \(\{T_k > t\}\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \{T_k > t\} & = \{\text{at most $k -1$ occurrences at or before time $t$} \}\\
+& = \{ N([0,t]) \le k -1\}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org900192c">
+<h4 id="org900192c">Gamma Distribution - continued</h4>
+<p>
+Then
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(T_k > t) & = \mathbb{P}(N([0,t])\le k - 1) = \sum_{l=0}^{k-1} \mathbb{P}(N([0,t]) = l)\\
+& = \sum_{l=0}^{k-1} \frac{e^{-\lambda t}(\lambda t)^l}{l!}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Therefore,
+</p>
+<div class="fragment">
+\begin{align*}
+  F_{T_k}(t) = \mathbb{P}(T_k \le t) = \begin{cases}
+1 - \sum_{l=0}^{k-1} \frac{e^{-\lambda t}(\lambda t)^l}{l!}, & t \ge 0,\\
+0, & t < 0.
+\end{cases}
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge51bfb2">
+<h4 id="orge51bfb2">Gamma Distribution - continued</h4>
+<p>
+For p.d.f. of \(T_k\):
+</p>
+<p class="fragment">
+If \(t < 0\), \(f(t) = F'_{T_k}(t) =0\).
+</p>
+
+</section>
+<section>
+<p>
+If \(t \ge 0\),
+</p>
+<div style="font-size: 80%;">
+<div>
+\begin{align*}
+  f(t) & = F_{T_k}'(t) = - \sum_{l=0}^{k-1} \frac{\lambda^l}{l!} \left( e^{-\lambda t} t^l \right)'\\
+    & = - \sum_{l=0}^{k-1} \frac{\lambda^l}{l!} \left( -\lambda e^{-\lambda t} t^l  + e^{-\lambda t} \cdot l \cdot t^{l-1}\right)\\
+    & = \lambda e^{-\lambda t} \sum_{l=0}^{k-1} \frac{\lambda^{l-1}}{l!} \left( \lambda t^l - l \cdot t^{l-1}\right)\\
+    & = \lambda e^{-\lambda t}  \left( \sum_{l=0}^{k-1} \frac{\lambda^{l} t^l}{l!} - \sum_{l=0}^{k-1} \frac{l \lambda^{l-1} t^{l-1}}{l!} \right)\\
+    & = \lambda e^{-\lambda t}  \left( \sum_{l=0}^{k-1} \frac{\lambda^{l} t^l}{l!} - \sum_{l=1}^{k-1} \frac{\lambda^{l-1} t^{l-1}}{(l-1)!} \right)\\
+    & = \lambda e^{-\lambda t}  \left( \sum_{l=0}^{k-1} \frac{\lambda^{l} t^l}{l!} - \sum_{l=0}^{k-2} \frac{\lambda^l t^l}{l!} \right)\\
+    & = \lambda e^{-\lambda t}  \frac{\lambda^{k-1} t^{k-1}}{(k-1)!} =  e^{-\lambda t}  \frac{\lambda^k t^{k-1}}{(k-1)!}
+\end{align*}
+
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7b82f72">
+<h4 id="org7b82f72">Definition</h4>
+<p class="fragment">
+Let \(\lambda > 0, k \in \mathbb{N}\), we say a random variable \(X\) has the <i>gamma distribution</i> with parameter \(k\) and \(\lambda\) if its p.d.f. is
+</p>
+<div class="fragment">
+\begin{align*}
+  f(x) = \begin{cases}
+e^{-\lambda x}  \frac{\lambda^k x^{k-1}}{(k-1)!}, & \mbox{if}~ x \ge 0,\\
+0, & \mbox{if}~ x< 0.
+\end{cases}
+\end{align*}
+
+</div>
+
+<p class="fragment">
+We write \(X \sim \text{Gamma} (k, \lambda)\).
+</p>
+
+<p class="fragment">
+In particular, when \(k=1\), \(\text{Gamma}(1, \lambda) = ~ \text{Exp}(\lambda)\).
+</p>
+
+<p class="fragment">
+The previous example says
+</p>
+<div class="fragment">
+\begin{align*}
+  T_k = ~\text{waiting time until $k$th occurrence} ~ \sim \text{Gamma} (k, \lambda).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgcb03b31">
+<h4 id="orgcb03b31">Moment Generating Function of Gamma Distributions</h4>
+<div class="fragment">
+\begin{align*}
+  \psi_X(t) = \left( \frac{\lambda}{\lambda - t} \right)^k, \, t < \lambda.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbac1587">
+<h4 id="orgbac1587">Theorem</h4>
+<p>
+If \(X \sim \text{Gamma}(k, \lambda)\) and \(Y \sim \text{Gamma}(l, \lambda)\) are independent, then \(X+Y \sim \text{Gamma}(k+l, \lambda)\).
+</p>
+
+<p class="fragment">
+Proof.
+</p>
+<div class="fragment">
+\begin{align*}
+  \psi_{X+Y}(t) & = \psi_X(t) \psi_Y(t) = \left( \frac{\lambda}{\lambda - t} \right)^k \left( \frac{\lambda}{\lambda - t} \right)^l = \left( \frac{\lambda}{\lambda - t} \right)^{k+l}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5d935ca">
+<h4 id="org5d935ca">Corollary</h4>
+<p class="fragment">
+If \(X_1, X_2, \dots, X_k\) are independent, and \(X_i \sim \text{Exp}(\lambda)\), for \(i = 1, 2, \dots, k\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  X_1 + X_2 + \cdots X_k \sim \text{Gamma} (k, \lambda).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org165fffe">
+<h4 id="org165fffe">General Case</h4>
+<p>
+We can define the gamma distribution with parameters \(k = \alpha > 0\).
+</p>
+
+<p>
+<span style="color: rgb(24,116,205)">Definition</span>
+</p>
+<p class="fragment">
+Let \(\lambda > 0, \alpha > 0\), a random variable \(X \sim \text{Gamma}(\alpha, \lambda)\) if its p.d.f. is
+</p>
+<div class="fragment">
+\begin{align*}
+  f(x) = \begin{cases}
+e^{-\lambda x}  \frac{\lambda^\alpha x^{\alpha-1}}{\Gamma(\alpha)}, & \mbox{if}~ x \ge 0,\\
+0, & \mbox{if}~ x< 0.
+\end{cases}
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: \(\Gamma(\alpha)\) is a function such that \(\int_{-\infty}^\infty f(x)\, dx = 1\). Thus,
+</p>
+<div class="fragment">
+\begin{align*}
+  \Gamma(\alpha) = \int_0^{\infty} e^{-x} x^{\alpha -1}\, dx.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org2540e70">
+<h4 id="org2540e70">Fact</h4>
+<div class="fragment">
+\begin{align*}
+  \Gamma(\alpha) = (\alpha - 1) \Gamma(\alpha -1), \, \alpha > 1.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+If \(\alpha = k \in \mathbb{N}\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \Gamma(k) = (k -1) \Gamma(k - 1) = (k - 1)(k-2) \Gamma(k - 2) = \cdots = (k - 1)!.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf66bf96">
+<h4 id="orgf66bf96">Mean and Variance of Gamma Distributions</h4>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Theorem 5.7.5 (Moments)</span>
+Assume \(X \sim \text{Gamma} (\alpha, \lambda)\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(X^k) &  = \int_0^{\infty} x^k \cdot \frac{e^{-\lambda x} \lambda^\alpha x^{\alpha -1}}{\Gamma(\alpha)}\, dx\\
+& = \int_0^{\infty} \frac{e^{-\lambda x} \lambda^\alpha x^{\alpha + k -1}}{\Gamma(\alpha)}\, dx\\
+& = \int_0^{\infty} \frac{e^{- y} \lambda^\alpha y^{\alpha + k -1}}{\lambda^{\alpha + k - 1} \Gamma(\alpha) \lambda}\, dy\\
+& = \frac{1}{\Gamma(\alpha) \lambda^k} \int_0^{\infty} e^{-y} y^{\alpha + k - 1}\, dy\\
+& = \frac{\Gamma(\alpha + k)}{\Gamma(\alpha) \lambda^k}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org103cd2d">
+<h4 id="org103cd2d">Mean and Variance of Gamma Distributions - Continued</h4>
+<p>
+In particular,
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(X) = \frac{\Gamma(\alpha + 1)}{\Gamma(\alpha) \lambda} = \frac{\alpha}{\lambda},
+\end{align*}
+
+</div>
+<p class="fragment">
+and
+</p>
+<div class="fragment">
+\begin{align*}
+  \text{Var} (X) = \frac{\alpha}{\lambda^2}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6840434">
+<h3 id="org6840434">5.8 The Beta Distributions</h3>
+<div class="outline-text-3" id="text-org6840434">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga84a475">
+<h4 id="orga84a475">Example 3.6.9 (page 148)</h4>
+<p class="fragment">
+Let
+</p>
+<div class="fragment">
+\begin{align*}
+  X & = ~\text{number of defective parts in a sample of size $n$} \\
+  P & = ~\text{proportion of defective parts among all parts} \sim \text{Unif} (0, 1).
+\end{align*}
+
+</div>
+<p class="fragment">
+Then the joint "p.d.f." of \(X\) and \(P\) is
+</p>
+<div class="fragment">
+\begin{align*}
+  f(k, p) & = p_{X|P}(k |p) g(p)\\
+          & = \binom{n}{k} p^k (1 - p)^{n-k},
+\end{align*}
+
+</div>
+<p class="fragment">
+for \(k = 0, 1, \dots, n\), and \(p\in [0,1]\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgc24d9e4">
+<h4 id="orgc24d9e4">What is the conditional p.d.f. of \(P\) given \(X = k\)?</h4>
+<p>
+By the definition of conditional probability,
+</p>
+<div class="fragment">
+\begin{align*}
+  f_{P|X}(p|k) & = \frac{f(k, p)}{p_X(k)},
+\end{align*}
+
+</div>
+<p class="fragment">
+and
+</p>
+<div class="fragment">
+\begin{align*}
+  p_X(k) = \int_0^1 f(k, p)\, dp.
+\end{align*}
+
+</div>
+</section>
+<section>
+<p>
+Thus,
+</p>
+<div class="fragment">
+ \begin{align*}
+  f_{P|X}(p|k) & = \frac{f(k, p)}{p_X(k)} = \frac{p_{X|P}(k|p) g(p)}{\int_0^1 \binom{n}{k}p^k(1-p)^{n-k}\, dp}\\
+  & = \frac{\binom{n}{k} p^k (1-p)^{n-k}}{\int_0^1 \binom{n}{k}x^k (1-x)^{n-k}\, dx}\\
+  & = \frac{p^k (1-p)^{n-k}}{\int_0^1 x^k (1-x)^{n-k}\, dx}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb95b2b9">
+<h4 id="orgb95b2b9">The Beta Function</h4>
+<p class="fragment">
+For \(\alpha , \beta >0\),
+</p>
+<div class="fragment">
+\begin{align*}
+  B(\alpha, \beta) = \int_0^1 x^{\alpha -1} (1 -x)^{\beta -1}\, dx.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+For example, in the previous calculation, how to express the denominator in terms of a beta function?
+</p>
+<div class="fragment">
+\begin{align*}
+  \int_0^1 x^k (1-x)^{n-k}\, dx = B(k+1, n-k+1).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org54d1d32">
+<h4 id="org54d1d32">Theorem 5.8.1</h4>
+<div class="fragment">
+\begin{align*}
+  B(\alpha, \beta) = \frac{\Gamma(\alpha) \Gamma(\beta)}{\Gamma(\alpha + \beta)}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+See the proof at the end of this section.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5f1fa62">
+<h4 id="org5f1fa62">Example</h4>
+<div class="fragment">
+\begin{align*}
+  B(k+1, n-k+1) & = \frac{\Gamma(k+1)\Gamma(n-k+1)}{\Gamma(n+2)}\\
+& = \frac{k!(n-k)!}{(n+1)!},
+\end{align*}
+
+</div>
+<p class="fragment">
+and so
+</p>
+<div class="fragment">
+\begin{align*}
+  f_{P|X}(p|k) & = \frac{p^k (1-p)^{n-k}}{\int_0^1 x^k (1-x)^{n-k}\, dx}\\
+& = \frac{(n+1)!}{k!(n-k)!}\cdot p^k(1-p)^{n-k}\\
+& = \binom{n}{k}p^k(1-p)^{n-k}\cdot (n+1).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1658769">
+<h4 id="org1658769">Definition</h4>
+<p>
+Let \(\alpha, \beta >0\), we say a random variable \(X\) has the <i>beta distribution</i> with parameters \(\alpha, \beta\), if its p.d.f. is
+</p>
+<div class="fragment">
+\begin{align*}
+  f(x|\alpha, \beta) = \begin{cases}
+\frac{x^{\alpha -1}(1 -x)^{\beta -1}}{B(\alpha, \beta)}, & 0< x < 1,\\
+0, & \text{otherwise}.
+\end{cases}
+\end{align*}
+
+</div>
+
+<p class="fragment">
+We write (slightly abuse of notation) \(X \sim B(\alpha, \beta)\).
+</p>
+
+<p class="fragment">
+In particular, the conditional distribution of \(P\) given \(X=k\) in Example 3.6.9 is the beta distribution with parameters \(\alpha = k + 1, \beta = n-k+1\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgeec0b0e">
+<h4 id="orgeec0b0e">Moments of Beta Distribution</h4>
+<p class="fragment">
+For \(\alpha, \beta >0\), assume \(X \sim Beta(\alpha, \beta)\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(X^k) & = \int_0^1 x^k \cdot \frac{x^{\alpha -1}(1 - x)^{\beta -1}}{B(\alpha, \beta)}\, dx\\
+& = \frac{1}{B(\alpha, \beta)} \int_0^1 x^{\alpha + k - 1}(1 - x)^{\beta -1}\, dx\\
+& = \frac{B(\alpha + k, \beta)}{B(\alpha, \beta)} = \frac{\Gamma(\alpha + k)\Gamma(\beta)}{\Gamma(\alpha + \beta + k)} \cdot \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org025d05f">
+<h4 id="org025d05f">Moments of Beta Distribution - Continued</h4>
+<p>
+When \(k = 1\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(X)= \frac{\Gamma(\alpha +1)\Gamma(\alpha + \beta)}{\Gamma(\alpha + \beta + 1)\Gamma(\alpha)} = \frac{\alpha}{\alpha + \beta}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+When \(k = 2\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(X^2) = \frac{\alpha (\alpha + 1)}{(\alpha + \beta)(\alpha + \beta + 1)}.
+\end{align*}
+
+</div>
+
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Read</span>: Example 5.8.5 (page 330-331).
+</p>
+</section>
+</section>
+</div>
+</div>
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/markdown/markdown.js"></script>
+<script src="../plugin/notes/notes.js"></script>
+<script src="../plugin/search/search.js"></script>
+<script src="../plugin/zoom/zoom.js"></script>
+<script src="../plugin/reveal.js-menu/menu.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: false,
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'none',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom, RevealMenu, RevealChalkboard ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+,chalkboard: {storage: "chalkboard-demo", toggleChalkboardButton: { left: "80px" },	toggleNotesButton: { left: "130px" },	colorButtons: 5}});
+</script>
+</body>
+</html>

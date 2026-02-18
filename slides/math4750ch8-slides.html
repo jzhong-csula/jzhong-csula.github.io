@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>MATH 4750 - Introduction to Mathematical Statistics</title>
+<meta name="author" content="\\
+Jie Zhong \\
+Department of Mathematics \\
+California State University, Los Angeles"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+
+<link rel="stylesheet" href="../dist/theme/serif.css" id="theme"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+
+<link rel="stylesheet" href="../gnohz.css"/>
+<script>window.MathJax = { TeX: {Macros: {range: "\\text{Range}", ow: "\\text{otherwise}"}} }</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1>MATH 4750 - Introduction to Mathematical Statistics</h1><h2></h2><h6> <br />
+Jie Zhong <br />
+Department of Mathematics <br />
+California State University, Los Angeles</h6>
+</section>
+<section>
+<section id="slide-org31133c7">
+<h2 id="org31133c7">Chapter 8 Sampling Distributions of Estimators</h2>
+<div class="outline-text-2" id="text-org31133c7">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org06742be">
+<h3 id="org06742be">8.1 The Sampling Distribution of a Statistic</h3>
+<p>
+A statistic is a function of some observable random variables, and hence is itself a random variable with a distribution. That distribution is its sampling distribution, and it tells us what values the statistic is likely to assume and how likely it is to assume those values prior to observing our data. When the distribution of the observable data is indexed by a parameter, the sampling distribution is specified as the distribution of the statistic for a given value of the parameter.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgc2c524c">
+<h4 id="orgc2c524c">Definition</h4>
+<p>
+<span style="color: rgb(24,116,205)">Sampling Distribution</span>
+</p>
+<p class="fragment">
+Suppose that the random variables \(\vec{X} = (X_1, \dots, X_n)\) form a random sample from a distribution involving a parameter \(\theta\) whose value is unknown. Let \(T\) be a function of \(\vec{X}\) and possibly \(\theta\). That is, \(T = r(X_, \dots, X_n, \theta)\).
+</p>
+<p class="fragment">
+The distribution of \(T\) (given \(\theta\)) is called the <i>sampling distribution</i> of \(T\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: Often, the random variable \(T\) in the definition here will not depend on \(\theta\), and hence will be a <b>statistic</b> as defined in Sec 7.1.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org6b57bbf">
+<h4 id="org6b57bbf">Example 8.1.3</h4>
+<p>
+<span style="color: rgb(24,116,205)">Lifetimes of Electronic Components</span>
+</p>
+<p class="fragment">
+Consider the company in Example 7.1.1 that sells electronic components.
+</p>
+<p class="fragment">
+Observations: \(X_1, \dots, X_n \sim \text{Exp}(\theta)\).
+</p>
+<p class="fragment">
+Prior distribution: \(\xi(\theta) \sim \text{Gamma}(1, 2)\).
+</p>
+<p class="fragment">
+Posterior distribution: \(\xi(\theta|\vec{X}) \sim \text{Gamma} (1 + 3, 2 + \sum_{i=1}^3 X_i)\) after observing \(n=3\) lifetimes.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgc73c973">
+<h4 id="orgc73c973">Example 8.1.3 - Continued</h4>
+<p>
+Posterior mean:
+</p>
+<div class="fragment">
+\begin{align*}
+  \hat{\theta} = \frac{4}{2 + \sum_{i=1}^3 X_i}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Prior to observing the three lifetimes, the company may want to know how likely it is that \(\hat{\theta}\) will be close to \(\theta\).
+</p>
+
+<p class="fragment">
+For example, they may want to compute
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(|\hat{\theta} - \theta|< 0.1).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org537cbd1">
+<h4 id="org537cbd1">Example 8.1.2</h4>
+<p>
+<span style="color: rgb(24,116,205)">Sampling Distribution of the M.L.E. of the Mean of a Normal Distribution</span>
+</p>
+<p class="fragment">
+A random sample \(X_1, \dots, X_n\) from \(\mathcal{N}(\mu, \sigma^2)\).
+</p>
+
+<p class="fragment">
+We already know that the M.L.E. of the mean:
+</p>
+<div class="fragment">
+\begin{align*}
+  \hat{\mu} = \overline{X}_n = \frac{X_1 + \cdots + X_n}{n}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Also, we know that (from Sec 5.6)
+</p>
+<div class="fragment">
+\begin{align*}
+  \hat{\mu} \sim \mathcal{N}(\mu, \sigma^2/n).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org479f128">
+<h4 id="org479f128">Example 8.1.2 - Continued</h4>
+<p>
+But what about the sample variance?
+</p>
+<div class="fragment">
+\begin{align*}
+  \widehat{\sigma^2} = \frac{1}{n}\sum_{i=1}^n (X_i - \overline{X}_n)^2,
+\end{align*}
+
+</div>
+<p class="fragment">
+so what is the distribution of \(\widehat{\sigma^2}\)?
+</p>
+
+<p class="fragment">
+In this chapter, we shall derive, for random samples from a normal distribution, the distribution of the sample variance and the distributions of various functions of the sample mean and the sample variance. These derivations will lead us to the definitions of some new distributions that play important roles in problems of statistical inference.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgce14d39">
+<h3 id="orgce14d39">8.2 The Chi-Square Distributions</h3>
+<p>
+The family of chi-square (\(\chi^2\)) distributions is a subcollection of the family of gamma distributions. These special gamma distributions arise as sampling distributions of variance estimators based on random samples from a normal distribution.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgb3f0815">
+<h4 id="orgb3f0815">Example 8.2.1</h4>
+<p>
+<span style="color: rgb(24,116,205)">M.L.E. of the Variance of a Normal Distribution</span>
+</p>
+<p class="fragment">
+Suppose a random sample \(X_1, \dots, X_n\) from \(\mathcal{N}(\mu, \sigma^2)\), with known \(\mu\) but unknown \(\sigma^2\).
+</p>
+<p class="fragment">
+Find the M.L.E. of the variance.
+</p>
+<p class="fragment">
+From Exercise 6 in Sec 7.5, we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \widehat{\sigma_0^2} = \frac{1}{n} \sum_{i=1}^n (X_i - \mu)^2.
+\end{align*}
+
+</div>
+<p class="fragment">
+The distribution of \(\widehat{\sigma^2_0}\) and \(\widehat{\sigma^2_0}/\sigma^2\) are useful in several statistical problems, and we will derive them in this section.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgba8b4be">
+<h4 id="orgba8b4be">Gamma Distribution (review)</h4>
+<p>
+Recall that if \(X \sim \text{Gamma} (\alpha, \beta)\):
+</p>
+<div class="fragment">
+\begin{align*}
+  f(x|\alpha,\beta ) = \begin{cases}
+\frac{1}{\Gamma(\alpha)} \beta^\alpha x^{\alpha -1 } e^{-\beta x}, & x>0\\
+0, & x \le 0.
+\end{cases}
+\end{align*}
+
+</div>
+<p class="fragment">
+Also,
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(X) = \frac{\alpha}{\beta}, \quad \text{Var}(X)  = \frac{\alpha}{\beta^2}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgd0ad552">
+<h4 id="orgd0ad552">Definition</h4>
+<p class="fragment">
+Given a positive integer \(m\), the gamma distribution with \(\alpha = m/2, \beta = 1/2\), is called the \(\chi^2\) distribution with \(m\) degrees of freedom.
+</p>
+
+<p class="fragment">
+Then its p.d.f. is
+</p>
+<div class="fragment">
+\begin{align*}
+  f(x | m) = \begin{cases}
+\frac{1}{2^{m/2}\Gamma(m/2)} x^{m/2 - 1} e^{-x/2}, & x >0\\
+0, & x\le 0.
+\end{cases}
+\end{align*}
+
+</div>
+<p class="fragment">
+Write \(X \sim \chi^2 (m)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgdfa53c1">
+<h4 id="orgdfa53c1">Facts of \(\chi^2\) Distribution</h4>
+<p>
+We also have
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(X) = \frac{\alpha}{\beta} = m, \quad \text{Var}(X)  = \frac{\alpha}{\beta^2} = 2m.
+\end{align*}
+
+</div>
+<p class="fragment">
+The m.g.f. is
+</p>
+<div class="fragment">
+\begin{align*}
+  \psi_X(t) = \left( \frac{1/2}{1/2 - t} \right)^{m/2} = \left( \frac{1}{1 - 2t} \right)^{m/2},
+\end{align*}
+
+</div>
+<p class="fragment">
+for \(t < 1/2\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org3e4248a">
+<h4 id="org3e4248a">Theorem 8.2.2</h4>
+<p class="fragment">
+If random variables \(X_1, \dots, X_k\) are independent and \(X_i \sim \chi^2(m_i), \, i = 1, \dots, k\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  X_1 + \cdots + X_k \sim \chi^2(m_1 + \cdots + m_k).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Idea of the proof:
+</p>
+<div class="fragment">
+\begin{align*}
+  X_i \sim \text{Gamma}(\alpha_i, 1/2) \Rightarrow  \sum_{i=1}^k X_i \sim \text{Gamma}\left(\sum_{i=1}^k \alpha_i, 1/2\right).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf0418f2">
+<h4 id="orgf0418f2">Theorem 8.2.3 (relation between normal and \(\chi^2\) distributions)</h4>
+<p class="fragment">
+If \(X\sim \mathcal{N}(0,1)\), then \(X^2 \sim \chi^2(1)\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Want To Show</span>: \(Y = X^2\) has the p.d.f.
+</p>
+<div class="fragment">
+\begin{align*}
+  f_Y(y) = \frac{1}{\sqrt{2}\Gamma(1/2)} y^{-1/2} e^{-y/2}, \, y >0.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4e69ff9">
+<h4 id="org4e69ff9">Theorem 8.2.3 - Continued</h4>
+<p>
+We first find the C.D.F. of \(Y\):
+</p>
+<div class="fragment">
+\begin{align*}
+  F_Y(y) & = \mathbb{P}(Y\le y ) = \mathbb{P}(X^2 \le y)\\
+& = \mathbb{P}(-y^{1/2} \le X \le y^{1/2})\\
+& = \Phi(y^{1/2}) - \Phi(-y^{1/2})\\
+& = 2 \Phi(y^{1/2}) -1.
+\end{align*}
+
+</div>
+<p class="fragment">
+Note that
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{d}{dy} \Phi(y^{1/2}) & = \phi(y^{1/2}) \cdot \frac{1}{2} y^{-1/2}\\
+& = \frac{1}{\sqrt{2\pi}} e^{-y/2} \cdot \frac{1}{2} y^{-1/2}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf6ccff8">
+<h4 id="orgf6ccff8">Theorem 8.2.3 - Continued</h4>
+<p>
+So,
+</p>
+<div class="fragment">
+\begin{align*}
+  f_Y(y) & = F'_Y(y) = 2 \frac{d}{dy} \Phi(y^{1/2}) \\
+& = 2 \frac{1}{\sqrt{2\pi}} e^{-y/2} \cdot \frac{1}{2} y^{-1/2}\\
+& = \frac{1}{\sqrt{2}\sqrt{\pi}} y^{-1/2} e^{-y/2}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Since \(\Gamma(1/2) = \sqrt{\pi}\) (see Sec 5.7.9 on page 318), we have \(X^2 \sim \chi^2(1)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgd563134">
+<h4 id="orgd563134">Corollary 8.2.1</h4>
+<p class="fragment">
+If the random variables \(X_1, \dots, X_m\) are i.i.d. with the standard normal distribution, then the sum of squares \(X_1^2 + \cdots + X_m^2\) has the \(\chi^2\) distribution with \(m\) degrees of freedom.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org8117421">
+<h4 id="org8117421">Example 8.2.2</h4>
+<p>
+<span style="color: rgb(24,116,205)">M.L.E. of the Variance of a Normal Distribution (revisited)</span>
+</p>
+<p class="fragment">
+Suppose a random sample \(X_1, \dots, X_n\) from \(\mathcal{N}(\mu, \sigma^2)\), with known \(\mu\) but unknown \(\sigma^2\).
+</p>
+
+<p class="fragment">
+The M.L.E. of the variance:
+</p>
+<div class="fragment">
+\begin{align*}
+  \widehat{\sigma_0^2} = \frac{1}{n} \sum_{i=1}^n (X_i - \mu)^2.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Note that the random variables
+</p>
+<div class="fragment">
+\begin{align*}
+    Z_i = \frac{X_i - \mu}{\sigma}, \quad \text{for } i = 1, \dots, n
+\end{align*}
+
+</div>
+<p class="fragment">
+form a random sample from \(\mathcal{N}(0, 1)\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1773830">
+<h4 id="org1773830">Example 8.2.2 - Continued</h4>
+<p>
+By Corollary 8.2.1, we know that \(\sum_{i=1}^n Z_i^2\) has the \(\chi^2\) distribution with \(n\) degrees of freedom.
+</p>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: What the relation between \(\widehat{\sigma^2_0}\) and \(\sum_{i=1}^n Z_i^2\)?
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{n \widehat{\sigma^2_0}}{\sigma^2} = \sum_{i=1}^n Z_i^2.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+In other words, \(n \widehat{\sigma^2_0}/\sigma^2\)  has the \(\chi^2\) distribution with \(n\) degrees of freedom.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org6261839">
+<h4 id="org6261839">Exercise 5</h4>
+<p>
+Suppose that a point \((X, Y, Z)\) is to be chosen at random in three-dimensional space, where \(X\), \(Y\), and \(Z\) are independent random variables and each has the standard normal distribution.
+</p>
+
+<p class="fragment">
+What is the probability that the distance from the origin to the point will be less than 1 unit?-
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org116d0d7">
+<h4 id="org116d0d7">Exercise 5 - Continued</h4>
+<p>
+Distance: \(\sqrt{X^2 + Y^2 + Z^2}\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Want</span>:
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(\sqrt{X^2 + Y^2 + Z^2} \le 1) & = \mathbb{P}(X^2 + Y^2 + Z^2 \le 1)\\
+& \approx 0.2 \quad (\text{see Table on page 858-859})
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org88b1002">
+<h4 id="org88b1002">Exercise 3</h4>
+<p>
+Sketch the p.d.f. of the \(\chi^2\) distribution with \(m=2\) degrees of freedom.
+</p>
+
+<p data-fragment-index="1" class="fragment">
+When \(m = 2\), the p.d.f is
+</p>
+<div data-fragment-index="2" class="fragment">
+\begin{align*}
+  f(x | m = 2) = \frac{1}{\Gamma(1)} x^0 e^{-x/2} = \frac{1}{2}e^{-x/2}, \, x>0.
+\end{align*}
+
+</div>
+<ul>
+<li data-fragment-index="4" class="fragment">\(\lim_{x\to \infty} f(x) = 0\)</li>
+<li data-fragment-index="5" class="fragment">\(\lim_{x\to 0+} f(x) = 1/2 = ~\text{mode}\)</li>
+<li data-fragment-index="6" class="fragment">\(f'(x) = - e^{-x/2}/4 < 0\)</li>
+<li data-fragment-index="7" class="fragment">\(f''(x) = e^{-x/2}/8 > 0\)</li>
+
+</ul>
+
+<p data-fragment-index="8" class="fragment">
+Also, we know the mean is \(2\) and the variance is \(4\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgd9e622c">
+<h3 id="orgd9e622c">8.3 Joint Distribution of the Sample Mean and Sample Variance</h3>
+<div class="outline-text-3" id="text-orgd9e622c">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org0b84050">
+<h4 id="org0b84050">Distribution of Sample Variance</h4>
+<p>
+Suppose \(X_1, \dots, X_n\) form a random sample from \(\mathcal{N}(\mu, \sigma^2)\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Case 1</span>: \(\mu\) known, but \(\sigma^2\) unknown.
+</p>
+<p class="fragment">
+The M.L.E. of the variance is
+</p>
+<div class="fragment">
+\begin{align*}
+  \widehat{\sigma_0^2} = \frac{1}{n} \sum_{i=1}^n (X_i - \mu)^2.
+\end{align*}
+
+</div>
+<p class="fragment">
+\(n \widehat{\sigma^2_0}/\sigma^2\)  has the \(\chi^2\) distribution with \(n\) degrees of freedom.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org377f354">
+<h4 id="org377f354">Distribution of Sample Variance - Continued</h4>
+<p>
+<span style="color: rgb(24,116,205)">Case 2</span>: both \(\mu\) and \(\sigma^2\) unknown.
+</p>
+<p class="fragment">
+The M.L.E. of the variance is
+</p>
+<div class="fragment">
+\begin{align*}
+  \widehat{\sigma^2} = \frac{1}{n} \sum_{i=1}^n (X_i - \overline{X}_n)^2.
+\end{align*}
+
+</div>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: What is the distribution of \(n \widehat{\sigma^2}/\sigma^2\)?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgabde5da">
+<h4 id="orgabde5da">Theorem 8.3.1</h4>
+<p>
+Suppose that \(X_1, \dots, X_n\) form a random sample from \(\mathcal{N}(\mu, \sigma^2)\). Then the sample mean \(\overline{X}_n\) and the sample variance \(\sum_{i=1}^n (X_i - \overline{X}_n)^2/n\) are <b>independent</b> random variables. Moreover,
+</p>
+<div class="fragment">
+\begin{align*}
+  \overline{X}_n \sim \mathcal{N}(\mu, \sigma^2/n), \quad \sum_{i=1}^n (X_i - \overline{X}_n)^2/\sigma^2 \sim \chi^2(n-1).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1922445">
+<h4 id="org1922445">Example 8.3.2</h4>
+<p>
+Assume \(X_1, \dots, X_{26}\) form a random sample from \(\mathcal{N}(\mu, \sigma^2)\).
+</p>
+<p class="fragment">
+Then by Theorem 8.3.1, we know that
+</p>
+<div class="fragment">
+\begin{align*}
+  U = \frac{26 \widehat{\sigma^2}}{\sigma^2} \sim \chi^2(25).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+From the \(\chi^2\) table in the book (on page 858), we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(U \le 19.94) = 0.25.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb1d4076">
+<h4 id="orgb1d4076">Example 8.3.2 - Continued</h4>
+<p>
+It follows that
+</p>
+<div class="fragment">
+\begin{align*}
+  0.25 = \mathbb{P} \left( \frac{26 \widehat{\sigma^2}}{\sigma^2} \le 19.94 \right) = \mathbb{P}(\widehat{\sigma^2} \le 0.77 \sigma^2).
+\end{align*}
+
+</div>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Interpretation</span>:
+</p>
+<p class="fragment">
+There is probability \(0.25\) that \(\widehat{\sigma^2}\) will underestimate \(\sigma^2\) by \(23\) percent or more. That is, (prior to observing  the data) it tells us the probability that \(\widehat{\sigma^2}\) would be at least \(23\%\) below \(\sigma^2\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgf0887d1">
+<h4 id="orgf0887d1">Example</h4>
+<p>
+Determine the smallest possible sample size \(n\) such that
+</p>
+<div>
+\begin{align*}
+    \mathbb{P}(| \hat{\mu} - \mu | \le \sigma/5, |\hat{\sigma} - \sigma| \le \sigma/5) \ge \frac{1}{2}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+By Theorem 8.3.1, we know that \(\hat{\mu}\) and \(\hat{\sigma}\) are independent, so
+</p>
+<div class="fragment">
+\begin{align*}
+    \mathbb{P}(| \hat{\mu} - \mu | \le \sigma/5, |\hat{\sigma} - \sigma| \le \sigma/5) = p_1 \cdot p_2,
+\end{align*}
+
+</div>
+<p class="fragment">
+where
+</p>
+<div class="fragment">
+\begin{align*}
+  p_1 & = \mathbb{P}(| \hat{\mu} - \mu | \le \sigma/5) \\
+p_2 & = \mathbb{P}( |\hat{\sigma} - \sigma| \le \sigma/5).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9da36c9">
+<h4 id="org9da36c9">Example - Continued</h4>
+<p>
+<span style="color: rgb(24,116,205)">Question</span>: How to compute \(p_1\) and \(p_2\)?
+</p>
+<div>
+\begin{align*}
+  p_1 & = \mathbb{P}(| \hat{\mu} - \mu | \le \sigma/5) \\
+p_2 & = \mathbb{P}( |\hat{\sigma} - \sigma| \le \sigma/5).
+\end{align*}
+
+</div>
+
+
+<div class="fragment">
+\begin{align*}
+  p_1 & = \mathbb{P}(| \hat{\mu} - \mu | \le \sigma/5) \\
+& = \mathbb{P}\left( \frac{|\hat{\mu} -\mu|}{\sigma/\sqrt{n}} \le \frac{\sqrt{n}}{5} \right)\\
+& = \mathbb{P}(|Z| \le \sqrt{n}/5 )\\
+& = 2 \Phi(\sqrt{n}/5) - 1.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org07ece20">
+<h4 id="org07ece20">Example - Continued</h4>
+<div>
+\begin{align*}
+p_2 & = \mathbb{P}( |\hat{\sigma} - \sigma| \le \sigma/5)\\
+& = \mathbb{P}(4\sigma/5 \le \hat{\sigma} \le 6 \sigma/5)\\
+& = \mathbb{P} \left( \frac{16}{25} n \le \frac{n \widehat{\sigma^2}}{\sigma^2} \le \frac{36}{25} n \right)\\
+& = \mathbb{P}(0.64 n \le V \le 1.44 n).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+After some trials, we can find (by the Table) the smallest sample size is \(21\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgb0e13cf">
+<h3 id="orgb0e13cf">8.4 The \(t\) Distribution</h3>
+<p>
+When our data are a sample from the normal distribution with mean \(\mu\) and variance \(\sigma^2\), the distribution of \(Z = n^{1/2}(\hat{\mu} - \mu)/\sigma\) is the standard normal distribution, where \(\hat{\mu}\) is the sample mean. If \(\sigma^2\) is unknown, we can replace \(\sigma\) by an estimator (similar to the M.L.E.) in the formula for \(Z\). The resulting random variable has the \(t\) distribution with \(n- 1\) degrees of freedom and is useful for making inferences about \(\mu\) alone even when both \(\mu\) and \(\sigma^2\) are unknown.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org593905c">
+<h4 id="org593905c">Definition (\(t\) Distribution)</h4>
+<p>
+Assume two random variables \(Y \sim \chi^2(m)\), and \(Z \sim \mathcal{N}(0, 1)\) are independent. Let
+</p>
+<div class="fragment">
+\begin{align*}
+  X = \frac{Z}{\left( \frac{Y}{m} \right)^{1/2}}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Then the distribution of \(X\) is called the <i>\(t\) distribution with \(m\) degrees of freedom</i>.
+</p>
+
+<p class="fragment">
+The p.d.f. of \(X\) is
+</p>
+<div class="fragment">
+\begin{align*}
+  f_X(x) = \frac{\Gamma \left( \frac{m+1}{2} \right)}{(m\pi)^{1/2} \Gamma \left( \frac{m}{2} \right)} \left( 1 + \frac{x^2}{m} \right)^{-(m+1)/2}, \, \text{for } x\in \mathbb{R}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org65eee44">
+<h4 id="org65eee44">Remark</h4>
+<p>
+(1) As \(m \to \infty\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \left( 1 + \frac{x^2}{m} \right)^{- (m+1)/2} \to e^{-x^2/2}.
+\end{align*}
+
+</div>
+<p class="fragment">
+So, the \(t\) distribution converges to \(\mathcal{N}(0, 1)\) as \(m \to \infty\).
+</p>
+
+<p class="fragment">
+(2) \(t\) distribution does not have a m.g.f.
+</p>
+<p class="fragment">
+In fact, \(t\) distribution can only have first \(m-1\) moments, if its degree of freedom is \(m\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org106f182">
+<h4 id="org106f182">Remark - Continued</h4>
+<p>
+For example, when \(m = 1\), the p.d.f becomes
+</p>
+<div class="fragment">
+\begin{align*}
+  f(x) = \frac{1}{\pi(1 + x^2)}.
+\end{align*}
+
+</div>
+<p class="fragment">
+This is the Cauchy distribution, and
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(X) = \int_{-\infty}^{\infty} x \frac{1}{\pi(1 + x^2)}\, dx = \infty.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4905ea5">
+<h4 id="org4905ea5">Remark - Continued</h4>
+<p>
+(3) The p.d.f. of a \(t\) distribution is symmetric.
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(X \le a) = \mathbb{P}(X \ge -a).
+\end{align*}
+
+</div>
+
+<div id="org4d85b45" class="figure">
+<p><img src="../img/math4750/fig8-4.png" alt="fig8-4.png" width="50%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgd616208">
+<h4 id="orgd616208">Relation to Random Samples from Normals</h4>
+<p class="fragment">
+Suppose that \(X_1, \dots, X_n\) form a random sample from \(\mathcal{N}(\mu, \sigma^2)\).
+</p>
+
+<p class="fragment">
+Then
+</p>
+<div class="fragment">
+\begin{align*}
+  \hat{\mu} = \overline{X}_n = \frac{1}{n}\sum_{i=1}^n X_i, \quad \widehat{\sigma^2} = (\hat{\sigma})^2 = \frac{s_n^2}{n},
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(s_n^2 = \sum_{i=1}^n (X_i - \overline{X}_n)^2\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org584a87c">
+<h4 id="org584a87c">Relation to Random Samples from Normals - Continued</h4>
+<p>
+Moreover,
+</p>
+<div class="fragment">
+\begin{align*}
+  Y =  \frac{n \widehat{\sigma^2}}{\sigma^2} \sim \chi^2(n - 1), \quad Z = \frac{\hat{\mu} - \mu}{\sigma/\sqrt{n}} \sim \mathcal{N}(0, 1),
+\end{align*}
+
+</div>
+<p class="fragment">
+and
+</p>
+<div class="fragment">
+\begin{align*}
+  U = \frac{Z}{\left( \frac{Y}{n-1} \right)^{1/2}} \sim t(n-1).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: Any relation between \(U\) and \(Z\)?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org9974ca9">
+<h4 id="org9974ca9">Relation to Random Samples from Normals - Continued</h4>
+<p>
+Let's re-write \(U\) as follows:
+</p>
+<div class="fragment">
+\begin{align*}
+  U &= \frac{Z}{\left( \frac{Y}{n-1} \right)^{1/2}} = \frac{\hat{\mu} - \mu}{\sigma/\sqrt{n}} \cdot \frac{\sqrt{n-1}}{s_n/\sigma}\\
+& = \frac{\overline{X}_n - \mu}{(s_n/\sqrt{n-1})/\sqrt{n}}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf89576c">
+<h4 id="orgf89576c">Relation to Random Samples from Normals - Continued</h4>
+<p>
+If we define
+</p>
+<div class="fragment">
+\begin{align*}
+  \sigma' = \frac{s_n}{\sqrt{n-1}},
+\end{align*}
+
+</div>
+<p class="fragment">
+Then
+</p>
+<div class="fragment">
+\begin{align*}
+  U = \frac{\overline{X}_n - \mu}{\sigma' /\sqrt{n}}\quad \text{compared to }\quad Z =  \frac{\overline{X}_n - \mu}{\sigma /\sqrt{n}}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: Any relation between \(\sigma'\) and \(\sigma\)?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgda18379">
+<h4 id="orgda18379">Relation to Random Samples from Normals - Continued</h4>
+<p>
+Note that
+</p>
+<div class="fragment">
+\begin{align*}
+  (\sigma')^2 &= \frac{s_n^2}{n-1} = \frac{1}{n-1} \sum_{i=1}^n (X_i - \overline{X}_n)^2\\
+  (\hat{\sigma})^2 &= \frac{s_n^2}{n} = \frac{1}{n} \sum_{i=1}^n (X_i - \overline{X}_n)^2\\
+\end{align*}
+
+</div>
+<p class="fragment">
+So we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \sigma' = \left( \frac{n}{n-1} \right)^{1/2} \hat{\sigma}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga58489d">
+<h4 id="orga58489d">More Facts:</h4>
+<p class="fragment">
+(1) \(\mathbb{E}(\sigma')^2 = \sigma^2\), so by Sec 8.7, we say \((\sigma')^2\) is an <i>unbiased estimator</i> of the variance.
+</p>
+<p class="fragment">
+(2) When \(n \to \infty\), \((\sigma')^2 \approx \widehat{\sigma^2} \approx \sigma^2\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgf075618">
+<h4 id="orgf075618">Summary</h4>
+<div>
+\begin{align*}
+  (\sigma')^2 &= \frac{s_n^2}{n-1} = \frac{1}{n-1} \sum_{i=1}^n (X_i - \overline{X}_n)^2\\
+  (\hat{\sigma})^2 &= \frac{s_n^2}{n} = \frac{1}{n} \sum_{i=1}^n (X_i - \overline{X}_n)^2\\
+\end{align*}
+
+</div>
+
+<div>
+\begin{align*}
+   \frac{\overline{X}_n - \mu}{\sigma' /\sqrt{n}} \sim t(n-1) \quad  \frac{\overline{X}_n - \mu}{\sigma /\sqrt{n}} \sim \mathcal{N}(0,1).
+\end{align*}
+
+</div>
+
+<div>
+\begin{align*}
+  \sigma' = \left( \frac{n}{n-1} \right)^{1/2} \hat{\sigma} \quad \sigma = \left( \frac{n-1}{n} \right)^{1/2} \hat{\sigma'} .
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb8b2d64">
+<h4 id="orgb8b2d64">Exercise 2</h4>
+<p>
+Suppose that \(X_1, \dots, X_{17}\) from a random sample of \(\mathcal{N}(\mu, \sigma^2)\) with unknown mean and variance.
+</p>
+<p class="fragment">
+Find a value of \(k\) such that
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(\hat{\mu} > \mu + k \hat{\sigma}) = 0.95.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgc6258fc">
+<h4 id="orgc6258fc">Exercise 2 - Continued</h4>
+<p>
+<i>Solution</i>
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}\left( \frac{\overline{X}_n -\mu}{\hat{\sigma}} > k \right) & = \mathbb{P}\left( \frac{\overline{X}_n -\mu}{\sigma'/\sqrt{n}}\cdot \frac{1}{\sqrt{n-1}} > k \right)\\
+& = \mathbb{P}\left( \frac{\overline{X}_n -\mu}{\sigma'/\sqrt{n}} > \sqrt{n-1}\cdot k \right)\\
+& = \mathbb{P}(U > \sqrt{n-1} \cdot k ), \quad U \sim t(16)\\
+& = \mathbb{P}(U > 4k) = 0.95
+\end{align*}
+
+</div>
+
+<p class="fragment">
+From the Table on page 860, we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(U \le 1.746) = 0.95.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+What is \(k\)? \(k = -\frac{1.746}{4}\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org7a2d30f">
+<h3 id="org7a2d30f">8.5 Confidence Intervals</h3>
+<p>
+Confidence intervals provide a method of adding more information to an estimator \(\hat{\theta}\) when we wish to estimate an unknown parameter \(\theta\). We can find an interval \((A, B)\) that we think has high probability of containing \(\theta\). The length of such an interval gives us an idea of how closely we can estimate \(\theta\).
+</p>
+
+<p>
+In this section, we mainly focus on the confidence intervals for the mean of a normal distribution.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgfe3d249">
+<h4 id="orgfe3d249">Example</h4>
+<p>
+Assume that \(X_1, \dots, X_n\) form a random sample from \(\mathcal{N}(\mu, \sigma^2)\).
+</p>
+
+<p class="fragment">
+Construct the estimators \(\overline{X}_n\) of \(\mu\) and \(\sigma'\) of \(\sigma\).
+</p>
+
+<p class="fragment">
+From Sec 8.4, we know that
+</p>
+<div class="fragment">
+\begin{align*}
+  U = \frac{\sqrt{n}(\overline{X}_n - \mu)}{\sigma'} \sim t(n-1).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: How to make use of \(U\) above to estimate \(\mu\) and also understand how much confidence we should place in the estimator?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org522c824">
+<h4 id="org522c824">Example - Continued</h4>
+<p>
+First of all, we can compute (using the Table)
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(-c < U < c), \quad \text{for every } c.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Note that
+</p>
+<div class="fragment">
+\begin{align*}
+  -c < U < c \Longleftrightarrow \overline{X}_n - \frac{c \sigma'}{\sqrt{n}} < \mu < \overline{X}_n + \frac{c \sigma'}{\sqrt{n}}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Goal</span>: Given any probability \(\gamma\), to find the value of \(c\) such that
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P} \left( \overline{X}_n - \frac{c \sigma'}{\sqrt{n}} < \mu < \overline{X}_n + \frac{c \sigma'}{\sqrt{n}} \right) = \gamma.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5fc1f7d">
+<h4 id="org5fc1f7d">Example - Continued</h4>
+<p>
+The interval
+</p>
+<div class="fragment">
+\begin{align*}
+ \left( \overline{X}_n - \frac{c \sigma'}{\sqrt{n}}, \overline{X}_n + \frac{c \sigma'}{\sqrt{n}} \right)
+\end{align*}
+
+</div>
+<p class="fragment">
+is called a <i>\(100 \gamma\) percent confidence interval</i> for \(\mu\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: How to find \(c\) given \(n\) and \(\gamma\)?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org2d9a358">
+<h4 id="org2d9a358">Example - Continued</h4>
+<p>
+Let \(T_{n-1}\) denote the C.D.F. of the \(t\) distribution with \(n-1\) degrees of freedom. Then
+</p>
+<div class="fragment">
+\begin{align*}
+  \gamma = \mathbb{P}(-c < U < c) = T_{n-1}(c) - T_{n-1}(-c) = 2 T_{n-1}(c) - 1,
+\end{align*}
+
+</div>
+<p class="fragment">
+and thus
+</p>
+<div class="fragment">
+\begin{align*}
+  c = T^{-1}_{n-1}([1+\gamma]/2).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+That is, \(c\) must be the \((1 + \gamma)/2\) quantile of the \(t\) distribution with \(n-1\) degrees of freedom.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org30684c9">
+<h4 id="org30684c9">How to find \(c\)?</h4>
+<p>
+For example, when \(n = 26, \gamma = 0.95\), we have
+</p>
+
+<div id="orgc2794f8" class="figure">
+<p><img src="../img/math4750/ci-975-quantile.png" alt="ci-975-quantile.png" width="70%" class="fragment middle" />
+</p>
+</div>
+
+<div class="fragment">
+\begin{align*}
+   c = 2.060, \quad \text{and}\quad \frac{c}{\sqrt{n}}  = 0.404.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4c9b918">
+<h4 id="org4c9b918">Interpretation</h4>
+<p class="fragment">
+Then we can state that regardless of the unknown values of \(\mu\) and \(\sigma\), the probability is \(0.95\) that the two random variables
+</p>
+<div class="fragment">
+\begin{align*}
+  A = \overline{X}_n - 0.404 \sigma', \quad \text{and} \quad B = \overline{X}_n + 0.404\sigma'
+\end{align*}
+
+</div>
+<p class="fragment">
+will lie one opposite sides of \(\mu\).
+</p>
+
+<p class="fragment">
+The interval \((A, B)\) here is called a <i>confidence interval</i>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgd48308b">
+<h4 id="orgd48308b">Definition</h4>
+<p class="fragment">
+Let \(X_1, \dots, X_n\) form a random sample from a distribution with \(\theta\) unknown. Let \(A(X_1, \dots, X_n)\) and \(B(X_1, \dots, X_n)\) be two statistics such that
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{P}(A< \theta < B) = \gamma,
+\end{align*}
+
+</div>
+<p class="fragment">
+then the <b>random</b> interval \((A, B)\) is called a <i>coefficient \(\gamma\) confidence interval for \(\theta\) or a \(100 \gamma\) percent confidence interval for \(\theta\)</i>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgd0f84a3">
+<h4 id="orgd0f84a3">Exercise 2</h4>
+<p>
+Suppose that a random sample of eight observations is taken from the normal distribution with unknown mean \(\mu\) and unknown variance \(\sigma^2\), and that the observed values are \(3.1, 3.5, 2.6, 3.4, 3.8, 3.0, 2.9\), and \(2.2\).
+</p>
+
+<p class="fragment">
+Find the shortest confidence interval for \(\mu\) with the confidence coefficients \(\gamma= 0.90\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org0c8ba0d">
+<h4 id="org0c8ba0d">Exercise 2 - Continued</h4>
+<p>
+In this problem, \(n=8\), and \(\gamma = 0.90\), what is \(c\)?
+</p>
+
+<div id="orgc1ac590" class="figure">
+<p><img src="../img/math4750/ch8ex2.png" alt="ch8ex2.png" width="80%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org156490c">
+<h4 id="org156490c">Exercise 2 - Continued</h4>
+<p>
+Using the Table, we can find
+</p>
+<div class="fragment">
+\begin{align*}
+  c = T^{-1}_7(0.95) = 1.895.
+\end{align*}
+
+</div>
+<p class="fragment">
+So with \(90\%\) confidence, the true mean \(\mu\) lies in
+</p>
+<div class="fragment">
+\begin{align*}
+  \left( \overline{X}_n - \frac{1.895 \cdot \sigma'}{\sqrt{n}},  \overline{X}_n + \frac{1.895 \cdot \sigma'}{\sqrt{n}}\right) = (2.719, 3.406).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga05bb9e">
+<h3 id="orga05bb9e">8.7 Unbiased Estimator</h3>
+<div class="outline-text-3" id="text-orga05bb9e">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org2603807">
+<h4 id="org2603807">Definition</h4>
+<p class="fragment">
+If \(\delta(X_1, \dots, X_n)\) is an estimator of a parameter \(\theta\) such that
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}_\theta[\delta(X_1, \dots, X_n)] = \theta,
+\end{align*}
+
+</div>
+<p class="fragment">
+for every possible value of \(\theta\), we call \(\delta(X_1, \dots, X_n)\) an <i>unbiased estimator</i> of \(\theta\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org7917acc">
+<h4 id="org7917acc">Example</h4>
+<p>
+Assume \(X_1, \dots, X_n\) is a random sample from a distribution.
+</p>
+<p class="fragment">
+By the property of the expectation, we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}(\overline{X}_n) = \mu.
+\end{align*}
+
+</div>
+<p class="fragment">
+In this case, we say the sample mean \(\overline{X}_n\) is an unbiased estimator of \(\mu\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org75da6c2">
+<h4 id="org75da6c2">Example</h4>
+<p>
+Further, if we assume that the sample distribution is \(\mathcal{N}(\mu, \sigma^2)\).
+</p>
+<p class="fragment">
+We have that
+</p>
+<div class="fragment">
+\begin{align*}
+  \widehat{\sigma^2} = (\hat{\sigma})^2 = \frac{1}{n} \sum_{i=1}^n (X_i - \overline{X}_n)^2,
+\end{align*}
+
+</div>
+<p class="fragment">
+which is the M.L.E. of the variance \(\sigma^2\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org31cdfd7">
+<h4 id="org31cdfd7">Theorem 8.7.1</h4>
+<div>
+\begin{align*}
+  \mathbb{E}(\widehat{\sigma^2}) = \frac{n-1}{n} \sigma^2.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge162476">
+<h4 id="orge162476">Proof</h4>
+<div style="font-size: 80%;">
+<div>
+\begin{align*}
+  \sum_{i=1}^n (X_i - \overline{X}_n)^2
+& = \sum_{i=1}^n (X_i - \mu + \mu - \overline{X}_n)^2\\
+& = \sum_{i=1}^n \left[ (X_i-\mu)^2 + 2(X_i - \mu)(\mu - \overline{X}_n) + (\mu - \overline{X}_n)^2 \right]\\
+& = \sum_{i=1}^n (X_i - \mu)^2 + \sum_{i=1}^n (\mu - \overline{X}_n)^2 + 2(\mu - \overline{X}_n) \sum_{i=1}^n (X_i -\mu)\\
+& = \sum_{i=1}^n (X_i - \mu)^2 + n(\mu - \overline{X}_n)^2 + 2(\mu - \overline{X}_n)\left( \sum_{i=1}^n X_i - n \mu \right)\\
+& = \sum_{i=1}^n (X_i - \mu)^2 + n(\mu - \overline{X}_n)^2 + 2n (\mu - \overline{X}_n)(\overline{X}_n - \mu)\\
+& = \sum_{i=1}^n (X_i - \mu)^2 - n(\mu - \overline{X}_n)^2
+\end{align*}
+
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5e4ff0f">
+<h4 id="org5e4ff0f">Proof - Continued</h4>
+<p>
+Therefore,
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbb{E}\widehat{\sigma^2}
+& = \mathbb{E}\left[ \frac{1}{n} \sum_{i=1}^n (X_i - \overline{X}_n)^2 \right]\\
+& = \mathbb{E}\left[ \frac{1}{n} \left(  \sum_{i=1}^n (X_i - \mu)^2 - n(\mu - \overline{X}_n)^2\right) \right]\\
+& = \mathbb{E}\left( \frac{1}{n} \sum_{i=1}^n (X_i - \mu)^2 \right) - \mathbb{E}(\overline{X}_n - \mu)^2\\
+& = \sigma^2 - \frac{\sigma^2}{n} = \frac{n-1}{n} \sigma^2.
+\end{align*}
+
+</div>
+<p class="fragment">
+Hence, \(\widehat{\sigma^2}\) is NOT unbiased, or it is biased.
+</p>
+
+</section>
+<section>
+<p>
+However,
+</p>
+<div>
+\begin{align*}
+   \mathbb{E}(\sigma')^2 & = \mathbb{E}\left( \frac{n}{n-1} \widehat{\sigma^2} \right) = \sigma^2.
+\end{align*}
+
+</div>
+<p>
+So,
+</p>
+<div>
+\begin{align*}
+  (\sigma')^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i - \overline{X}_n)^2
+\end{align*}
+
+</div>
+<p>
+is an unbiased estimator of \(\sigma^2\).
+</p>
+</section>
+</section>
+</div>
+</div>
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/markdown/markdown.js"></script>
+<script src="../plugin/notes/notes.js"></script>
+<script src="../plugin/search/search.js"></script>
+<script src="../plugin/zoom/zoom.js"></script>
+<script src="../plugin/reveal.js-menu/menu.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: false,
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'none',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom, RevealMenu, RevealChalkboard ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+,chalkboard: {storage: "chalkboard-demo", toggleChalkboardButton: { left: "80px" },	toggleNotesButton: { left: "130px" },	colorButtons: 5}});
+</script>
+</body>
+</html>

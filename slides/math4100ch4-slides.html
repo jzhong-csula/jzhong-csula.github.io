@@ -1,0 +1,2232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>MATH 4100 - Vector Analysis</title>
+<meta name="author" content="\\
+Jie Zhong \\
+Department of Mathematics \\
+California State University, Los Angeles"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+
+<link rel="stylesheet" href="../dist/theme/serif.css" id="theme"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+
+<link rel="stylesheet" href="../gnohz.css"/>
+<script>window.MathJax = { TeX: {Macros: {range: "\\text{Range}", ow: "\\text{otherwise}"}} }</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1>MATH 4100 - Vector Analysis</h1><h2></h2><h6> <br />
+Jie Zhong <br />
+Department of Mathematics <br />
+California State University, Los Angeles</h6>
+</section>
+<section>
+<section id="slide-orgef80776">
+<h2 id="orgef80776">Chapter 4 Line, Surface, and Volume Integrals</h2>
+<div class="outline-text-2" id="text-orgef80776">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbdecf37">
+<h3 id="orgbdecf37">4.1 Line Integrals</h3>
+<div class="outline-text-3" id="text-orgbdecf37">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7ac779c">
+<h4 id="org7ac779c">Definition</h4>
+<p class="fragment">
+Let \(\mathbf{F}\) be a vector field that is continuous on the \(C^1\) curve \(\mathbf{R}: [a, b] \to \mathbb{R}^3\). We define the <b>line integral</b> of \(\mathbf{F}\) along \(\mathbf{R}\), by
+</p>
+<div class="fragment">
+\begin{align*}
+\int_C \mathbf{F} \cdot d \mathbf{R} = \int_a^b \mathbf{F}(\mathbf{R}(t)) \cdot \mathbf{R}'(t)\, dt,
+  \end{align*}
+
+</div>
+<p class="fragment">
+that is, we integrate the scalar (dot) product of \(\mathbf{F}\) with \(\mathbf{R}'(t)\) over the interval \([a, b]\).
+</p>
+
+<p class="fragment">
+If \(\mathbf{F} = F_1 \mathbf{i} + F_2 \mathbf{j} + F_3 \mathbf{k}\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+    \int_C \mathbf{F} \cdot d \mathbf{R} & = \int_C F_1 dx + F_2 dy + F_3 dz \quad (\text{differential form})\\
+    & = \int_a^b \left( F_1 \frac{dx}{dt} + F_2 \frac{dy}{dt} + F_3 \frac{dz}{dt} \right)\, dt.     \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1da5f83">
+<h4 id="org1da5f83">Motivation</h4>
+<p class="fragment">
+Consider \(\mathbf{F}\) is a force in space.
+</p>
+
+<p class="fragment">
+If \(\mathbf{F}\) is constant acting through a displacement \(\mathbf{D}\),
+</p>
+<div class="fragment">
+\begin{align*}
+\text{Work}  = \mathbf{F} \cdot \mathbf{D}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question:</span> What about the work done by \(\mathbf{F}\) along a curve \(\mathbf{R}\)?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgaa377be">
+<h4 id="orgaa377be">Motivation - Continued</h4>
+<div class="column" style="float:left; width: 48%">
+<p class="fragment">
+We can imagine that the curve is made up of a succession of infinitesimal straight-line displacement.
+</p>
+
+<p class="fragment">
+Then the work done in going from \(\mathbf{R}(t)\) to \(\mathbf{R}(t+\Delta t)\) is approximately
+</p>
+<div class="fragment">
+\begin{align*}
+\mathbf{F}(\mathbf{R}(t))\cdot \Delta \mathbf{R} \approx \mathbf{F}(\mathbf{R}(t)) \cdot \mathbf{R}'(t) \Delta t.
+\end{align*}
+
+</div>
+</div>
+
+<div class="column" style="float:right; width: 50%">
+
+<div id="org23f9971" class="figure">
+<p><img src="../img/math4100/fig4-3.jpeg" alt="fig4-3.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org2a6d63a">
+<h4 id="org2a6d63a">Motivation - Continued</h4>
+<p class="fragment">
+If we subdivide the interval \([a, b]\) into \(n\) equal parts \(a = t_0 < t_1 < \cdots < t_n = b\), with \(\Delta t = t_{i+1} - t_i\), then the work done by \(\mathbf{F}\) is approximately
+</p>
+<div class="fragment">
+\begin{align*}
+\sum_{i=0}^{n-1} \mathbf{F}(\mathbf{R}(t_i))\cdot \Delta \mathbf{R} \approx \sum_{i=0}^{n-1} \mathbf{F}(\mathbf{R}(t_i)) \cdot \mathbf{R}'(t)\Delta t,
+\end{align*}
+
+</div>
+<p class="fragment">
+whose limit is given by the integral
+</p>
+<div class="fragment">
+\begin{align*}
+    \int_C \mathbf{F} \cdot d \mathbf{R} = \int_a^b \mathbf{F}(\mathbf{R}(t)) \cdot \mathbf{R}'(t)\, dt.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1b6c955">
+<h4 id="org1b6c955">Example 4.1</h4>
+<p>
+Let \(C\) be the curve \(y = \sqrt{x}\) in the \(xy\) plane extending from \((0, 0, 0)\) to \((1, 1, 0)\), and let \(\mathbf{F} = xy^2 \mathbf{i} + y^2 \mathbf{k}\). Find \(\displaystyle \int_C \mathbf{F} \cdot d \mathbf{R}\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+The curve can be parametrized \(x = t, y = \sqrt{t}, z = 0, 0 \le t \le 1\).
+</p>
+
+<p class="fragment">
+The line integral is
+</p>
+<div class="fragment">
+\begin{align*}
+  \int_C \mathbf{F} \cdot d \mathbf{R} & = \int_C F_1 dx + F_2 dy + F_3 dz \\
+      & = \int_a^b \left( F_1 \frac{dx}{dt} + F_2 \frac{dy}{dt} + F_3 \frac{dz}{dt} \right)\, dt\\
+ & = \int_0^1 \left( xy^2 \frac{dx}{dt} + y^2 \frac{dz}{dt} \right)\, dt = \int_0^1 t^2 \, dt = \frac{1}{3}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb3786b0">
+<h4 id="orgb3786b0">Example 4.2</h4>
+<p>
+Compute the line integral \(\displaystyle \int_C \mathbf{F} \cdot d \mathbf{R}\) from \((0, 0, 0)\) to \((1, 2, 4)\) if
+</p>
+<div>
+\begin{align*}
+\mathbf{F} = x^2 \mathbf{i} + y \mathbf{j} + (xz - y) \mathbf{k}
+  \end{align*}
+
+</div>
+<p>
+(a) along the line segment joining these two points.<br />
+(b) along the curve given parametrically by \(x = t^2, y = 2t, z = 4t^3\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org452b2be">
+<h4 id="org452b2be">Solution of (a)</h4>
+<p class="fragment">
+The curve can be parametrized \(x = t, y = 2t, z = 4t, 0 \le t \le 1\).
+</p>
+<p class="fragment">
+The line integral is
+</p>
+<div class="fragment">
+\begin{align*}
+  \int_C \mathbf{F} \cdot d \mathbf{R} & = \int_C F_1 dx + F_2 dy + F_3 dz \\
+      & = \int_a^b \left( F_1 \frac{dx}{dt} + F_2 \frac{dy}{dt} + F_3 \frac{dz}{dt} \right)\, dt\\
+ & = \int_0^1 \left( x^2 \frac{dx}{dt} + y \frac{dz}{dt}  + (xz - y) \frac{dz}{dt}\right)\, dt \\
+ & = \int_0^1 t^2\, dt + (2t)(2\, dt) + (4t^2 - 2t)(4\, dt)\\
+  & = \int_0^1 (17t^2 - 4t)\, dt =  \frac{11}{3}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org21f1590">
+<h4 id="org21f1590">Solution of (b)</h4>
+<p class="fragment">
+In this case, we have
+</p>
+<div class="fragment">
+\begin{align*}
+  \int_C \mathbf{F} \cdot d \mathbf{R}
+      & = \int_a^b \left( F_1 \frac{dx}{dt} + F_2 \frac{dy}{dt} + F_3 \frac{dz}{dt} \right)\, dt\\
+  & = \int_0^1 t^4(2t \, dt) + (2t)(2\, dt) + (4t^5 - 2t)(12 t^2\, dt)\\
+  &  = \int_0^1 (2t^5 + 4t + 48t^7 - 24 t^3)\, dt =  \frac{7}{3}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4eaf76e">
+<h4 id="org4eaf76e">Example 4.3</h4>
+<p>
+Find the line integral of \(\mathbf{F} = x \mathbf{i} + x^2 \mathbf{j}\) from \((-1, 0)\) to \((1, 0)\) in the \(xy\) plane.
+(a) along the \(x\) axis.<br />
+(b) along the semicircle \(y = \sqrt{1 - x^2}\).<br />
+(c) along the dotted polygonal path shown in Figure 4.4.
+</p>
+
+
+
+<div id="org154bd0f" class="figure">
+<p><img src="../img/math4100/fig4-4.jpeg" alt="fig4-4.jpeg" width="50%" class="middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org858652c">
+<h4 id="org858652c">Solution of (a)</h4>
+<p class="fragment">
+Along the \(x\) axis, \(y = 0\); hence \(dy = 0\), and
+</p>
+<div class="fragment">
+\begin{align*}
+\int_C \mathbf{F}\cdot d \mathbf{R} & = \int_C (x dx + x^2 dy)\\
+& = \int_{-1}^1 x\, dx =\left. \frac{1}{2}x^2 \right|_{-1}^1 =0.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb2e0d01">
+<h4 id="orgb2e0d01">Solution of (b)</h4>
+<p class="fragment">
+Along the semicircle, we use polar coordinate: \(x = \cos \theta, y = \sin \theta\); hence \(dx = - \sin \theta\, d\theta, dy = \cos \theta\, d\theta\), and \(\theta\) runs from \(\pi\) down to zero.
+</p>
+<div class="fragment">
+\begin{align*}
+  \int_C \mathbf{F}\cdot d \mathbf{R} & = \int_C (x dx + x^2 dy)\\
+ & = \int_{\pi}^0 [(\cos \theta)(-\sin \theta\, d\theta) + (\cos^2\theta)(\cos\theta \, d\theta)]\\
+ & = \int_{\pi}^0 (-\sin \theta \cos \theta + \cos^3 \theta)\, d\theta\\
+ & = \left[ - \frac{\sin^2\theta}{2} + \sin \theta - \frac{\sin^3\theta}{3} \right]_\pi^0 =0.
+ \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org76ec34a">
+<h4 id="org76ec34a">Solution of (c)</h4>
+<p class="fragment">
+Along the path labeled (1) in Figure 4.4, \(y = x+1\), so that \(dy = dx\), and
+</p>
+<div class="fragment">
+\begin{align*}
+  \int_C (x\, dx + x^2\, dy) = \int_{-1}^0 (x \, dx + x^2 \, dx) = -\frac{1}{6}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+Along the path labeled (2) in Figure 4.4, \(y =1\), so that \(dy = 0\), and
+</p>
+<div class="fragment">
+\begin{align*}
+  \int_C (x\, dx + x^2\, dy) = \int_0^1 x \, dx= \frac{1}{2}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+Along the path labeled (3) in Figure 4.4, \(x = 1\), so that \(dx = 0\), and
+</p>
+<div class="fragment">
+\begin{align*}
+  \int_C (x\, dx + x^2\, dy) = \int_0^1 dy = -1.
+  \end{align*}
+
+</div>
+<p class="fragment">
+So the final answer of the integral is \(-1/6 +1/2 - 1 = -2/3\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgfa09f09">
+<h3 id="orgfa09f09">4.2 Domains; Simply Connected Domains</h3>
+<div class="outline-text-3" id="text-orgfa09f09">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge99d6a4">
+<h4 id="orge99d6a4">Definitions and Concepts</h4>
+<p class="fragment">
+The distance between two points \(P\) and \(P_0\) in space is defined by
+</p>
+<div class="fragment">
+\begin{align*}
+d(P, P_0) = \sqrt{(x-x_0)^2 + (y - y_0)^2 + (z - z_0)^2}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+Let \(P_0\) be a point. The set of points \(P\) such that the distance
+</p>
+<div class="fragment">
+\begin{align*}
+d(P, P_0) < \varepsilon,
+  \end{align*}
+
+</div>
+<p class="fragment">
+with some \(\varepsilon>0\), is called an <b>open ball</b> centered at \(P_0\) of radius \(\varepsilon\).
+</p>
+<p class="fragment">
+A region containing an open ball centered at a point \(P_0\) is called a <b>neighborhood</b> of \(P_0\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgeb7bddd">
+<h4 id="orgeb7bddd">Definitions and Concepts - Continued</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">A point \(P\) is an <b>interior point</b> of a region \(R\) if there is a neighborhood of \(P\) contained in the region \(R\).</li>
+<li data-fragment-index="2" class="fragment">A point \(P\) is an <b>exterior point</b> of a region \(R\) if there is a neighborhood of the point \(P\) that is entirely outside of the region \(R\).</li>
+<li data-fragment-index="3" class="fragment">A point \(P\) is an <b>boundary point</b> of a region \(R\) if every neighborhood of the point \(P\) contains a point in \(R\) and a point outside \(R\).</li>
+<li data-fragment-index="4" class="fragment">The set of all interior points of a region \(R\) is called the <b>interior</b> of \(R\).</li>
+<li data-fragment-index="5" class="fragment">The set of all exterior points of a region \(R\) is called the <b>exterior</b> of \(R\).</li>
+<li data-fragment-index="6" class="fragment">The set of all boundary points of a region \(R\) is called the <b>boundary</b> of \(R\), denoted by \(\partial R\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org5c10a5c">
+<h4 id="org5c10a5c">Definitions and Concepts - Continued</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">A region \(R\) is <b>open</b> if every point of the region \(R\) is an interior point.</li>
+<li data-fragment-index="2" class="fragment">An open region does not contain any its boundary points and coincides with its interior.</li>
+<li data-fragment-index="3" class="fragment">A region \(R\) is <b>closed</b> if it contains all its boundary points.</li>
+<li data-fragment-index="4" class="fragment">An open region \(R\) is <b>connected</b> if any two points in \(R\) can be connected by a smooth arc that lies in \(R\).</li>
+<li data-fragment-index="5" class="fragment">An open region \(R\) is <b>disconnected</b> if it is not connected.</li>
+<li data-fragment-index="6" class="fragment">A disconnected region \(R\) contains at least two points that cannot be connected by a smooth arc lying in \(R\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org472130d">
+<h4 id="org472130d">Definitions and Concepts - Continued</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">A <b>domain</b> is an open connected region.</li>
+<li data-fragment-index="2" class="fragment">We will consider below only open connected regions (domains).</li>
+<li data-fragment-index="3" class="fragment">A domain \(R\) is <b>simply connected</b> if every closed curve in \(R\) can be continuously deformed to a point in \(R\) (without any parts of the curve passing through the exterior of the domain).</li>
+<li data-fragment-index="4" class="fragment">On the plane \(\mathbb{R}^2\), a domain is simply connected if it does not have any holes.</li>
+<li data-fragment-index="5" class="fragment">In the space \(\mathbb{R}^3\), a domain is simply connected if it does not have holes bored through it.</li>
+<li data-fragment-index="6" class="fragment">More precisely, a domain \(R\) is simply connected if for any closed curve \(C\) in \(R\) there is a surface \(S\) in \(R\) such that the curve \(C\) is the boundary of the surface \(S\), i.e., \(C = \partial S\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgcc6c9a0">
+<h4 id="orgcc6c9a0">Examples</h4>
+<p data-fragment-index="0" class="fragment">
+Simply connected
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">Spherical shell (the set of points between two spheres): \(a^2 < x^2 + y^2 + z^2 < b^2\)</li>
+<li data-fragment-index="2" class="fragment">Interior of cylinder: \(x^2 + y^2 < c^2\)</li>
+
+</ul>
+
+<p data-fragment-index="3" class="fragment">
+Not Simply connected
+</p>
+<ul data-fragment-index="4" class="fragment">
+<li>Exterior of cylinder: \(x^2 + y^2 > c^2\)</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org386875b">
+<h3 id="org386875b">4.3 Conservative Fields: The Potential Function</h3>
+<div class="outline-text-3" id="text-org386875b">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org157cdae">
+<h4 id="org157cdae">Motivation</h4>
+<p class="fragment">
+Let's consider a vector field \(\mathbf{F} = x^2 \mathbf{i} + y^2 \mathbf{j}\), and compute the line integrals along the following curves:
+</p>
+<div class="fragment">
+\begin{align*}
+& C_1: \, \mathbf{R}(t) = t \mathbf{i}, && -1  \le t \le 1\\
+& C_2: \, \mathbf{R}(t) = - \cos t \mathbf{i} + \sin t \mathbf{j}, && 0 \le t \le \pi\\
+& C_3: \, \mathbf{R}(t) = C_{31} + C_{32} + C_{33}, &&
+  \end{align*}
+
+</div>
+<p class="fragment">
+where
+</p>
+<div class="fragment">
+  \begin{align*}
+ & C_{31}: \, \mathbf{R}(t) = t \mathbf{i} + (t+1) \mathbf{j}, && -1  \le t \le 0\\
+& C_{32}: \, \mathbf{R}(t) = t \mathbf{i} + \mathbf{j}, && 0 \le t \le 1\\
+& C_{33}: \, \mathbf{R}(t) =  \mathbf{i} + (1 - t) \mathbf{j}, &&  0 \le t \le 1,
+  \end{align*}
+
+</div>
+<p class="fragment">
+as well as  \(C_4 : \mathbf{R}(t) = - \cos t \mathbf{i} + \sin t \mathbf{j}, \quad 0 \le t \le 2\pi\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orga476ba9">
+<h4 id="orga476ba9">Motivation - Continued</h4>
+<p class="fragment">
+Then
+</p>
+<div class="fragment">
+\begin{align*}
+\int_{C_1} \mathbf{F}\cdot d \mathbf{R} =
+\int_{C_2} \mathbf{F}\cdot d \mathbf{R} =
+\int_{C_3} \mathbf{F}\cdot d \mathbf{R} = \frac{2}{3},
+ \end{align*}
+
+</div>
+<p class="fragment">
+and
+</p>
+<div class="fragment">
+\begin{align*}
+    \int_{C_4}  \mathbf{F} \cdot d \mathbf{R} = 0.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org03e16ef">
+<h4 id="org03e16ef">Motivation - Continued</h4>
+<p data-fragment-index="0" class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>:
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">It is not a coincidence that the line integrals along curves \(C_1, C_2\) and \(C_3\) are the same.</li>
+<li data-fragment-index="2" class="fragment">In fact, these integrals does not depend on the curve but only depends on the initial and the end points as follows:<br />
+\(\int_C \mathbf{F} \cdot d \mathbf{R} = f(1, 0, 0) - f(-1, 0, 0) = \frac{2}{3}\),<br />
+where \(f = (x^3 + y^3)/3\) such that \(\mathbf{F} = \mathbf{grad} f\).</li>
+<li data-fragment-index="3" class="fragment">The line integral of \(\mathbf{F}\) around a <i>closed</i> curve \(C\) is called the <b>circulation</b> of \(\mathbf{F}\) about \(C\), and denoted by \(\oint_C \mathbf{F} \cdot d \mathbf{R}\).<br />
+So we write \(\oint_{C_4} \mathbf{F} \cdot d \mathbf{R} =0\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org7b0a15d">
+<h4 id="org7b0a15d">Definition</h4>
+<p class="fragment">
+A continuous vector field \(\mathbf{F}\) is said to be <b>conservative</b> in a domain \(D\) if there is a scalar field \(\phi\) defined in \(D\) such that \(\mathbf{F} = \mathbf{grad}\, \phi\). If this is possible, then \(\phi\) is called a <b>potential</b> function, or simply a potential, for \(\mathbf{F}\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: A potential for a conservative field is not unique, since one can always add an arbitrary constant to \(\phi\) to obtain a new potential \(\phi + C\) whose gradient is also \(\mathbf{F}\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org954daca">
+<h4 id="org954daca">Theorem</h4>
+<p class="fragment">
+A vector field \(\mathbf{F}\) continuous in a domain \(D\) is conservative if and only if the line integral of \(\mathbf{F}\) along <i>every</i> regular curve in \(D\) depends only on the initial and terminal points of the curve. In that case, the line integral is simply the difference in potential  of the endpoints.
+</p>
+
+<p class="fragment">
+That is, we have
+</p>
+<div class="fragment">
+\begin{align*}
+\int_C \mathbf{F} \cdot d \mathbf{R} = \phi(Q) - \phi(P),
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+where \(\phi\) is the potential for \(\mathbf{F}\), \(P\) and \(Q\) are initial and terminal points of \(C\), respectively.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1be9148">
+<h4 id="org1be9148">Corollary</h4>
+<p class="fragment">
+A vector field \(\mathbf{F}\) continuous in a domain \(D\) is conservative if and only if the line integral of \(\mathbf{F}\) along <i>every</i> regular <i>closed</i> curve in \(D\) (i.e., its circulation) is zero.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org335d288">
+<h4 id="org335d288">Example 4.4</h4>
+<p>
+Show that \(\mathbf{F} = xy^2 \mathbf{i} + x^3 y \mathbf{j}\) is <i>not</i> conservative.
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+
+<p class="fragment">
+We can prove the vector field is not conservative by showing that its line integral does <i>depend</i> on the path.
+</p>
+
+<p class="fragment">
+We compute the line integral along two paths joining \((0, 0)\) to \((1, 1)\) in the \(xy\) plane.
+</p>
+
+<p class="fragment">
+Along the line \(y = x\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+\int_{(0, 0)}^{(1,1)} (x^2 dy + x^3 y dy) = \int_{x=1}^{x=1} (x^3 + x^4)\, dx = \frac{9}{20}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org397de4e">
+<h4 id="org397de4e">Example 4.4 - Continue</h4>
+<p>
+Now let us move along the regular path consisting of two line segments, the first joining \((0, 0)\) to \((1, 0)\) and the second joining \((1, 0)\) to \((1, 1)\). Along the first line segment, \(y =0\), so that the line integral is zero. Along the second line segment, \(x=1\), so that \(dx =0\), and the integral becomes
+</p>
+<div class="fragment">
+\begin{align*}
+\int_{y=0}^{y=1} y\, dy = \frac{1}{2}.
+\end{align*}
+
+</div>
+<p class="fragment">
+The total of the two integrals is thus \(1/2\), differing from \(9/20\). Hence the field is not conservative.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org693815a">
+<h4 id="org693815a">Example 4.5</h4>
+<p>
+Show that  \(\mathbf{F} = xy^2 \mathbf{i} + x^3 y \mathbf{j}\) is <i>not</i> conservative, without computing any integrals.
+</p>
+
+<p class="fragment">
+<i>Proof</i>
+</p>
+<p class="fragment">
+This can be done by contradiction.
+</p>
+
+<p class="fragment">
+Suppose \(\mathbf{F}\) were conservative. Then \(\mathbf{F} = \mathbf{grad}\, \phi\) for some scalar function \(\phi\), and thus,
+</p>
+<div class="fragment">
+\begin{align*}
+    \frac{\partial \phi}{\partial x} = F_1 = xy^2, \quad \frac{\partial \phi}{\partial y} = F_2 = x^3y.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+This is impossible, since the mixed derivatives
+</p>
+<div class="fragment">
+\begin{align*}
+    \frac{\partial^2 \phi}{\partial y \partial x} = 2 xy \neq 3x^2y = \frac{\partial^2 \phi}{\partial x \partial y}
+\end{align*}
+
+</div>
+
+<p class="fragment">
+are not the same.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org1c55dfa">
+<h4 id="org1c55dfa">Example 4.6</h4>
+<p>
+Show that \(\mathbf{F} = 3x^2 y \mathbf{i} + (x^3 + 1) \mathbf{j} + 9 z^2 \mathbf{k}\) is conservative.
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<i>Proof</i>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">We will find a \(\phi\) such that \(\mathbf{F} = \nabla \phi\).</li>
+
+<li data-fragment-index="2" class="fragment">Suppose this is true, then<br />
+\(\displaystyle \frac{\partial \phi}{\partial x} = 3x^2y, \quad \frac{\partial \phi}{\partial y} = x^3 + 1, \quad \frac{\partial \phi}{\partial z} = 9z^2\).</li>
+
+<li data-fragment-index="3" class="fragment">\(\displaystyle \frac{\partial \phi}{\partial x} = 3x^2y\) implies that \(\phi = x^3y + g(y, z)\).</li>
+
+<li data-fragment-index="4" class="fragment">\(\displaystyle \frac{\partial \phi}{\partial y} = x^3 + 1\) implies that \(g(y, z) = y + h(z)\).</li>
+
+<li data-fragment-index="5" class="fragment">\(\displaystyle \frac{\partial \phi}{\partial z} = 9z^2\) implies that \(h(z) = 3z^3 + C\).</li>
+
+<li data-fragment-index="6" class="fragment">Finally \(\phi = x^3 y + y + 3z^3 + C\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgabebc8d">
+<h3 id="orgabebc8d">4.4 Conservative Fields: Irrotational Fields</h3>
+<div class="outline-text-3" id="text-orgabebc8d">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org93b70a7">
+<h4 id="org93b70a7">Conservative Fields: Summary</h4>
+<p data-fragment-index="0" class="fragment">
+If \(\mathbf{F}\) is a continuous vector field in a domain \(D\). The following statements are equivalent:
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(\mathbf{F}\) is conservative.</li>
+<li data-fragment-index="2" class="fragment">There is a scalar field \(\phi\) such that \(\mathbf{F} = \nabla \phi\).</li>
+<li data-fragment-index="3" class="fragment">The line integral \(\int_C \mathbf{F}\cdot d \mathbf{R}\) along any regular curve \(C\) in \(D\) only depends on the endpoints of the curve \(C\), but independent of the path.</li>
+<li data-fragment-index="4" class="fragment">The circulation of \(\mathbf{F}\) along any regular closed curve is zero: \(\oint_C \mathbf{F} \cdot d\mathbf{R} = 0\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orga94e425">
+<h4 id="orga94e425">Irrotational Fields</h4>
+<p class="fragment">
+Recall that a vector field \(\mathbf{F}\) is <b>irrotational</b> if \(\mathbf{curl}\, \mathbf{F} = \mathbf{0}\).
+</p>
+
+<p class="fragment">
+We also note that <i>any gradient field is curl free</i>.
+</p>
+
+<p class="fragment">
+Therefore,
+</p>
+<div class="fragment">
+\begin{align*}
+  \mathbf{F}\, \text{is conservative} \Rightarrow \mathbf{F}\, \text{is irrotational}
+  \end{align*}
+
+</div>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Question</span>: Is every irrotational field conservative?
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Answer</span>: It depends on the domain. Only in a <i>simply connected</i> domain.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org4a6a7e5">
+<h4 id="org4a6a7e5">Theorem</h4>
+<p class="fragment">
+A vector field \(\mathbf{F}\) defined and continuously differentiable in a simply connected domain \(D\) is conservative if and only if \(\mathbf{curl \, F} = \mathbf{0}\) throughout \(D\).
+</p>
+
+<p class="fragment">
+In practice, if \(\mathbf{F} = F_1 \mathbf{i} + F_2 \mathbf{j} + F_3 \mathbf{k}\) is defined in a simply connected domain \(D\), to determine whether it is conservative consists of checking whether <i>all</i> the following are valid:
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{\partial F_1}{\partial y} = \frac{\partial F_2}{\partial x}, \quad \frac{\partial F_2}{\partial z} = \frac{\partial F_3}{\partial y}, \quad \frac{\partial F_1}{\partial z} = \frac{\partial F_3}{\partial x}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1138cec">
+<h4 id="org1138cec">Example</h4>
+<p>
+Show the vector field \(\mathbf{F} = y \mathbf{i} + x \mathbf{j} + x^2 \mathbf{k}\) is not conservative.
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<i>Proof</i>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(\displaystyle \frac{\partial}{\partial y}(y) = \frac{\partial}{\partial x}(x)\).</li>
+<li data-fragment-index="2" class="fragment">\(\displaystyle \frac{\partial}{\partial z}(x) = \frac{\partial}{\partial y}(x^2)\).</li>
+<li data-fragment-index="3" class="fragment">\(\displaystyle \frac{\partial}{\partial z}(y) \neq \frac{\partial}{\partial x}(x^2)\).</li>
+<li data-fragment-index="4" class="fragment">Thus, the curl of \(\mathbf{F}\) is not zero, and so \(\mathbf{F}\) is not conservative.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org2b5462f">
+<h4 id="org2b5462f">Example 4.7</h4>
+<p>
+Show that \(\mathbf{F} = 2xy \mathbf{i} + (x^2 + 1) \mathbf{j} + 6z^2 \mathbf{k}\) is conservative.
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<i>Proof</i>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">\(\displaystyle \frac{\partial F_1}{\partial y} = \frac{\partial F_2}{\partial x} = 2x\)</li>
+<li data-fragment-index="2" class="fragment">\(\displaystyle \frac{\partial F_2}{\partial z} = \frac{\partial F_3}{\partial y}=0\)</li>
+<li data-fragment-index="3" class="fragment">\(\displaystyle \frac{\partial F_1}{\partial z} = \frac{\partial F_3}{\partial x}=0\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orge48ece5">
+<h4 id="orge48ece5">Example</h4>
+<p>
+Is the vector field
+</p>
+<div>
+\begin{align*}
+   \mathbf{F} = \frac{-y \mathbf{i} + x \mathbf{j}}{x^2 + y^2}
+  \end{align*}
+
+</div>
+<p>
+conservative?
+</p>
+
+<ul>
+<li data-fragment-index="1" class="fragment">We computed \(\mathbf{curl \, F}  = \mathbf{0}\).</li>
+
+<li data-fragment-index="2" class="fragment">However, the line integral around the curve specified in Exercise 4 of Sec 4.3 is \(2\pi\), but not zero.</li>
+
+<li data-fragment-index="3" class="fragment">What's the problem here? Does this contradict the theorem?</li>
+
+<li data-fragment-index="4" class="fragment">Note that \(\mathbf{F}\) fails to be defined on the \(z\) axis, where \(x^2+y^2=0\), and thus the domain \(D\) is not simply connected.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orge9a5447">
+<h3 id="orge9a5447">4.6 Oriented Surface</h3>
+<div class="outline-text-3" id="text-orge9a5447">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7f0266f">
+<h4 id="org7f0266f">Orientation of Surfaces</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">Recall that a curve is smooth if has a well-defined smooth nowhere vanishing tangent vector.</li>
+<li data-fragment-index="2" class="fragment">A surface \(S\) is <i>smooth</i> if it has a well-defined tangent space, that is, a smooth nowhere vanishing normal vector.</li>
+<li data-fragment-index="3" class="fragment">A surface is <i>piecewise</i> smooth if it consists of a finite number of smooth parts "joined together".</li>
+<li data-fragment-index="4" class="fragment">For example, the surface of a sphere is smooth, whereas the surface of a cube is piecewise smooth.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org9378816">
+<h4 id="org9378816">Orientation of Surfaces - Continued</h4>
+<div class="column" style="float:left; width: 38%">
+
+<div id="orgb7bc40b" class="figure">
+<p><img src="../img/math4100/fig4-22.jpeg" alt="fig4-22.jpeg" />
+</p>
+</div>
+</div>
+
+<div class="column" style="float:right; width: 60%">
+
+<ul>
+<li data-fragment-index="1" class="fragment">At every point of a smooth surface there will be two choices for the unit normal, an <i>inward-pointing</i> normal and an <i>outward-pointing</i> normal.</li>
+<li data-fragment-index="2" class="fragment">Orienting a surface means choosing a normal.</li>
+<li data-fragment-index="3" class="fragment">An oriented surface always has two sides, a <i>positive side</i> and a <i>negative side</i>.</li>
+<li data-fragment-index="4" class="fragment">The choice of a normal also fixes the positive (counter-clockwise) direction for the angles.</li>
+<li data-fragment-index="5" class="fragment">The orientation of a surface induces an <i>orientation of its boundary</i> by the right-handed rule.</li>
+
+</ul>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org336a59a">
+<h4 id="org336a59a">Orientation of Surfaces - Continued</h4>
+<div class="column" style="float:left; width: 38%">
+
+
+<div id="org2512462" class="figure">
+<p><img src="../img/math4100/fig4-23.jpeg" alt="fig4-23.jpeg" data-fragment-index="1" class="fragment" />
+</p>
+</div>
+</div>
+
+<div class="column" style="float:right; width: 60%">
+
+<ul>
+<li data-fragment-index="0" class="fragment">The orientation of different pieces of the surface must be <i>consistent</i>, that is, the orientation along the common edges must be opposite.</li>
+<li data-fragment-index="2" class="fragment">A surface without boundary is called <i>closed</i>.</li>
+<li data-fragment-index="3" class="fragment">There is a common convention to orient the closed surfaces by choosing the outward-pointing normal.</li>
+
+</ul>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1bef4a0">
+<h4 id="org1bef4a0">Orientation of Surfaces - Continued</h4>
+<p class="fragment">
+There are surfaces (called <i>non-orientable</i>) that cannot be oriented. They have only one side. For example, the Mobius strip.
+</p>
+
+
+<div id="orge94a8d4" class="figure">
+<p><img src="../img/math4100/fig4-25.jpeg" alt="fig4-25.jpeg" width="35%" class="fragment middle" />
+</p>
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: Surface integrals can be only defined for oriented surfaces. We will only consider orientable surfaces.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orga8b122a">
+<h4 id="orga8b122a">Parametrizations of Surfaces</h4>
+<p class="fragment">
+Recall that a space curve can be parametrized as a vector function of a <i>single</i> variable \(t\).
+</p>
+<p class="fragment">
+A surface \(S\) can be parametrized by <i>two</i> parameters \(u\) and \(v\):
+</p>
+<div class="fragment">
+\begin{align*}
+    x = x(u, v), \quad y = y(u, v), \quad z = z(u, v),
+\end{align*}
+
+</div>
+<p class="fragment">
+or equivalently,
+</p>
+<div class="fragment">
+\begin{align*}
+   \mathbf{R} = \mathbf{R}(u, v).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org464b2af">
+<h4 id="org464b2af">Example 4.13</h4>
+<p class="fragment">
+In Section 1.10 we saw that points \(\mathbf{R}\) on the plane through \(\mathbf{R}_0\) and parallel to \(\mathbf{A}\) and \(\mathbf{B}\) could be expressed by
+</p>
+<div>
+\begin{align*}
+   \mathbf{R} = \mathbf{R}_0 + s \mathbf{A} + t \mathbf{B}.
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+This is a parametric representation, with \(u\) and \(v\) taken as \(s\) and \(t\).
+</p>
+
+<p class="fragment">
+If the plane were described by a nonparametric equation
+</p>
+<div class="fragment">
+\begin{align*}
+  a x + by + c z = d,
+  \end{align*}
+
+</div>
+<p class="fragment">
+then a parametrization would be
+</p>
+<div class="fragment">
+\begin{align*}
+x = u, \quad, y = v, \quad z = \frac{d - au - bv}{c},
+\end{align*}
+
+</div>
+<p class="fragment">
+as long as \(c = \neq 0\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org16f4435">
+<h4 id="org16f4435">Example 4.14</h4>
+<p class="fragment">
+For a sphere of radius \(a\), the parametrization in terms of the coordinates \(\phi\) and \(\theta\) is given by
+</p>
+<div class="fragment">
+\begin{align*}
+  x = a \sin \phi \cos \theta, \quad y = a \sin \phi \sin \theta, \quad z = a \cos \phi.
+  \end{align*}
+
+</div>
+
+<div id="org835ab20" class="figure">
+<p><img src="../img/math4100/fig4-26.jpeg" alt="fig4-26.jpeg" width="35%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge013c62">
+<h4 id="orge013c62">Example 4.15</h4>
+<p class="fragment">
+For a cylinder of radius \(a\) is parametrized in terms of \(\theta\) and \(z\) by
+</p>
+<div class="fragment">
+\begin{align*}
+  x = a \cos \theta, \quad y = a \sin \theta, \quad z = z.
+  \end{align*}
+
+</div>
+
+<div id="orgd8842c2" class="figure">
+<p><img src="../img/math4100/fig4-27.jpeg" alt="fig4-27.jpeg" width="35%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7992de9">
+<h4 id="org7992de9">Example 4.16</h4>
+<p class="fragment">
+A cone as a surface is parametrized in terms of \(r\) and \(\theta\) by
+</p>
+<div class="fragment">
+\begin{align*}
+  x = r \sin \phi_0 \cos \theta, \quad y = r \sin \phi_0 \sin \theta, \quad z = r \cos \phi_0,
+  \end{align*}
+
+</div>
+<p class="fragment">
+where \(\phi_0\) is the angle of the cone (a constant).
+</p>
+
+<div id="orgc8e90f5" class="figure">
+<p><img src="../img/math4100/fig4-28.jpeg" alt="fig4-28.jpeg" width="45%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgcb088d0">
+<h4 id="orgcb088d0">Parametric Equations of Revolutions</h4>
+<p class="fragment">
+The parametric equation of any surface of revolution or "axially symmetric" surface can be expressed as
+</p>
+<div class="fragment">
+\begin{align*}
+  x = v \cos \theta, \quad y = v \sin \theta, \quad z = f(v),
+  \end{align*}
+
+</div>
+<p class="fragment">
+when the surface is generated by rotating the graph of \(z = f(x)\) about the \(z\) axis.
+</p>
+
+<div id="orgaa2b91c" class="figure">
+<p><img src="../img/math4100/fig4-29.jpeg" alt="fig4-29.jpeg" width="30%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgd4192f6">
+<h4 id="orgd4192f6">Coordinate Curves</h4>
+<p class="fragment">
+As the parameters \(u\) and \(v\) vary, the tip of the position vector \(\mathbf{R}(u, v)\) generates the surface.
+</p>
+
+<p class="fragment">
+In particular, if we <i>fix</i> the value \(u = u_0\) or \(v = v_0\), then we obtain the <b>coordinate curves</b> lying in the surface:
+</p>
+<div class="fragment">
+\begin{align*}
+    \mathbf{R}(u_0, v), \quad \mathbf{R}(u, v_0).
+\end{align*}
+
+</div>
+
+<div id="orge36bbc2" class="figure">
+<p><img src="../img/math4100/fig4-30.jpeg" alt="fig4-30.jpeg" width="30%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org2e62acf">
+<h4 id="org2e62acf">Coordinate Curves - Continued</h4>
+<p>
+The tangent vectors to the coordinate curves are
+</p>
+<div class="fragment">
+\begin{align*}
+    \frac{\partial \mathbf{R}}{\partial u} & = \frac{\partial x}{\partial u}\mathbf{i} + \frac{\partial y}{\partial u} \mathbf{j} + \frac{\partial z}{\partial u} \mathbf{k}\\
+            \frac{\partial \mathbf{R}}{\partial v} & = \frac{\partial x}{\partial v}\mathbf{i} + \frac{\partial y}{\partial v} \mathbf{j} + \frac{\partial z}{\partial v} \mathbf{k}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: Here we assume the relevant derivatives exist, and that \(\partial \mathbf{R}/\partial u\) and \(\partial \mathbf{R}/\partial v\) are nonzero and non-parallel at every point.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org845094c">
+<h4 id="org845094c">Normal Vector to the Surface</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">If a surface is specified nonparametrically by \(f(x, y, z) = C\), then \(\mathbf{grad} f\) is a normal vector to the surface.</li>
+
+<li data-fragment-index="2" class="fragment">If the surface is parametrically through \(\mathbf{R}(u, v)\), then the vector \(\displaystyle \frac{\partial \mathbf{R}}{\partial u} \times \frac{\partial \mathbf{R}}{\partial v}\) is normal to the surface.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgc5cf837">
+<h4 id="orgc5cf837">Example 4.17</h4>
+<p>
+Write the equation for the plane tangent to the surface given by
+</p>
+<div>
+\begin{align*}
+  x = u^2, \quad y = uv, \quad z = v
+  \end{align*}
+
+</div>
+<p>
+at the point corresponding to \(u = 1, v = 2\).
+</p>
+
+<p>
+<i>Solution</i>
+</p>
+<p class="fragment">
+The point corresponding to \(u = 1, v=2\) is \(\mathbf{R}_0 = \mathbf{i} + 2 \mathbf{j} + 2\mathbf{k}\).
+</p>
+
+<p class="fragment">
+The tangent vectors to the coordinate curves are
+</p>
+<div class="fragment">
+\begin{align*}
+    \frac{\partial \mathbf{R}}{\partial u} & = 2 u \mathbf{i} + v \mathbf{j} = 2 \mathbf{i} + 2 \mathbf{j}\\
+            \frac{\partial \mathbf{R}}{\partial v} & = u \mathbf{j} + \mathbf{k} = \mathbf{j} + \mathbf{k}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf8610b1">
+<h4 id="orgf8610b1">Example 4.17 - Continued</h4>
+<p>
+Hence a normal to the plane is given by:
+</p>
+<div class="fragment">
+\begin{align*}
+    \mathbf{n} & = \frac{\partial \mathbf{R}}{\partial u} \times \frac{\partial \mathbf{R}}{\partial v}\\
+        & = (2 \mathbf{i} + 2 \mathbf{j})\times (\mathbf{j} + \mathbf{k}) = 2 \mathbf{i} - 2 \mathbf{j} + 2 \mathbf{k}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+The (nonparametric) equation of the tangent plane is
+</p>
+<div class="fragment">
+\begin{align*}
+    (\mathbf{R} - \mathbf{R}_0) \cdot \mathbf{n} = 2(x-1) - 2(y-2) + 2(z-2)=0.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org0713d46">
+<h4 id="org0713d46">Surface Area</h4>
+<div class="column" style="float:left; width: 50%">
+<p data-fragment-index="0" class="fragment">
+Let's consider a <b>regular surface element</b> bounded by coordinate curves in Figure 4.31.
+</p>
+
+<p data-fragment-index="2" class="fragment">
+The area of the surface element can be approximated by the area of the parallelogram, which can be computed by the cross product:
+</p>
+<div data-fragment-index="3" class="fragment">
+\begin{align*}
+    \Delta S \approx \left|\frac{\partial \mathbf{R}}{\partial u} \times \frac{\partial \mathbf{R}}{\partial v}\right| \Delta u \Delta v.
+\end{align*}
+
+</div>
+</div>
+
+<div class="column" style="float:right; width: 48%">
+
+<div id="orgaa0675e" class="figure">
+<p><img src="../img/math4100/fig4-31.jpeg" alt="fig4-31.jpeg" data-fragment-index="1" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgebbf04d">
+<h4 id="orgebbf04d">Surface Area</h4>
+<p>
+The area of the surface element is
+</p>
+<div class="fragment">
+\begin{align*}
+    dS = \left|\frac{\partial \mathbf{R}}{\partial u} \times \frac{\partial \mathbf{R}}{\partial v}\right| du dv,
+\end{align*}
+
+</div>
+<p class="fragment">
+so that
+</p>
+<div class="fragment">
+\begin{align*}
+    d \mathbf{S} = \mathbf{n} dS, \quad \text{or}\quad dS = \mathbf{n} \cdot d \mathbf{S},
+\end{align*}
+
+</div>
+<p class="fragment">
+where,
+</p>
+<div class="fragment">
+\begin{align*}
+    d \mathbf{S} = \frac{\partial \mathbf{R}}{\partial u} du \times \frac{\partial \mathbf{R}}{\partial v} dv
+\end{align*}
+
+</div>
+<p class="fragment">
+is a vector normal to the surface, and \(\mathbf{n}\) is a unit normal vector in the same direction as \(d \mathbf{S}\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgeb544fb">
+<h4 id="orgeb544fb">Example 4.18</h4>
+<p>
+Find the surface area of the cylinder defined by the equations
+</p>
+<div>
+\begin{align*}
+  x = \cos \theta, \quad y = \sin \theta, \quad z = z
+  \end{align*}
+
+</div>
+<p>
+for \(0 \le \theta \le 2 \pi, 0 \le z \le 1\).
+</p>
+
+<p>
+<i>Solution</i>
+</p>
+<p class="fragment">
+Identifying \(\theta\) with \(u\) and \(z\) with \(v\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+    \frac{\partial \mathbf{R}}{\partial u} & = - \sin u \mathbf{i} + \cos u \mathbf{j}\\
+    \frac{\partial \mathbf{R}}{\partial v} & = \mathbf{k},
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org3ab21c0">
+<h4 id="org3ab21c0">Example 4.18 - Continued</h4>
+<div class="fragment">
+  \begin{align*}
+      d \mathbf{S} & = \frac{\partial \mathbf{R}}{\partial u} \times \frac{\partial \mathbf{R}}{\partial v} du dv = \begin{vmatrix}
+              \mathbf{i} & \mathbf{j} & \mathbf{k}\\
+- \sin u & \cos u & 0 \\
+  0 & 0 & 1
+            \end{vmatrix}du dv\\
+       & = (\cos u \mathbf{i} + \sin u \mathbf{j}) du dv.
+\end{align*}
+
+</div>
+<p class="fragment">
+Thus, the surface area is
+</p>
+<div class="fragment">
+\begin{align*}
+\int_0^1 \int_0^{2\pi} dS = \int_0^1 \int_0^{2\pi} |d \mathbf{S}| =  \int_0^1 \int_0^{2\pi} du dv = 2\pi.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf148ca7">
+<h4 id="orgf148ca7">Special Case</h4>
+<p>
+Consider the surface is described by \(z = f(x, y)\), where the projection of the surface element on the \(xy\) plane is bounded by the curves
+</p>
+<div>
+\begin{align*}
+   y = y_1(x), \quad y = y_2(x), \quad x = a, \quad x = b.
+  \end{align*}
+
+</div>
+<p class="fragment">
+We can parametrize via the equations \(x = u, y = v\), and \(z = f(u, v)\) in order to make use of the preceding formulas:
+</p>
+<div class="fragment">
+\begin{align*}
+    & \frac{\partial \mathbf{R}}{\partial u} = \frac{\partial \mathbf{R}}{\partial x} = \mathbf{i} + \partial_x f \mathbf{k}\\
+    & \frac{\partial \mathbf{R}}{\partial v} = \frac{\partial \mathbf{R}}{\partial y} = \mathbf{j} + \partial_y f \mathbf{k}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgfa548b6">
+<h4 id="orgfa548b6">Special Case - Continued</h4>
+<p>
+Then
+</p>
+<div class="fragment">
+\begin{align*}
+  d \mathbf{S} & = \frac{\partial \mathbf{R}}{\partial x} \times \frac{\partial \mathbf{R}}{\partial y} dx dy = \begin{vmatrix}
+                \mathbf{i} & \mathbf{j} & \mathbf{k}\\
+                1 & 0 & \partial_x f \\
+                0 & 1 & \partial_y f
+              \end{vmatrix}dx dy\\
+        & = (- \partial_x f \mathbf{i} - \partial_y f \mathbf{j} + \mathbf{k}) dx dy.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Therefore, the surface area is
+</p>
+<div class="fragment">
+\begin{align*}
+\int_a^b \int_{y_1(x)}^{y_2(x)} \sqrt{1 + (\partial_x f)^2 + (\partial_y f)^2} dy dx.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org8dea49b">
+<h4 id="org8dea49b">Special Case - Continued</h4>
+<div class="column" style="float:left; width: 53%">
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: The geometrical significance of this formula for the special case is seen by considering the angle \(\gamma\) between \(d \mathbf{S}\) and \(\mathbf{k}\):
+</p>
+<div class="fragment">
+\begin{align*}
+  | \cos \gamma | = \frac{d \mathbf{S} \cdot \mathbf{k}}{ | d \mathbf{S} | } = \frac{1}{\sqrt{1 + (\partial_x f)^2 + (\partial_y f)^2}},
+  \end{align*}
+
+</div>
+<p class="fragment">
+so that the surface area can also be computed as
+</p>
+<div class="fragment">
+\begin{align*}
+    \int_a^b \int_{y_1(x)}^{y_2(x)} \frac{dy dx}{|\cos \gamma|}.
+\end{align*}
+
+</div>
+</div>
+
+<div class="column" style="float:right; width: 45%">
+
+<div id="org0382c9a" class="figure">
+<p><img src="../img/math4100/fig4-32.jpeg" alt="fig4-32.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1d10a74">
+<h4 id="org1d10a74">Example 4.19</h4>
+<p>
+Find the area of hemisphere defined by
+</p>
+<div>
+\begin{align*}
+  x^2 + y^2 + z^2 = 1, \quad x \ge 0.
+  \end{align*}
+
+</div>
+
+<p data-fragment-index="0" class="fragment">
+<i>Solution 1</i>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">The area is the same as the one with \(z \ge 0\).</li>
+
+<li data-fragment-index="2" class="fragment">As in Example 4.14, we parametrize the surface as follows:<br />
+\(x = \sin \phi \cos \theta, y = \sin \phi \sin \theta, z = \cos \phi\),
+with \(0 \le \theta \le 2 \pi\) and \(0 \le \phi \le \pi/2\).</li>
+
+<li data-fragment-index="3" class="fragment">Using Formula (4.31) (Exercise 8 in Sec 4.6), we have \(dS = \sin \phi\,  d\phi\, d\theta\).</li>
+
+<li data-fragment-index="4" class="fragment">Thus, the surface area is \(\displaystyle \int_0^{2\pi} \int_0^{\pi/2} \sin\phi\, d\phi\, d\theta = 2\pi\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org004d45c">
+<h4 id="org004d45c">Example 4.19 - Continued</h4>
+<p data-fragment-index="0" class="fragment">
+<i>Solution 2</i>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment"><span style="color: rgb(24,116,205)">Note</span>:  \(\gamma\) is the angle between \(d \mathbf{S}\) and \(\mathbf{i}\), and it is the same angle between the gradient of the surface and \(\mathbf{i}\), since \(d \mathbf{S}\) and the gradient are both <i>normal</i> to the surface.</li>
+
+<li data-fragment-index="2" class="fragment">\(\nabla (x^2+y^2+z^2) = 2x \mathbf{i} + 2y \mathbf{j} + 2z \mathbf{k}\).</li>
+
+<li data-fragment-index="3" class="fragment">\(\displaystyle \cos \gamma = \frac{(2x \mathbf{i} + 2y \mathbf{j} + 2z \mathbf{k}) \cdot \mathbf{i}}{(4x^2 + 4y^2 + 4z^2)^{1/2}} = \frac{2x}{2} = x\).</li>
+
+<li data-fragment-index="4" class="fragment">Then the area is \(\displaystyle \int_{-1}^1 \int_{-(1-z^2)^{1/2}}^{+(1-z^2)^{1/2}} x^{-1}\, dy \, dz  = 2\pi\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org412fe89">
+<h3 id="org412fe89">4.7 Surface Integrals</h3>
+<div class="outline-text-3" id="text-org412fe89">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6c395b2">
+<h4 id="org6c395b2">Surface Integral of Scalar Field</h4>
+<p class="fragment">
+Let \(S\) denote a smooth surface and let \(f(x, y, z)\) be a function defined and continuous on \(S\). Then the surface integral of \(f\) over \(S\) is defined by
+</p>
+<div class="fragment">
+\begin{align*}
+  \iint_S f(x, y, z)\, dS = \lim_{\substack{\max \delta S_i \to 0\\ n\to \infty}} \sum_{i=1}^n f(x_i, y_i, z_i) \delta S_i,
+  \end{align*}
+
+</div>
+<p class="fragment">
+If the surface \(S\) is parametrized by \(\mathbf{R} = \mathbf{R}(u, v)\), then
+</p>
+<div class="fragment">
+\begin{align*}
+\iint_S f(x, y, z)\, dS = \iint_S f \left| \frac{\partial \mathbf{R}}{\partial u}\times \frac{\partial \mathbf{R}}{\partial v}\right|\, du dv.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org65c2806">
+<h4 id="org65c2806">Surface Integral of Vector Field</h4>
+<p class="fragment">
+A surface integral of a continuous vector field \(\mathbf{F}\) over a smooth surface \(S\) is defined by
+</p>
+<div class="fragment">
+\begin{align*}
+  \iint_S \mathbf{F} \cdot d \mathbf{S}
+  & = \iint_S \mathbf{F} \cdot \mathbf{n} \, dS\\
+  & = \iint_S \mathbf{F} \cdot \left( \frac{\partial \mathbf{R}}{\partial u} \times \frac{\partial \mathbf{R}}{\partial v} \right)\, du dv,
+  \end{align*}
+
+</div>
+<p class="fragment">
+which also is called the <b>total flux</b> of \(\mathbf{F}\) through \(S\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5aecf74">
+<h4 id="org5aecf74">Surface Integral of Vector Field - Continued</h4>
+<p class="fragment">
+If the surface is described explicitly by \(z = f(x, y)\), then the total flux is
+</p>
+<div class="fragment">
+\begin{align*}
+  \iint_S \mathbf{F} \cdot d \mathbf{S} = \iint_S \mathbf{F} \cdot \mathbf{n} \sqrt{1 + (\partial_x f)^2 + (\partial_y f)^2}\, dx dy = \iint_S \mathbf{F} \cdot \mathbf{n} \frac{dx dy}{|\cos \gamma|}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+If the surface is piecewise smooth, then the surface integral is obtained by summing over all smooth pieces of the surface.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org4e57220">
+<h4 id="org4e57220">Example 4.20</h4>
+<p>
+Compute the flux of the vector field \(\mathbf{F} = \mathbf{i} + xy \mathbf{j}\) across the surface given by
+</p>
+<div>
+\begin{align*}
+  x = u + v, \quad y = u - v, \quad z = u^2, \quad u , v \in [0, 1].
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<div class="fragment">
+\begin{align*}
+    \iint_S \mathbf{F} \cdot \left( \frac{\partial \mathbf{R}}{\partial u} \times \frac{\partial \mathbf{R}}{\partial v} \right)\, du dv & = \int_0^1 \int_0^1 \begin{vmatrix}
+    1 & u^2 - v^2 & 0\\
+    1 & 1 & 2 u\\
+    1 & -1 & 0
+    \end{vmatrix}\, du dv\\
+    & = \int_0^1 \int_0^1 (2u^3 - 2 uv^2 + 2u)\, du dv\\
+    & = \int_0^1 (1/2 - v^2 + 1)\, dv = \frac{7}{6}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org8847e85">
+<h4 id="org8847e85">Example 4.21</h4>
+<p>
+Compute the surface integral \(\displaystyle \iint_S \mathbf{F} \cdot d \mathbf{S}\) when \(S\) is the surface of the sphere \(x^2 + y^2 + z^2 = 4\), and \(\mathbf{F} = x \mathbf{i} + y \mathbf{j} + z \mathbf{k}\).
+</p>
+
+<p data-fragment-index="0" class="fragment">
+<i>Solution</i>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">Key observation: \(\mathbf{F}\) and \(\mathbf{n}\) have the same direction, pointing away from the origin.</li>
+
+<li data-fragment-index="2" class="fragment">\(\mathbf{F} \cdot \mathbf{n} = |\mathbf{F}| = (x^2 + y^2 + z^2)^{1/2} = 2\).</li>
+
+<li data-fragment-index="3" class="fragment">\(\displaystyle \iint_S \mathbf{F}\cdot d \mathbf{S} =  \iint_S \mathbf{F}\cdot \mathbf{n}\, dS = \iint_S 2\, dS\).</li>
+
+<li data-fragment-index="4" class="fragment">\(\displaystyle \iint_S \, dS = ~\text{total surface area}~ = 4 \pi 2^2 = 16 \pi\).</li>
+
+<li data-fragment-index="5" class="fragment">Therefore, the surface integral is \(32\pi\).</li>
+
+<li data-fragment-index="6" class="fragment"><span style="color: rgb(24,116,205)">Note</span>: In this example, no integration is needed since \(\mathbf{F} \cdot \mathbf{n}\) is a constant over the entire surface.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgc664971">
+<h4 id="orgc664971">Example 4.22</h4>
+<p>
+Compute the surface integral \(\displaystyle \iint_S \mathbf{F} \cdot d \mathbf{S}\) when \(S\) is the surface of the cube bounded by the planes \(x=0, x=1, y=0, y=1, z =0, z = 1\), and \(\mathbf{F} = x \mathbf{i} + y \mathbf{j} + z \mathbf{k}\).
+</p>
+
+<div id="org957aa28" class="figure">
+<p><img src="../img/math4100/fig4-36.jpeg" alt="fig4-36.jpeg" width="35%" class="middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgba5dcdf">
+<h4 id="orgba5dcdf">Example 4.22 - Continued</h4>
+<p>
+<i>Solution</i>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">The unit normal to the front face \(S_1\) is \(\mathbf{n} = \mathbf{i}\).</li>
+
+<li data-fragment-index="2" class="fragment">\(\mathbf{F} \cdot \mathbf{n} = (x \mathbf{i} + y \mathbf{j} + z \mathbf{k}) \cdot \mathbf{i} = x =1\) on the front face.</li>
+
+<li data-fragment-index="3" class="fragment">\(\displaystyle \iint_{S_1} \mathbf{F} \cdot d \mathbf{S} = \iint_{S_1} \mathbf{F} \cdot \mathbf{n} \, dS = \iint_{S_1}\, dS = 1\).</li>
+
+<li data-fragment-index="4" class="fragment">On the opposite face \(S_2\) (in the \(yz\) plane), \(\mathbf{n} = - \mathbf{i}\), so that \(\mathbf{F} \cdot \mathbf{n} = - x\).</li>
+
+<li data-fragment-index="5" class="fragment">However, \(x = 0\) for all points on the face \(S_2\), so the surface integral is zero.</li>
+
+<li data-fragment-index="6" class="fragment">Similarly, we can compute the surface integrals over other faces.</li>
+
+<li data-fragment-index="7" class="fragment">By symmetry, we conclude that the total flux is \(3\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org53e9aa5">
+<h4 id="org53e9aa5">Example 4.23</h4>
+<p>
+Compute the surface integral of the normal component of \(\mathbf{F} = x^2 \mathbf{i} + y x \mathbf{j} + zx \mathbf{k}\) over the triangle with vertices \((1, 0, 0), (0, 2, 0), (0, 0, 3)\). Consider the triangle oriented such that its positive side is that away from the origin.
+</p>
+
+<div id="orga3a7322" class="figure">
+<p><img src="../img/math4100/fig4-37.jpeg" alt="fig4-37.jpeg" width="35%" class="middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org56e913d">
+<h4 id="org56e913d">Example 4.23 - Continued</h4>
+<p>
+<i>Solution</i>
+</p>
+
+<p class="fragment">
+First, we can find the normal vector to the triangle:
+</p>
+<div class="fragment">
+\begin{align*}
+   \mathbf{n} = \frac{6}{7}\mathbf{i} + \frac{3}{7} \mathbf{j} + \frac{2}{7} \mathbf{k},
+  \end{align*}
+
+</div>
+<p class="fragment">
+and thus
+</p>
+<div class="fragment">
+\begin{align*}
+    \mathbf{F} \cdot \mathbf{n} = \frac{6}{7}x^2 + \frac{3}{7} yx + \frac{2}{7} zx.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org67e1498">
+<h4 id="org67e1498">Example 4.23 - Continued</h4>
+<p>
+Note that on the triangle, we have \(z = 3 - 3x - (3/2)y\), so we can use the formula
+</p>
+<div class="fragment">
+\begin{align*}
+    \iint_S \mathbf{F} \cdot \mathbf{n} \frac{dx dy}{|\cos \gamma|},
+\end{align*}
+
+</div>
+<p class="fragment">
+where
+</p>
+<div class="fragment">
+\begin{align*}
+    \cos \gamma = \mathbf{n} \cdot \mathbf{k} = \frac{2}{7}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org886363e">
+<h4 id="org886363e">Example 4.23 - Continued</h4>
+<p>
+Therefore, the surface integral is
+</p>
+<div class="fragment">
+\begin{align*}
+    \iint_S \mathbf{F} \cdot d \mathbf{S}
+    & = \int_0^1  \int_0^{2 - 2x} \frac{7}{2} \left( \frac{6}{7} x^2 + \frac{3}{7} yx + \frac{2}{7} zx \right)\, dy dx\\
+    & = \int_0^1  \int_0^{2 - 2x} \left( 3x^2 + \frac{3}{2} yx + zx \right)\, dy dx\\
+    & = \int_0^1  \int_0^{2 - 2x} 3 x\, dy dx\\
+    & = \int_0^1 3x(2 - 2x)\, dx = 1.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org2372944">
+<h3 id="org2372944">4.8 Volume Integrals (Review)</h3>
+<div class="outline-text-3" id="text-org2372944">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org731bd03">
+<h4 id="org731bd03">Definition</h4>
+<p class="fragment">
+Let \(V\) be domain, and consider a (scalar) function \(f\) defined within and on the boundary of \(V\). Then the <b>volume</b> integral of \(f\) over the domain \(V\) is
+</p>
+<div class="fragment">
+\begin{align*}
+\iiint_V f(x, y, z)\, dV = \lim \sum_{i=1}^n f(x_i, y_i, z_i)\, \delta V_i.
+  \end{align*}
+
+</div>
+<p class="fragment">
+In particular, if \(f \equiv 1\), the volume integral becomes the <b>volume</b> of the domain \(V\):
+</p>
+<div class="fragment">
+\begin{align*}
+    \text{volume of } V = \iiint_V dV.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Note</span>: The tricky part of volume integration is to setup the limits of the "partial integrals".
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org97d5cb4">
+<h4 id="org97d5cb4">Example 4.28</h4>
+<p>
+Find the volume integral of \(f(x, y, z) = x + yz\) over the box bounded by the coordinate planes, \(x =1, y =2\), and \(z=1 +x\).
+</p>
+
+<div id="orgfa9880d" class="figure">
+<p><img src="../img/math4100/fig4-44a.jpeg" alt="fig4-44a.jpeg" width="40%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgcc34883">
+<h4 id="orgcc34883">Example 4.28 - Continued</h4>
+<p>
+<i>Solution 1</i>
+</p>
+<p class="fragment">
+Integrating in the order of \(dz, dx, dy\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \iiint_V f(x, y, z)\, dV
+   = \int_0^2 \int_0^1 \int_0^{1+x} (x + yz)\, dz dx dy
+  \end{align*}
+
+</div>
+
+
+<div id="org7d8e43b" class="figure">
+<p><img src="../img/math4100/fig4-44b.jpeg" alt="fig4-44b.jpeg" width="35%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org480473f">
+<h4 id="org480473f">Example 4.28 - Continued</h4>
+<p>
+<i>Solution 1</i>
+</p>
+<p class="fragment">
+Integrating in the order of \(dz, dx, dy\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \iiint_V f(x, y, z)\, dV
+  & = \int_0^2 \int_0^1 \int_0^{1+x} (x + yz)\, dz dx dy\\
+  & = \int_0^2 \int_0^1 \left.\left( xz + \frac{1}{2}yz^2 \right)\right|_0^{1 + x}\, dx dy\\
+  & = \int_0^2 \int_{0}^1 \left( x + x^2 + \frac{1}{2} y + yx + \frac{1}{2} y x^2 \right)\, dx dy\\
+  & = \int_0^2 \left( \frac{5}{6} + \frac{7}{6} y \right)\, dy = 4.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org113aec0">
+<h4 id="org113aec0">Example 4.28 - Continued</h4>
+<p>
+<i>Solution 2</i>
+</p>
+<p class="fragment">
+Integrating in the order of \(dz, dy, dx\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \iiint_V f(x, y, z)\, dV = \int_0^1 \int_0^2 \int_0^{1+x} (x + yz)\, dz dy dx.
+  \end{align*}
+
+</div>
+
+
+<div id="org605cf94" class="figure">
+<p><img src="../img/math4100/fig4-44a.jpeg" alt="fig4-44a.jpeg" width="35%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb73b294">
+<h4 id="orgb73b294">Example 4.28 - Continued</h4>
+<p>
+<i>Solution 2</i>
+</p>
+<p class="fragment">
+Integrating in the order of \(dz, dy, dx\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \iiint_V f(x, y, z)\, dV
+  & = \int_0^1 \int_0^2 \int_0^{1+x} (x + yz)\, dz dy dx\\
+  & = \int_0^1 \int_{0}^2 \left( x + x^2 + \frac{1}{2} y + yx + \frac{1}{2} y x^2 \right)\, dy dx\\
+  & = \int_0^1 \left.\left( xy + x^2 y + \frac{1}{4}y^2 + \frac{1}{2}y^2x + \frac{1}{4} y^2x^2 \right)\right|_0^2 \, dx\\
+  & = \int_0^1 (1 + 4x + 3x^2)\, x = 4.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgfd698d7">
+<h4 id="orgfd698d7">Example 4.28 - Continued</h4>
+<p>
+<i>Solution 3</i>
+</p>
+<p class="fragment">
+Integrating in the order of \(dy, dz, dx\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \iiint_V f(x, y, z)\, dV
+   = \int_0^1 \int_0^{1+x} \int_0^2 (x + yz)\, dy dz dx.
+  \end{align*}
+
+</div>
+
+<div id="orgff594b6" class="figure">
+<p><img src="../img/math4100/fig4-44a.jpeg" alt="fig4-44a.jpeg" width="35%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org209b066">
+<h4 id="org209b066">Example 4.28 - Continued</h4>
+<p>
+<i>Solution 3</i>
+</p>
+<p class="fragment">
+Integrating in the order of \(dy, dz, dx\):
+</p>
+<div class="fragment">
+\begin{align*}
+  \iiint_V f(x, y, z)\, dV
+  & = \int_0^1 \int_0^{1+x} \int_0^2 (x + yz)\, dy dz dx\\
+  & = \int_0^1 \int_0^{1+x} \left.\left( xy + \frac{1}{2}y^2z \right)\right|_0^2\, dz dx\\
+  & = \int_0^1 \int_{0}^{1+x} \left( 2x + 2z \right)\, dz dx\\
+  & = \int_0^1 \left.\left( 2xz+z^2 \right)\right|_0^{1+x} \, dx\\
+  & = \int_0^1 (1 + 4x + 3x^2)\, dx = 4.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org32216e6">
+<h4 id="org32216e6">Example 4.28 - Continued</h4>
+<p>
+<i>Solution 4</i>
+</p>
+<p class="fragment">
+Integrating in the order of \(dx, dy, dz\):
+</p>
+<div class="fragment">
+\begin{align*}
+  & \iiint_V f(x, y, z)\, dV\\
+   = & \int_0^1 \int_0^2 \int_0^1 (x + yz)\, dx dy dz + \int_1^2 \int_0^2 \int_{z-1}^1 (x + yz)\, dx dy dz.
+  \end{align*}
+
+</div>
+
+<div id="orgfb38465" class="figure">
+<p><img src="../img/math4100/fig4-44a.jpeg" alt="fig4-44a.jpeg" width="30%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga4af33b">
+<h4 id="orga4af33b">Example 4.28 - Continued</h4>
+<p>
+<i>Solution 4</i>
+</p>
+<p class="fragment">
+Integrating in the order of \(dx, dy, dz\):
+</p>
+<div class="fragment">
+\begin{align*}
+ &  \int_0^1 \int_0^2 \int_0^1 (x + yz)\, dx dy dz + \int_1^2 \int_0^2 \int_{z-1}^1 (x + yz)\, dx dy dz\\
+   = & \int_0^1 \int_0^2 \left( \frac{1}{2} + yz\right)\, dy dz + \int_1^2 \int_0^2 \left( 2yz - \frac{1}{2}z^2 + z - yz^2\right)\, dy dz \\
+   = & \int_0^1 (1 + 2z)\, dz + \int_1^2 (6z - 3z^2)\, dz = 2 + 2= 4.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga5c3fb0">
+<h4 id="orga5c3fb0">Example 4.29</h4>
+<p>
+Find the volume of the region of space above the \(xy\) plane and beneath the plane \(z = 2 + x + y\), bounded by the planes \(y = 0, x = 0\), and the surface \(y = 1 - x^2\).
+</p>
+
+
+<div id="org8819c44" class="figure">
+<p><img src="../img/math4100/fig4-45.jpeg" alt="fig4-45.jpeg" width="50%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgba897e7">
+<h4 id="orgba897e7">Example 4.29 - Continued</h4>
+<p>
+<i>Solution</i>
+</p>
+<p class="fragment">
+We hold \(x\) fixed and vary \(y\), the columns generate slices from \(y =0\) to \(y = 1 - x^2\). Stacking up these slices for \(0\le x \le 1\), we find
+</p>
+<div class="fragment">
+\begin{align*}
+  \iiint_V f(x, y, z)\, dV
+  & = \int_0^1 \int_0^{1-x^2} \int_0^{2+x+y} \, dz dy dx\\
+  & = \int_0^1 \int_0^{1 - x^2} (2 + x + y)\, dy dx\\
+  & = \int_0^1 \left.\left( 2y + xy + \frac{1}{2}y^2 \right)\right|_0^{1-x^2} \, dx\\
+  & = \int_0^1 \left(\frac{5}{2} + x - 3x^2 - x^3 + \frac{1}{2}x^4\right)\, dx = \frac{37}{20}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf8e65df">
+<h4 id="orgf8e65df">Example 4.30</h4>
+<p>
+Find the integral of \(f(x, y, z) = y\) over the volume of the sphere contained inside \(x^2+y^2+z^2 = 1\).
+</p>
+
+<p class="fragment">
+<i>Solution</i>
+</p>
+<p class="fragment">
+For a sphere we can integrate equally well in any order. Hence,
+</p>
+<div class="fragment">
+\begin{align*}
+  \iiint_V f(x, y, z)\, dV
+  & = \int_{-1}^1 \int_{-(1-x^2)}^{1-x^2} \int_{-(1-x^2-y^2)^{1/2}}^{(1-x^2-y^2)^{1/2}} y \, dz dy dx\\
+  & = 2 \int_{-1}^1 \int_{-(1-x^2)^{1/2}}^{(1 - x^2)^{1/2}} y(1 - x^2 - y^2)^{1/2}\, dy dx\\
+  & = 2 \int_{-1}^1 0 \, dx = 0.
+   \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga1d6419">
+<h3 id="orga1d6419">4.9 Introduction to the Divergence Theorem and Stokes Theorem</h3>
+<div class="outline-text-3" id="text-orga1d6419">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org0eb186f">
+<h4 id="org0eb186f">Example</h4>
+<p>
+Let \(\mathbf{F} = f(r) \mathbf{R}\) be a vector field, where \(f\) is a smooth scalar field, \(\mathbf{R}= x \mathbf{i} + y \mathbf{j} + z \mathbf{k}\), and \(r = |\mathbf{R}|\).
+</p>
+
+<p class="fragment">
+We compute the divergence of \(\mathbf{F}\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \nabla \cdot \mathbf{F} = 3 f(r) + r \frac{\partial f}{\partial r}.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7ec01e2">
+<h4 id="org7ec01e2">Example - Continued</h4>
+<div class="column" style="float:left; width: 50%">
+<p class="fragment">
+Let \(D\) be a ball of radius \(a\) centered at the origin, which can be parametrized in spherical coordinates by
+</p>
+<div class="fragment">
+\begin{align*}
+  0 \le r \le a, \quad 0 \le \theta \le 2 \pi, \quad 0 \le \phi \le \pi.
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+The volume element in spherical coordinates (see 3.65 on page 165) is
+</p>
+<div class="fragment">
+\begin{align*}
+  dV = r^2 \sin \phi\, dr d\phi d\theta.
+  \end{align*}
+
+</div>
+</div>
+
+<div class="column" style="float:right; width: 48%">
+
+<div id="org981784f" class="figure">
+<p><img src="../img/math4100/fig3-25.jpeg" alt="fig3-25.jpeg" class="fragment" />
+</p>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9bca940">
+<h4 id="org9bca940">Example - Continued</h4>
+<p>
+We compute the volume integral
+</p>
+<div class="fragment">
+\begin{align*}
+\int_D \nabla \cdot \mathbf{F}\, dV
+&  = \int_0^a \int_0^{2\pi} \int_0^{\pi} \left( 3 f + r \frac{\partial f}{\partial r} \right)r^2 \sin \phi\, dr d \phi d \theta\\
+& 2 \pi \cdot 2 \int_0^a  \frac{\partial r^3 f}{\partial r}\, dr = 4 \pi a^3 f(a)
+\end{align*}
+
+</div>
+<p class="fragment">
+Notice that the integral does not depend on the values of the function \(f\) inside the ball; but it only depends on its value at the boundary \(\partial D\).
+</p>
+
+<p class="fragment">
+The boundary \(\partial D\) of the ball \(D\) is a sphere of radius \(a\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org34d26af">
+<h4 id="org34d26af">Example - Continued</h4>
+<p class="fragment">
+The unit normal to the sphere is \(\mathbf{n} = \mathbf{R}/a\).
+</p>
+
+<p class="fragment">
+Now, let us compute the flux of \(\mathbf{F}\) through the boundary:
+</p>
+<div class="fragment">
+\begin{align*}
+    \int_{\partial D} \mathbf{F} \cdot \mathbf{n}\, dS
+    & = \int_{\partial D} f(a) \mathbf{R}\cdot \frac{\mathbf{R}}{a}\, dS\\
+    & = a f(a) \int_{\partial D} dS = a f(a) \cdot 4 \pi a^2 = 4 \pi a^3 f(a).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org30d7be5">
+<h4 id="org30d7be5">Divergence Theorem</h4>
+<p class="fragment">
+The volume integral of the divergence of a vector field, taken throughout a bounded domain \(D\), equals the surface integral of the normal component of the vector field taken over the surface \(S\) bounding \(D\).
+</p>
+<div class="fragment">
+\begin{align*}
+  \iiint_D \nabla \cdot \mathbf{F} \, dV = \iint_S \mathbf{F} \cdot d \mathbf{S}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+Roughly speaking, the total divergence within \(D\) equals the net flux emerging through \(D\)'s "skin".
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org90c8339">
+<h4 id="org90c8339">Divergence Theorem - Continued</h4>
+
+<div id="org2152d46" class="figure">
+<p><img src="../img/math4100/fig4-48.jpeg" alt="fig4-48.jpeg" width="60%" class="middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgc9446ae">
+<h4 id="orgc9446ae">Exercise 4.7.1</h4>
+<p>
+If \(\mathbf{F} = z \mathbf{k}\) , find the surface integral of the normal component of \(\mathbf{F}\) over the closed surface of the right circular cylinder with curved surface \(x^2 + y^2 = 9\) and bases in the planes \(z =0\) and \(z = 2\). (Mental arithmetic should suffice).
+</p>
+
+
+<div id="org15c27b3" class="figure">
+<p><img src="../img/math4100/ex4-7-1.png" alt="ex4-7-1.png" width="30%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4d6a07a">
+<h4 id="org4d6a07a">Exercise 4.7.1 - Continued</h4>
+<p>
+<i>Solution 1</i>
+</p>
+
+<p class="fragment">
+The surface can be split into three smooth parts \(S = S_1 \cup S_2 \cup S_3\), where \(S_1\) is the top, \(S_2\) is the side, and \(S_3\) is the bottom.
+</p>
+
+<p class="fragment">
+Note that \(\mathbf{F}= \mathbf{0}\) on \(S_3\), \(\mathbf{F}\) is parallel to \(d \mathbf{S}\) on \(S_1\), and \(\mathbf{F}\) is perpendicular to \(d \mathbf{S}\) on \(S_2\), so
+</p>
+<div class="fragment">
+\begin{align*}
+  \iint_S \mathbf{F}\cdot d \mathbf{S}
+  & = \iint_{S_1} \mathbf{F} \cdot d \mathbf{S} = \iint_{S_1} 2\, dS\\
+   & = 2 ~\text{area of } S_1 = 2 \cdot 9 \pi = 18 \pi.
+  \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1787bb8">
+<h4 id="org1787bb8">Exercise 4.7.1 - Continued</h4>
+<p>
+<i>Solution 2</i>
+</p>
+
+<p class="fragment">
+Since \(\mathbf{F} = z \mathbf{k}\), we have \(\nabla \cdot \mathbf{F} = 1\), and by the divergence theorem,
+</p>
+<div class="fragment">
+\begin{align*}
+  \iint_S \mathbf{F}\cdot d \mathbf{S}
+ & = \iiint_D \nabla \cdot \mathbf{F} \, d V = \iiint_D \, dV\\
+  & =  ~\text{volume of } D = \pi\cdot 3^2 \cdot 2 = 18 \pi.
+ \end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgf25c663">
+<h4 id="orgf25c663">Stokes' Theorem</h4>
+<p class="fragment">
+The surface integral of the normal component of the curl of a vector field, taken over a bounded surface \(S\), equals the line integral of the tangential component of the field, taken over the closed curve \(C\) bounding the surface.
+</p>
+<div class="fragment">
+\begin{align*}
+  \iint_S \nabla \times \mathbf{F}\cdot d \mathbf{S} = \int_C \mathbf{F} \cdot d \mathbf{R}.
+  \end{align*}
+
+</div>
+<p class="fragment">
+Roughly speaking, the Stokes' theorem states that the total flux of the curl equals the line integral around the edge.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org9f31a4d">
+<h4 id="org9f31a4d">Stokes' Theorem - Continued</h4>
+
+<div id="org04b412e" class="figure">
+<p><img src="../img/math4100/fig4-49.jpeg" alt="fig4-49.jpeg" width="60%" class="middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge7bb0c4">
+<h4 id="orge7bb0c4">Exercise 4.1.4</h4>
+<p>
+Find the value of
+</p>
+<div>
+\begin{align*}
+        \oint_{C}[(3x + 4y)\, dx + (2x + 3y^{2})\, dy]
+  \end{align*}
+
+</div>
+<p>
+around the circle \(x^2 + y^2 = 4\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org393d087">
+<h4 id="org393d087">Exercise 4.1.4 - Continued</h4>
+<p class="fragment">
+<i>Solution 1</i>
+</p>
+<p class="fragment">
+Let \(x = 2 \cos \theta, y = 2 \sin \theta\) ,then \(dx = - 2 \sin\theta\, d\theta, dy = 2 \cos \theta\, d \theta\).
+</p>
+<div class="fragment">
+\begin{align*}
+      \oint_{C}[(3x + 4y)\, dx + (2x + 3y^{2})\, dy]
+      & = \int_0^{2\pi}[(6 \cos \theta + 8 \sin \theta)](-2\sin \theta) \\
+      & \, + (4 \cos \theta + 12 \sin^2 \theta)(2 \cos \theta)]\, d\theta\\
+      & = -12 \int_0^{2\pi} \cos \theta \sin\theta\, d\theta - 16 \int_0^{2\pi} \sin^2 \theta\, d\theta\\
+      &\,   + 8 \int_0^{2\pi} \cos^2 \theta\, d\theta + 8 \int_0^{2\pi} d(\sin^3 \theta)\\
+      & = 0 - 16 \pi + 8 \pi + 0 = - 8\pi.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org8820487">
+<h4 id="org8820487">Exercise 4.1.4 - Continued</h4>
+<p>
+<i>Solution 2</i>
+</p>
+<p class="fragment">
+Note \(\mathbf{F} = (3x + 4 y) \mathbf{i} + (2x + 3 y^2) \mathbf{j}\), so
+</p>
+<div class="fragment">
+\begin{align*}
+    \nabla \times \mathbf{F}
+    & =
+    \begin{vmatrix}
+        \mathbf{i} & \mathbf{j} & \mathbf{k}\\
+        \partial_x & \partial_y & \partial_z\\
+        3x+4y & 2x+3y^2 & 0
+    \end{vmatrix}\\
+    & = \mathbf{0} - \mathbf{0} + (2 - 4) \mathbf{k} = -2 \mathbf{k}.
+\end{align*}
+
+</div>
+<p class="fragment">
+By the Stokes' theorem,
+</p>
+<div class="fragment">
+\begin{align*}
+      & \oint_{C}[(3x + 4y)\, dx + (2x + 3y^{2})\, dy]
+       = \iint_S \nabla \times \mathbf{F}\cdot d \mathbf{S}\\
+      & = \iint_S \nabla \times (-2 \mathbf{k})\cdot \mathbf{n} d S
+       = -2 \iint_S dS = -2 \cdot 2^2 \pi = -8\pi.
+\end{align*}
+
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/markdown/markdown.js"></script>
+<script src="../plugin/notes/notes.js"></script>
+<script src="../plugin/search/search.js"></script>
+<script src="../plugin/zoom/zoom.js"></script>
+<script src="../plugin/reveal.js-menu/menu.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: false,
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'none',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom, RevealMenu, RevealChalkboard ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+,chalkboard: {storage: "chalkboard-demo", toggleChalkboardButton: { left: "80px" },	toggleNotesButton: { left: "130px" },	colorButtons: 5}});
+</script>
+</body>
+</html>

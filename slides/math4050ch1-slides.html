@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>MATH 4050 - Mathematical Finance and Interest Theory</title>
+<meta name="author" content="\\
+Jie Zhong \\
+Department of Mathematics \\
+California State University, Los Angeles"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+
+<link rel="stylesheet" href="../dist/theme/serif.css" id="theme"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+
+<link rel="stylesheet" href="../gnohz.css"/>
+<script>window.MathJax = { TeX: {Macros: {range: "\\text{Range}", ow: "\\text{otherwise}"}} }</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1>MATH 4050 - Mathematical Finance and Interest Theory</h1><h2></h2><h6> <br />
+Jie Zhong <br />
+Department of Mathematics <br />
+California State University, Los Angeles</h6>
+</section>
+<section>
+<section id="slide-org17e7fef">
+<h2 id="org17e7fef">Chapter 1 The growth of money</h2>
+<div class="outline-text-2" id="text-org17e7fef">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgd9fb757">
+<h3 id="orgd9fb757">Interest</h3>
+<div class="outline-text-3" id="text-orgd9fb757">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6adacac">
+<h4 id="org6adacac">Why the <i>Theory of Interest</i>?</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">Interest rates is the main and popular tool of monetary policy. For example, low interest rate generally leads to economic expansion, high interest rate generally leads to economic contraction.</li>
+<li data-fragment-index="2" class="fragment">Understand how money grows, and manage our own money.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orga75debf">
+<h4 id="orga75debf">Typical problem</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">Suppose you have won a lottery with two option to collect the prize.</li>
+<li data-fragment-index="2" class="fragment">Option 1: get 20 payments of $60,000 on the first day of each year as from 2024</li>
+<li data-fragment-index="3" class="fragment">Option 2: get one million on the first day of 2024.</li>
+<li data-fragment-index="4" class="fragment">Which option should you choose?</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org9365b4e">
+<h4 id="org9365b4e">Reasons/Motivations for your choice?</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">How badly do you need the cash?</li>
+<li data-fragment-index="2" class="fragment">How much debt do you have now?</li>
+<li data-fragment-index="3" class="fragment">Do you like to spend money as you receive it?</li>
+<li data-fragment-index="4" class="fragment">How much return can you make with the cash?</li>
+<li data-fragment-index="5" class="fragment">All of the above and other factors related to <b>interest</b> rate.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgd5406c2">
+<h4 id="orgd5406c2">What is interest?</h4>
+<div class="column" style="float:left; width: 30%">
+
+<div id="org1b6f661" class="figure">
+<p><img src="../img/math4050/picture1.png" alt="picture1.png" data-fragment-index="1" class="fragment" />
+</p>
+</div>
+
+
+<div id="org6b4e032" class="figure">
+<p><img src="../img/math4050/picture2.png" alt="picture2.png" data-fragment-index="3" class="fragment" />
+</p>
+</div>
+</div>
+
+<div class="column" style="float:right; width: 68%">
+<p data-fragment-index="2" class="fragment">
+<br />
+<br />
+When a landowner allows a farmer to use the land he owns, the farmer has to pay “rent” to the landowner.
+</p>
+
+<p data-fragment-index="4" class="fragment">
+<br />
+<br />
+<br />
+<br />
+<br />
+When a banker lets a borrower to use a certain amount of money, the banker will charge the borrower something.
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga4c3f6d">
+<h4 id="orga4c3f6d">Definition of Interest</h4>
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Interest</span> may be defined as the <b>compensation</b> paid by a borrower of money to a lender.
+</p>
+<p class="fragment">
+Thus we can view interest as the <b>rent</b> paid by a borrower to a lender for the loss of use of the money.
+</p>
+
+<p class="fragment">
+If an investment of \(K\) (called the <span style="color: rgb(24,116,205)">principal</span>, i.e., the amount of money that the borrower borrows/lender lends at time \(t=0\)) grows to \(S\) (at a later time, say, \(T\)), then the <span style="color: rgb(24,116,205)">interest</span> is the difference
+</p>
+<div class="fragment">
+\begin{align*}
+  S - K \ge 0
+  \end{align*}
+
+</div>
+
+<p class="fragment">
+<b>Question</b>: Why do we charge interest?
+</p>
+<ul class="fragment">
+<li>Investment opportunities theory</li>
+
+</ul>
+<ul class="fragment">
+<li>Time preference theory</li>
+
+</ul>
+<ul class="fragment">
+<li>Risk premium</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org2b18839">
+<h3 id="org2b18839">Accumulation and amount functions</h3>
+<div class="outline-text-3" id="text-org2b18839">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4d1127a">
+<h4 id="org4d1127a">Amount function</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">Let us temporarily fix the principal \(K\).</li>
+<li data-fragment-index="2" class="fragment">\(A_K(t)\): the <span style="color: rgb(24,116,205)">amount function</span> for principal \(K\), i.e., the balance at time \(t\ge 0\) (time is always measured in some agreed upon units; think "years" for now).</li>
+<li data-fragment-index="3" class="fragment">In words, \(K\) invested at time \(t =0\) <b>"grows"</b> to \(A_K(t)\) at time \(t\ge 0\).</li>
+<li data-fragment-index="4" class="fragment"><b>Note</b>: \(A_K(0) = K\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org643ed1d">
+<h4 id="org643ed1d">Accumulation function</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">\(a(t)\): the <span style="color: rgb(24,116,205)">accumulation function</span>, i.e., the amount function if the principal \(K\) is one unit of money.</li>
+<li data-fragment-index="2" class="fragment">Formally, if the principal is one unit of money, we write \(a(t) = A_1(t)\).</li>
+<li data-fragment-index="3" class="fragment"><b>Note</b>: \(a(0) = 1\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org59f8494">
+<h4 id="org59f8494">The relationship between \(A_K(t)\) and \(a(t)\)</h4>
+<p data-fragment-index="1" class="fragment">
+What do you think the relationship should be?
+</p>
+
+<p data-fragment-index="2" class="fragment">
+Often, \(A_K(t) = K a(t)\).
+</p>
+<ul>
+<li data-fragment-index="3" class="fragment">What does this mean?</li>
+<li data-fragment-index="4" class="fragment">When is this not true?</li>
+<li data-fragment-index="5" class="fragment">However, since the above equality holds in most cases, we will assume that it is true unless it is <i>explicitly</i> noted otherwise.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org6c52630">
+<h4 id="org6c52630">Examples</h4>
+<ul>
+<li>Suppose you borrow \(20\) from your parents, what would \(A_K(t)\) look like?</li>
+<li>Suppose you borrow \(20\) from your friend, what would \(A_K(t)\) look like?</li>
+<li>Suppose you borrow \(20\) from your bank, what would \(A_K(t)\) look like?</li>
+<li>Suppose you deposit \(20\) into a bank which earns \(1\) at the end of every year (but nothing else during the year), what would \(A_K(t)\) look like?</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgb9d73cc">
+<h4 id="orgb9d73cc">Examples of amount function</h4>
+
+<div id="org898f02f" class="figure">
+<p><img src="../img/math4050/BlankAmount.png" alt="BlankAmount.png" width="85%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org814a7e4">
+<h4 id="org814a7e4">The increase/decrease of \(A_K(t)\) and \(a(t)\)</h4>
+<ul>
+<li data-fragment-index="1" class="fragment">It is natural to assume that both \(a\) and \(A_K\) <b>increase</b> in the time \(t\).</li>
+<li data-fragment-index="2" class="fragment">Such increase may be, for example,
+<ul>
+<li>continuous and linear</li>
+<li>discrete (end of the year, e.g.)</li>
+<li>continuous and exponential</li>
+
+</ul></li>
+<li data-fragment-index="3" class="fragment">However, there are <b>risky</b> investment which might <b>lose</b> money over the time.</li>
+<li data-fragment-index="4" class="fragment"><span style="color: rgb(24,116,205)">Read</span>: Example 1.3.2-4 in the textbook.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org778b8a6">
+<h4 id="org778b8a6">Example</h4>
+<p>
+Given \(A_K(t) = \frac{1000}{50 - t}\) for \(0\le t < 50\), calculate \(K\) and \(a(10)\), assuming that \(A_K(t) = K a(t)\).
+</p>
+
+<p data-fragment-index="1" class="fragment">
+<b>Solution</b>:
+</p>
+<ul>
+<li data-fragment-index="2" class="fragment">\(K = A_K(0) = 1000/50 = 20\).</li>
+<li data-fragment-index="3" class="fragment">\(a(10) = A_{20}(10)/20 = 1000/(50 - 10)/20 = 5/4 = 1.25\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org6dff732">
+<h4 id="org6dff732">Effective interest rate</h4>
+<p class="fragment">
+When \(0 \leq t_1 \leq t_2\), the <span style="color: rgb(24,116,205)">effective interest rate</span> for \([t_1,t_2]\) is
+</p>
+<div class="fragment">
+\begin{align*}
+  i_{[t_1,t_2]} = \frac{a(t_2) - a(t_1)}{a(t_1)},
+\end{align*}
+
+</div>
+<p class="fragment">
+and <b>if</b> \(A_K(t) = Ka(t)\) then
+</p>
+<div class="fragment">
+\begin{align*}
+ i_{[t_1,t_2]} = \frac{A_K(t_2) - A_K(t_1)}{A_K(t_1)}.
+\end{align*}
+
+</div>
+<p class="fragment">
+<b>Question</b>: Why not use \(A_K(t)\) to define the rate?
+</p>
+
+<p class="fragment">
+This is because \(A_K\) might depend on the principal \(K\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org4a4535c">
+<h4 id="org4a4535c">Effective interest rate, alternatively</h4>
+<p class="fragment">
+For a positive integer \(n\), the interval \([n-1, n]\) is called \(n\text{-th}\) time period.
+</p>
+
+<p class="fragment">
+We write
+</p>
+<div class="fragment">
+\begin{align*}
+  i_n = i_{[n-1, n]} = \frac{a(n) - a(n-1)}{a(n-1)},
+\end{align*}
+
+</div>
+<p class="fragment">
+and hence,
+</p>
+<div class="fragment">
+\begin{align*}
+ a(n) = a(n-1)(1+i_n).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+How would this simplify for \(i_1\)?
+</p>
+<div class="fragment">
+\begin{align*}
+    i_1 = a(1) -1.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4f94895">
+<h3 id="org4f94895">Simple interest / Linear \(a(t)\)</h3>
+<div class="outline-text-3" id="text-org4f94895">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6d8f3b7">
+<h4 id="org6d8f3b7">Simple interest</h4>
+<p class="fragment">
+Assume the accumulation function \(a(t)\) is <b>linear</b> in \(t\), and since \(a(0) = 1\), we have
+</p>
+<div class="fragment">
+\begin{align*}
+  a(t) = 1 + st,
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(s\) is called the <span style="color: rgb(24,116,205)">simple interert rate</span>.
+</p>
+
+<p class="fragment">
+<b>Note</b>:
+</p>
+<div class="fragment">
+\begin{align*}
+  s = i_1.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+We call \(A_K(t) = K(1 + st)\), the amount function for \(K\) invested by simple interest at rate \(s\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgd8d3a6b">
+<h4 id="orgd8d3a6b">Example 1.4.1</h4>
+<p>
+Tonya loans Renu \(1,600\). Renu promises that in return, she will pay Tonya \(2,000\) at the end of four years. To what rate of simple interest does this correspond?
+</p>
+
+<p data-fragment-index="1" class="fragment">
+<b>Solution</b>:
+</p>
+<ul>
+<li data-fragment-index="2" class="fragment">\(2000 = A_{1600}(4) = 1600(1 + 4s)\)</li>
+<li data-fragment-index="3" class="fragment">\(\displaystyle s = \frac{1}{4}\left( \frac{2000}{1600} -1 \right) = 0.0625\)</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgb26262c">
+<h4 id="orgb26262c">Example 1.4.2</h4>
+<p>
+Antonio loans his brother Bob \(2,400\) for three years at \(5\%\) simple interest. The brothers agree that if Bob wishes to repay the loan early, he may do so, and the repayment amount will still be based on \(5\%\) simple interest.
+</p>
+
+<p class="fragment">
+Find the amount Bob would be required to pay if he makes his repayment at the end of three years. What if the repayment is after two years or after one year? Calculate \(i_1, i_2\), and \(i_3\) if the loan lasts the full three years.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgf5e39a5">
+<h4 id="orgf5e39a5">Example 1.4.2 - Solution</h4>
+<p>
+If Bob repays the loan after
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">three years, then \(A_{2400}(3) = 2400[1 + 3\cdot 0.05] = 2760\)</li>
+<li data-fragment-index="2" class="fragment">two years, then \(A_{2400}(2) = 2400[1 + 2\cdot 0.05] = 2640\)</li>
+<li data-fragment-index="3" class="fragment">one year, then \(A_{2400}(1) = 2400[1 + 0.05] = 2520\)</li>
+
+</ul>
+
+<p data-fragment-index="4" class="fragment">
+Therefore,
+</p>
+<ul>
+<li data-fragment-index="5" class="fragment">\(\displaystyle i_1 = \frac{2520-2400}{2400} = 5\%\)</li>
+<li data-fragment-index="6" class="fragment">\(\displaystyle i_2 = \frac{2640-2520}{2520} \approx 4.76\%\)</li>
+<li data-fragment-index="7" class="fragment">\(\displaystyle i_3 = \frac{2760-2640}{2640} \approx 4.55\%\)</li>
+
+</ul>
+
+<p data-fragment-index="8" class="fragment">
+<b>Note</b>: The annual effective interest rates are <b>decreasing</b>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org6422ac2">
+<h4 id="org6422ac2">On \(i_n\)</h4>
+<p>
+In the simple interest case:
+</p>
+<div class="fragment">
+\begin{align*}
+  i_n = \frac{a(n) - a(n-1)}{a(n-1)} = \frac{(1+sn) - (1+s(n-1))}{1+s(n-1)}= \frac{s}{1 + s(n-1)}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+So, \(i_n\) is <b>decreasing</b> in \(n\), and moreover,
+</p>
+<div class="fragment">
+\begin{align*}
+  i_n \to 0, \, \text{as}~ n \to \infty.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Therefore, simple interest is rarely used for loans of long duration; otherwise you would go into the bank, close your account, and then instantly reopen it.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org83bd083">
+<h3 id="org83bd083">Compound interest (The usual case!)</h3>
+<div class="outline-text-3" id="text-org83bd083">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org65ca109">
+<h4 id="org65ca109">Compound interest</h4>
+<p>
+Define \(i = i_1 = a(1) - 1\).
+</p>
+
+<p class="fragment">
+Assume that an accumulation function \(a(t)\) has the associated periodic interest rates <b>all equal</b>, i.e., assume that
+</p>
+<div class="fragment">
+\begin{align*}
+  i_n = i \quad \text{for every positive integer}~ n.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Then the accumulation function must equal to
+</p>
+<div class="fragment">
+\begin{align*}
+  a(t) = (1 + i)^t \quad \text{for every } t \ge 0.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+We call \(a(t)\) defined above the <span style="color: rgb(24,116,205)">compound interest rate accumulation function</span> at interest rate \(i\).
+</p>
+
+<p class="fragment">
+The word <b>"compound"</b> means that the interest earned is automatically reinvested to earn additional interest.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orge3b2779">
+<h4 id="orge3b2779">Simple vs. Compound interest</h4>
+
+<div id="org1a80510" class="figure">
+<p><img src="../img/math4050/SimpleCompound.png" alt="SimpleCompound.png" width="85%" class="fragment middle" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org146197c">
+<h4 id="org146197c">Example</h4>
+<p>
+An account is opened with \(12,000\) and is closed in \(6.5\) years. The account earns \(5\%\) interest. How much is withdrawn from the account if
+</p>
+
+<p data-fragment-index="1" class="fragment">
+Compound interest is paid throughout.
+</p>
+<div data-fragment-index="3" class="fragment">
+\begin{align*}
+   12000(1.05)^{6.5} = 16478.27
+\end{align*}
+
+</div>
+
+<p data-fragment-index="2" class="fragment">
+Compound interest is paid on each whole year and then simple interest is paid on the last half year.
+</p>
+<div data-fragment-index="4" class="fragment">
+\begin{align*}
+   12000(1.05)^6[1 + 0.5 \times 0.05] = 16483.18
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgcab7dbc">
+<h4 id="orgcab7dbc">Example - Varying interest rates</h4>
+<p>
+Assume that \(1,000\) is deposited into an account. The effective annual compound interest rate is \(3\%\) for the first year, \(4\%\) for the next two, and \(1\%\) for the next three.
+</p>
+
+<p class="fragment">
+How much would be in the account at the end of the six years?
+</p>
+
+<p class="fragment">
+<b>Solution</b>
+</p>
+<div class="fragment">
+\begin{align*}
+  1000 (1+0.03)(1+0.04)^2(1.01)^3 = 1147.80
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbf27e12">
+<h4 id="orgbf27e12">Example - Unknown rate</h4>
+<p>
+Suppose you want to have \(1,000\) in three years. You currently have \(900\) to invest.
+</p>
+
+<p class="fragment">
+What interest rate (annually compounding) do you need to accomplish your goal?
+</p>
+
+<p class="fragment">
+<b>Solution</b>
+</p>
+<div class="fragment">
+\begin{align*}
+  1000 = 900(1 + i)^3
+\end{align*}
+
+</div>
+<p class="fragment">
+implies
+</p>
+<div class="fragment">
+\begin{align*}
+  i = \left( \frac{1000}{900} \right)^{1/3} - 1 = 3.57\%.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgcc8f887">
+<h4 id="orgcc8f887">Example - Unknown principal</h4>
+<p>
+Suppose you want to have \(1,000\) in three years. If you could earn \(2\%\) annually compounding interest, how much would you need now to invest to accomplish your goal?
+</p>
+
+<p class="fragment">
+<b>Solutions</b>
+</p>
+<div class="fragment">
+\begin{align*}
+  1000 = K(1 + 0.02)^3,
+\end{align*}
+
+</div>
+<p class="fragment">
+so
+</p>
+<div class="fragment">
+\begin{align*}
+  K = \frac{1000}{(1 + 0.02)^3} = 942.32
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgadfb987">
+<h3 id="orgadfb987">Interest in advance / The effective discount rate</h3>
+<div class="outline-text-3" id="text-orgadfb987">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgff3cb77">
+<h4 id="orgff3cb77">Discount rate</h4>
+<p class="fragment">
+When you rent an apartment, usually you are required to pay rent for each month at the beginning of the month. In other words, you pay the rent before you have the use of the apartment.
+</p>
+
+<p class="fragment">
+We said that interest may be thought of as a rent for the use of the investor's money. It is therefore not surprising that there are financial arrangements in which the interest must be paid by the borrower <b>before</b> the borrowed money becomes available.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgdad374b">
+<h4 id="orgdad374b">Two scenarios</h4>
+<p class="fragment">
+<b>Loan 1</b>: \(500\) is borrowed for a year at an effective rate of interest of \(6\%\). At the end of the year, the borrower pays the lender \(530\).
+</p>
+
+<p class="fragment">
+<b>Loan 2</b>: \(500\) is borrowed for a year, but the borrower pays the interest at the loan's inception. The borrower receives \(470\) and must repay \(500\) at the end of one year.
+</p>
+
+<p class="fragment">
+In both cases the interest paid is \(30\).
+</p>
+<p class="fragment">
+However, in the second case the interest is paid on a loan of only \(470\).
+</p>
+<p class="fragment">
+Loan 2 is an example of computing interest as a discount and is said to have an <span style="color: rgb(24,116,205)">effective rate of discount</span> of \(6\%\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org38c43e5">
+<h4 id="org38c43e5">Definition of discount rate</h4>
+<p>
+The <span style="color: rgb(24,116,205)">effective discount rate</span> for the interval \([t_1, t_2]\) is
+</p>
+<div class="fragment">
+\begin{align*}
+    d_{[t_1,t_2]} = \frac{a(t_2)-a(t_1)}{a(t_2)}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+If \(A_K(t) = Ka(t)\), then
+</p>
+<div class="fragment">
+\begin{align*}
+d_{[t_1,t_2]} = \frac{A_K(t_2)-A_K(t_1)}{A_K(t_2)}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Similar to \(i_n\), when \(n\) is a positive integer,
+</p>
+<div class="fragment">
+\begin{align*}
+d_n = d_{[n-1, n]} = \frac{a(n) - a(n-1)}{a(n)} \qquad \text{and} \qquad a(n-1) = a(n)(1-d_n).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb75fd36">
+<h4 id="orgb75fd36">Example 1.6.5</h4>
+<p>
+Suppose that the growth of money is governed by the accumulation function \(a(t) = (1.05)^{t/2}(1 + 0.025t)\). Find \(d_4\) and \(i_4\).
+</p>
+
+<p class="fragment">
+<b>Solution</b>
+</p>
+<p class="fragment">
+We need
+</p>
+<div class="fragment">
+\begin{align*}
+  a(4) = (1.05)^2(1.1) = 1.21275, \quad a(3) = (1.05)^{3/2}(1.075) - 1.156624568,
+\end{align*}
+
+</div>
+<p class="fragment">
+and thus
+</p>
+<div class="fragment">
+\begin{align*}
+  d_4 = \frac{a(4) - a(3)}{a(4)} = 0.046279474, \qquad  i_4 = \frac{a(4) - a(3)}{a(3)} = 0.048525195.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<b>Note</b>: Usually, \(i_{[t_1,t_2]}\) and \(d_{[t_1, t_2]}\) are <b>not</b> equal.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orge3902e5">
+<h4 id="orge3902e5">Equivalence of interest and discount rates</h4>
+<p>
+A rate of interest and a rate of discount are said to be <span style="color: rgb(24,116,205)">equivalent</span> for an interval \([t_1, t_2]\) if they produce the same accumulated value at time \(t_2\) for one unit of money invested at time \(t_1\):
+</p>
+<div class="fragment">
+\begin{align*}
+  1 = (1 + i_{[t_1, t_2]})(1 - d_{[t_1, t_2]}),
+\end{align*}
+
+</div>
+<p class="fragment">
+which is equivalent to
+</p>
+<div class="fragment">
+\begin{align*}
+    i_{[t_1,t_2]} = \frac{d_{[t_1,t_2]}}{1-d_{[t_1,t_2]}} \qquad \text{or} \qquad	d_{[t_1,t_2]} = \frac{i_{[t_1,t_2]}}{1+i_{[t_1,t_2]}}.
+\end{align*}
+
+</div>
+<p class="fragment">
+Similarly,
+</p>
+<div class="fragment">
+\begin{align*}
+  i_n = \frac{d_n}{1-d_n} \qquad \text{and} \qquad	d_n = \frac{i_n}{1+i_n}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgc1fc4c8">
+<h3 id="orgc1fc4c8">Discount functions / The time value of money</h3>
+<div class="outline-text-3" id="text-orgc1fc4c8">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgbfbe4fc">
+<h4 id="orgbfbe4fc">Discount function - Motivation</h4>
+<p class="fragment">
+\(100\) now may be worth more than \(100\) in three years.
+</p>
+
+<p class="fragment">
+<b>Why</b>?
+</p>
+<p class="fragment">
+You could invest this \(100\) today and it would grow to \(100 a(3)\).
+</p>
+
+<p class="fragment">
+<b>Question</b>: How much should you invest now (at time \(t =0\)) to have \(1\) after \(t\) years?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org4e6a0ab">
+<h4 id="org4e6a0ab">Definition of discount function</h4>
+<p>
+The <span style="color: rgb(24,116,205)">discount function</span> is defined by
+</p>
+<div class="fragment">
+\begin{align*}
+  v(t) = \frac{1}{a(t)}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+In words, \(v(t)\) is the amount of money that one should <b>invest</b> at time \(0\) in order to have \(1\) at time \(t\).
+</p>
+
+<p class="fragment">
+For example,
+</p>
+<div class="fragment">
+\begin{align*}
+  v(t) = \begin{cases}
+    \frac{1}{1 + st}, & \mbox{simple interest}\\
+    \frac{1}{(1 + i)^t}, & \mbox{compound interest}
+\end{cases}
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org032d614">
+<h4 id="org032d614">Example 1.7.2</h4>
+<p>
+Suppose that the growth of money for the next five years is governed by simple interest at \(5\%\).
+</p>
+
+<p data-fragment-index="1" class="fragment">
+How much money should you invest now in order that you have a balance of \(23,000\) three years from now?
+</p>
+
+<p data-fragment-index="2" class="fragment">
+<b>Solution</b>
+</p>
+<ul>
+<li data-fragment-index="3" class="fragment">\(\displaystyle v(3) = \frac{1}{1 + (0.05)3} = \frac{1}{1.15}\).</li>
+<li data-fragment-index="4" class="fragment">Then we should invest \(23000 v(3) = 23000(1/1.15) = 20000\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgf2bafa5">
+<h4 id="orgf2bafa5">Invested at a time not zero</h4>
+<p>
+<b>Question</b>: What if one wishes to invest \(X\) not at time \(0\) but at a later time \(t_1>0\) with the goal of receiving \(S\) at \(t_2 > t_1\)?
+</p>
+
+<p class="fragment">
+Let us draw the timeline:
+</p>
+
+<div id="orgc53582c" class="figure">
+<p><img src="../img/math4050/Timeline.png" alt="Timeline.png" width="85%" class="fragment middle" />
+</p>
+</div>
+
+<div class="fragment">
+\begin{align*}
+  X = S \frac{v(t_2)}{v(t_1)} = S v(t_2)a(t_1) = S \frac{a(t_1)}{a(t_2)}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Read</span>: Example 1.7.3, and also page 35 - 40 for very useful instructions on <b>Cash Flow worksheet</b> using the BA II Plus calculator.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org2862247">
+<h4 id="org2862247">Example 1.7.4</h4>
+<p>
+Suppose that the growth of money for the next five years is governed by the linear accumulation function \(a(t) = 1+0.05t\).
+</p>
+
+<p class="fragment">
+If you wish to invest money two years from now so as to have \(23,000\) five years from now, how much money should you invest?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org2adc480">
+<h4 id="org2adc480">Example 1.7.4 - Solution</h4>
+<p class="fragment">
+Let \(X\) be the amount invested at time two.
+</p>
+
+
+<div id="orgba7b7b1" class="figure">
+<p><img src="../img/math4050/Timeline2-5.png" alt="Timeline2-5.png" width="80%" class="fragment middle" />
+</p>
+</div>
+
+<p class="fragment">
+So we have  \(X v(2) a(5) = 23000\),
+</p>
+<p class="fragment">
+and thus
+</p>
+<div class="fragment">
+\begin{align*}
+  X & = 23000 \frac{1}{a(5)} \frac{1}{v(2)} = 23000 v(5)a(2)\\
+& = 23000 \cdot \frac{1}{1.25} \cdot 1.10 = 20240.
+\end{align*}
+
+</div>
+<p class="fragment">
+<span style="color: rgb(255,0,0)">Warning:</span> \(a(5)v(2) = a(5)/a(2) \neq a(3)\)! Read Example 1.7.3 &amp; 4, and top of page 32.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgbc694c7">
+<h3 id="orgbc694c7">Simple and compound discount</h3>
+<div class="outline-text-3" id="text-orgbc694c7">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9e81681">
+<h4 id="org9e81681">Simple discount</h4>
+<p>
+In Section (1.4) we considered two parties negotiating a loan with a <b>fixed</b> amount of <b>interest</b> per basic time period for each \(1\) borrowed.
+</p>
+
+<p class="fragment">
+Suppose that we again consider two parties negotiating a loan, but this time they agree on a <b>fixed</b> amount of <b>discount</b> \(d\) per basic time period for each \(1\) borrowed.
+</p>
+
+<p class="fragment">
+Then, if the loan period is \([0, t]\) and \(K\) is the loan amount, the borrower receives \(K - Ktd = K(1 - td)\).
+</p>
+
+<p class="fragment">
+In particular, the borrower receives \(1\) if \(K = (1 - td)^{-1}\). It follows that \(a(t) = (1 - td)^{-1}\). Then the discount function \(v(t) = 1 - td\) is <b>linear</b>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org5ecaebe">
+<h4 id="org5ecaebe">Definition of simple discount</h4>
+<div>
+\begin{align*}
+  A_K(t) = \frac{K}{(1 - dt)}
+\end{align*}
+
+</div>
+<p class="fragment">
+is called the <span style="color: rgb(24,116,205)">amount function for K invested by simple discount at rate</span> \(d\).
+</p>
+
+<div class="fragment">
+\begin{align*}
+  a(t) = \frac{1}{1 - dt}
+\end{align*}
+
+</div>
+<p class="fragment">
+is called the <span style="color: rgb(24,116,205)">simple discount accumulation function at rate</span> \(d\).
+</p>
+
+<p class="fragment">
+<b>Note</b>: It only makes sense to talk about loan terms that are shorter than \(1/d\) in this case.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org8bed7fb">
+<h4 id="org8bed7fb">Compound discount</h4>
+<p>
+In analogy with the case of compound interest, here we assume that the effective discount rate \(d_n\) is <b>constant</b> for every unit time period, i.e., we assume that there is a constant \(d\) such that
+</p>
+<div class="fragment">
+\begin{align*}
+  d = d_n \qquad \text{for every } n \ge 1.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Then the equivalent interest rate has the form
+</p>
+<div class="fragment">
+\begin{align*}
+  i_n = i = \frac{d}{1 - d}\qquad \text{for every }  n \ge 1.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<i>Terminology</i>: If "year" is our basic time unit, then we say that \(d\) is the <span style="color: rgb(24,116,205)">annual effective discount rate</span>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org7a522a6">
+<h4 id="org7a522a6">Example 1.9.8</h4>
+<p>
+Cassandra needs to borrow money to pay her tuition. She has a choice of borrowing at an annual effective interest rate of \(5.1\%\) or at an annual effective discount rate of \(4.9\%\). Which rate should she choose?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgd0a0dda">
+<h4 id="orgd0a0dda">Example 1.9.8 - Solution</h4>
+<p>
+<b>Solution 1</b>:
+</p>
+<p class="fragment">
+An annual effective discount rate of \(4.9\%\) is equivalent to an annual effective interest rate of
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{0.049}{1-0.049} = 0.0515 > 0.051.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<b>Solution 2</b>:
+</p>
+<p class="fragment">
+An annual effective interest rate of \(5.1\%\) is equivalent to an annual effective discount rate of
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{0.051}{1+0.051} = 0.0485 < 0.049.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+So by both calculations, Cassandra should borrow at the \(5.1\%\) interest rate.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org4e11e0d">
+<h4 id="org4e11e0d">The discount factor</h4>
+<p>
+In the compound discount case, i.e., the discount rate is a constant, we have
+</p>
+<div class="fragment">
+\begin{align*}
+  d = \frac{i}{1 + i}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Using the notation for the <span style="color: rgb(24,116,205)">discount factor</span> \(\displaystyle v = \frac{1}{1 + i}\), we can rewrite the above as
+</p>
+<div class="fragment">
+\begin{align*}
+  d = iv.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<b>Note</b>:
+</p>
+<div class="fragment">
+\begin{align*}
+  d + v = 1.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9690176">
+<h4 id="org9690176">Compound discount accumulation function</h4>
+<p>
+In the compound discount case, we can rewrite the accumulation function
+</p>
+<div class="fragment">
+\begin{align*}
+  a(t) = (1 + i)^t = (1 - d)^{-t}.
+\end{align*}
+
+</div>
+<p class="fragment">
+and call it <span style="color: rgb(24,116,205)">compound discount accumulation function</span> at discount rate \(d\).
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Read:</span> Example 1.9.13 in the textbook.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org65c8572">
+<h3 id="org65c8572">Nominal rates of interest and discount</h3>
+<div class="outline-text-3" id="text-org65c8572">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org54df6fd">
+<h4 id="org54df6fd">Nominal interest rate</h4>
+<p>
+Assume that the bank credits the interest more than once per year, say \(m\) times in a single year.
+</p>
+
+<p class="fragment">
+We denote by \(i^{(m)}\), the <span style="color: rgb(24,116,205)">nominal (annual) interest rate compounded (convertible, payable) m times per year</span>.
+</p>
+
+<p class="fragment">
+The word "nominal" means that the interest rate \(i^{(m)}\) is annual <i>in name only</i>, i.e., the mechanism is such that the bank pays interest at the rate of
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{i^{(m)}}{m}\quad \text{after each $m^{\text{th}}$ of a year}
+\end{align*}
+
+</div>
+<p class="fragment">
+which then gets <b>reinvested</b> in the account.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org2064530">
+<h4 id="org2064530">Connection between \(i^{m}\) and \(i\)</h4>
+<p>
+Suppose that we have an investment governed by compound interest.
+Let \(i\) be the annual effective interest rate. It is also known as the <span style="color: rgb(24,116,205)">annual percentage yield (APY)</span>. Then
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{i^{(m)}}{m} = (1 + i)^{1/m} - 1,
+\end{align*}
+
+</div>
+<p class="fragment">
+which is equivalent to
+</p>
+<div class="fragment">
+\begin{align*}
+  i^{(m)} = m[(1 + i)^{1/m} - 1], \quad   i = \left( 1 + \frac{i^{(m)}}{m} \right)^m -1.
+\end{align*}
+
+</div>
+<p class="fragment">
+<b>Question</b>: Why?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org4ff7110">
+<h4 id="org4ff7110">Connection between \(i^{m}\) and \(i\) - Continued</h4>
+<p>
+In words, for every invested unit of money, one gets
+</p>
+<div class="fragment">
+\begin{align*}
+  1 + i
+\end{align*}
+
+</div>
+<p class="fragment">
+at the end of the year.
+</p>
+
+<p class="fragment">
+On the other hand, after every \(m^{\text{th}}\) of the year the money currently on the account grows by a factor of \((1 + i^{(m)}/m)\); there are \(m\) such compoundings in a single year, so the final amount of money equals
+</p>
+<div class="fragment">
+\begin{align*}
+  \left( 1 + \frac{i^{(m)}}{m} \right)^m.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+Finally, the two values displayed above must be equal.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgded44d9">
+<h4 id="orgded44d9">Example</h4>
+<p>
+Find the accumulated value of \(500\) invested for five years at \(0.08\) nominal interest compounded quarterly.
+</p>
+
+<p class="fragment">
+<b>Solution</b>
+</p>
+<div class="fragment">
+\begin{align*}
+  500 \left( 1 + \frac{0.08}{4} \right)^{4\times 5} = 500 \cdot 1.02^{20} = 742.97.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<b>Note</b>: The above investment scheme is equivalent to the one in which one invests \(500\) at \(2\%\) for \(20\) years.
+</p>
+
+<p class="fragment">
+<span style="color: rgb(24,116,205)">Read:</span> Example 1.10.5 and 1.10.6 in the textbook.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgc343b52">
+<h4 id="orgc343b52">Example 1.10.7 - \(i^{(m)}\) for \(m\) not an integer</h4>
+<p>
+Jolene invests money in a fund for which interest is paid once every two years. The rate per two-year period is \(14\%\). Find the nominal interest rate convertible biennially and the annual effective interest rate governing the fund.
+</p>
+
+<p>
+<b>Solution</b>
+</p>
+<ul>
+<li data-fragment-index="1" class="fragment">In this case, \(m = 1/2\).</li>
+<li data-fragment-index="2" class="fragment">The nominal (annual) interest rate \(i^{(1/2)} = 14\% / 2 = 7\%\).</li>
+<li data-fragment-index="3" class="fragment">The annual effective interest rate \(i = (1 + i^{(m)}/m)^m -1 = (1.14)^{1/2} -1 = 6.77\%\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgf5ac794">
+<h4 id="orgf5ac794">Nominal discount rate</h4>
+<p>
+Similar facts exist for discount rate.
+</p>
+
+<p class="fragment">
+With \(d\) as the annual discount rate, we have
+</p>
+<div class="fragment">
+\begin{align*}
+  1 - d = \left( 1 - \frac{d^{(m)}}{m} \right)^m,
+\end{align*}
+
+</div>
+<p class="fragment">
+or, equivalently,
+</p>
+<div class="fragment">
+\begin{align*}
+  d = 1 - \left( 1 - \frac{d^{(m)}}{m} \right)^m, \quad \text{or}\quad
+  d^{(m)} = m \left[ 1 - (1 -d)^{1/m} \right],
+\end{align*}
+
+</div>
+<p class="fragment">
+where \(d^{(m)}\) is called the <span style="color: rgb(24,116,205)">nominal discount rate compounded (convertible, payable) m times per year</span>.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org7ce239c">
+<h4 id="org7ce239c">Equivalent discount and interest rate</h4>
+<p>
+We can derive the following relationships
+</p>
+<div class="fragment">
+\begin{align*}
+  \left( 1 - \frac{d^{(m)}}{m} \right) \left( 1 + \frac{i^{(m)}}{m} \right) =1,
+\end{align*}
+
+</div>
+<div class="fragment">
+\begin{align*}
+  i^{(m)} = \frac{d^{(m)}}{1 - \frac{d^{(m)}}{m}}\quad \text{and} \quad d^{(m)} = \frac{i^{(m)}}{1 + \frac{i^{(m)}}{m}},
+\end{align*}
+
+</div>
+<p class="fragment">
+and most generally, for integers \(n\) and \(p\),
+</p>
+<div class="fragment">
+\begin{align*}
+  \left( 1 + \frac{i^{(n)}}{n} \right)^n = 1 + i = (1 - d)^{-1} = \left( 1 - \frac{d^{(p)}}{p} \right)^{-p}.
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9ee21d1">
+<h4 id="org9ee21d1">Example</h4>
+<p>
+If you invest \(100\) today and it grows to \(115\) in one year, what is
+</p>
+
+<div style="font-size: 80%;">
+<p class="fragment">
+<b>annual simple interest rate</b>:
+</p>
+<div class="fragment">
+\begin{align*}
+  100(1 + i) = 115 \Longrightarrow i = 0.15.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<b>annual compound interest rate</b>:
+</p>
+<div class="fragment">
+\begin{align*}
+  100(1 + i) = 115 \Longrightarrow i = 0.15.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<b>nominal interest compounded monthly</b>:
+</p>
+<div class="fragment">
+\begin{align*}
+  100 \left( 1 + \frac{i^{(12)}}{12} \right)^{12} = 115 \Longrightarrow i^{(12)} = 0.1406.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<b>nominal discount compounded monthly</b>:
+</p>
+<div class="fragment">
+\begin{align*}
+  \left( 1 - \frac{d^{(12)}}{12} \right) \left( 1 + \frac{i^{(12)}}{12} \right) =1 \Longrightarrow d^{(12)} = 0.1389.
+\end{align*}
+
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4e00fea">
+<h3 id="org4e00fea">Force of interest</h3>
+<div class="outline-text-3" id="text-org4e00fea">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org84df5db">
+<h4 id="org84df5db">Continuous compounding</h4>
+<p>
+What happens as \(m\) increases?
+</p>
+<div class="fragment">
+\begin{align*}
+  \lim_{m \to \infty} i^{(m)} = \lim_{m\to \infty} m \left[ (1+i)^{1/m} -1 \right] = \ln (1 + i).
+\end{align*}
+
+</div>
+
+<p class="fragment">
+We call
+</p>
+<div class="fragment">
+\begin{align*}
+  \delta = \lim_{m\to\infty} i^{(m)} = \ln (1 + i)
+\end{align*}
+
+</div>
+<p class="fragment">
+the <span style="color: rgb(24,116,205)">force of interest</span>.
+</p>
+
+<p class="fragment">
+Equivalently, \(i = e^{\delta} - 1, e^{\delta} = 1 + i\).
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org53b9768">
+<h4 id="org53b9768">Continuous compounding - Continued</h4>
+<p>
+With such a notation, the accumulation function takes the form
+</p>
+<div>
+\begin{align*}
+  a(t) = e^{\delta t}.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+One should imagine that the <b>continuous</b> compounding occurs at infinitesimally short time intervals &#x2026;
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org6538832">
+<h4 id="org6538832">Rates comparison</h4>
+<p>
+We also have
+</p>
+<div class="fragment">
+\begin{align*}
+  \lim_{m \to \infty} d^{(m)} = \lim_{m\to\infty} \frac{i^{(m)}}{1 + \frac{i^{(m)}}{m}} = \lim_{m\to \infty} i^{(m)}=\delta.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+If \(i>0\) and \(m>1\), then
+</p>
+<div class="fragment">
+\begin{align*}
+  i > i^{(m)} \searrow \delta \nwarrow d^{(m)} > d.
+\end{align*}
+
+</div>
+
+<p class="fragment">
+<b>Question</b>: Can you prove that \(i^{(m)}\) is <b>decreasing</b> and \(d^{(m)}\) is <b>increasing</b> in \(m\)?
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org934985b">
+<h4 id="org934985b">Force of interest at time \(t\)</h4>
+<p>
+Assuming that the interest rate is <b>variable</b>, you may be interested in looking at the interest rate over short periods of time. That interest rate is:
+</p>
+<div class="fragment">
+\begin{align*}
+  i_{[t, t+1/m]} = \frac{a(t+1/m) - a(t)}{a(t)},
+\end{align*}
+
+</div>
+<p class="fragment">
+and the nominal interest rate is
+</p>
+<div class="fragment">
+\begin{align*}
+  \frac{\left(\frac{a(t + 1/m ) - a(t)}{a(t)}\right)}{1/m} = \frac{\left(\frac{a(t + 1/m ) - a(t)}{1/m}\right)}{a(t)},
+\end{align*}
+
+</div>
+<p class="fragment">
+which as \(m \rightarrow \infty\) tends to
+</p>
+<div class="fragment">
+\begin{align*}
+\delta_t = \frac{a'(t)}{a(t)}  = \frac{d}{dt} \ln a(t).
+\end{align*}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4ae6574">
+<h4 id="org4ae6574">Force of interest at time \(t\) - Continued</h4>
+<p>
+We define the <b>function of time</b>
+</p>
+<div>
+\begin{align*}
+\delta_t = \frac{a'(t)}{a(t)}  = \frac{d}{dt} \ln a(t)
+\end{align*}
+
+</div>
+<p>
+as the <span style="color: rgb(24,116,205)">force of interest</span> at time \(t\).
+</p>
+
+<p data-fragment-index="1" class="fragment">
+<b>Special cases</b>:
+</p>
+<ul>
+<li data-fragment-index="2" class="fragment">Simple interest: \(a(t) = 1 + st\), \(\displaystyle \delta_t =  \frac{s}{1 + st}\).</li>
+<li data-fragment-index="3" class="fragment">Simple discount: \(a(t) = (1 - dt)^{-1}\), \(\displaystyle \delta_t =  \frac{d}{1 - dt}\).</li>
+<li data-fragment-index="4" class="fragment">Compound interest: \(a(t) = (1 + i)^t\), \(\delta_t = \ln ( 1 + i ) = \delta\).</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org26a88d4">
+<h4 id="org26a88d4">From \(\delta_t\) to \(a(t)\)</h4>
+<p>
+Recalling the definition of \(\delta_t\), and using the Fundamental Theorem of Calculus (simply put - we integrate both sides of the equality), we have
+</p>
+<div class="fragment">
+\begin{align*}
+  a(t) = e^{\int_0^t \delta_r\, dr} = \exp \left( \int_0^t \delta_r\, dr \right).
+\end{align*}
+
+</div>
+<p class="fragment">
+In particular, if \(\delta_t = \delta\), then
+</p>
+<div class="fragment">
+\begin{align*}
+a(t) = \exp\left(\int_0^t \delta dt\right) = e^{t \delta}.
+\end{align*}
+
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/markdown/markdown.js"></script>
+<script src="../plugin/notes/notes.js"></script>
+<script src="../plugin/search/search.js"></script>
+<script src="../plugin/zoom/zoom.js"></script>
+<script src="../plugin/reveal.js-menu/menu.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: false,
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'none',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom, RevealMenu, RevealChalkboard ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+,chalkboard: {storage: "chalkboard-demo", toggleChalkboardButton: { left: "80px" },	toggleNotesButton: { left: "130px" },	colorButtons: 5}});
+</script>
+</body>
+</html>
