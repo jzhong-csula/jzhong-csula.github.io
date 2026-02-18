@@ -12,8 +12,8 @@
 - This repo is intended to map to GitHub root site:
   `https://jzhong-csula.github.io/`
 - Clean short URLs are provided with per-course redirect folders, e.g.:
-  - `/math4050ch1/` -> `/slides/math4050ch1-slides.html`
-  - `/math4100ch1/` -> `/slides/math4100ch1-slides.html`
+  - `/math4050ch1/` -> `/slides/math4050ch1.html`
+  - `/math4100ch1/` -> `/slides/math4100ch1.html`
 
 ## Why This Layout
 - Keep source org files in S drive for multi-machine sync.
