@@ -33,13 +33,15 @@
 <div style="overflow:hidden;">
 <p style="margin-bottom:0.2em;"><strong>What AI can do for you:</strong></p>
 <pre style="background:#1e1e1e; color:#d4d4d4; padding:0.4em 0.6em; border-radius:6px; font-size:0.7em; width:fit-content;"><code>output = F.scaled_dot_product_attention(Q, K, V)</code></pre>
-<p class="fragment" style="margin:0.3em 0;">One line. Written by AI in 2 seconds. Anyone can run it.</p>
+<p class="fragment" style="margin:0.3em 0; color:rgb(30,90,160); font-weight:600;">One line. Written by AI in 2 seconds. Anyone can run it.</p>
+<div class="fragment">
 <p style="margin:0.5em 0 0.2em;"><strong>What this course teaches you:</strong></p>
 <p style="font-size:0.95em; margin:0.1em 0;">
 \[\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V\]
 </p>
 <p style="font-size:0.55em; color:#666; margin:0;"><em>— Vaswani et al. (2017)</em></p>
-<p class="fragment" style="margin:0.3em 0;">Understanding <strong>why</strong> this works. Knowing what to change when it doesn't.</p>
+</div>
+<p class="fragment" style="margin:0.3em 0; color:rgb(30,90,160); font-weight:600;">Understanding <strong>why</strong> this works. Knowing what to change when it doesn't.</p>
 </div>
 <div class="key-question fragment" style="clear:both;">Which person is harder to replace — the one who <strong>calls</strong> the function, or the one who <strong>understands</strong> it?</div>
 <aside class="notes">"Left side: one line of Python. ChatGPT writes this in 2 seconds. Anyone can copy-paste it." "Right side: the actual formula from the 2017 paper that invented the technology behind ChatGPT. Every AI system you use today is built on this." "Which person has more value? The one who copies the code, or the one who understands the formula? Who can debug it? Improve it? Build the NEXT breakthrough?" "That's what this course gives you. Not just how to USE AI — how to UNDERSTAND it."</aside>
@@ -136,7 +138,7 @@
 <ol>
 <li class="fragment">Turn every word into <strong>a list of numbers</strong>. ("cat" → some numbers, ...)</li>
 <li class="fragment">For each word, ask: <strong>how related is it to the blank?</strong> (Score each word.)</li>
-<li class="fragment">Turn the scores into <strong>percentages</strong>. (cat 40%, sat 30%, the 15%, on 15%.)</li>
+<li class="fragment">Turn the scores into <strong>percentages</strong>. (cat 51%, sat 31%, on 11%, the 7%.)</li>
 <li class="fragment">Mix the words' information using those percentages → <strong>predict "mat"</strong>.</li>
 </ol>
 <div class="applied fragment">That's it. Four steps. Each step is a math concept we'll learn.</div>
@@ -210,17 +212,20 @@ And wanting to understand ChatGPT motivates you to learn Math (vectors). <br/>
 <!-- 13: Scores to percentages -->
 <section>
 <h4>Step 3: From scores to percentages</h4>
-<p>After dot products, ChatGPT has a score for each word:</p>
-<table>
-<tr><th>Word</th><th>The</th><th>cat</th><th>sat</th><th>on</th></tr>
-<tr><td><strong>Score</strong></td><td>2</td><td>20</td><td>15</td><td>5</td></tr>
+<p>The blank <em>"___"</em> has its own numbers too: \(q = (0.5,\ 1)\). Score every word against it — same multiply-and-add as Step 2:</p>
+<table style="font-size:0.85em;">
+<tr><th>Word</th><th>Its numbers</th><th>Multiply and add</th><th>Score</th></tr>
+<tr><td>The</td><td>\((0,\ 1)\)</td><td>\(0(0.5) + 1(1)\)</td><td>1</td></tr>
+<tr><td><strong>cat</strong></td><td>\((4,\ 1)\)</td><td>\(4(0.5) + 1(1)\)</td><td><strong>3</strong></td></tr>
+<tr><td>sat</td><td>\((1,\ 2)\)</td><td>\(1(0.5) + 2(1)\)</td><td>2.5</td></tr>
+<tr><td>on</td><td>\((1,\ 1)\)</td><td>\(1(0.5) + 1(1)\)</td><td>1.5</td></tr>
 </table>
 <p>But we need <em>percentages</em>: out of 100% of my attention, how much goes to each word?</p>
 <table class="fragment">
 <tr><th>Word</th><th>The</th><th>cat</th><th>sat</th><th>on</th></tr>
-<tr><td><strong>Attention</strong></td><td>5%</td><td>47%</td><td>36%</td><td>12%</td></tr>
+<tr><td><strong>Attention</strong></td><td>7%</td><td>51%</td><td>31%</td><td>11%</td></tr>
 </table>
-<p class="fragment">"cat" gets 47% — it's the most important clue for predicting the blank.</p>
+<p class="fragment">"cat" gets 51% — over half the attention. It's the most important clue for predicting the blank.</p>
 <aside class="notes">"Scores: cat=20, sat=15, on=5, the=2. But what does '20' mean? Is it a lot? We need context." "Percentages give context: almost half to cat, about a third to sat, a little to on, barely any to the. Makes sense — 'cat' is the most important clue for 'the cat sat on the ___'." "The math function that does this is SOFTMAX. Scores in, percentages out. We'll learn exactly how in Week 12." This is where probability enters — AI needs to make DECISIONS, not just compute scores.</aside>
 </section>
 
@@ -295,10 +300,10 @@ And wanting to understand ChatGPT motivates you to learn Math (vectors). <br/>
 <!-- 18: Scaling -->
 <section>
 <h4>Why the \(\div\sqrt{d_k}\)?</h4>
-<p>Without scaling: scores \(= [50,\ 10,\ 2]\) → \([99.9\%,\ 0.1\%,\ 0.0\%]\)</p>
-<p>With scaling: scores \(= [5,\ 1,\ 0.2]\) → \([84\%,\ 12\%,\ 4\%]\)</p>
+<p>Without scaling: scores \(= [40,\ 32,\ 24]\) → \([99.97\%,\ 0.03\%,\ 0.00\%]\)</p>
+<p>With scaling \((\div\sqrt{d_k}=\div 8)\): scores \(= [5,\ 4,\ 3]\) → \([67\%,\ 24\%,\ 9\%]\)</p>
 <ul>
-<li class="fragment">Without scaling: 99.9% on ONE word. Can only "look at" one thing.</li>
+<li class="fragment">Without scaling: essentially <strong>100%</strong> on ONE word. Can only "look at" one thing.</li>
 <li class="fragment">With scaling: spreads attention across <strong>several</strong> words. Much better.</li>
 </ul>
 <p class="fragment">Like a student who reads one chapter vs. several — the second understands better.</p>
