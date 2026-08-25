@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<title>Math for DS</title>
+<title>Mathematical Foundations for Data Science and AI</title>
 <meta name="author" content="\\
 Jie Zhong \\
 Department of Mathematics \\
@@ -26,28 +26,28 @@ California State University, Los Angeles"/>
 <div class="reveal">
 <div class="slides">
 <section id="sec-title-slide">
-<h1>Math for DS</h1><h2>Unit 1 - Data Are Vectors; Matrices Are Machines</h2><h6> <br />
+<h1>Mathematical Foundations for Data Science and AI</h1><h2>Unit 1 — Data Are Vectors; Matrices Are Machines</h2><h6> <br />
 Jie Zhong <br />
 Department of Mathematics <br />
 California State University, Los Angeles</h6>
 </section>
 <section>
-<section id="slide-orgf14cebe">
-<h2 id="orgf14cebe">Unit 1</h2>
-<div class="outline-text-2" id="text-orgf14cebe">
+<section id="slide-org9698cba">
+<h2 id="org9698cba">Unit 1</h2>
+<div class="outline-text-2" id="text-org9698cba">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orga6d3d10">
-<h3 id="orga6d3d10">Data Are Vectors; Matrices Are Machines</h3>
-<div class="outline-text-3" id="text-orga6d3d10">
+<section id="slide-org8cf4df9">
+<h3 id="org8cf4df9">Data Are Vectors; Matrices Are Machines</h3>
+<div class="outline-text-3" id="text-org8cf4df9">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgdd8ff30">
-<h4 id="orgdd8ff30">Unit map</h4>
+<section id="slide-org696b9e9">
+<h4 id="org696b9e9">Unit map</h4>
 <div class="key-question">
 <p>
 How can real objects become numbers, and how can mathematical operations compare or transform those numbers?
@@ -64,8 +64,8 @@ How can real objects become numbers, and how can mathematical operations compare
 </section>
 </section>
 <section>
-<section id="slide-org5695142">
-<h4 id="org5695142">What this unit should answer</h4>
+<section id="slide-orgb6afd2c">
+<h4 id="orgb6afd2c">What this unit should answer</h4>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -112,22 +112,22 @@ How can real objects become numbers, and how can mathematical operations compare
 </section>
 </section>
 <section>
-<section id="slide-orgef800f8">
-<h2 id="orgef800f8">Week 1 - L01</h2>
-<div class="outline-text-2" id="text-orgef800f8">
+<section id="slide-org8b24453">
+<h2 id="org8b24453">Week 1 - L01</h2>
+<div class="outline-text-2" id="text-org8b24453">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org7e4ae97">
-<h3 id="org7e4ae97">Vectors, Norms, Similarity</h3>
-<div class="outline-text-3" id="text-org7e4ae97">
+<section id="slide-orgae47b29">
+<h3 id="orgae47b29">Vectors, Norms, Similarity</h3>
+<div class="outline-text-3" id="text-orgae47b29">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org6c61c2e">
-<h4 id="org6c61c2e">Opening question</h4>
+<section id="slide-orge911367">
+<h4 id="orge911367">Opening question</h4>
 <div class="key-question">
 <p>
 If two movies, students, or documents can be represented by numbers, how can we decide which two are similar?
@@ -143,8 +143,8 @@ If two movies, students, or documents can be represented by numbers, how can we 
 </section>
 </section>
 <section>
-<section id="slide-org5821e9d">
-<h4 id="org5821e9d">Course promise</h4>
+<section id="slide-orgc8d0f9d">
+<h4 id="orgc8d0f9d">Course promise</h4>
 <div class="applied">
 <p>
 This course connects mathematical ideas to data science and AI — without pretending one semester covers everything.
@@ -160,8 +160,8 @@ This course connects mathematical ideas to data science and AI — without prete
 </section>
 </section>
 <section>
-<section id="slide-orgfcea4e9">
-<h4 id="orgfcea4e9">Question map</h4>
+<section id="slide-org1522dac">
+<h4 id="org1522dac">Question map</h4>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -214,15 +214,15 @@ This course connects mathematical ideas to data science and AI — without prete
 </section>
 </section>
 <section>
-<section id="slide-org6b17451">
-<h3 id="org6b17451">Data as Vectors</h3>
-<div class="outline-text-3" id="text-org6b17451">
+<section id="slide-orgb93a2de">
+<h3 id="orgb93a2de">Data as Vectors</h3>
+<div class="outline-text-3" id="text-orgb93a2de">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org734138e">
-<h4 id="org734138e">The real question</h4>
+<section id="slide-org6c7ca85">
+<h4 id="org6c7ca85">The real question</h4>
 <div class="key-question">
 <p>
 A patient has blood pressure 120 and heart rate 75. Another has 135 and 70. How do we organize and compare these numbers?
@@ -237,8 +237,8 @@ A patient has blood pressure 120 and heart rate 75. Another has 135 and 70. How 
 </section>
 </section>
 <section>
-<section id="slide-org9e8e665">
-<h4 id="org9e8e665">Movie preferences as lists of numbers</h4>
+<section id="slide-org3f1eb53">
+<h4 id="org3f1eb53">Movie preferences as lists of numbers</h4>
 <p>
 Suppose each movie is described by three features:
 </p>
@@ -260,8 +260,8 @@ Suppose each movie is described by three features:
 </section>
 </section>
 <section>
-<section id="slide-org909aa1f">
-<h4 id="org909aa1f">What should similarity mean?</h4>
+<section id="slide-org96c8681">
+<h4 id="org96c8681">What should similarity mean?</h4>
 <div class="key-question">
 <p>
 Is \(\mathbf{x}\) more similar to \(\mathbf{y}\), or to \(\mathbf{z}\)?
@@ -277,8 +277,8 @@ Is \(\mathbf{x}\) more similar to \(\mathbf{y}\), or to \(\mathbf{z}\)?
 </section>
 </section>
 <section>
-<section id="slide-orgb67d630">
-<h4 id="orgb67d630">Now name it: vector</h4>
+<section id="slide-org06c662c">
+<h4 id="org06c662c">Now name it: vector</h4>
 <div class="mathbox">
 <p>
 A vector in \(\R^d\) is an ordered list of \(d\) real numbers:
@@ -297,8 +297,8 @@ A vector in \(\R^d\) is an ordered list of \(d\) real numbers:
 </section>
 </section>
 <section>
-<section id="slide-orga3cc163">
-<h4 id="orga3cc163">Vector arithmetic</h4>
+<section id="slide-org9d987c2">
+<h4 id="org9d987c2">Vector arithmetic</h4>
 <div style="display:flex; align-items:center; gap:1em;"><div style="flex:1;">
 <p>
 Let \(\mathbf{x}=(2,-1)\) and \(\mathbf{y}=(-3,4)\).
@@ -321,8 +321,8 @@ All arithmetic is <b>component by component</b>.
 </section>
 </section>
 <section>
-<section id="slide-org05d03a3">
-<h4 id="org05d03a3">Quick check: vectors</h4>
+<section id="slide-org3a5fc7c">
+<h4 id="org3a5fc7c">Quick check: vectors</h4>
 <div class="quickcheck">
 <p>
 Compute \(2\mathbf{x}-\mathbf{y}\) for \(\mathbf{x}=(2,-1)\) and \(\mathbf{y}=(-3,4)\).
@@ -335,15 +335,15 @@ Answer: \(2(2,-1)-(-3,4)=(4,-2)-(-3,4)=(7,-6)\).
 </section>
 </section>
 <section>
-<section id="slide-orga18da7c">
-<h3 id="orga18da7c">Dot Product</h3>
-<div class="outline-text-3" id="text-orga18da7c">
+<section id="slide-org1b1d8db">
+<h3 id="org1b1d8db">Dot Product</h3>
+<div class="outline-text-3" id="text-org1b1d8db">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgaf8aee6">
-<h4 id="orgaf8aee6">The real question</h4>
+<section id="slide-org1274f58">
+<h4 id="org1274f58">The real question</h4>
 <p>
 Recall: \(\text{Movie X}=(3,1,0)\), \(\text{Movie Y}=(6,2,0)\), \(\text{Movie Z}=(0,1,3)\).
 </p>
@@ -362,8 +362,8 @@ Three numbers each. How do we get a <b>single number</b> that says "how similar 
 </section>
 </section>
 <section>
-<section id="slide-orge116e49">
-<h4 id="orge116e49">First example</h4>
+<section id="slide-org062d4b8">
+<h4 id="org062d4b8">First example</h4>
 <p>
 For our movie vectors:
 \[
@@ -383,8 +383,8 @@ Large positive value: these two movies put weight on the same features.
 </section>
 </section>
 <section>
-<section id="slide-org7a4a6a0">
-<h4 id="org7a4a6a0">Now try with the different movie</h4>
+<section id="slide-org07a79d6">
+<h4 id="org07a79d6">Now try with the different movie</h4>
 <p>
 \[
 \mathbf{x}=(3,1,0),\qquad \mathbf{z}=(0,1,3),
@@ -401,8 +401,8 @@ Much smaller: these movies have different feature patterns.
 </section>
 </section>
 <section>
-<section id="slide-org2136148">
-<h4 id="org2136148">Now name it: dot product</h4>
+<section id="slide-org71b08ef">
+<h4 id="org71b08ef">Now name it: dot product</h4>
 <div class="mathbox">
 <p>
 For \(\mathbf{x},\mathbf{y}\in\R^d\),
@@ -422,8 +422,8 @@ For \(\mathbf{x},\mathbf{y}\in\R^d\),
 </section>
 </section>
 <section>
-<section id="slide-org8cce5c0">
-<h4 id="org8cce5c0">What does the sign tell you?</h4>
+<section id="slide-org318c442">
+<h4 id="org318c442">What does the sign tell you?</h4>
 <ul>
 <li data-fragment-index="1" class="fragment">Positive dot product: vectors tend to point in similar directions.</li>
 <li data-fragment-index="2" class="fragment">Zero dot product: vectors are perpendicular (orthogonal).</li>
@@ -441,8 +441,8 @@ Positive = agreement. Negative = disagreement. Zero = unrelated.
 </section>
 </section>
 <section>
-<section id="slide-org2f33f72">
-<h4 id="org2f33f72">Quick check: dot product</h4>
+<section id="slide-org556d97f">
+<h4 id="org556d97f">Quick check: dot product</h4>
 <div class="quickcheck">
 <p>
 Compute \((1,2,0)^\top(3,-1,4)\). What does the sign tell you?
@@ -455,15 +455,15 @@ Answer: \(1\cdot 3+2\cdot(-1)+0\cdot 4=3-2+0=1\). Positive: mild agreement.
 </section>
 </section>
 <section>
-<section id="slide-orgbc26dcc">
-<h3 id="orgbc26dcc">Norms</h3>
-<div class="outline-text-3" id="text-orgbc26dcc">
+<section id="slide-org4d2b37a">
+<h3 id="org4d2b37a">Norms</h3>
+<div class="outline-text-3" id="text-org4d2b37a">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org5f4d890">
-<h4 id="org5f4d890">The real question</h4>
+<section id="slide-orgccc2812">
+<h4 id="orgccc2812">The real question</h4>
 <div class="key-question">
 <p>
 A model predicts scores \((2,-1)\) but the correct scores are \((0,0)\). How big is the error?
@@ -478,8 +478,8 @@ A model predicts scores \((2,-1)\) but the correct scores are \((0,0)\). How big
 </section>
 </section>
 <section>
-<section id="slide-org1a67391">
-<h4 id="org1a67391">First example: L2 norm</h4>
+<section id="slide-org72fdee1">
+<h4 id="org72fdee1">First example: L2 norm</h4>
 <p>
 For \(\mathbf{x}=(3,4)\):
 \[
@@ -495,8 +495,8 @@ The \(\ell_2\) norm is the straight-line distance from the origin — like measu
 </section>
 </section>
 <section>
-<section id="slide-orgdbe6fcc">
-<h4 id="orgdbe6fcc">Second example: L1 norm</h4>
+<section id="slide-org3f9aa66">
+<h4 id="org3f9aa66">Second example: L1 norm</h4>
 <p>
 For \(\mathbf{u}=(-2,5)\):
 \[
@@ -512,8 +512,8 @@ The \(\ell_1\) norm adds absolute values — like walking along city blocks.
 </section>
 </section>
 <section>
-<section id="slide-org788b1eb">
-<h4 id="org788b1eb">Now name them: norms</h4>
+<section id="slide-org506c946">
+<h4 id="org506c946">Now name them: norms</h4>
 <div class="mathbox">
 <p>
 \[
@@ -532,8 +532,8 @@ The \(\ell_1\) norm adds absolute values — like walking along city blocks.
 </section>
 </section>
 <section>
-<section id="slide-org159d858">
-<h4 id="org159d858">L1 vs L2: different geometry</h4>
+<section id="slide-orge43a287">
+<h4 id="orge43a287">L1 vs L2: different geometry</h4>
 <div style="display:flex; align-items:center; gap:1em;"><div style="flex:1;">
 <p>
 The "unit ball" — all vectors with norm \(\le 1\) — looks different for each norm:
@@ -556,8 +556,8 @@ The diamond shape of the \(\ell_1\) ball is why L1 regularization pushes weights
 </section>
 </section>
 <section>
-<section id="slide-org8e212ee">
-<h4 id="org8e212ee">Quick check: norms</h4>
+<section id="slide-org5a39dbd">
+<h4 id="org5a39dbd">Quick check: norms</h4>
 <div class="quickcheck">
 <p>
 Compute \(\norm{(3,-4)}_2\) and \(\norm{(3,-4)}_1\).
@@ -570,15 +570,15 @@ Answer: \(\norm{(3,-4)}_2=\sqrt{9+16}=5\). \(\norm{(3,-4)}_1=3+4=7\).
 </section>
 </section>
 <section>
-<section id="slide-org554489e">
-<h3 id="org554489e">Distance</h3>
-<div class="outline-text-3" id="text-org554489e">
+<section id="slide-orgcb59dd2">
+<h3 id="orgcb59dd2">Distance</h3>
+<div class="outline-text-3" id="text-orgcb59dd2">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgbd335fb">
-<h4 id="orgbd335fb">The real question</h4>
+<section id="slide-org4daea81">
+<h4 id="org4daea81">The real question</h4>
 <div class="key-question">
 <p>
 Two data points are at \(\mathbf{x}=(1,2)\) and \(\mathbf{y}=(4,6)\). How far apart are they?
@@ -593,8 +593,8 @@ Two data points are at \(\mathbf{x}=(1,2)\) and \(\mathbf{y}=(4,6)\). How far ap
 </section>
 </section>
 <section>
-<section id="slide-org140a928">
-<h4 id="org140a928">Worked example</h4>
+<section id="slide-org4ead95f">
+<h4 id="org4ead95f">Worked example</h4>
 <p>
 \[
 \mathbf{x}-\mathbf{y}=(1-4,\;2-6)=(-3,-4).
@@ -612,8 +612,8 @@ Distance = length of the difference vector. This is how nearest-neighbor search 
 </section>
 </section>
 <section>
-<section id="slide-org3147625">
-<h4 id="org3147625">Now name it: distance</h4>
+<section id="slide-org77d2b46">
+<h4 id="org77d2b46">Now name it: distance</h4>
 <div class="mathbox">
 <p>
 \[
@@ -631,8 +631,8 @@ d(\mathbf{x},\mathbf{y})=\norm{\mathbf{x}-\mathbf{y}}_2.
 </section>
 </section>
 <section>
-<section id="slide-org39b3961">
-<h4 id="org39b3961">Common mistake</h4>
+<section id="slide-orgd27661d">
+<h4 id="orgd27661d">Common mistake</h4>
 <div class="quickcheck">
 <p>
 Is \(\norm{\mathbf{x}}_2 - \norm{\mathbf{y}}_2\) the same as \(\norm{\mathbf{x}-\mathbf{y}}_2\)?
@@ -647,15 +647,15 @@ Is \(\norm{\mathbf{x}}_2 - \norm{\mathbf{y}}_2\) the same as \(\norm{\mathbf{x}-
 </section>
 </section>
 <section>
-<section id="slide-org8c82851">
-<h3 id="org8c82851">Cosine Similarity</h3>
-<div class="outline-text-3" id="text-org8c82851">
+<section id="slide-orgb5398cd">
+<h3 id="orgb5398cd">Cosine Similarity</h3>
+<div class="outline-text-3" id="text-orgb5398cd">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgd53a4b3">
-<h4 id="orgd53a4b3">The real question</h4>
+<section id="slide-org4e2fe80">
+<h4 id="org4e2fe80">The real question</h4>
 <div class="key-question">
 <p>
 If \(\mathbf{y}=2\mathbf{x}\), should these two vectors be considered similar?
@@ -671,8 +671,8 @@ If \(\mathbf{y}=2\mathbf{x}\), should these two vectors be considered similar?
 </section>
 </section>
 <section>
-<section id="slide-orga489f15">
-<h4 id="orga489f15">Worked example (step 1)</h4>
+<section id="slide-org98064f7">
+<h4 id="org98064f7">Worked example (step 1)</h4>
 <p>
 Let \(\mathbf{x}=(1,2)\) and \(\mathbf{y}=(3,-1)\).
 </p>
@@ -694,8 +694,8 @@ Step 2 — norms:
 </section>
 </section>
 <section>
-<section id="slide-orgdce9afd">
-<h4 id="orgdce9afd">Worked example (step 3)</h4>
+<section id="slide-org6711ae0">
+<h4 id="org6711ae0">Worked example (step 3)</h4>
 <p>
 Step 3 — divide:
 \[
@@ -712,8 +712,8 @@ Small positive value: these vectors have only mild directional agreement.
 </section>
 </section>
 <section>
-<section id="slide-org26de714">
-<h4 id="org26de714">Now name it: cosine similarity</h4>
+<section id="slide-org7bd6c7b">
+<h4 id="org7bd6c7b">Now name it: cosine similarity</h4>
 <div class="mathbox">
 <p>
 \[
@@ -734,8 +734,8 @@ Small positive value: these vectors have only mild directional agreement.
 </section>
 </section>
 <section>
-<section id="slide-orgf32e451">
-<h4 id="orgf32e451">Why this works: unit vectors</h4>
+<section id="slide-org05c8b03">
+<h4 id="org05c8b03">Why this works: unit vectors</h4>
 <p>
 Dividing by the norms shrinks each vector to length \(1\):
 \[
@@ -758,8 +758,8 @@ Cosine similarity powers search engines, recommendation systems, and text retrie
 </section>
 </section>
 <section>
-<section id="slide-org1433fc8">
-<h4 id="org1433fc8">Quick check: cosine similarity</h4>
+<section id="slide-org749b5de">
+<h4 id="org749b5de">Quick check: cosine similarity</h4>
 <div class="quickcheck">
 <p>
 If \(\mathbf{y}=5\mathbf{x}\) for some nonzero \(\mathbf{x}\), what is \(\cos\theta\)?
@@ -772,15 +772,15 @@ Answer: \(\cos\theta=1\). Scaling does not change the angle.
 </section>
 </section>
 <section>
-<section id="slide-org1fe2943">
-<h3 id="org1fe2943">L01 Summary</h3>
-<div class="outline-text-3" id="text-org1fe2943">
+<section id="slide-orge194c80">
+<h3 id="orge194c80">L01 Summary</h3>
+<div class="outline-text-3" id="text-orge194c80">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgcc16ed4">
-<h4 id="orgcc16ed4">What we built today</h4>
+<section id="slide-orgdcf5351">
+<h4 id="orgdcf5351">What we built today</h4>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -834,8 +834,8 @@ Answer: \(\cos\theta=1\). Scaling does not change the angle.
 </section>
 </section>
 <section>
-<section id="slide-org93d5a4e">
-<h4 id="org93d5a4e">Preview</h4>
+<section id="slide-orgb288d7d">
+<h4 id="orgb288d7d">Preview</h4>
 <div class="key-question">
 <p>
 We can now compare vectors. But what transforms them?
@@ -848,22 +848,22 @@ Next time: matrices as machines that transform data.
 </section>
 </section>
 <section>
-<section id="slide-org39ddf12">
-<h2 id="org39ddf12">Week 1 - L02</h2>
-<div class="outline-text-2" id="text-org39ddf12">
+<section id="slide-org887e26b">
+<h2 id="org887e26b">Week 1 - L02</h2>
+<div class="outline-text-2" id="text-org887e26b">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org49c0a75">
-<h3 id="org49c0a75">Matrices and Linear Maps</h3>
-<div class="outline-text-3" id="text-org49c0a75">
+<section id="slide-org6f26a4a">
+<h3 id="org6f26a4a">Matrices and Linear Maps</h3>
+<div class="outline-text-3" id="text-org6f26a4a">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org560ed16">
-<h4 id="org560ed16">Opening question</h4>
+<section id="slide-orgadec1a7">
+<h4 id="orgadec1a7">Opening question</h4>
 <div class="key-question">
 <p>
 If vectors represent data, what kind of machine can transform every data point at once?
@@ -879,15 +879,15 @@ If vectors represent data, what kind of machine can transform every data point a
 </section>
 </section>
 <section>
-<section id="slide-org6668a69">
-<h3 id="org6668a69">Matrices: Tables with Rules</h3>
-<div class="outline-text-3" id="text-org6668a69">
+<section id="slide-orgf238397">
+<h3 id="orgf238397">Matrices: Tables with Rules</h3>
+<div class="outline-text-3" id="text-orgf238397">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orged80cde">
-<h4 id="orged80cde">Start with a data table</h4>
+<section id="slide-org08c810f">
+<h4 id="org08c810f">Start with a data table</h4>
 <p>
 Three students, two features each: hours studied and hours slept.
 </p>
@@ -906,8 +906,8 @@ Three students, two features each: hours studied and hours slept.
 </section>
 </section>
 <section>
-<section id="slide-org39d4cab">
-<h4 id="org39d4cab">Now name it: matrix</h4>
+<section id="slide-org4660ee8">
+<h4 id="org4660ee8">Now name it: matrix</h4>
 <div class="mathbox">
 <p>
 A matrix \(A=[a_{ij}]\in\R^{m\times n}\) has \(m\) rows and \(n\) columns.
@@ -924,8 +924,8 @@ Think of \(a_{ij}\) as a spreadsheet cell address: row \(i\), column \(j\).
 </section>
 </section>
 <section>
-<section id="slide-org4b91695">
-<h4 id="org4b91695">Identify entries</h4>
+<section id="slide-orgd76aea4">
+<h4 id="orgd76aea4">Identify entries</h4>
 <p>
 \[A=\begin{bmatrix}1 & 2\\-1 & 3\end{bmatrix}.\]
 </p>
@@ -939,8 +939,8 @@ Think of \(a_{ij}\) as a spreadsheet cell address: row \(i\), column \(j\).
 </section>
 </section>
 <section>
-<section id="slide-orgc8fc61f">
-<h4 id="orgc8fc61f">Transpose and identity</h4>
+<section id="slide-org9ff5161">
+<h4 id="org9ff5161">Transpose and identity</h4>
 <div class="fragment">
 <p>
 <b>Transpose</b> \(A^\top\): swap rows and columns. \((A^\top)_{ij}=a_{ji}\).
@@ -969,8 +969,8 @@ The identity matrix is like multiplying by 1 — it shows up as the "starting po
 </section>
 </section>
 <section>
-<section id="slide-org41d31ae">
-<h4 id="org41d31ae">Quick check: matrices</h4>
+<section id="slide-org7acee24">
+<h4 id="org7acee24">Quick check: matrices</h4>
 <div class="quickcheck">
 <p>
 If \(A\in\R^{2\times 3}\), how many entries does \(A\) have? What is the shape of \(A^\top\)?
@@ -983,15 +983,15 @@ Answer: 6 entries. \(A^\top\in\R^{3\times 2}\).
 </section>
 </section>
 <section>
-<section id="slide-org9ada613">
-<h3 id="org9ada613">Matrix-Vector Multiplication</h3>
-<div class="outline-text-3" id="text-org9ada613">
+<section id="slide-orgdb4707f">
+<h3 id="orgdb4707f">Matrix-Vector Multiplication</h3>
+<div class="outline-text-3" id="text-orgdb4707f">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org69a2ac1">
-<h4 id="org69a2ac1">The real question</h4>
+<section id="slide-org9effa15">
+<h4 id="org9effa15">The real question</h4>
 <div class="key-question">
 <p>
 A student has features (hours studied, hours slept) = \((5,7)\). The model assigns weights \((0.6,\,0.4)\). What is the student's predicted score?
@@ -1004,8 +1004,8 @@ A student has features (hours studied, hours slept) = \((5,7)\). The model assig
 </section>
 </section>
 <section>
-<section id="slide-org1d48fc2">
-<h4 id="org1d48fc2">One student is a dot product. What about three?</h4>
+<section id="slide-orgf9dd433">
+<h4 id="orgf9dd433">One student is a dot product. What about three?</h4>
 <div class="mathbox">
 <p>
 \[X=\begin{bmatrix} 1 & 2\\ 2 & 1\\ 3 & 4 \end{bmatrix}, \qquad \mathbf{w}=\begin{bmatrix} 2\\ 1 \end{bmatrix}.\]
@@ -1018,8 +1018,8 @@ We want one score per student: \(X\mathbf{w}=\text{?}\)
 </section>
 </section>
 <section>
-<section id="slide-org954ad0f">
-<h4 id="org954ad0f">Row-by-row computation</h4>
+<section id="slide-org35f6f25">
+<h4 id="org35f6f25">Row-by-row computation</h4>
 <p>
 \[X\mathbf{w} = \begin{bmatrix} 1\cdot 2+2\cdot 1\\ 2\cdot 2+1\cdot 1\\ 3\cdot 2+4\cdot 1 \end{bmatrix} = \begin{bmatrix} 4\\5\\10 \end{bmatrix}.\]
 </p>
@@ -1032,8 +1032,8 @@ We want one score per student: \(X\mathbf{w}=\text{?}\)
 </section>
 </section>
 <section>
-<section id="slide-org394eeb9">
-<h4 id="org394eeb9">Now name it: matrix-vector multiplication</h4>
+<section id="slide-orgd2c79dc">
+<h4 id="orgd2c79dc">Now name it: matrix-vector multiplication</h4>
 <div class="mathbox">
 <p>
 For \(A\in\R^{m\times n}\) and \(\mathbf{x}\in\R^n\):
@@ -1051,8 +1051,8 @@ For \(A\in\R^{m\times n}\) and \(\mathbf{x}\in\R^n\):
 </section>
 </section>
 <section>
-<section id="slide-org07e3d04">
-<h4 id="org07e3d04">Second example</h4>
+<section id="slide-org7d9a354">
+<h4 id="org7d9a354">Second example</h4>
 <p>
 \[A=\begin{bmatrix}1&2\\-1&3\end{bmatrix},\quad \mathbf{x}=\begin{bmatrix}2\\-1\end{bmatrix}.\]
 </p>
@@ -1066,8 +1066,8 @@ For \(A\in\R^{m\times n}\) and \(\mathbf{x}\in\R^n\):
 </section>
 </section>
 <section>
-<section id="slide-org9b44f14">
-<h4 id="org9b44f14">Column view</h4>
+<section id="slide-org5e204e1">
+<h4 id="org5e204e1">Column view</h4>
 <div style="display:flex; align-items:center; gap:1em;"><div style="flex:1;">
 <p>
 There is another way to read \(A\mathbf{x}\): as a weighted combination of columns.
@@ -1088,8 +1088,8 @@ There is another way to read \(A\mathbf{x}\): as a weighted combination of colum
 </section>
 </section>
 <section>
-<section id="slide-org52b5549">
-<h4 id="org52b5549">Quick check: matrix-vector</h4>
+<section id="slide-orgfad0018">
+<h4 id="orgfad0018">Quick check: matrix-vector</h4>
 <div class="quickcheck">
 <p>
 Compute \(A\mathbf{x}\) for \(A=\begin{bmatrix}2&0\\1&3\end{bmatrix}\) and \(\mathbf{x}=\begin{bmatrix}1\\2\end{bmatrix}\).
@@ -1102,15 +1102,15 @@ Answer: \(A\mathbf{x}=\begin{bmatrix}2\cdot 1+0\cdot 2\\1\cdot 1+3\cdot 2\end{bm
 </section>
 </section>
 <section>
-<section id="slide-org5985b04">
-<h3 id="org5985b04">Linear Maps</h3>
-<div class="outline-text-3" id="text-org5985b04">
+<section id="slide-orgfde4d78">
+<h3 id="orgfde4d78">Linear Maps</h3>
+<div class="outline-text-3" id="text-orgfde4d78">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org664ffe5">
-<h4 id="org664ffe5">What does a matrix do to a picture?</h4>
+<section id="slide-org1a14cce">
+<h4 id="org1a14cce">What does a matrix do to a picture?</h4>
 <div class="key-question">
 <p>
 If we apply \(A\mathbf{x}\) to every point in a grid, what happens to the grid?
@@ -1125,8 +1125,8 @@ If we apply \(A\mathbf{x}\) to every point in a grid, what happens to the grid?
 </section>
 </section>
 <section>
-<section id="slide-orgc52a3ca">
-<h4 id="orgc52a3ca">Grid transformation</h4>
+<section id="slide-org16df813">
+<h4 id="org16df813">Grid transformation</h4>
 <img src="../images/unit01/u1-L02-fig06-linear-map-grid.png" alt="Grid before and after linear transformation" style="display:block; max-width:85%; margin:0.3em auto; border-radius:6px;">
 
 <div class="small-note center">
@@ -1137,8 +1137,8 @@ A matrix can stretch, rotate, reflect, or shear — but always keeps lines strai
 </section>
 </section>
 <section>
-<section id="slide-org009ab58">
-<h4 id="org009ab58">What makes it "linear"?</h4>
+<section id="slide-org1f622ca">
+<h4 id="org1f622ca">What makes it "linear"?</h4>
 <p>
 A linear map \(\Phi\) satisfies two rules:
 </p>
@@ -1157,15 +1157,15 @@ Every matrix \(A\) defines a linear map via \(\mathbf{x}\mapsto A\mathbf{x}\). L
 </section>
 </section>
 <section>
-<section id="slide-org48f3479">
-<h3 id="org48f3479">Matrix-Matrix Multiplication</h3>
-<div class="outline-text-3" id="text-org48f3479">
+<section id="slide-org1488acc">
+<h3 id="org1488acc">Matrix-Matrix Multiplication</h3>
+<div class="outline-text-3" id="text-org1488acc">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgeec4df4">
-<h4 id="orgeec4df4">The real question</h4>
+<section id="slide-orge729e62">
+<h4 id="orge729e62">The real question</h4>
 <div class="key-question">
 <p>
 What if we apply one transformation and then another? Can we combine them into a single matrix?
@@ -1178,8 +1178,8 @@ Yes: matrix-matrix multiplication = composition of transformations.
 </section>
 </section>
 <section>
-<section id="slide-org1b3172c">
-<h4 id="org1b3172c">Setup</h4>
+<section id="slide-org639ca9f">
+<h4 id="org639ca9f">Setup</h4>
 <p>
 \[A=\begin{bmatrix}1&2\\-1&3\end{bmatrix},\quad B=\begin{bmatrix}0&1\\4&-2\end{bmatrix}.\]
 </p>
@@ -1190,8 +1190,8 @@ We want \(C=AB\): first apply \(B\), then apply \(A\).
 </section>
 </section>
 <section>
-<section id="slide-org04c50b1">
-<h4 id="org04c50b1">Entry-by-entry computation</h4>
+<section id="slide-org312954e">
+<h4 id="org312954e">Entry-by-entry computation</h4>
 <p>
 \[
 c_{11}=1\cdot 0+2\cdot 4=8,\quad c_{12}=1\cdot 1+2\cdot(-2)=-3,
@@ -1207,8 +1207,8 @@ c_{21}=(-1)\cdot 0+3\cdot 4=12,\quad c_{22}=(-1)\cdot 1+3\cdot(-2)=-7.
 </section>
 </section>
 <section>
-<section id="slide-org4bece53">
-<h4 id="org4bece53">Now name it: matrix multiplication</h4>
+<section id="slide-org11c8e66">
+<h4 id="org11c8e66">Now name it: matrix multiplication</h4>
 <div class="mathbox">
 <p>
 For \(A\in\R^{m\times n}\) and \(B\in\R^{n\times p}\):
@@ -1226,8 +1226,8 @@ For \(A\in\R^{m\times n}\) and \(B\in\R^{n\times p}\):
 </section>
 </section>
 <section>
-<section id="slide-org24a3846">
-<h4 id="org24a3846">Order matters</h4>
+<section id="slide-org880c58b">
+<h4 id="org880c58b">Order matters</h4>
 <div class="key-question">
 <p>
 Is \(AB=BA\)?
@@ -1242,8 +1242,8 @@ Is \(AB=BA\)?
 </section>
 </section>
 <section>
-<section id="slide-org461b1c6">
-<h4 id="org461b1c6">Quick check: matrix multiplication</h4>
+<section id="slide-orgf93aa1a">
+<h4 id="orgf93aa1a">Quick check: matrix multiplication</h4>
 <div class="quickcheck">
 <p>
 If \(A\) is \(2\times 3\) and \(B\) is \(3\times 4\), what is the shape of \(AB\)? Can you compute \(BA\)?
@@ -1256,15 +1256,15 @@ Answer: \(AB\in\R^{2\times 4}\). \(BA\) is not defined: \(B\) has 4 columns but 
 </section>
 </section>
 <section>
-<section id="slide-org5528f85">
-<h3 id="org5528f85">Data Matrix View</h3>
-<div class="outline-text-3" id="text-org5528f85">
+<section id="slide-org3acc6c5">
+<h3 id="org3acc6c5">Data Matrix View</h3>
+<div class="outline-text-3" id="text-org3acc6c5">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org7204d9c">
-<h4 id="org7204d9c">Putting it together</h4>
+<section id="slide-org3e55a86">
+<h4 id="org3e55a86">Putting it together</h4>
 <div class="key-question">
 <p>
 How does matrix-vector multiplication look in a real prediction pipeline?
@@ -1285,8 +1285,8 @@ Data matrix \(X\in\R^{n\times d}\), weight vector \(\mathbf{w}\in\R^d\), predict
 </section>
 </section>
 <section>
-<section id="slide-orga4c2d2e">
-<h4 id="orga4c2d2e">Worked example: three data points</h4>
+<section id="slide-org8838355">
+<h4 id="org8838355">Worked example: three data points</h4>
 <p>
 \[X=\begin{bmatrix}1&0\\1&1\\1&2\end{bmatrix},\quad \mathbf{w}=\begin{bmatrix}2\\-1\end{bmatrix}.\]
 </p>
@@ -1301,8 +1301,8 @@ Data matrix \(X\in\R^{n\times d}\), weight vector \(\mathbf{w}\in\R^d\), predict
 </section>
 </section>
 <section>
-<section id="slide-orgd696ae5">
-<h4 id="orgd696ae5">The dimension check habit</h4>
+<section id="slide-org5d1833c">
+<h4 id="org5d1833c">The dimension check habit</h4>
 <div class="applied">
 <p>
 Before computing, always check: do the inner dimensions match?
@@ -1322,8 +1322,8 @@ If the inner \(d\)'s do not match, the multiplication is not defined.
 </section>
 </section>
 <section>
-<section id="slide-org370e934">
-<h4 id="org370e934">Quick check: dimensions</h4>
+<section id="slide-org6690371">
+<h4 id="org6690371">Quick check: dimensions</h4>
 <div class="quickcheck">
 <p>
 If \(X\in\R^{5\times 3}\) and \(\mathbf{w}\in\R^{3}\), what is the shape of \(X\mathbf{w}\)? How many predictions?
@@ -1336,15 +1336,15 @@ Answer: \(X\mathbf{w}\in\R^5\). Five predictions, one per sample.
 </section>
 </section>
 <section>
-<section id="slide-orgceab8ee">
-<h3 id="orgceab8ee">L02 Summary</h3>
-<div class="outline-text-3" id="text-orgceab8ee">
+<section id="slide-org2de849e">
+<h3 id="org2de849e">L02 Summary</h3>
+<div class="outline-text-3" id="text-org2de849e">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgf0a5d32">
-<h4 id="orgf0a5d32">What we built today</h4>
+<section id="slide-org0bd0350">
+<h4 id="org0bd0350">What we built today</h4>
 <ul>
 <li data-fragment-index="1" class="fragment">Matrices organize data: \(n\) rows of samples, \(d\) columns of features.</li>
 <li data-fragment-index="2" class="fragment">Matrix-vector multiplication: one dot product per row \(\Rightarrow\) one prediction per sample.</li>
@@ -1355,8 +1355,8 @@ Answer: \(X\mathbf{w}\in\R^5\). Five predictions, one per sample.
 </section>
 </section>
 <section>
-<section id="slide-orge30fe23">
-<h4 id="orge30fe23">Preview</h4>
+<section id="slide-orgc2d0ffe">
+<h4 id="orgc2d0ffe">Preview</h4>
 <div class="applied">
 <p>
 We now have the building blocks: vectors for data, dot products for comparison, matrices for transformation.
@@ -1369,22 +1369,22 @@ Next unit: what if the model cannot fit all data exactly? We will need projectio
 </section>
 </section>
 <section>
-<section id="slide-orgd1b0216">
-<h2 id="orgd1b0216">Unit 1 Wrap-Up</h2>
-<div class="outline-text-2" id="text-orgd1b0216">
+<section id="slide-orgf119bce">
+<h2 id="orgf119bce">Unit 1 Wrap-Up</h2>
+<div class="outline-text-2" id="text-orgf119bce">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgb8d6401">
-<h3 id="orgb8d6401">What should students remember?</h3>
-<div class="outline-text-3" id="text-orgb8d6401">
+<section id="slide-org3472063">
+<h3 id="org3472063">What should students remember?</h3>
+<div class="outline-text-3" id="text-org3472063">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org98f2220">
-<h4 id="org98f2220">Unit summary</h4>
+<section id="slide-org9c2f15a">
+<h4 id="org9c2f15a">Unit summary</h4>
 <ul>
 <li data-fragment-index="1" class="fragment">Vectors represent data as ordered lists of numbers.</li>
 <li data-fragment-index="2" class="fragment">Dot products, norms, distances, and cosine compare vectors.</li>
@@ -1395,8 +1395,8 @@ Next unit: what if the model cannot fit all data exactly? We will need projectio
 </section>
 </section>
 <section>
-<section id="slide-org58f012f">
-<h4 id="org58f012f">The regression thread</h4>
+<section id="slide-orgd8c5667">
+<h4 id="orgd8c5667">The regression thread</h4>
 <div class="applied">
 <p>
 These tools will appear again and again throughout the course:
@@ -1413,8 +1413,8 @@ These tools will appear again and again throughout the course:
 </section>
 </section>
 <section>
-<section id="slide-org764d35f">
-<h4 id="org764d35f">Next unit</h4>
+<section id="slide-org777d332">
+<h4 id="org777d332">Next unit</h4>
 <div class="key-question">
 <p>
 What if the model cannot fit all data exactly?
