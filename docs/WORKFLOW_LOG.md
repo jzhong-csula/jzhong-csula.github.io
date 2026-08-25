@@ -31,6 +31,13 @@ rewrites that prefix to `../` on copy. Figure and CSS references
 (`../images/...`, `../css/...`) already resolve from `<site>/slides/` and are
 copied unchanged.
 
+**Units 0 and 1 are frozen.** They are published from hand-tuned HTML
+(`slides/html/unit00-preview.html`, `unit01-preview.html`) rather than from
+org. The org export loses their manual figure sizing and layout work, so
+`publish.sh` copies the HTML for those two units and refuses to export them.
+Their org files carry an OUT OF SYNC banner. Unit 2 onward uses the normal
+org -> export -> review loop.
+
 Assets this course adds to the root site:
 - `slides/math-for-ds-unit00.html`, `slides/math-for-ds-unit01.html`
 - `images/unit00/`, `images/unit01/`
