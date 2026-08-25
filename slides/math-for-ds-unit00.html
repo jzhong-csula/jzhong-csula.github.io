@@ -220,13 +220,24 @@ And wanting to understand ChatGPT motivates you to learn Math (vectors). <br/>
 <tr><td>sat</td><td>\((1,\ 2)\)</td><td>\(1(0.5) + 2(1)\)</td><td>2.5</td></tr>
 <tr><td>on</td><td>\((1,\ 1)\)</td><td>\(1(0.5) + 1(1)\)</td><td>1.5</td></tr>
 </table>
-<p>But we need <em>percentages</em>: out of 100% of my attention, how much goes to each word?</p>
-<table class="fragment">
-<tr><th>Word</th><th>The</th><th>cat</th><th>sat</th><th>on</th></tr>
-<tr><td><strong>Attention</strong></td><td>7%</td><td>51%</td><td>31%</td><td>11%</td></tr>
+<p class="fragment">Bigger score = more related to the blank. But what does a score of 3 <em>mean</em>? We need percentages.</p>
+<aside class="notes">"The blank has its own report card too. To score each word, do exactly what we just did: multiply matching entries, add them up." "cat scores 3, the highest. sat 2.5. on 1.5. The barely 1." "But is 3 a lot? You can't tell. That's the next slide."</aside>
+</section>
+
+<!-- 13b: Softmax -->
+<section>
+<h4>Step 3, continued: scores become percentages</h4>
+<p>The function that does this is <strong>softmax</strong>. It first <em>grows</em> each score, then divides by the total:</p>
+<table style="font-size:0.85em;">
+<tr><th>Word</th><th>Score \(s\)</th><th>Grow it: \(e^{s}\)</th><th>Share of the total</th></tr>
+<tr><td>The</td><td>1</td><td>2.72</td><td>7%</td></tr>
+<tr><td><strong>cat</strong></td><td>3</td><td>20.09</td><td><strong>51%</strong></td></tr>
+<tr><td>sat</td><td>2.5</td><td>12.18</td><td>31%</td></tr>
+<tr><td>on</td><td>1.5</td><td>4.48</td><td>11%</td></tr>
+<tr><td></td><td></td><td><strong>39.47</strong></td><td><strong>100%</strong></td></tr>
 </table>
-<p class="fragment">"cat" gets 51% — over half the attention. It's the most important clue for predicting the blank.</p>
-<aside class="notes">"Scores: cat=20, sat=15, on=5, the=2. But what does '20' mean? Is it a lot? We need context." "Percentages give context: almost half to cat, about a third to sat, a little to on, barely any to the. Makes sense — 'cat' is the most important clue for 'the cat sat on the ___'." "The math function that does this is SOFTMAX. Scores in, percentages out. We'll learn exactly how in Week 12." This is where probability enters — AI needs to make DECISIONS, not just compute scores.</aside>
+<p class="fragment">"cat" scores only <strong>twice</strong> what "on" does — but gets <strong>4.5&times;</strong> the attention. Growing the scores first is what makes the winner win clearly.</p>
+<aside class="notes">"Softmax does two things. First it GROWS each score — 3 becomes about 20, 1.5 becomes about 4.5. Then it divides each by the total, 39.47, so everything adds to 100%." "Why grow them first? Watch: cat's score is exactly twice on's score. But cat ends up with 51% and on with 11% — four and a half times as much, not twice. Growing the scores first exaggerates the gaps, so the best word wins clearly instead of by a nose. That's what 'soft-max' means: a soft version of just picking the maximum." Expect a student to check this with ratios and think it's wrong — that is the right instinct, and this is the answer. "We do this properly in Week 12."</aside>
 </section>
 
 <!-- 14: GPA -->
