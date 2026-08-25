@@ -1,0 +1,149 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Math for DS — Slide Design System
+   Standalone CSS for Reveal.js (1200×700, margin 0.04)
+   ═══════════════════════════════════════════════════════════════════
+
+   COMPONENT INVENTORY — when to use each box:
+
+   .mathbox       Formal definitions and key formulas ONLY.
+                  Use on "Now name it:" slides.
+                  NOT for worked examples, example data, or calculations.
+
+   .key-question  Driving question that motivates a section.
+                  One per topic block. Blue left border.
+
+   .applied       AI/DS application connection.
+                  "When ChatGPT…", "In machine learning…"
+                  Green left border.
+
+   .quickcheck    In-class practice problem.
+                  Orange left border. Followed by fragment answer.
+
+   .small-note    Footnote or caption under a figure.
+                  Gray, smaller text.
+
+   No box         Everything else: worked examples, calculations,
+                  example data setups, plain prose.
+
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Global layout ─────────────────────────────────────────────── */
+
+.reveal .slides {
+  text-align: left;
+}
+
+/* ── Base typography (replaces gnohz.css) ──────────────────────── */
+
+.reveal section { font-size: 0.6em; }
+.reveal h4 { font-size: 1.4em; font-weight: bold; margin-bottom: 0.3em; }
+
+/* ── Typography scale ──────────────────────────────────────────── */
+
+.reveal .subtitle {
+  color: rgb(30, 90, 160);
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+.reveal .small-note {
+  color: rgb(90, 90, 90);
+  font-size: 0.75em;
+}
+
+.reveal .big-number {
+  color: rgb(30, 90, 160);
+  font-size: 1.3em;
+  font-weight: 700;
+}
+
+/* ── Boxed components ──────────────────────────────────────────── */
+
+.reveal .mathbox {
+  border: 1px solid rgba(40, 40, 40, 0.25);
+  background: rgba(250, 250, 250, 0.95);
+  padding: 0.5em 0.8em;
+  margin: 0.5em 0;
+}
+
+.reveal .key-question {
+  border-left: 8px solid rgb(30, 90, 160);
+  background: rgba(230, 240, 255, 0.8);
+  padding: 0.6em 0.8em;
+  margin: 0.5em 0;
+}
+
+.reveal .applied {
+  border-left: 8px solid rgb(25, 130, 95);
+  background: rgba(225, 245, 235, 0.8);
+  padding: 0.55em 0.8em;
+  margin: 0.5em 0;
+}
+
+.reveal .quickcheck {
+  border-left: 8px solid rgb(180, 115, 25);
+  background: rgba(255, 243, 220, 0.9);
+  padding: 0.55em 0.8em;
+  margin: 0.5em 0;
+}
+
+/* ── Tables ────────────────────────────────────────────────────── */
+
+.reveal table {
+  font-size: 0.85em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reveal section table th {
+  background-color: rgba(230, 230, 250, 1);
+  text-align: center;
+}
+
+.reveal section table tr:nth-child(even) {
+  background-color: rgba(230, 230, 250, 0.7);
+}
+
+.reveal section table tr:nth-child(odd) {
+  background-color: rgba(230, 230, 250, 0.3);
+}
+
+/* ── Layout helpers ────────────────────────────────────────────── */
+
+.reveal .twocol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2em;
+  align-items: start;
+}
+
+.reveal .center {
+  text-align: center;
+}
+
+.reveal section ul,
+.reveal section ol {
+  display: block;
+}
+
+img.middle {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Placeholder (development only) ────────────────────────────── */
+
+.reveal .figure-placeholder {
+  border: 3px dashed rgb(180, 60, 60);
+  background: rgba(255, 235, 235, 0.5);
+  padding: 1.2em 1em;
+  margin: 0.6em 0;
+  text-align: center;
+  color: rgb(140, 50, 50);
+  font-size: 0.7em;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
