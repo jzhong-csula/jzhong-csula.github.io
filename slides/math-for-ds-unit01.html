@@ -3,1467 +3,907 @@
 <head>
 <meta charset="utf-8"/>
 <title>Mathematical Foundations for Data Science and AI</title>
-<meta name="author" content="\\
-Jie Zhong \\
-Department of Mathematics \\
-California State University, Los Angeles"/>
-<style type="text/css">
-.underline { text-decoration: underline; }
-</style>
 <link rel="stylesheet" href="../dist/reveal.css"/>
-
-<link rel="stylesheet" href="../dist/theme/serif.css" id="theme"/>
-
+<link rel="stylesheet" href="../dist/theme/serif.css"/>
 <link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
-
 <link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
-
-<link rel="stylesheet" href="../css/math-for-ds.css"/>
-<script>window.MathJax = { TeX: {Macros: {R: "\\mathbb{R}", norm: ["\\left\\|#1\\right\\|", 1], inner: ["\\left\\langle #1,#2\\right\\rangle", 2]}} }</script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link rel="stylesheet" href="../css/math-for-ds.css?v=4"/>
+<!-- MathJax macros configured in Reveal.initialize math config below -->
+<style>
+.reveal ul { margin-top: 0.3em; }
+.reveal li { margin-bottom: 0.2em; }
+.reveal td, .reveal th { padding: 0.25em 0.5em; }
+</style>
 </head>
 <body>
 <div class="reveal">
 <div class="slides">
-<section id="sec-title-slide">
-<h1>Mathematical Foundations for Data Science and AI</h1><h2>Unit 1 — Data Are Vectors; Matrices Are Machines</h2><h6> <br />
-Jie Zhong <br />
-Department of Mathematics <br />
-California State University, Los Angeles</h6>
-</section>
-<section>
-<section id="slide-org9698cba">
-<h2 id="org9698cba">Unit 1</h2>
-<div class="outline-text-2" id="text-org9698cba">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org8cf4df9">
-<h3 id="org8cf4df9">Data Are Vectors; Matrices Are Machines</h3>
-<div class="outline-text-3" id="text-org8cf4df9">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org696b9e9">
-<h4 id="org696b9e9">Unit map</h4>
-<div class="key-question">
-<p>
-How can real objects become numbers, and how can mathematical operations compare or transform those numbers?
-</p>
-</div>
 
+<!-- S00: Title -->
+<section>
+<h1 style="font-size:1.6em;">Mathematical Foundations for Data Science and AI</h1>
+<h2 style="font-size:1.0em;">Unit 1 — Data Are Vectors; Matrices Are Machines</h2>
+<p><br/>Jie Zhong<br/>Department of Mathematics<br/>California State University, Los Angeles</p>
+</section>
+
+<!-- S01: Unit map -->
+<section>
+<h4>Unit map</h4>
+<div class="key-question">How can real objects become numbers, and how can mathematical operations compare or transform those numbers?</div>
 <ul>
-<li data-fragment-index="1" class="fragment">L01: vectors, dot product, norms, distance, cosine similarity.</li>
-<li data-fragment-index="2" class="fragment">L02: matrices, matrix-vector multiplication, matrix-matrix multiplication.</li>
-<li data-fragment-index="3" class="fragment">Main idea: data representations are mathematical objects.</li>
-<li data-fragment-index="4" class="fragment">Applied connection: similarity, prediction, and linear transformations.</li>
-
+<li class="fragment">L01: vectors, dot product, norms, distance, cosine similarity.</li>
+<li class="fragment">L02: matrices, matrix-vector multiplication, matrix-matrix multiplication.</li>
+<li class="fragment">Main idea: data representations are mathematical objects.</li>
+<li class="fragment">Applied connection: similarity, prediction, and linear transformations.</li>
 </ul>
 </section>
-</section>
+
+<!-- S02: What this unit should answer -->
 <section>
-<section id="slide-orgb6afd2c">
-<h4 id="orgb6afd2c">What this unit should answer</h4>
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Question</th>
-<th scope="col" class="org-left">Math idea</th>
-<th scope="col" class="org-left">Lecture</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left">How do we represent an object as numbers?</td>
-<td class="org-left">vector / feature vector</td>
-<td class="org-left">L01</td>
-</tr>
-
-<tr>
-<td class="org-left">How do we compare two objects?</td>
-<td class="org-left">norm, distance, dot product, cosine</td>
-<td class="org-left">L01</td>
-</tr>
-
-<tr>
-<td class="org-left">How does a model transform inputs?</td>
-<td class="org-left">matrix-vector multiplication</td>
-<td class="org-left">L02</td>
-</tr>
-
-<tr>
-<td class="org-left">How do multiple transformations combine?</td>
-<td class="org-left">matrix-matrix multiplication</td>
-<td class="org-left">L02</td>
-</tr>
-</tbody>
+<h4>What this unit should answer</h4>
+<table>
+<tr><th>Question</th><th>Math idea</th><th>Lecture</th></tr>
+<tr><td>How do we represent an object as numbers?</td><td>vector / feature vector</td><td>L01</td></tr>
+<tr><td>How do we compare two objects?</td><td>norm, distance, dot product, cosine</td><td>L01</td></tr>
+<tr><td>How does a model transform inputs?</td><td>matrix-vector multiplication</td><td>L02</td></tr>
+<tr><td>How do multiple transformations combine?</td><td>matrix-matrix multiplication</td><td>L02</td></tr>
 </table>
 </section>
-</section>
-<section>
-<section id="slide-org8b24453">
-<h2 id="org8b24453">Week 1 - L01</h2>
-<div class="outline-text-2" id="text-org8b24453">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-orgae47b29">
-<h3 id="orgae47b29">Vectors, Norms, Similarity</h3>
-<div class="outline-text-3" id="text-orgae47b29">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-orge911367">
-<h4 id="orge911367">Opening question</h4>
-<div class="key-question">
-<p>
-If two movies, students, or documents can be represented by numbers, how can we decide which two are similar?
-</p>
-</div>
 
+<!-- ═══════════════════════════════════════ -->
+<!-- L01: Vectors, Norms, Similarity        -->
+<!-- ═══════════════════════════════════════ -->
+
+<!-- S03: L01 header -->
+<section>
+<h4>L01 — Vectors, Dot Products, and Similarity</h4>
+<div class="key-question">How do we turn real objects into numbers, and then measure how similar they are?</div>
 <ul>
-<li data-fragment-index="1" class="fragment">We need a way to represent objects.</li>
-<li data-fragment-index="2" class="fragment">We need a way to compare representations.</li>
-<li data-fragment-index="3" class="fragment">Today: vectors, dot products, norms, distance, and cosine similarity.</li>
-
+<li class="fragment">Vectors — data as ordered lists of numbers <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment">Dot product — agreement score <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment">Norms — measuring size <span style="color:#2563eb; font-size:0.85em;">[MASTER: L2] [UNDERSTAND: L1]</span></li>
+<li class="fragment">Distance — how far apart <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment">Cosine similarity — direction without magnitude <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
 </ul>
 </section>
-</section>
-<section>
-<section id="slide-orgc8d0f9d">
-<h4 id="orgc8d0f9d">Course promise</h4>
-<div class="applied">
-<p>
-This course connects mathematical ideas to data science and AI — without pretending one semester covers everything.
-</p>
-</div>
 
+<!-- S04: Opening — connect to Unit 0 -->
+<section>
+<h4>Remember Spotify?</h4>
+<p>In Unit 0 we saw: Spotify turns every song into <strong>a list of numbers</strong>, then finds songs whose numbers are "close" to yours.</p>
+<div class="key-question fragment">Today we make that precise. What IS a "list of numbers"? What does "close" mean, exactly?</div>
 <ul>
-<li data-fragment-index="1" class="fragment">Some questions we answer directly (regression, optimization, PCA).</li>
-<li data-fragment-index="2" class="fragment">Some questions we partially explain through simpler models (attention, neural networks).</li>
-<li data-fragment-index="3" class="fragment">Some questions require more advanced courses (deep learning, NLP, systems).</li>
-
+<li class="fragment">The list of numbers = a <strong>vector</strong>.</li>
+<li class="fragment">"Close" = small <strong>distance</strong> or high <strong>cosine similarity</strong>.</li>
+<li class="fragment">By the end of today, you can compute these by hand.</li>
 </ul>
+<aside class="notes">"Last time we said Spotify, Instagram, ChatGPT all do the same three steps: turn things into numbers, measure closeness, pick the closest. Today we build the math for steps 1 and 2. Step 1: vectors. Step 2: dot product, norms, distance, cosine. All of this is arithmetic you already know — add, multiply, square root. We're just giving names to patterns you've seen before."</aside>
 </section>
-</section>
+
+<!-- S04: Course promise -->
 <section>
-<section id="slide-org1522dac">
-<h4 id="org1522dac">Question map</h4>
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Motivating question</th>
-<th scope="col" class="org-left">Math we need</th>
-<th scope="col" class="org-left">Coverage</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left">Why can data be represented as vectors?</td>
-<td class="org-left">coordinates, features</td>
-<td class="org-left">Yes</td>
-</tr>
-
-<tr>
-<td class="org-left">Why does cosine measure similarity?</td>
-<td class="org-left">dot product, norm, angle</td>
-<td class="org-left">Yes</td>
-</tr>
-
-<tr>
-<td class="org-left">How does regression learn from data?</td>
-<td class="org-left">error, projection</td>
-<td class="org-left">Yes</td>
-</tr>
-
-<tr>
-<td class="org-left">How does attention use similarity?</td>
-<td class="org-left">dot products, weights</td>
-<td class="org-left">Partially</td>
-</tr>
-
-<tr>
-<td class="org-left">How do we build a full LLM?</td>
-<td class="org-left">deep learning, NLP, systems</td>
-<td class="org-left">Beyond</td>
-</tr>
-</tbody>
+<h4>What this course can and cannot do</h4>
+<div class="applied">This course connects mathematical ideas to data science and AI — without pretending one semester covers everything.</div>
+<table>
+<tr><th>Motivating question</th><th>Math we need</th><th>Coverage</th></tr>
+<tr><td>Why can data be represented as vectors?</td><td>coordinates, features</td><td>Yes</td></tr>
+<tr><td>Why does cosine measure similarity?</td><td>dot product, norm, angle</td><td>Yes</td></tr>
+<tr><td>How does regression learn from data?</td><td>error, projection</td><td>Yes</td></tr>
+<tr><td>How does attention use similarity?</td><td>dot products, weights</td><td>Partially</td></tr>
+<tr><td>How do we build a full LLM?</td><td>deep learning, NLP, systems</td><td>Beyond</td></tr>
 </table>
+<aside class="notes">"Some questions we answer completely. Some we explain through simpler models. And some require graduate-level courses. Being honest about boundaries IS part of understanding. A lot of AI hype comes from people who never learned where their knowledge stops."</aside>
 </section>
-</section>
-<section>
-<section id="slide-orgb93a2de">
-<h3 id="orgb93a2de">Data as Vectors</h3>
-<div class="outline-text-3" id="text-orgb93a2de">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org6c7ca85">
-<h4 id="org6c7ca85">The real question</h4>
-<div class="key-question">
-<p>
-A patient has blood pressure 120 and heart rate 75. Another has 135 and 70. How do we organize and compare these numbers?
-</p>
-</div>
 
+<!-- ─── Data as Vectors ─── -->
+
+<!-- S05: The real question — report cards for everything -->
+<section>
+<h4>Report cards for everything</h4>
+<p>In Unit 0, we gave every <em>word</em> a report card — a list of numbers describing its features.</p>
+<p class="fragment">The same idea works for <strong>anything</strong>:</p>
 <ul>
-<li data-fragment-index="1" class="fragment">We need a container: an ordered list of numbers.</li>
-<li data-fragment-index="2" class="fragment">We need rules: how to add, scale, and measure.</li>
-
+<li class="fragment">A <strong>patient</strong>: (blood pressure, heart rate, temperature) = (120, 75, 98.6)</li>
+<li class="fragment">A <strong>song</strong>: (tempo, energy, danceability) = (0.8, 0.6, 0.9)</li>
+<li class="fragment">A <strong>student</strong>: (GPA, study hours, sleep hours) = (3.2, 5, 7)</li>
 </ul>
+<div class="key-question fragment">Once everything is a list of numbers, we can use <strong>arithmetic</strong> to compare, measure, and transform.</div>
+<aside class="notes">"Last time we said 'cat' gets a report card: noun-ness 0.9, verb-ness 0.1, etc. Today: EVERYTHING gets a report card. A patient, a song, a movie, YOU. Your GPA, study hours, sleep hours — that's three numbers describing you as a student. AI does this to everything: take a real thing, turn it into numbers." Ask: "What three numbers would describe YOU as a student?"</aside>
 </section>
-</section>
+
+<!-- S06: Movie example — same direction, different scale -->
 <section>
-<section id="slide-org3f1eb53">
-<h4 id="org3f1eb53">Movie preferences as lists of numbers</h4>
-<p>
-Suppose each movie is described by three features:
-</p>
-
+<h4>Three movies walk into a bar...</h4>
+<p>Each movie is described by three features: action level, romance level, comedy level.</p>
+\[\text{Movie X} = (3, 1, 0) \qquad \text{Movie Y} = (6, 2, 0) \qquad \text{Movie Z} = (0, 1, 3)\]
 <ul>
-<li data-fragment-index="1" class="fragment">action level</li>
-<li data-fragment-index="2" class="fragment">romance level</li>
-<li data-fragment-index="3" class="fragment">comedy level</li>
-
+<li class="fragment">X is a mild action movie. Y is a BIGGER action movie (same mix, double the intensity).</li>
+<li class="fragment">Z is a pure comedy — completely different taste.</li>
 </ul>
+<div class="key-question fragment">Which two movies should Spotify-for-movies recommend together: X and Y, or X and Z?</div>
+<aside class="notes">"Imagine Netflix wants to recommend movies. It turns each movie into numbers. X is a mild action movie. Y is an intense action movie — same DNA, just louder. Z is a comedy — totally different DNA. Obviously X and Y go together. But how would a COMPUTER know that? It can't watch the movie. It can only look at numbers." This is the core challenge: making 'similarity' into arithmetic.</aside>
+</section>
 
+<!-- S07: Now name it: vector -->
+<section>
+<h4>Now name it: vector</h4>
 <div class="mathbox">
-<p>
-\[
-\mathbf{x}=(3,1,0),\qquad \mathbf{y}=(6,2,0),\qquad \mathbf{z}=(0,1,3).
-\]
-</p>
+A <strong>vector</strong> in \(\R^d\) is an ordered list of \(d\) real numbers:
+\[\mathbf{x} = (x_1, x_2, \ldots, x_d)^\top.\]
+<strong>Convention:</strong> vectors are <strong>column vectors</strong>. The \({}^\top\) makes the row into a column.
 </div>
-</section>
-</section>
-<section>
-<section id="slide-org96c8681">
-<h4 id="org96c8681">What should similarity mean?</h4>
-<div class="key-question">
-<p>
-Is \(\mathbf{x}\) more similar to \(\mathbf{y}\), or to \(\mathbf{z}\)?
-</p>
-</div>
-
 <ul>
-<li data-fragment-index="1" class="fragment">\(\mathbf{y}=(6,2,0)\) has the same pattern as \(\mathbf{x}\), just scaled up.</li>
-<li data-fragment-index="2" class="fragment">\(\mathbf{z}=(0,1,3)\) has a completely different pattern.</li>
-<li data-fragment-index="3" class="fragment">We need mathematics that can detect both size and direction.</li>
-
+<li class="fragment">In geometry: an <strong>arrow</strong> with direction and length.</li>
+<li class="fragment">In data science: a <strong>feature list</strong> describing one object.</li>
+<li class="fragment">\(d\) = number of features. ChatGPT uses \(d = 12{,}288\). We start with \(d = 2\) or \(3\).</li>
 </ul>
+<div class="applied fragment">Every AI system begins by converting real things into vectors. No vectors, no AI.</div>
+<aside class="notes">"Vector is just a fancy word for 'ordered list of numbers.' You've been making vectors your whole life — every time you fill out a form with multiple fields, that's a vector. Your college application: (GPA, SAT, extracurriculars) — that's a 3D vector. ChatGPT uses 12,288-dimensional vectors. Same idea, just longer lists."</aside>
 </section>
-</section>
-<section>
-<section id="slide-org06c662c">
-<h4 id="org06c662c">Now name it: vector</h4>
-<div class="mathbox">
-<p>
-A vector in \(\R^d\) is an ordered list of \(d\) real numbers:
-\[
-\mathbf{x}=(x_1,\ldots,x_d)^\top.
-\]
-</p>
-</div>
 
+<!-- S08: Vector arithmetic — intuition -->
+<section>
+<h4>Vector arithmetic: adding and scaling</h4>
+<div style="display:flex; align-items:center; gap:1em;">
+<div style="flex:1;">
+<p>Let \(\mathbf{x} = (2, -1)\) and \(\mathbf{y} = (-3, 4)\).</p>
 <ul>
-<li data-fragment-index="1" class="fragment">In geometry: an arrow with direction and length.</li>
-<li data-fragment-index="2" class="fragment">In data: a feature representation of an object.</li>
-<li data-fragment-index="3" class="fragment">The dimension \(d\) is the number of features.</li>
-
+<li class="fragment"><strong>Addition</strong>: \(\mathbf{x} + \mathbf{y} = (2 + (-3),\; -1 + 4) = (-1, 3)\). Like combining two ingredient lists.</li>
+<li class="fragment"><strong>Scaling</strong>: \(2\mathbf{x} = (4, -2)\). Like doubling a recipe — same proportions, bigger batch.</li>
 </ul>
+<div class="applied fragment" style="margin-top:0.5em;">All arithmetic is <strong>component by component</strong>.</div>
+</div>
+<img src="../images/unit01/u1-L01-fig01-vector-addition.png?v=2" alt="Vector addition as parallelogram" style="max-height:530px; max-width:55%; border-radius:6px;">
+</div>
+<aside class="notes">"Adding vectors: just add matching entries. Like if you and your friend each bring groceries. You bring (2 apples, 3 oranges), they bring (1 apple, 5 oranges). Together: (3 apples, 8 oranges). Component by component." "Scaling: double everything. A recipe for 4 people → recipe for 8 people. Same proportions, just more."</aside>
 </section>
-</section>
+
+<!-- S09: Quick check: vectors -->
 <section>
-<section id="slide-org9d987c2">
-<h4 id="org9d987c2">Vector arithmetic</h4>
-<div style="display:flex; align-items:center; gap:1em;"><div style="flex:1;">
-<p>
-Let \(\mathbf{x}=(2,-1)\) and \(\mathbf{y}=(-3,4)\).
-</p>
-
-<ul>
-<li data-fragment-index="1" class="fragment">Sum: \(\mathbf{x}+\mathbf{y}=(2-3,\;-1+4)=(-1,3)\).</li>
-<li data-fragment-index="2" class="fragment">Scaling: \(2\mathbf{x}=2(2,-1)=(4,-2)\).</li>
-
-</ul>
-
-<div class="applied" style="margin-top:0.5em;">
-<p>
-All arithmetic is <b>component by component</b>.
-</p>
-</div>
-</div>
-<img src="../images/unit01/u1-L01-fig01-vector-addition.png" alt="Vector addition as parallelogram" style="max-height:530px; max-width:55%; border-radius:6px;">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org3a5fc7c">
-<h4 id="org3a5fc7c">Quick check: vectors</h4>
+<h4>Quick check: vectors</h4>
 <div class="quickcheck">
-<p>
-Compute \(2\mathbf{x}-\mathbf{y}\) for \(\mathbf{x}=(2,-1)\) and \(\mathbf{y}=(-3,4)\).
-</p>
+Compute \(2\mathbf{x} - \mathbf{y}\) for \(\mathbf{x} = (2, -1)\) and \(\mathbf{y} = (-3, 4)\).
 </div>
+<p class="fragment">Answer: \(2(2, -1) - (-3, 4) = (4, -2) - (-3, 4) = (7, -6)\).</p>
+<div class="applied fragment">This is the same arithmetic behind "weighted average" in your GPA calculation — scale each entry, then combine.</div>
+<aside class="notes">"Step by step: first scale x by 2, then subtract y. Each component independently. This is all vector arithmetic is — entry by entry. The power comes from doing it systematically on thousands of dimensions."</aside>
+</section>
 
-<p class="fragment">
-Answer: \(2(2,-1)-(-3,4)=(4,-2)-(-3,4)=(7,-6)\).
-</p>
-</section>
-</section>
+<!-- ─── Dot Product ─── -->
+
+<!-- S10: The real question — agreement score -->
 <section>
-<section id="slide-org1b1d8db">
-<h3 id="org1b1d8db">Dot Product</h3>
-<div class="outline-text-3" id="text-org1b1d8db">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org1274f58">
-<h4 id="org1274f58">The real question</h4>
-<p>
-Recall: \(\text{Movie X}=(3,1,0)\), \(\text{Movie Y}=(6,2,0)\), \(\text{Movie Z}=(0,1,3)\).
-</p>
-
-<div class="key-question">
-<p>
-Three numbers each. How do we get a <b>single number</b> that says "how similar are they"?
-</p>
-</div>
-
+<h4>Measuring agreement: the key to similarity</h4>
+<p>Recall: \(\text{Movie X} = (3, 1, 0)\), \(\text{Movie Y} = (6, 2, 0)\), \(\text{Movie Z} = (0, 1, 3)\).</p>
+<div class="key-question">Three numbers each. How do we get a <strong>single number</strong> that says "how similar are they"?</div>
 <ul>
-<li data-fragment-index="1" class="fragment">Multiply matching features and add them up.</li>
-<li data-fragment-index="2" class="fragment">This gives an "agreement score": large means similar patterns.</li>
-
+<li class="fragment">Idea: multiply matching features and add them up.</li>
+<li class="fragment">If both movies score high on the same feature → big positive product.</li>
+<li class="fragment">If they disagree → products cancel out.</li>
 </ul>
+<p class="fragment">This "agreement score" has a name: the <strong>dot product</strong>.</p>
+<aside class="notes">"Think of it like this: you and your friend both rate 3 categories. If you both give action a high score, multiplying them gives a big positive number. If you love action but your friend hates it — one positive, one negative — the product is negative. Add up all three products and you get an 'agreement score.' That's ALL the dot product is."</aside>
 </section>
-</section>
-<section>
-<section id="slide-org062d4b8">
-<h4 id="org062d4b8">First example</h4>
-<p>
-For our movie vectors:
-\[
-\mathbf{x}=(3,1,0),\qquad \mathbf{y}=(6,2,0),
-\]
-compute
-\[
-\mathbf{x}^\top\mathbf{y}=3\cdot 6+1\cdot 2+0\cdot 0=20.
-\]
-</p>
 
-<div class="applied">
-<p>
-Large positive value: these two movies put weight on the same features.
-</p>
-</div>
-</section>
-</section>
+<!-- S11: First example — similar movies -->
 <section>
-<section id="slide-org07a79d6">
-<h4 id="org07a79d6">Now try with the different movie</h4>
-<p>
-\[
-\mathbf{x}=(3,1,0),\qquad \mathbf{z}=(0,1,3),
-\]
-compute
-\[
-\mathbf{x}^\top\mathbf{z}=3\cdot 0+1\cdot 1+0\cdot 3=1.
-\]
-</p>
+<h4>Worked example: similar movies</h4>
+<p>Movie X = (3, 1, 0) and Movie Y = (6, 2, 0). Both are action-heavy.</p>
+\[\mathbf{x}^\top \mathbf{y} = 3 \times 6 + 1 \times 2 + 0 \times 0 = 18 + 2 + 0 = 20.\]
+<div class="applied fragment">Score = 20. Large positive number = strong agreement. These movies have similar DNA.</div>
+<p class="fragment">Now the <em>different</em> movie: X = (3, 1, 0) and Z = (0, 1, 3).</p>
+<div class="fragment">\[\mathbf{x}^\top \mathbf{z} = 3 \times 0 + 1 \times 1 + 0 \times 3 = 0 + 1 + 0 = 1.\]</div>
+<p class="fragment">Score = 1. Much smaller. Almost no agreement.</p>
+<aside class="notes">"X and Y agree on action (3×6=18), agree on romance (1×2=2), and both ignore comedy (0×0=0). Total: 20. Strong agreement." "X and Z: action doesn't match (3×0=0), slight romance overlap (1×1=1), comedy doesn't match (0×3=0). Total: 1. Almost strangers." "The dot product QUANTIFIED what your intuition already knew: X and Y are similar, X and Z are not."</aside>
+</section>
 
-<p class="fragment">
-Much smaller: these movies have different feature patterns.
-</p>
-</section>
-</section>
+<!-- S12: Now name it: dot product -->
 <section>
-<section id="slide-org71b08ef">
-<h4 id="org71b08ef">Now name it: dot product</h4>
+<h4>Now name it: dot product</h4>
 <div class="mathbox">
-<p>
-For \(\mathbf{x},\mathbf{y}\in\R^d\),
-\[
-\mathbf{x}^\top\mathbf{y}
-=\sum_{i=1}^d x_i y_i
-= x_1 y_1 + x_2 y_2 + \cdots + x_d y_d.
-\]
-</p>
+The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
+\[\mathbf{x} \cdot \mathbf{y} = x_1 y_1 + x_2 y_2 + \cdots + x_d y_d = \sum_{i=1}^d x_i y_i.\]
 </div>
-
 <ul>
-<li data-fragment-index="1" class="fragment">Multiply matching coordinates.</li>
-<li data-fragment-index="2" class="fragment">Add all the products to get one number (a scalar).</li>
-
+<li class="fragment">Multiply matching entries. Add the products. Get one number.</li>
+<li class="fragment"><strong>Notation:</strong> since our vectors are <strong>column vectors</strong>, the dot product equals \(\mathbf{x}^\top \mathbf{y}\) — transpose the first, then multiply. We use \(\mathbf{x}^\top \mathbf{y}\) from now on.</li>
+<li class="fragment">This is <em>exactly</em> the same operation inside the attention formula: \(QK^\top\).</li>
 </ul>
+<div class="applied fragment">When ChatGPT asks "how related is this word to that word?" — it computes a dot product.</div>
+<aside class="notes">"The dot product literally used to be written with a dot: x · y. We write x^T y instead because our convention is that vectors are columns. Transposing x makes it a row, then row × column = a single number. Same operation, just matrix notation. From now on, x^T y means dot product." "QK^T is a matrix of dot products — each entry asks 'how related is word i to word j?'"</aside>
 </section>
-</section>
+
+<!-- S13: What does the sign tell you? -->
 <section>
-<section id="slide-org318c442">
-<h4 id="org318c442">What does the sign tell you?</h4>
-<ul>
-<li data-fragment-index="1" class="fragment">Positive dot product: vectors tend to point in similar directions.</li>
-<li data-fragment-index="2" class="fragment">Zero dot product: vectors are perpendicular (orthogonal).</li>
-<li data-fragment-index="3" class="fragment">Negative dot product: vectors point in opposing directions.</li>
-
-</ul>
-
-<div class="applied">
-<p>
-Positive = agreement. Negative = disagreement. Zero = unrelated.
-</p>
-</div>
-
+<h4>What does the sign tell you?</h4>
 <img src="../images/unit01/u1-L01-fig02-dot-product-sign.png" alt="Dot product sign: positive, zero, negative" style="display:block; max-width:90%; margin:0.3em auto; border-radius:6px;">
-</section>
-</section>
-<section>
-<section id="slide-org556d97f">
-<h4 id="org556d97f">Quick check: dot product</h4>
-<div class="quickcheck">
-<p>
-Compute \((1,2,0)^\top(3,-1,4)\). What does the sign tell you?
-</p>
-</div>
-
-<p class="fragment">
-Answer: \(1\cdot 3+2\cdot(-1)+0\cdot 4=3-2+0=1\). Positive: mild agreement.
-</p>
-</section>
-</section>
-<section>
-<section id="slide-org4d2b37a">
-<h3 id="org4d2b37a">Norms</h3>
-<div class="outline-text-3" id="text-org4d2b37a">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-orgccc2812">
-<h4 id="orgccc2812">The real question</h4>
-<div class="key-question">
-<p>
-A model predicts scores \((2,-1)\) but the correct scores are \((0,0)\). How big is the error?
-</p>
-</div>
-
-<ul>
-<li data-fragment-index="1" class="fragment">The error vector is \(\mathbf{e}=(2,-1)\).</li>
-<li data-fragment-index="2" class="fragment">We need a single number that says "how large."</li>
-
+<ul style="display:flex; justify-content:space-around; list-style:none; padding:0; margin:0.3em 0; font-size:0.85em;">
+<li class="fragment"><strong>Positive</strong>: similar direction. <em>Agreement.</em></li>
+<li class="fragment"><strong>Zero</strong>: perpendicular. <em>Unrelated.</em></li>
+<li class="fragment"><strong>Negative</strong>: opposing. <em>Disagreement.</em></li>
 </ul>
+<div class="applied fragment">In recommendation: positive = "these items go together." Negative = "these items repel each other." Zero = "no relationship."</div>
+<aside class="notes">"Think of it like two people's opinions. Positive dot product: 'We agree!' Zero: 'We have nothing in common.' Negative: 'We disagree on everything.' In AI, the sign tells the model whether two things should be grouped together or kept apart."</aside>
 </section>
-</section>
-<section>
-<section id="slide-org72fdee1">
-<h4 id="org72fdee1">First example: L2 norm</h4>
-<p>
-For \(\mathbf{x}=(3,4)\):
-\[
-\norm{\mathbf{x}}_2=\sqrt{3^2+4^2}=\sqrt{9+16}=\sqrt{25}=5.
-\]
-</p>
 
-<div class="applied">
-<p>
-The \(\ell_2\) norm is the straight-line distance from the origin — like measuring with a ruler.
-</p>
-</div>
-</section>
-</section>
+<!-- S14: Extra worked example -->
 <section>
-<section id="slide-org3f9aa66">
-<h4 id="org3f9aa66">Second example: L1 norm</h4>
-<p>
-For \(\mathbf{u}=(-2,5)\):
-\[
-\norm{\mathbf{u}}_1=|-2|+|5|=2+5=7.
-\]
-</p>
+<h4>Worked example: student preferences</h4>
+<p>Two students rate 3 features of their ideal college: (campus size, city feel, sports).</p>
+<p>Alice = (2, 5, 1). Bob = (4, 3, 2). Carmen = (-1, 5, 0).</p>
+<ul>
+<li class="fragment">Alice \(\cdot\) Bob: \(2(4) + 5(3) + 1(2) = 8 + 15 + 2 = 25\). Positive — similar tastes.</li>
+<li class="fragment">Alice \(\cdot\) Carmen: \(2(-1) + 5(5) + 1(0) = -2 + 25 + 0 = 23\). Also positive — they agree on city feel.</li>
+</ul>
+<div class="quickcheck fragment">Your turn: compute Bob \(\cdot\) Carmen.</div>
+<p class="fragment">Answer: \(4(-1) + 3(5) + 2(0) = -4 + 15 + 0 = 11\). Moderate agreement.</p>
+<aside class="notes">"Notice: even though Carmen has a NEGATIVE score for campus size, the dot product with Alice is still positive because they strongly agree on city feel (5×5=25 dominates). The dot product captures overall agreement, not just one feature."</aside>
+</section>
 
-<div class="applied">
-<p>
-The \(\ell_1\) norm adds absolute values — like walking along city blocks.
-</p>
-</div>
-</section>
-</section>
+<!-- S15: Quick check: dot product -->
 <section>
-<section id="slide-org506c946">
-<h4 id="org506c946">Now name them: norms</h4>
+<h4>Quick check: dot product</h4>
+<div class="quickcheck">Compute \((1, 2, 0)^\top (3, -1, 4)\). What does the sign tell you?</div>
+<p class="fragment">Answer: \(1 \cdot 3 + 2 \cdot (-1) + 0 \cdot 4 = 3 - 2 + 0 = 1\). Positive: mild agreement.</p>
+<aside class="notes">"The result is 1 — barely positive. These vectors mildly agree but aren't strongly aligned. Like two acquaintances who have one hobby in common."</aside>
+</section>
+
+<!-- ─── Norms ─── -->
+
+<!-- S16: The real question — how big is the error? -->
+<section>
+<h4>How big is the error?</h4>
+<p>Your GPS says you'll arrive in 25 minutes. You actually arrive in 30.</p>
+<div class="key-question fragment">The error is 5 minutes. Easy with one number. But what if you have HUNDREDS of predictions?</div>
+<ul>
+<li class="fragment">A model predicts exam scores for 3 students: \(\hat{\mathbf{y}} = (85, 90, 70)\).</li>
+<li class="fragment">Actual scores: \(\mathbf{y} = (80, 92, 75)\).</li>
+<li class="fragment">Error vector: \(\mathbf{e} = (5, -2, -5)\). Three errors. We need ONE number.</li>
+</ul>
+<div class="applied fragment">AI training is ALL about making this number smaller. But first: how do we measure the "size" of a vector?</div>
+<aside class="notes">"When AI trains, it makes thousands of predictions, each slightly wrong. The errors form a vector. Training = make this vector SMALLER. But what does 'smaller' mean for a vector? We can't just add the entries — positive and negative errors would cancel! We need a way to measure the LENGTH of the error vector."</aside>
+</section>
+
+<!-- S17: L2 norm — Pythagorean theorem -->
+<section>
+<h4>The Pythagorean way: L2 norm</h4>
+<p>You know the Pythagorean theorem: for a right triangle with sides 3 and 4, the hypotenuse is 5.</p>
+<div class="fragment">\[\sqrt{3^2 + 4^2} = \sqrt{9 + 16} = \sqrt{25} = 5.\]</div>
+<p class="fragment">The <strong>\(\ell_2\) norm</strong> is the same idea applied to any vector:</p>
+<p class="fragment">For \(\mathbf{x} = (3, 4)\): \(\norm{\mathbf{x}}_2 = \sqrt{3^2 + 4^2} = 5.\)</p>
+<div class="applied fragment">The \(\ell_2\) norm = straight-line distance from the origin. Like measuring with a ruler.</div>
+<aside class="notes">"You already know this! The Pythagorean theorem from high school. a² + b² = c². The L2 norm is just Pythagoras generalized to any number of dimensions. For a 3D vector (a, b, c), it's √(a² + b² + c²). For 768 dimensions, same idea — just a longer sum under the square root."</aside>
+</section>
+
+<!-- S18: L1 norm — city blocks -->
+<section>
+<h4>The city-block way: L1 norm</h4>
+<p>In Manhattan, you can't walk diagonally. You walk <strong>3 blocks east</strong>, then <strong>4 blocks north</strong>. Total: 7 blocks.</p>
+<p class="fragment">The <strong>\(\ell_1\) norm</strong> adds absolute values:</p>
+<p class="fragment">For \(\mathbf{u} = (-2, 5)\): \(\norm{\mathbf{u}}_1 = |-2| + |5| = 2 + 5 = 7.\)</p>
+<ul>
+<li class="fragment">\(\ell_2\) (Pythagoras): straight-line distance = \(\sqrt{4 + 25} = \sqrt{29} \approx 5.4\).</li>
+<li class="fragment">\(\ell_1\) (Manhattan): walk along grid lines = \(7\).</li>
+</ul>
+<div class="applied fragment">Same vector, two ways to measure "how big." Each is useful in different AI applications.</div>
+<aside class="notes">"Why two norms? L2 penalizes big errors more (because of squaring). L1 treats every error equally. In machine learning, choosing L1 vs L2 changes what your model learns — L1 tends to zero out small features (sparsity), L2 spreads the error around. We'll see this again when we study regularization."</aside>
+</section>
+
+<!-- S19: Formal definition -->
+<section>
+<h4>Now name them: norms</h4>
 <div class="mathbox">
-<p>
-\[
-\norm{\mathbf{x}}_2=\sqrt{\sum_{i=1}^d x_i^2},
-\qquad
-\norm{\mathbf{x}}_1=\sum_{i=1}^d |x_i|.
-\]
-</p>
+\[\norm{\mathbf{x}}_2 = \sqrt{\sum_{i=1}^d x_i^2}, \qquad \norm{\mathbf{x}}_1 = \sum_{i=1}^d |x_i|.\]
 </div>
-
 <ul>
-<li data-fragment-index="1" class="fragment">\(\ell_2\) penalizes large entries more harshly (squaring).</li>
-<li data-fragment-index="2" class="fragment">\(\ell_1\) treats all entries equally (absolute value).</li>
-
+<li class="fragment">\(\ell_2\) penalizes large entries harshly (squaring). One big error dominates.</li>
+<li class="fragment">\(\ell_1\) treats all entries equally (absolute value). Many small errors add up.</li>
 </ul>
+<div class="applied fragment">AI training uses \(\ell_2\) (MSE loss) or \(\ell_1\) (MAE loss) to measure prediction quality.</div>
+<aside class="notes">"MSE = Mean Squared Error = average of squared errors. That's L2 norm squared, divided by n. MAE = Mean Absolute Error = average of absolute errors. That's L1 norm divided by n. When you see 'loss function' in AI — it's usually one of these norms in disguise."</aside>
 </section>
-</section>
+
+<!-- S20: L1 vs L2 geometry -->
 <section>
-<section id="slide-orge43a287">
-<h4 id="orge43a287">L1 vs L2: different geometry</h4>
-<div style="display:flex; align-items:center; gap:1em;"><div style="flex:1;">
-<p>
-The "unit ball" — all vectors with norm \(\le 1\) — looks different for each norm:
-</p>
-
+<h4>L1 vs L2: different geometry</h4>
+<div style="display:flex; align-items:center; gap:1em;">
+<div style="flex:1;">
+<p>The "unit ball" — all vectors with norm \(\le 1\) — looks different for each norm:</p>
 <ul>
-<li data-fragment-index="1" class="fragment">\(\ell_2\) ball: a circle (all points at distance 1 from the origin).</li>
-<li data-fragment-index="2" class="fragment">\(\ell_1\) ball: a diamond (corners on the axes).</li>
-
+<li class="fragment">\(\ell_2\) ball: a circle (all points at distance 1 from origin).</li>
+<li class="fragment">\(\ell_1\) ball: a diamond (corners on the axes).</li>
 </ul>
-
-<div class="applied" style="margin-top:0.5em;">
-<p>
-The diamond shape of the \(\ell_1\) ball is why L1 regularization pushes weights to exactly zero — the corners sit on the axes.
-</p>
-</div>
+<div class="applied fragment">The diamond shape of the \(\ell_1\) ball is why L1 regularization pushes weights to exactly zero — the corners are on the axes.</div>
 </div>
 <img src="../images/unit01/u1-L01-fig03-L1-L2-unit-balls.png" alt="L1 diamond vs L2 circle unit balls" style="max-height:420px; max-width:50%; border-radius:6px;">
 </div>
+<aside class="notes">"You don't need to understand regularization yet. But file this picture away. In Week 9, when we discuss how AI prevents overfitting, we'll come back to these shapes and the diamond's corners will be the key insight."</aside>
 </section>
-</section>
-<section>
-<section id="slide-org5a39dbd">
-<h4 id="org5a39dbd">Quick check: norms</h4>
-<div class="quickcheck">
-<p>
-Compute \(\norm{(3,-4)}_2\) and \(\norm{(3,-4)}_1\).
-</p>
-</div>
 
-<p class="fragment">
-Answer: \(\norm{(3,-4)}_2=\sqrt{9+16}=5\). \(\norm{(3,-4)}_1=3+4=7\).
-</p>
-</section>
-</section>
+<!-- S21: Quick check: norms -->
 <section>
-<section id="slide-orgcb59dd2">
-<h3 id="orgcb59dd2">Distance</h3>
-<div class="outline-text-3" id="text-orgcb59dd2">
-</div>
+<h4>Quick check: norms</h4>
+<div class="quickcheck">Compute \(\norm{(3, -4)}_2\) and \(\norm{(3, -4)}_1\).</div>
+<p class="fragment">Answer: \(\norm{(3, -4)}_2 = \sqrt{9 + 16} = 5\). \(\norm{(3, -4)}_1 = 3 + 4 = 7\).</p>
+<p class="fragment">Notice: \(\ell_2 \le \ell_1\) always. The straight line is never longer than the city blocks.</p>
+<aside class="notes">"3-4-5 right triangle — the most famous Pythagorean triple. The L2 norm is 5, the hypotenuse. The L1 norm is 7, walking along the two legs. The direct path is always shorter than the grid path."</aside>
 </section>
-</section>
-<section>
-<section id="slide-org4daea81">
-<h4 id="org4daea81">The real question</h4>
-<div class="key-question">
-<p>
-Two data points are at \(\mathbf{x}=(1,2)\) and \(\mathbf{y}=(4,6)\). How far apart are they?
-</p>
-</div>
 
+<!-- ─── Distance ─── -->
+
+<!-- S22: The real question — finding the closest match -->
+<section>
+<h4>Finding the closest match</h4>
+<p>Spotify has 100 million songs, each described by a vector. You just liked a song.</p>
+<div class="key-question fragment">Spotify's job: find the song whose vector is <strong>closest</strong> to the one you liked.</div>
 <ul>
-<li data-fragment-index="1" class="fragment">Compute the difference vector: \(\mathbf{x}-\mathbf{y}=(-3,-4)\).</li>
-<li data-fragment-index="2" class="fragment">Measure how big that difference is.</li>
-
+<li class="fragment">We know how to measure the size of ONE vector (norms).</li>
+<li class="fragment">Distance between two vectors = size of their <strong>difference</strong>.</li>
 </ul>
+<div class="applied fragment">Nearest-neighbor search is behind recommendation, image search, and even ChatGPT's retrieval system.</div>
+<aside class="notes">"This is literally what recommendation systems do. Every song is a point in number-space. Your favorite song is one point. Spotify calculates the distance from your point to every other point, then plays the closest ones. The math: subtract the two vectors, measure the length of the difference."</aside>
 </section>
-</section>
-<section>
-<section id="slide-org4ead95f">
-<h4 id="org4ead95f">Worked example</h4>
-<p>
-\[
-\mathbf{x}-\mathbf{y}=(1-4,\;2-6)=(-3,-4).
-\]
-\[
-d(\mathbf{x},\mathbf{y})=\norm{\mathbf{x}-\mathbf{y}}_2=\sqrt{(-3)^2+(-4)^2}=\sqrt{25}=5.
-\]
-</p>
 
-<div class="applied">
-<p>
-Distance = length of the difference vector. This is how nearest-neighbor search finds the closest match.
-</p>
-</div>
-</section>
-</section>
+<!-- S23: Worked example -->
 <section>
-<section id="slide-org77d2b46">
-<h4 id="org77d2b46">Now name it: distance</h4>
+<h4>Worked example: how far apart?</h4>
+<p>Two data points: \(\mathbf{x} = (1, 2)\) and \(\mathbf{y} = (4, 6)\).</p>
+<p class="fragment">Step 1 — find the difference: \(\mathbf{x} - \mathbf{y} = (1 - 4,\; 2 - 6) = (-3, -4)\).</p>
+<p class="fragment">Step 2 — measure the length: \(\norm{(-3, -4)}_2 = \sqrt{9 + 16} = 5.\)</p>
+<div class="fragment">\[d(\mathbf{x}, \mathbf{y}) = \norm{\mathbf{x} - \mathbf{y}}_2 = 5.\]</div>
+<div class="applied fragment">Distance = the norm of the difference. Subtract, then measure.</div>
+<aside class="notes">"Two steps: subtract, then Pythagoras. That's it. The distance between two points = the length of the arrow connecting them. In AI, when we say 'these two items are close,' we mean this number is small."</aside>
+</section>
+
+<!-- S24: Formal definition -->
+<section>
+<h4>Now name it: distance</h4>
 <div class="mathbox">
-<p>
-\[
-d(\mathbf{x},\mathbf{y})=\norm{\mathbf{x}-\mathbf{y}}_2.
-\]
-</p>
+\[d(\mathbf{x}, \mathbf{y}) = \norm{\mathbf{x} - \mathbf{y}}_2 = \sqrt{\sum_{i=1}^d (x_i - y_i)^2}.\]
 </div>
-
 <ul>
-<li data-fragment-index="1" class="fragment">Always \(\ge 0\), and equals \(0\) only when \(\mathbf{x}=\mathbf{y}\).</li>
-<li data-fragment-index="2" class="fragment">Symmetric: \(d(\mathbf{x},\mathbf{y})=d(\mathbf{y},\mathbf{x})\).</li>
-<li data-fragment-index="3" class="fragment">Triangle inequality: the direct path is never longer.</li>
-
+<li class="fragment">Always \(\ge 0\). Equals \(0\) only when \(\mathbf{x} = \mathbf{y}\) (same point).</li>
+<li class="fragment">Symmetric: distance from A to B = distance from B to A.</li>
+<li class="fragment">Triangle inequality: the direct path is never longer than a detour.</li>
 </ul>
+<aside class="notes">"These three properties are what make it a 'true' distance. Any function with these three properties is called a metric. Different norms give different distances — L1 distance is the city-block distance, L2 is the straight-line distance."</aside>
 </section>
-</section>
-<section>
-<section id="slide-orgd27661d">
-<h4 id="orgd27661d">Common mistake</h4>
-<div class="quickcheck">
-<p>
-Is \(\norm{\mathbf{x}}_2 - \norm{\mathbf{y}}_2\) the same as \(\norm{\mathbf{x}-\mathbf{y}}_2\)?
-</p>
-</div>
 
+<!-- S25: Common mistake -->
+<section>
+<h4>A common mistake</h4>
+<div class="quickcheck">Is "difference of lengths" the same as "length of difference"?</div>
+<p>Let \(\mathbf{x} = (1, 2)\) and \(\mathbf{y} = (4, 6)\).</p>
 <ul>
-<li data-fragment-index="1" class="fragment">No! \(\norm{(1,2)}_2 \approx 2.24\), \(\norm{(4,6)}_2 \approx 7.21\). Difference of norms \(\approx 4.97\).</li>
-<li data-fragment-index="2" class="fragment">But \(\norm{(1,2)-(4,6)}_2=\norm{(-3,-4)}_2=5\). Not the same.</li>
-
+<li class="fragment">Difference of lengths: \(\norm{\mathbf{x}}_2 - \norm{\mathbf{y}}_2 \approx 2.24 - 7.21 \approx -4.97\).</li>
+<li class="fragment">Length of difference: \(\norm{\mathbf{x} - \mathbf{y}}_2 = \norm{(-3, -4)}_2 = 5\).</li>
 </ul>
+<div class="key-question fragment"><strong>Not the same!</strong> You cannot distribute the norm over subtraction. This is a common exam mistake.</div>
+<aside class="notes">"The norm is NOT linear. You can't pull the subtraction outside the norm. This trips up students every semester. Write it in big letters: ||x - y|| ≠ ||x|| - ||y||. Think of it this way: two people can be the same height (same norm) but stand far apart (large distance)."</aside>
 </section>
-</section>
-<section>
-<section id="slide-orgb5398cd">
-<h3 id="orgb5398cd">Cosine Similarity</h3>
-<div class="outline-text-3" id="text-orgb5398cd">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org4e2fe80">
-<h4 id="org4e2fe80">The real question</h4>
-<div class="key-question">
-<p>
-If \(\mathbf{y}=2\mathbf{x}\), should these two vectors be considered similar?
-</p>
-</div>
 
+<!-- ─── Cosine Similarity ─── -->
+
+<!-- S26: The real question — same taste, different intensity -->
+<section>
+<h4>Same taste, different intensity</h4>
+<p>Two people rate movies on a scale of 0-10:</p>
 <ul>
-<li data-fragment-index="1" class="fragment">They point in the same direction.</li>
-<li data-fragment-index="2" class="fragment">But Euclidean distance says they are far apart.</li>
-<li data-fragment-index="3" class="fragment">We need a measure that focuses on direction, not size.</li>
-
+<li>You: (8, 2, 0) — love action, meh on romance, hate comedy.</li>
+<li>Your friend: (4, 1, 0) — same preferences, but rates everything lower.</li>
 </ul>
+<div class="key-question fragment">You have the <strong>same taste</strong>. But Euclidean distance says you're far apart. What went wrong?</div>
+<ul>
+<li class="fragment">Distance measures <strong>size</strong>. But taste is about <strong>direction</strong>.</li>
+<li class="fragment">We need a measure that ignores magnitude and captures direction only.</li>
+</ul>
+<aside class="notes">"Imagine a harsh critic who gives every movie a 2. And a generous critic who gives the same movies an 8. They AGREE on which movies are good and which are bad — they just use different scales. Euclidean distance says they're far apart. But a recommendation system should treat them as identical. Cosine similarity does exactly that."</aside>
 </section>
-</section>
-<section>
-<section id="slide-org98064f7">
-<h4 id="org98064f7">Worked example (step 1)</h4>
-<p>
-Let \(\mathbf{x}=(1,2)\) and \(\mathbf{y}=(3,-1)\).
-</p>
 
-<p>
-Step 1 — dot product:
-\[
-\mathbf{x}^\top\mathbf{y}=1\cdot 3+2\cdot(-1)=3-2=1.
-\]
-</p>
-
-<p class="fragment">
-Step 2 — norms:
-\[
-\norm{\mathbf{x}}_2=\sqrt{1+4}=\sqrt{5},\quad
-\norm{\mathbf{y}}_2=\sqrt{9+1}=\sqrt{10}.
-\]
-</p>
-</section>
-</section>
+<!-- S27: Worked example step 1 -->
 <section>
-<section id="slide-org6711ae0">
-<h4 id="org6711ae0">Worked example (step 3)</h4>
-<p>
-Step 3 — divide:
-\[
-\cos\theta=\frac{\mathbf{x}^\top\mathbf{y}}{\norm{\mathbf{x}}_2\,\norm{\mathbf{y}}_2}
-=\frac{1}{\sqrt{5}\cdot\sqrt{10}}
-=\frac{1}{\sqrt{50}}
-\approx 0.14.
-\]
-</p>
+<h4>Worked example: three steps</h4>
+<p>Let \(\mathbf{x} = (1, 2)\) and \(\mathbf{y} = (3, -1)\). How similar is their direction?</p>
+<p><strong>Step 1</strong> — Dot product (numerator):</p>
+\[\mathbf{x}^\top \mathbf{y} = 1(3) + 2(-1) = 3 - 2 = 1.\]
+<p class="fragment"><strong>Step 2</strong> — Norms (denominator):</p>
+<div class="fragment">\[\norm{\mathbf{x}}_2 = \sqrt{1 + 4} = \sqrt{5}, \qquad \norm{\mathbf{y}}_2 = \sqrt{9 + 1} = \sqrt{10}.\]</div>
+<p class="fragment"><strong>Step 3</strong> — Divide:</p>
+<div class="fragment">\[\cos\theta = \frac{1}{\sqrt{5} \cdot \sqrt{10}} = \frac{1}{\sqrt{50}} \approx 0.14.\]</div>
+<p class="fragment">Small positive value = mild directional agreement. They point in <em>roughly</em> the same direction.</p>
+<aside class="notes">"Three steps: dot product on top, product of norms on bottom. The denominator normalizes away the lengths, so you're only measuring the angle. Result is always between -1 and 1."</aside>
+</section>
 
-<p class="fragment">
-Small positive value: these vectors have only mild directional agreement.
-</p>
-</section>
-</section>
+<!-- S28: Now name it: cosine similarity -->
 <section>
-<section id="slide-org7bd6c7b">
-<h4 id="org7bd6c7b">Now name it: cosine similarity</h4>
+<h4>Now name it: cosine similarity</h4>
 <div class="mathbox">
-<p>
-\[
-\cos\theta
-=
-\frac{\mathbf{x}^\top\mathbf{y}}
-{\norm{\mathbf{x}}_2\,\norm{\mathbf{y}}_2}.
-\]
-</p>
+\[\cos\theta = \frac{\mathbf{x}^\top \mathbf{y}}{\norm{\mathbf{x}}_2 \, \norm{\mathbf{y}}_2}\]
 </div>
-
-<ul>
-<li data-fragment-index="1" class="fragment">Always between \(-1\) and \(1\).</li>
-<li data-fragment-index="2" class="fragment">\(\cos\theta=1\): same direction. \(\cos\theta=-1\): opposite.</li>
-<li data-fragment-index="3" class="fragment">\(\cos\theta=0\): perpendicular (orthogonal).</li>
-
-</ul>
-</section>
-</section>
-<section>
-<section id="slide-org05c8b03">
-<h4 id="org05c8b03">Why this works: unit vectors</h4>
-<p>
-Dividing by the norms shrinks each vector to length \(1\):
-\[
-\hat{\mathbf{x}}=\frac{\mathbf{x}}{\norm{\mathbf{x}}_2}, \qquad
-\hat{\mathbf{y}}=\frac{\mathbf{y}}{\norm{\mathbf{y}}_2}.
-\]
-</p>
-
-<p class="fragment">
-Then \(\cos\theta = \hat{\mathbf{x}}^\top\hat{\mathbf{y}}\) — the dot product of unit vectors measures direction only.
-</p>
-
-<div class="applied">
-<p>
-Cosine similarity powers search engines, recommendation systems, and text retrieval.
-</p>
-</div>
-
-<img src="../images/unit01/u1-L01-fig04-cosine-unit-circle.png" alt="Cosine similarity on unit circle" style="display:block; max-height:450px; max-width:60%; margin:0.3em auto; border-radius:6px;">
-</section>
-</section>
-<section>
-<section id="slide-org749b5de">
-<h4 id="org749b5de">Quick check: cosine similarity</h4>
-<div class="quickcheck">
-<p>
-If \(\mathbf{y}=5\mathbf{x}\) for some nonzero \(\mathbf{x}\), what is \(\cos\theta\)?
-</p>
-</div>
-
-<p class="fragment">
-Answer: \(\cos\theta=1\). Scaling does not change the angle.
-</p>
-</section>
-</section>
-<section>
-<section id="slide-orge194c80">
-<h3 id="orge194c80">L01 Summary</h3>
-<div class="outline-text-3" id="text-orge194c80">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-orgdcf5351">
-<h4 id="orgdcf5351">What we built today</h4>
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Tool</th>
-<th scope="col" class="org-left">Input</th>
-<th scope="col" class="org-left">Output</th>
-<th scope="col" class="org-left">Measures</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left">Dot product</td>
-<td class="org-left">two vectors</td>
-<td class="org-left">scalar</td>
-<td class="org-left">alignment</td>
-</tr>
-
-<tr>
-<td class="org-left">Norm</td>
-<td class="org-left">one vector</td>
-<td class="org-left">scalar</td>
-<td class="org-left">size</td>
-</tr>
-
-<tr>
-<td class="org-left">Distance</td>
-<td class="org-left">two vectors</td>
-<td class="org-left">scalar</td>
-<td class="org-left">separation</td>
-</tr>
-
-<tr>
-<td class="org-left">Cosine</td>
-<td class="org-left">two vectors</td>
-<td class="org-left">value in \([-1,1]\)</td>
-<td class="org-left">direction</td>
-</tr>
-</tbody>
+<table>
+<tr><th>Value</th><th>Meaning</th><th>Example</th></tr>
+<tr><td>\(\cos\theta = 1\)</td><td>Same direction</td><td>Two action fans (different intensity)</td></tr>
+<tr><td>\(\cos\theta = 0\)</td><td>Perpendicular</td><td>Action fan vs. someone who only cares about comedy</td></tr>
+<tr><td>\(\cos\theta = -1\)</td><td>Opposite direction</td><td>One loves what the other hates</td></tr>
 </table>
+<div class="applied fragment">Google Search ranks pages by cosine similarity between your query vector and each page's vector.</div>
+<aside class="notes">"When you Google something, the search engine turns your query into a vector and every web page into a vector. It computes cosine similarity between your query and each page. Highest cosine = best match. That's why a search for 'best pizza near me' returns pizza reviews, not sushi restaurants — high cosine similarity."</aside>
 </section>
-</section>
-<section>
-<section id="slide-orgb288d7d">
-<h4 id="orgb288d7d">Preview</h4>
-<div class="key-question">
-<p>
-We can now compare vectors. But what transforms them?
-</p>
-</div>
 
-<p class="fragment">
-Next time: matrices as machines that transform data.
-</p>
-</section>
-</section>
+<!-- S29: Unit vectors — the key insight -->
 <section>
-<section id="slide-org887e26b">
-<h2 id="org887e26b">Week 1 - L02</h2>
-<div class="outline-text-2" id="text-org887e26b">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org6f26a4a">
-<h3 id="org6f26a4a">Matrices and Linear Maps</h3>
-<div class="outline-text-3" id="text-org6f26a4a">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-orgadec1a7">
-<h4 id="orgadec1a7">Opening question</h4>
-<div class="key-question">
-<p>
-If vectors represent data, what kind of machine can transform every data point at once?
-</p>
-</div>
-
+<h4>Why this works: unit vectors</h4>
+<div style="display:flex; align-items:center; gap:1em;">
+<div style="flex:1;">
+<p>Dividing by the norm shrinks any vector to length 1:</p>
+\[\hat{\mathbf{x}} = \frac{\mathbf{x}}{\norm{\mathbf{x}}_2}\]
 <ul>
-<li data-fragment-index="1" class="fragment">A model takes input features and produces output scores.</li>
-<li data-fragment-index="2" class="fragment">We need something that works on entire datasets, not one point at a time.</li>
-<li data-fragment-index="3" class="fragment">Today: matrices as transformation machines.</li>
+<li class="fragment">\(\hat{\mathbf{x}}\) points in the <strong>same direction</strong> as \(\mathbf{x}\), but has length exactly 1.</li>
+<li class="fragment">Cosine similarity = dot product of unit vectors: \(\cos\theta = \hat{\mathbf{x}}^\top \hat{\mathbf{y}}\).</li>
+</ul>
+<div class="applied fragment">This is why your harsh-critic and generous-critic friends get the same cosine score — after normalizing, their vectors are identical.</div>
+</div>
+<img src="../images/unit01/u1-L01-fig04-cosine-unit-circle.png" alt="Cosine similarity on unit circle" style="max-height:450px; max-width:45%; border-radius:6px;">
+</div>
+<aside class="notes">"Normalizing = shrinking to length 1. It removes magnitude and keeps only direction. Like converting a recipe from '4 cups flour, 2 cups sugar' to '2 parts flour, 1 part sugar' — the proportions are what matter, not the absolute amounts."</aside>
+</section>
 
+<!-- S30: Quick check: cosine similarity -->
+<section>
+<h4>Quick check: cosine similarity</h4>
+<div class="quickcheck">If \(\mathbf{y} = 5\mathbf{x}\) for some nonzero \(\mathbf{x}\), what is \(\cos\theta\)?</div>
+<p class="fragment">Answer: \(\cos\theta = 1\). Scaling does not change the angle.</p>
+<p class="fragment"><strong>Follow-up</strong>: If \(\mathbf{y} = -3\mathbf{x}\), what is \(\cos\theta\)?</p>
+<p class="fragment">Answer: \(\cos\theta = -1\). Flipping direction gives the exact opposite.</p>
+<aside class="notes">"If y is just a scaled-up version of x, they point the same way → cosine = 1. If y is a negative multiple of x, they point in opposite directions → cosine = -1. Cosine is BLIND to magnitude. That's its superpower for recommendation and search."</aside>
+</section>
+
+<!-- ─── L01 Summary ─── -->
+
+<!-- L01 takeaways -->
+<section>
+<h4>L01 takeaways</h4>
+<table>
+<tr><th>Tool</th><th>Input</th><th>Output</th><th>What it measures</th><th>Tier</th></tr>
+<tr><td>Dot product</td><td>two vectors</td><td>a number</td><td>agreement / alignment</td><td style="color:#2563eb;">MASTER</td></tr>
+<tr><td>L2 Norm</td><td>one vector</td><td>a number \(\ge 0\)</td><td>size / length</td><td style="color:#2563eb;">MASTER</td></tr>
+<tr><td>Distance</td><td>two vectors</td><td>a number \(\ge 0\)</td><td>how far apart</td><td style="color:#2563eb;">MASTER</td></tr>
+<tr><td>Cosine</td><td>two vectors</td><td>\([-1, 1]\)</td><td>direction similarity</td><td style="color:#2563eb;">MASTER</td></tr>
+<tr><td>L1 Norm</td><td>one vector</td><td>a number \(\ge 0\)</td><td>city-block size</td><td style="color:#d97706;">UNDERSTAND</td></tr>
+</table>
+<div class="applied fragment">These tools are the foundation of step 2 ("measure closeness") in every AI application we saw in Unit 0.</div>
+<aside class="notes">"Four tools, all built from the same three operations: multiply, add, square root. That's all the arithmetic you need for the similarity engine inside Spotify, Google, and ChatGPT. Next time: the machine that TRANSFORMS these vectors — matrices."</aside>
+</section>
+
+<!-- S32: Preview -->
+<section>
+<h4>Preview</h4>
+<div class="key-question">We can now compare vectors. But what <strong>transforms</strong> them?</div>
+<p class="fragment">Next time: matrices as machines that transform data.</p>
+<p class="fragment">If vectors are the data, matrices are the <strong>model</strong> — the thing that turns inputs into predictions.</p>
+<aside class="notes">"So far we can represent data (vectors) and compare data (dot product, distance, cosine). But AI doesn't just compare — it TRANSFORMS. A model takes input features and produces predictions. That transformation is a matrix. Next class: matrices as transformation machines."</aside>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- L02: Matrices and Linear Maps          -->
+<!-- ═══════════════════════════════════════ -->
+
+<!-- L02 header -->
+<section>
+<h4>L02 — Matrices: Transformation Machines</h4>
+<div class="key-question">How does a model transform inputs into predictions — all at once?</div>
+<ul>
+<li class="fragment">Matrix as data table <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment">Matrix-vector multiplication = batch prediction <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment">Linear maps — what "linear" means geometrically <span style="color:#d97706; font-size:0.85em;">[UNDERSTAND]</span></li>
+<li class="fragment">Matrix-matrix multiplication = chaining transformations <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
 </ul>
 </section>
-</section>
-<section>
-<section id="slide-orgf238397">
-<h3 id="orgf238397">Matrices: Tables with Rules</h3>
-<div class="outline-text-3" id="text-orgf238397">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org08c810f">
-<h4 id="org08c810f">Start with a data table</h4>
-<p>
-Three students, two features each: hours studied and hours slept.
-</p>
 
-<div class="mathbox">
-<p>
+<!-- Opening — one student to many -->
+<section>
+<h4>From one prediction to many</h4>
+<p>Last time we computed a dot product: one student's features \(\cdot\) model weights = one prediction.</p>
+<div class="key-question fragment">But a class has 30 students. A dataset has millions of rows. How do we predict ALL of them at once?</div>
+<ul>
+<li class="fragment">We could compute 30 separate dot products...</li>
+<li class="fragment">Or we could organize the data into a <strong>table</strong> and multiply once.</li>
+<li class="fragment">That table has a name: a <strong>matrix</strong>.</li>
+</ul>
+<aside class="notes">"Last class: one student, two features, one dot product, one prediction. But what if you're a professor with 30 students? You don't want to do 30 separate calculations. You want to run them all at once. That's exactly what matrix-vector multiplication does — it's a batch dot product."</aside>
+</section>
+
+<!-- ─── Matrices: Tables with Rules ─── -->
+
+<!-- S34: Start with a data table -->
+<section>
+<h4>Start with a data table</h4>
+<p>Three students, two features each: hours studied and hours slept before the exam.</p>
 \[\begin{bmatrix} 5 & 7\\ 3 & 8\\ 6 & 6 \end{bmatrix}\]
-</p>
-</div>
-
 <ul>
-<li data-fragment-index="1" class="fragment">Each row is one student.</li>
-<li data-fragment-index="2" class="fragment">Each column is one feature.</li>
-
+<li class="fragment">Each <strong>row</strong> is one student (one data point).</li>
+<li class="fragment">Each <strong>column</strong> is one feature (one measurement).</li>
 </ul>
+<div class="applied fragment">This is how EVERY dataset looks: rows = observations, columns = features. Exactly like a spreadsheet.</div>
+<aside class="notes">"You've seen this format before — it's a spreadsheet. Every dataset in data science is a table like this. The only new thing: we're going to do MATH on the whole table at once, not one cell at a time."</aside>
 </section>
-</section>
-<section>
-<section id="slide-org4660ee8">
-<h4 id="org4660ee8">Now name it: matrix</h4>
-<div class="mathbox">
-<p>
-A matrix \(A=[a_{ij}]\in\R^{m\times n}\) has \(m\) rows and \(n\) columns.
-</p>
 
-<p>
+<!-- S35: Now name it: matrix -->
+<section>
+<h4>Now name it: matrix</h4>
+<div class="mathbox">
+A <strong>matrix</strong> \(A = [a_{ij}] \in \R^{m \times n}\) has \(m\) rows and \(n\) columns.<br/><br/>
 The entry in row \(i\), column \(j\) is \(a_{ij}\).
-</p>
 </div>
+<p class="fragment">Think of \(a_{ij}\) as a <strong>spreadsheet cell address</strong>: row \(i\), column \(j\).</p>
+<div class="fragment">\[A = \begin{bmatrix} 1 & 2 \\ -1 & 3 \end{bmatrix} \quad \Rightarrow \quad a_{12} = 2, \quad a_{21} = -1.\]</div>
+<p class="fragment">Common mistake: swapping row and column — \(a_{12}\) is row 1, column 2, <strong>not</strong> the other way.</p>
+<aside class="notes">"a_{ij}: first index = row, second = column. Like a street address: avenue first, then street. Students confuse this every year. a_{12} means row 1, column 2. NOT row 2, column 1. Drill it: row first, column second."</aside>
+</section>
 
-<p class="fragment">
-Think of \(a_{ij}\) as a spreadsheet cell address: row \(i\), column \(j\).
-</p>
-</section>
-</section>
+<!-- S36: Transpose and identity -->
 <section>
-<section id="slide-orgd76aea4">
-<h4 id="orgd76aea4">Identify entries</h4>
-<p>
-\[A=\begin{bmatrix}1 & 2\\-1 & 3\end{bmatrix}.\]
-</p>
-
-<ul>
-<li data-fragment-index="1" class="fragment">\(a_{12}=2\) (row 1, column 2).</li>
-<li data-fragment-index="2" class="fragment">\(a_{21}=-1\) (row 2, column 1).</li>
-<li data-fragment-index="3" class="fragment">Common mistake: swapping row and column indices.</li>
-
-</ul>
-</section>
-</section>
-<section>
-<section id="slide-org9ff5161">
-<h4 id="org9ff5161">Transpose and identity</h4>
+<h4>Two special operations</h4>
 <div class="fragment">
-<p>
-<b>Transpose</b> \(A^\top\): swap rows and columns. \((A^\top)_{ij}=a_{ji}\).
-</p>
-
-<p>
-\[A=\begin{bmatrix}1&2\\3&4\end{bmatrix} \;\Longrightarrow\; A^\top=\begin{bmatrix}1&3\\2&4\end{bmatrix}\]
-</p>
+<p><strong>Transpose</strong> \(A^\top\): swap rows and columns. \((A^\top)_{ij} = a_{ji}\).</p>
+\[A = \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix} \;\Longrightarrow\; A^\top = \begin{bmatrix} 1 & 3 \\ 2 & 4 \end{bmatrix}\]
 </div>
-
 <div class="fragment">
-<p>
-<b>Identity matrix</b> \(I\): the "do nothing" matrix. \(I\mathbf{x}=\mathbf{x}\) for any \(\mathbf{x}\).
-</p>
+<p><strong>Identity matrix</strong> \(I\): the "do nothing" matrix. \(I\mathbf{x} = \mathbf{x}\) for any \(\mathbf{x}\).</p>
+\[I = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}, \qquad I \begin{bmatrix} 3 \\ 7 \end{bmatrix} = \begin{bmatrix} 3 \\ 7 \end{bmatrix}.\]
+</div>
+<div class="applied fragment">The identity matrix is like multiplying by 1 — it will show up as the "starting point" in many AI algorithms.</div>
+<aside class="notes">"Transpose: flip the table on its diagonal. Rows become columns and vice versa. If A is 2×3, then A^T is 3×2." "Identity: 1's on the diagonal, 0's everywhere else. It's the matrix version of the number 1 — multiplying by it does nothing. When an AI model starts training, its weights often begin near the identity."</aside>
+</section>
 
-<p>
-\[I=\begin{bmatrix}1&0\\0&1\end{bmatrix}, \qquad I\begin{bmatrix}3\\7\end{bmatrix}=\begin{bmatrix}3\\7\end{bmatrix}.\]
-</p>
-</div>
+<!-- S37: Quick check: matrices -->
+<section>
+<h4>Quick check: matrices</h4>
+<div class="quickcheck">If \(A \in \R^{2 \times 3}\), how many entries does \(A\) have? What is the shape of \(A^\top\)?</div>
+<p class="fragment">Answer: \(2 \times 3 = 6\) entries. \(A^\top \in \R^{3 \times 2}\).</p>
+<aside class="notes">"2 rows × 3 columns = 6 entries total. Transpose swaps the dimensions: 2×3 becomes 3×2."</aside>
+</section>
 
-<div class="applied fragment">
-<p>
-The identity matrix is like multiplying by 1 — it shows up as the "starting point" in many AI algorithms.
-</p>
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org7acee24">
-<h4 id="org7acee24">Quick check: matrices</h4>
-<div class="quickcheck">
-<p>
-If \(A\in\R^{2\times 3}\), how many entries does \(A\) have? What is the shape of \(A^\top\)?
-</p>
-</div>
+<!-- ─── Matrix-Vector Multiplication ─── -->
 
-<p class="fragment">
-Answer: 6 entries. \(A^\top\in\R^{3\times 2}\).
-</p>
-</section>
-</section>
+<!-- S38: The real question — batch prediction -->
 <section>
-<section id="slide-orgdb4707f">
-<h3 id="orgdb4707f">Matrix-Vector Multiplication</h3>
-<div class="outline-text-3" id="text-orgdb4707f">
-</div>
+<h4>The real question: batch prediction</h4>
+<div class="key-question">A student has features (hours studied, hours slept) = \((5, 7)\). The model assigns weights \((0.6, 0.4)\). Predicted score?</div>
+<div class="fragment">\[0.6 \times 5 + 0.4 \times 7 = 3.0 + 2.8 = 5.8.\]</div>
+<p class="fragment">That's a dot product! One student, one prediction.</p>
+<div class="applied fragment">Now imagine 1,000 students. We want 1,000 predictions — all at once.</div>
+<aside class="notes">"One student, two features, one dot product, one prediction. You already know how to do this from last class. But a real dataset has thousands of rows. We need to run the SAME dot product on every row. That's matrix-vector multiplication."</aside>
 </section>
-</section>
-<section>
-<section id="slide-org9effa15">
-<h4 id="org9effa15">The real question</h4>
-<div class="key-question">
-<p>
-A student has features (hours studied, hours slept) = \((5,7)\). The model assigns weights \((0.6,\,0.4)\). What is the student's predicted score?
-</p>
-</div>
 
-<p class="fragment">
-\(0.6\times 5+0.4\times 7=3.0+2.8=5.8\). That is a dot product!
-</p>
-</section>
-</section>
+<!-- S39: Three students at once -->
 <section>
-<section id="slide-orgf9dd433">
-<h4 id="orgf9dd433">One student is a dot product. What about three?</h4>
+<h4>Three students at once</h4>
+\[X = \begin{bmatrix} 1 & 2\\ 2 & 1\\ 3 & 4 \end{bmatrix}, \qquad \mathbf{w} = \begin{bmatrix} 2\\ 1 \end{bmatrix}.\]
+<p class="fragment">Each row of \(X\) is one student. \(\mathbf{w}\) is the weight vector.</p>
+<div class="fragment">\[X\mathbf{w} = \begin{bmatrix} 1(2) + 2(1)\\ 2(2) + 1(1)\\ 3(2) + 4(1) \end{bmatrix} = \begin{bmatrix} 4\\ 5\\ 10 \end{bmatrix}.\]</div>
+<div class="applied fragment">One operation. Three predictions. Each output is a dot product of one row with \(\mathbf{w}\).</div>
+<aside class="notes">"Row 1 dot w = 1×2 + 2×1 = 4. Row 2 dot w = 2×2 + 1×1 = 5. Row 3 dot w = 3×2 + 4×1 = 10. Three dot products, but we write it as ONE matrix-vector product. That's the power: one notation for 3 (or 3 million) predictions."</aside>
+</section>
+
+<!-- S40: Now name it: matrix-vector multiplication -->
+<section>
+<h4>Now name it: matrix-vector multiplication</h4>
 <div class="mathbox">
-<p>
-\[X=\begin{bmatrix} 1 & 2\\ 2 & 1\\ 3 & 4 \end{bmatrix}, \qquad \mathbf{w}=\begin{bmatrix} 2\\ 1 \end{bmatrix}.\]
-</p>
+For \(A \in \R^{m \times n}\) and \(\mathbf{x} \in \R^n\):
+\[(A\mathbf{x})_i = \sum_{j=1}^n a_{ij} x_j.\]
 </div>
-
-<p class="fragment">
-We want one score per student: \(X\mathbf{w}=\text{?}\)
-</p>
-</section>
-</section>
-<section>
-<section id="slide-org35f6f25">
-<h4 id="org35f6f25">Row-by-row computation</h4>
-<p>
-\[X\mathbf{w} = \begin{bmatrix} 1\cdot 2+2\cdot 1\\ 2\cdot 2+1\cdot 1\\ 3\cdot 2+4\cdot 1 \end{bmatrix} = \begin{bmatrix} 4\\5\\10 \end{bmatrix}.\]
-</p>
-
 <ul>
-<li data-fragment-index="1" class="fragment">Row 1 \(\cdot\) \(\mathbf{w}\) = 4. Row 2 \(\cdot\) \(\mathbf{w}\) = 5. Row 3 \(\cdot\) \(\mathbf{w}\) = 10.</li>
-<li data-fragment-index="2" class="fragment">Each output is a dot product of one row with \(\mathbf{w}\).</li>
-
+<li class="fragment">Each output entry = dot product of row \(i\) with \(\mathbf{x}\).</li>
+<li class="fragment">Dimensions: \(A \in \R^{m \times n}\), \(\mathbf{x} \in \R^n\) \(\Rightarrow\) \(A\mathbf{x} \in \R^m\). Input has \(n\) entries, output has \(m\).</li>
 </ul>
+<div class="applied fragment">In AI: \(A\) = model weights, \(\mathbf{x}\) = input features, \(A\mathbf{x}\) = predictions. This is a <strong>linear model</strong>.</div>
+<aside class="notes">"The formal definition looks dense but it's saying: for each row, take the dot product with x. That's it. The dimension rule is crucial: the number of COLUMNS in A must equal the number of ENTRIES in x. Otherwise the dot products don't work — you'd be multiplying mismatched lists."</aside>
 </section>
-</section>
-<section>
-<section id="slide-orgd2c79dc">
-<h4 id="orgd2c79dc">Now name it: matrix-vector multiplication</h4>
-<div class="mathbox">
-<p>
-For \(A\in\R^{m\times n}\) and \(\mathbf{x}\in\R^n\):
-\[
-(A\mathbf{x})_i=\sum_{j=1}^n a_{ij}x_j.
-\]
-</p>
-</div>
 
+<!-- S41: Second worked example -->
+<section>
+<h4>Worked example 2</h4>
+\[A = \begin{bmatrix} 1 & 2 \\ -1 & 3 \end{bmatrix}, \quad \mathbf{x} = \begin{bmatrix} 2 \\ -1 \end{bmatrix}.\]
 <ul>
-<li data-fragment-index="1" class="fragment">Each output entry is a dot product of row \(i\) with \(\mathbf{x}\).</li>
-<li data-fragment-index="2" class="fragment">Dimensions: \(A\in\R^{m\times n}\), \(\mathbf{x}\in\R^n\) \(\Rightarrow\) \(A\mathbf{x}\in\R^m\).</li>
-
+<li class="fragment">Row 1: \(1(2) + 2(-1) = 2 - 2 = 0\).</li>
+<li class="fragment">Row 2: \((-1)(2) + 3(-1) = -2 - 3 = -5\).</li>
+<li class="fragment">\(A\mathbf{x} = \begin{bmatrix} 0 \\ -5 \end{bmatrix}\). The matrix turned \((2, -1)\) into \((0, -5)\).</li>
 </ul>
+<div class="key-question fragment">The matrix <strong>moved</strong> the vector. It transformed it. That's what matrices DO — they are transformation machines.</div>
+<aside class="notes">"Look at what happened: we put in (2, -1) and got out (0, -5). The matrix MOVED the point. Different matrices move points differently — some stretch, some rotate, some flip. That's the key insight: a matrix is not just a table of numbers. It's a MACHINE that transforms vectors."</aside>
 </section>
-</section>
-<section>
-<section id="slide-org7d9a354">
-<h4 id="org7d9a354">Second example</h4>
-<p>
-\[A=\begin{bmatrix}1&2\\-1&3\end{bmatrix},\quad \mathbf{x}=\begin{bmatrix}2\\-1\end{bmatrix}.\]
-</p>
 
+<!-- S42: Column view -->
+<section>
+<h4>Another way to see it: column view</h4>
+<div style="display:flex; align-items:center; gap:1em;">
+<div style="flex:1;">
+<p>There's a second way to read \(A\mathbf{x}\): as a <strong>weighted combination of columns</strong>.</p>
+\[2 \begin{bmatrix} 1 \\ -1 \end{bmatrix} + (-1) \begin{bmatrix} 2 \\ 3 \end{bmatrix} = \begin{bmatrix} 2 \\ -2 \end{bmatrix} + \begin{bmatrix} -2 \\ -3 \end{bmatrix} = \begin{bmatrix} 0 \\ -5 \end{bmatrix}.\]
+<div class="applied fragment">\(A\mathbf{x}\) = take the columns of \(A\), scale them by the entries of \(\mathbf{x}\), add them up. This is a <strong>linear combination</strong>.</div>
+</div>
+<img src="../images/unit01/u1-L02-fig05-Ax-column-combination.png?v=2" alt="Ax as weighted sum of column vectors" style="max-height:504px; max-width:50%; border-radius:6px;">
+</div>
+<aside class="notes">"Row view: each output entry is a dot product. Column view: the output is a mix of the columns of A, with weights from x. Same answer, different perspective. The column view will become essential when we study linear combinations and span in the next unit."</aside>
+</section>
+
+<!-- S43: Quick check: matrix-vector -->
+<section>
+<h4>Quick check: matrix-vector</h4>
+<div class="quickcheck">Compute \(A\mathbf{x}\) for \(A = \begin{bmatrix} 2 & 0 \\ 1 & 3 \end{bmatrix}\) and \(\mathbf{x} = \begin{bmatrix} 1 \\ 2 \end{bmatrix}\).</div>
+<p class="fragment">Answer: \(A\mathbf{x} = \begin{bmatrix} 2(1) + 0(2) \\ 1(1) + 3(2) \end{bmatrix} = \begin{bmatrix} 2 \\ 7 \end{bmatrix}\).</p>
+<aside class="notes">"Row 1: 2×1 + 0×2 = 2. Row 2: 1×1 + 3×2 = 7. Quick sanity check: A is 2×2, x is 2×1, so Ax is 2×1. Dimensions match."</aside>
+</section>
+
+<!-- ─── Linear Maps ─── -->
+
+<!-- S44: What does a matrix do to a picture? -->
+<section>
+<h4>What does a matrix do to a picture?</h4>
+<div class="key-question">If we apply \(A\mathbf{x}\) to <strong>every</strong> point in a grid, what happens to the grid?</div>
 <ul>
-<li data-fragment-index="1" class="fragment">Row 1: \(1\cdot 2+2\cdot(-1)=0\).</li>
-<li data-fragment-index="2" class="fragment">Row 2: \((-1)\cdot 2+3\cdot(-1)=-5\).</li>
-<li data-fragment-index="3" class="fragment">\(A\mathbf{x}=\begin{bmatrix}0\\-5\end{bmatrix}\).</li>
-
+<li class="fragment">Lines stay as lines (they do not curve).</li>
+<li class="fragment">The origin stays fixed.</li>
+<li class="fragment">The grid can stretch, rotate, reflect, or shear — but never bend.</li>
 </ul>
+<div class="applied fragment">This is like an Instagram filter that can resize, rotate, and flip your photo — but can't warp or distort curves.</div>
+<aside class="notes">"Imagine a grid of points, like graph paper. Apply a matrix to every point. The grid might stretch like taffy, rotate like a wheel, or flip like a mirror — but the lines always stay straight and the origin never moves. That's a linear transformation." "Why does AI care? Because a linear model can only learn straight-line relationships. If the real pattern is curved, we need more tools (which we'll build in later units)."</aside>
 </section>
-</section>
-<section>
-<section id="slide-org5e204e1">
-<h4 id="org5e204e1">Column view</h4>
-<div style="display:flex; align-items:center; gap:1em;"><div style="flex:1;">
-<p>
-There is another way to read \(A\mathbf{x}\): as a weighted combination of columns.
-</p>
 
-<p>
-\[2\begin{bmatrix}1\\-1\end{bmatrix} +(-1)\begin{bmatrix}2\\3\end{bmatrix} =\begin{bmatrix}2\\-2\end{bmatrix}+\begin{bmatrix}-2\\-3\end{bmatrix} =\begin{bmatrix}0\\-5\end{bmatrix}.\]
-</p>
-
-<div class="applied" style="margin-top:0.5em;">
-<p>
-\(A\mathbf{x}\) = take the columns of \(A\), scale them by the entries of \(\mathbf{x}\), add them up. This is a <b>linear combination</b>.
-</p>
-</div>
-</div>
-<img src="../images/unit01/u1-L02-fig05-Ax-column-combination.png" alt="Ax as weighted sum of column vectors" style="max-height:504px; max-width:50%; border-radius:6px;">
-</div>
-</section>
-</section>
+<!-- S45: Grid transformation -->
 <section>
-<section id="slide-orgfad0018">
-<h4 id="orgfad0018">Quick check: matrix-vector</h4>
-<div class="quickcheck">
-<p>
-Compute \(A\mathbf{x}\) for \(A=\begin{bmatrix}2&0\\1&3\end{bmatrix}\) and \(\mathbf{x}=\begin{bmatrix}1\\2\end{bmatrix}\).
-</p>
-</div>
-
-<p class="fragment">
-Answer: \(A\mathbf{x}=\begin{bmatrix}2\cdot 1+0\cdot 2\\1\cdot 1+3\cdot 2\end{bmatrix}=\begin{bmatrix}2\\7\end{bmatrix}\).
-</p>
-</section>
-</section>
-<section>
-<section id="slide-orgfde4d78">
-<h3 id="orgfde4d78">Linear Maps</h3>
-<div class="outline-text-3" id="text-orgfde4d78">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org1a14cce">
-<h4 id="org1a14cce">What does a matrix do to a picture?</h4>
-<div class="key-question">
-<p>
-If we apply \(A\mathbf{x}\) to every point in a grid, what happens to the grid?
-</p>
-</div>
-
-<ul>
-<li data-fragment-index="1" class="fragment">Lines stay as lines (they do not curve).</li>
-<li data-fragment-index="2" class="fragment">The origin stays fixed.</li>
-
-</ul>
-</section>
-</section>
-<section>
-<section id="slide-org16df813">
-<h4 id="org16df813">Grid transformation</h4>
+<h4>Grid transformation</h4>
 <img src="../images/unit01/u1-L02-fig06-linear-map-grid.png" alt="Grid before and after linear transformation" style="display:block; max-width:85%; margin:0.3em auto; border-radius:6px;">
+<div class="small-note center">A matrix can stretch, rotate, reflect, or shear — but always keeps lines straight.</div>
+<aside class="notes">"This is the key visual. Before: a nice square grid. After: the grid is deformed — stretched, rotated, maybe sheared — but every line is still a line. No curves. That's what 'linear' means geometrically."</aside>
+</section>
 
-<div class="small-note center">
-<p>
-A matrix can stretch, rotate, reflect, or shear — but always keeps lines straight.
-</p>
-</div>
-</section>
-</section>
+<!-- S46: What makes it "linear"? -->
 <section>
-<section id="slide-org1f622ca">
-<h4 id="org1f622ca">What makes it "linear"?</h4>
-<p>
-A linear map \(\Phi\) satisfies two rules:
-</p>
-
+<h4>What makes it "linear"?</h4>
+<p>A linear map \(\Phi\) satisfies two rules:</p>
 <ul>
-<li data-fragment-index="1" class="fragment">Additivity: \(\Phi(\mathbf{x}+\mathbf{y})=\Phi(\mathbf{x})+\Phi(\mathbf{y})\).</li>
-<li data-fragment-index="2" class="fragment">Scaling: \(\Phi(\alpha\mathbf{x})=\alpha\Phi(\mathbf{x})\).</li>
-
+<li class="fragment"><strong>Additivity</strong>: \(\Phi(\mathbf{x} + \mathbf{y}) = \Phi(\mathbf{x}) + \Phi(\mathbf{y})\). Transform the sum = sum of transforms.</li>
+<li class="fragment"><strong>Scaling</strong>: \(\Phi(\alpha \mathbf{x}) = \alpha \Phi(\mathbf{x})\). Transform the scaled = scale the transform.</li>
 </ul>
+<div class="applied fragment">Every matrix \(A\) defines a linear map via \(\mathbf{x} \mapsto A\mathbf{x}\). Linear models in data science — regression, PCA, attention — all use this structure.</div>
+<aside class="notes">"These two rules say: it doesn't matter whether you combine first and then transform, or transform first and then combine — you get the same answer. That's linearity. It's a very special property, and it's the reason linear algebra is so powerful — it makes EVERYTHING predictable."</aside>
+</section>
 
-<div class="applied">
-<p>
-Every matrix \(A\) defines a linear map via \(\mathbf{x}\mapsto A\mathbf{x}\). Linear models in data science use exactly this structure.
-</p>
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org1488acc">
-<h3 id="org1488acc">Matrix-Matrix Multiplication</h3>
-<div class="outline-text-3" id="text-org1488acc">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-orge729e62">
-<h4 id="orge729e62">The real question</h4>
-<div class="key-question">
-<p>
-What if we apply one transformation and then another? Can we combine them into a single matrix?
-</p>
-</div>
+<!-- ─── Matrix-Matrix Multiplication ─── -->
 
-<p class="fragment">
-Yes: matrix-matrix multiplication = composition of transformations.
-</p>
-</section>
-</section>
+<!-- S47: Chaining transformations -->
 <section>
-<section id="slide-org639ca9f">
-<h4 id="org639ca9f">Setup</h4>
-<p>
-\[A=\begin{bmatrix}1&2\\-1&3\end{bmatrix},\quad B=\begin{bmatrix}0&1\\4&-2\end{bmatrix}.\]
-</p>
+<h4>Chaining transformations</h4>
+<div class="key-question">What if we apply one transformation and then another? Can we combine them into a single matrix?</div>
+<ul>
+<li class="fragment">First transform: rotate the grid (matrix \(B\)).</li>
+<li class="fragment">Then transform: stretch the grid (matrix \(A\)).</li>
+<li class="fragment">Combined: one matrix \(C = AB\) does both at once.</li>
+</ul>
+<div class="applied fragment">Neural networks are exactly this: layer after layer of matrix multiplications, each transforming the data further.</div>
+<aside class="notes">"A neural network with 100 layers does 100 matrix multiplications in sequence. Each layer transforms the data a little. Matrix-matrix multiplication lets us compose transformations — chain them together. Understanding this is understanding the backbone of deep learning."</aside>
+</section>
 
-<p class="fragment">
-We want \(C=AB\): first apply \(B\), then apply \(A\).
-</p>
-</section>
-</section>
+<!-- S48: Setup and computation -->
 <section>
-<section id="slide-org312954e">
-<h4 id="org312954e">Entry-by-entry computation</h4>
-<p>
-\[
-c_{11}=1\cdot 0+2\cdot 4=8,\quad c_{12}=1\cdot 1+2\cdot(-2)=-3,
-\]
-\[
-c_{21}=(-1)\cdot 0+3\cdot 4=12,\quad c_{22}=(-1)\cdot 1+3\cdot(-2)=-7.
-\]
-</p>
+<h4>Worked example: composing two transformations</h4>
+\[A = \begin{bmatrix} 1 & 2 \\ -1 & 3 \end{bmatrix}, \quad B = \begin{bmatrix} 0 & 1 \\ 4 & -2 \end{bmatrix}.\]
+<p class="fragment">We want \(C = AB\): first apply \(B\), then apply \(A\). Compute each entry:</p>
+<ul>
+<li class="fragment">\(c_{11} = 1(0) + 2(4) = 8\). \(\quad c_{12} = 1(1) + 2(-2) = -3\).</li>
+<li class="fragment">\(c_{21} = (-1)(0) + 3(4) = 12\). \(\quad c_{22} = (-1)(1) + 3(-2) = -7\).</li>
+</ul>
+<div class="fragment">\[AB = \begin{bmatrix} 8 & -3 \\ 12 & -7 \end{bmatrix}.\]</div>
+<aside class="notes">"Each entry is a dot product: row i of A with column k of B. That's 4 dot products for a 2×2 result. For bigger matrices: a 100×100 times a 100×100 means 10,000 dot products. GPUs do this in milliseconds."</aside>
+</section>
 
-<p class="fragment">
-\[AB=\begin{bmatrix}8&-3\\12&-7\end{bmatrix}.\]
-</p>
-</section>
-</section>
+<!-- S49: Formal definition -->
 <section>
-<section id="slide-org11c8e66">
-<h4 id="org11c8e66">Now name it: matrix multiplication</h4>
+<h4>Now name it: matrix multiplication</h4>
 <div class="mathbox">
-<p>
-For \(A\in\R^{m\times n}\) and \(B\in\R^{n\times p}\):
-\[
-(AB)_{ik}=\sum_{j=1}^n a_{ij}b_{jk}.
-\]
-</p>
+For \(A \in \R^{m \times n}\) and \(B \in \R^{n \times p}\):
+\[(AB)_{ik} = \sum_{j=1}^n a_{ij} b_{jk}.\]
 </div>
-
 <ul>
-<li data-fragment-index="1" class="fragment">Each entry of \(AB\) is a dot product: row \(i\) of \(A\) with column \(k\) of \(B\).</li>
-<li data-fragment-index="2" class="fragment">Dimensions: \(A\in\R^{m\times n}\), \(B\in\R^{n\times p}\) \(\Rightarrow\) \(AB\in\R^{m\times p}\).</li>
-
+<li class="fragment">Each entry of \(AB\) = dot product: row \(i\) of \(A\) with column \(k\) of \(B\).</li>
+<li class="fragment">Dimensions: \(\R^{m \times n} \cdot \R^{n \times p} \Rightarrow \R^{m \times p}\). The inner \(n\)'s must match.</li>
 </ul>
+<aside class="notes">"The pattern: row from A, column from B, dot product gives one entry. The dimension rule: inner dimensions must match. A is m×n, B is n×p. The n's match, so the product is m×p. If they don't match, multiplication is not defined."</aside>
 </section>
-</section>
-<section>
-<section id="slide-org880c58b">
-<h4 id="org880c58b">Order matters</h4>
-<div class="key-question">
-<p>
-Is \(AB=BA\)?
-</p>
-</div>
 
+<!-- S50: Order matters! -->
+<section>
+<h4>Order matters!</h4>
+<div class="key-question">Is \(AB = BA\)?</div>
 <ul>
-<li data-fragment-index="1" class="fragment">Generally no. Matrix multiplication is not commutative.</li>
-<li data-fragment-index="2" class="fragment">"Apply \(B\) first, then \(A\)" differs from "Apply \(A\) first, then \(B\)."</li>
-
+<li class="fragment"><strong>Generally no.</strong> Matrix multiplication is NOT commutative.</li>
+<li class="fragment">"Rotate then stretch" gives a different result than "stretch then rotate."</li>
+<li class="fragment">Sometimes \(BA\) doesn't even exist! (dimensions might not match.)</li>
 </ul>
+<div class="applied fragment">In neural networks: changing the order of layers changes the model. The sequence matters.</div>
+<aside class="notes">"This surprises students who are used to numbers: 3×5 = 5×3. But matrices are not numbers — they are TRANSFORMATIONS. And the order of transformations matters. Try it with real life: putting on socks then shoes gives a different result than shoes then socks."</aside>
 </section>
-</section>
-<section>
-<section id="slide-orgf93aa1a">
-<h4 id="orgf93aa1a">Quick check: matrix multiplication</h4>
-<div class="quickcheck">
-<p>
-If \(A\) is \(2\times 3\) and \(B\) is \(3\times 4\), what is the shape of \(AB\)? Can you compute \(BA\)?
-</p>
-</div>
 
-<p class="fragment">
-Answer: \(AB\in\R^{2\times 4}\). \(BA\) is not defined: \(B\) has 4 columns but \(A\) has 2 rows.
-</p>
-</section>
-</section>
+<!-- S51: Quick check: matrix multiplication -->
 <section>
-<section id="slide-org3acc6c5">
-<h3 id="org3acc6c5">Data Matrix View</h3>
-<div class="outline-text-3" id="text-org3acc6c5">
-</div>
+<h4>Quick check: matrix multiplication</h4>
+<div class="quickcheck">If \(A\) is \(2 \times 3\) and \(B\) is \(3 \times 4\), what is the shape of \(AB\)? Can you compute \(BA\)?</div>
+<p class="fragment">Answer: \(AB \in \R^{2 \times 4}\). Inner dimensions \(3 = 3\) match.</p>
+<p class="fragment">\(BA\): \(B\) is \(3 \times 4\), \(A\) is \(2 \times 3\). Inner dimensions \(4 \ne 2\). <strong>Not defined.</strong></p>
+<aside class="notes">"AB works: 2×3 times 3×4 → inner 3's match → result is 2×4. BA fails: 3×4 times 2×3 → inner 4 ≠ 2 → can't multiply. Another reason AB ≠ BA: sometimes one exists and the other doesn't!"</aside>
 </section>
-</section>
-<section>
-<section id="slide-org3e55a86">
-<h4 id="org3e55a86">Putting it together</h4>
-<div class="key-question">
-<p>
-How does matrix-vector multiplication look in a real prediction pipeline?
-</p>
-</div>
 
+<!-- ─── Data Matrix View ─── -->
+
+<!-- S52: The prediction pipeline -->
+<section>
+<h4>The prediction pipeline</h4>
+<div class="key-question">How does matrix-vector multiplication look in a real prediction pipeline?</div>
 <div class="mathbox">
-<p>
-Data matrix \(X\in\R^{n\times d}\), weight vector \(\mathbf{w}\in\R^d\), predictions \(X\mathbf{w}\in\R^n\).
-</p>
+Data matrix \(X \in \R^{n \times d}\), weight vector \(\mathbf{w} \in \R^d\), predictions \(X\mathbf{w} \in \R^n\).
 </div>
-
 <ul>
-<li data-fragment-index="1" class="fragment">\(n\) = number of samples (rows).</li>
-<li data-fragment-index="2" class="fragment">\(d\) = number of features (columns).</li>
-
+<li class="fragment">\(n\) = number of samples (rows). One per student/patient/song.</li>
+<li class="fragment">\(d\) = number of features (columns). One per measurement.</li>
 </ul>
+<div class="applied fragment">This is the simplest AI model: <strong>linear regression</strong>. One matrix multiplication = all predictions at once.</div>
+<aside class="notes">"This is the template for ALL linear models. X is your dataset — n rows, d features. w is what the model learns — d weights. Xw gives n predictions, one per data point. Training = finding the best w. We'll learn how in Units 3-5."</aside>
 </section>
-</section>
-<section>
-<section id="slide-org8838355">
-<h4 id="org8838355">Worked example: three data points</h4>
-<p>
-\[X=\begin{bmatrix}1&0\\1&1\\1&2\end{bmatrix},\quad \mathbf{w}=\begin{bmatrix}2\\-1\end{bmatrix}.\]
-</p>
 
+<!-- S53: Worked example: three data points -->
+<section>
+<h4>Worked example: three data points</h4>
+\[X = \begin{bmatrix} 1 & 0 \\ 1 & 1 \\ 1 & 2 \end{bmatrix}, \quad \mathbf{w} = \begin{bmatrix} 2 \\ -1 \end{bmatrix}.\]
 <ul>
-<li data-fragment-index="1" class="fragment">Row 1: \(1\cdot 2+0\cdot(-1)=2\).</li>
-<li data-fragment-index="2" class="fragment">Row 2: \(1\cdot 2+1\cdot(-1)=1\).</li>
-<li data-fragment-index="3" class="fragment">Row 3: \(1\cdot 2+2\cdot(-1)=0\).</li>
-<li data-fragment-index="4" class="fragment">\(X\mathbf{w}=\begin{bmatrix}2\\1\\0\end{bmatrix}\): one prediction per sample.</li>
-
+<li class="fragment">Row 1: \(1(2) + 0(-1) = 2\).</li>
+<li class="fragment">Row 2: \(1(2) + 1(-1) = 1\).</li>
+<li class="fragment">Row 3: \(1(2) + 2(-1) = 0\).</li>
+<li class="fragment">\(X\mathbf{w} = \begin{bmatrix} 2 \\ 1 \\ 0 \end{bmatrix}\): three predictions, decreasing as feature 2 increases.</li>
 </ul>
+<aside class="notes">"Weight w_1 = 2 (positive: feature 1 helps). Weight w_2 = -1 (negative: feature 2 hurts). As feature 2 increases (0 → 1 → 2), the prediction drops (2 → 1 → 0). The model learned that feature 2 has a negative effect."</aside>
 </section>
-</section>
-<section>
-<section id="slide-org5d1833c">
-<h4 id="org5d1833c">The dimension check habit</h4>
-<div class="applied">
-<p>
-Before computing, always check: do the inner dimensions match?
-</p>
-</div>
 
-<p>
-\[
-\underbrace{X}_{n\times d}\;\underbrace{\mathbf{w}}_{d\times 1}
-=\underbrace{X\mathbf{w}}_{n\times 1}.
-\]
-</p>
+<!-- S54: The dimension check habit -->
+<section>
+<h4>The dimension check habit</h4>
+<div class="applied">Before computing, always check: do the inner dimensions match?</div>
+\[\underbrace{X}_{n \times d} \; \underbrace{\mathbf{w}}_{d \times 1} = \underbrace{X\mathbf{w}}_{n \times 1}.\]
+<p class="fragment">If the inner \(d\)'s do not match, the multiplication is <strong>not defined</strong>.</p>
+<div class="quickcheck fragment">If \(X \in \R^{5 \times 3}\) and \(\mathbf{w} \in \R^{3}\), what is the shape of \(X\mathbf{w}\)? How many predictions?</div>
+<p class="fragment">Answer: \(X\mathbf{w} \in \R^5\). Five predictions, one per sample.</p>
+<aside class="notes">"This is the #1 debugging skill in data science. When your code crashes with 'dimension mismatch,' it means the inner dimensions don't agree. Before you compute anything, write down the shapes and check: do the inner numbers match? Get into this habit NOW — it will save you hours of debugging."</aside>
+</section>
 
-<p class="fragment">
-If the inner \(d\)'s do not match, the multiplication is not defined.
-</p>
-</section>
-</section>
-<section>
-<section id="slide-org6690371">
-<h4 id="org6690371">Quick check: dimensions</h4>
-<div class="quickcheck">
-<p>
-If \(X\in\R^{5\times 3}\) and \(\mathbf{w}\in\R^{3}\), what is the shape of \(X\mathbf{w}\)? How many predictions?
-</p>
-</div>
+<!-- ─── L02 Summary ─── -->
 
-<p class="fragment">
-Answer: \(X\mathbf{w}\in\R^5\). Five predictions, one per sample.
-</p>
-</section>
-</section>
+<!-- L02 takeaways -->
 <section>
-<section id="slide-org2de849e">
-<h3 id="org2de849e">L02 Summary</h3>
-<div class="outline-text-3" id="text-org2de849e">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org0bd0350">
-<h4 id="org0bd0350">What we built today</h4>
+<h4>L02 takeaways</h4>
 <ul>
-<li data-fragment-index="1" class="fragment">Matrices organize data: \(n\) rows of samples, \(d\) columns of features.</li>
-<li data-fragment-index="2" class="fragment">Matrix-vector multiplication: one dot product per row \(\Rightarrow\) one prediction per sample.</li>
-<li data-fragment-index="3" class="fragment">Matrix-matrix multiplication: compose two transformations into one.</li>
-<li data-fragment-index="4" class="fragment">Dimension check: always verify inner dimensions before computing.</li>
-
+<li class="fragment"><strong>Matrices</strong> organize data: \(n\) rows of samples, \(d\) columns of features. <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment"><strong>Matrix-vector multiplication</strong>: one dot product per row → one prediction per sample. <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment"><strong>Matrix-matrix multiplication</strong>: compose two transformations into one. <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment"><strong>Dimension check</strong>: always verify inner dimensions before computing. <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment"><strong>Linear maps</strong>: lines stay straight, origin stays fixed. <span style="color:#d97706; font-size:0.85em;">[UNDERSTAND]</span></li>
 </ul>
+<div class="applied fragment">Matrices are the backbone of AI: data storage, prediction, and transformation — all in one object.</div>
+<aside class="notes">"Four ideas, all connected. Matrices hold data. Multiplying a matrix by a vector makes predictions. Multiplying two matrices chains transformations. And the dimension check keeps everything consistent. These are the building blocks for everything that follows."</aside>
 </section>
-</section>
-<section>
-<section id="slide-orgc2d0ffe">
-<h4 id="orgc2d0ffe">Preview</h4>
-<div class="applied">
-<p>
-We now have the building blocks: vectors for data, dot products for comparison, matrices for transformation.
-</p>
-</div>
 
-<p class="fragment">
-Next unit: what if the model cannot fit all data exactly? We will need projection, residuals, and least squares.
-</p>
-</section>
-</section>
+<!-- S56: Preview -->
 <section>
-<section id="slide-orgf119bce">
-<h2 id="orgf119bce">Unit 1 Wrap-Up</h2>
-<div class="outline-text-2" id="text-orgf119bce">
-</div>
+<h4>Preview</h4>
+<div class="applied">We now have the building blocks: vectors for data, dot products for comparison, matrices for transformation.</div>
+<p class="fragment">Next unit: what if the model <strong>cannot fit all data exactly</strong>? We will need projection, residuals, and least squares.</p>
+<aside class="notes">"So far we've been computing exact products. But real data is noisy — no line passes through every point. Next unit: what's the BEST line? How close can we get? That's regression — the most important algorithm in data science."</aside>
 </section>
-</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- Unit 1 Wrap-Up                         -->
+<!-- ═══════════════════════════════════════ -->
+
+<!-- Learning Boundary -->
 <section>
-<section id="slide-org3472063">
-<h3 id="org3472063">What should students remember?</h3>
-<div class="outline-text-3" id="text-org3472063">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org9c2f15a">
-<h4 id="org9c2f15a">Unit summary</h4>
+<h4>What should I know after Unit 1?</h4>
+<div style="display:flex; gap:1.5em;">
+<div style="flex:1;">
+<p><strong style="color:#2563eb;">You should be able to:</strong></p>
 <ul>
-<li data-fragment-index="1" class="fragment">Vectors represent data as ordered lists of numbers.</li>
-<li data-fragment-index="2" class="fragment">Dot products, norms, distances, and cosine compare vectors.</li>
-<li data-fragment-index="3" class="fragment">Matrices transform vectors: one dot product per row.</li>
-<li data-fragment-index="4" class="fragment">Matrix-matrix multiplication composes transformations.</li>
-
+<li>Represent data as a vector and explain what each entry means</li>
+<li>Compute a dot product and interpret the sign</li>
+<li>Compute the L2 norm and Euclidean distance</li>
+<li>Compute cosine similarity and explain why it ignores magnitude</li>
+<li>Multiply a matrix by a vector and check dimensions</li>
+<li>Multiply two matrices and state the output shape</li>
 </ul>
-</section>
-</section>
-<section>
-<section id="slide-orgd8c5667">
-<h4 id="orgd8c5667">The regression thread</h4>
-<div class="applied">
-<p>
-These tools will appear again and again throughout the course:
-</p>
 </div>
-
+<div style="flex:1;">
+<p><strong style="color:#6b7280;">You do NOT need to:</strong></p>
 <ul>
-<li data-fragment-index="1" class="fragment">Vectors \(\to\) error vectors in regression.</li>
-<li data-fragment-index="2" class="fragment">Norms \(\to\) measuring prediction error (MSE).</li>
-<li data-fragment-index="3" class="fragment">Matrix-vector multiplication \(\to\) computing predictions \(X\mathbf{w}\).</li>
-<li data-fragment-index="4" class="fragment">Cosine similarity \(\to\) attention weights in transformers.</li>
-
+<li>Prove properties of norms or metrics</li>
+<li>State the formal definition of a linear map</li>
+<li>Understand L1 vs L2 unit ball geometry in detail</li>
+<li>Know what regularization does (that's Unit 5)</li>
+<li>Multiply large matrices by hand — 2×2 and 2×3 are enough</li>
 </ul>
-</section>
-</section>
-<section>
-<section id="slide-org777d332">
-<h4 id="org777d332">Next unit</h4>
-<div class="key-question">
-<p>
-What if the model cannot fit all data exactly?
-</p>
+<p style="margin-top:0.8em;"><strong>Want to learn more?</strong></p>
+<ul>
+<li>MML: Ch 2.4, 3.1–3.4 (vectors, norms)</li>
+<li>MML: Ch 2.2, 2.7 (matrices, linear maps)</li>
+</ul>
 </div>
+</div>
+</section>
 
-<p class="fragment">
-Unit 2: projection, residuals, and least squares — the geometry of best approximation.
-</p>
+<!-- Unit summary -->
+<section>
+<h4>Unit 1 summary</h4>
+<ul>
+<li class="fragment"><strong>Vectors</strong> represent data as ordered lists of numbers.</li>
+<li class="fragment"><strong>Dot products, norms, distances, and cosine</strong> compare vectors.</li>
+<li class="fragment"><strong>Matrices</strong> transform vectors: one dot product per row.</li>
+<li class="fragment"><strong>Matrix multiplication</strong> composes transformations.</li>
+</ul>
+<div class="applied fragment">These four ideas power every AI application we saw in Unit 0: Spotify, Google, ChatGPT.</div>
+<aside class="notes">"Four ideas, one unit. Vectors = how AI represents the world. Dot products/norms/cosine = how AI measures similarity. Matrices = how AI transforms data. Matrix multiplication = how AI chains transformations. You now understand the first two columns of the Unit 0 table: data representation and similarity measurement."</aside>
 </section>
+
+<!-- S58: The regression thread -->
+<section>
+<h4>Where these tools appear next</h4>
+<div class="applied">These tools will appear again and again throughout the course:</div>
+<ul>
+<li class="fragment">Vectors → <strong>error vectors</strong> in regression (Unit 2).</li>
+<li class="fragment">Norms → measuring <strong>prediction error</strong> (MSE, MAE).</li>
+<li class="fragment">Matrix-vector multiplication → computing predictions \(X\mathbf{w}\).</li>
+<li class="fragment">Cosine similarity → <strong>attention weights</strong> in transformers (Unit 7).</li>
+</ul>
+<aside class="notes">"Nothing we learned today is one-and-done. Every concept comes back. Vectors appear in regression errors. Norms measure loss. Matrices compute predictions. Cosine drives attention. This unit is the foundation — everything else builds on top."</aside>
 </section>
-</div>
-</div>
+
+<!-- S59: Next unit -->
+<section>
+<h4>Next unit</h4>
+<div class="key-question">What if the model cannot fit all data exactly?</div>
+<p class="fragment">Unit 2: projection, residuals, and least squares — the geometry of <strong>best approximation</strong>.</p>
+<p class="fragment">This is where AI <strong>learns</strong>: finding the weights \(\mathbf{w}\) that make predictions as close as possible to reality.</p>
+<aside class="notes">"Next unit is where things get exciting. We've built the tools — now we use them. The question: given noisy data, what's the BEST set of weights? The answer involves projection — dropping a perpendicular from the data to the model's reach. It's beautiful geometry, and it's the foundation of machine learning."</aside>
+</section>
+
+</div><!-- .slides -->
+</div><!-- .reveal -->
+
 <script src="../dist/reveal.js"></script>
-<script src="../plugin/markdown/markdown.js"></script>
+<script src="../plugin/math/math.js"></script>
 <script src="../plugin/notes/notes.js"></script>
-<script src="../plugin/search/search.js"></script>
-<script src="../plugin/zoom/zoom.js"></script>
 <script src="../plugin/reveal.js-menu/menu.js"></script>
 <script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
 <script>
-// Full list of configuration options available here:
-// https://github.com/hakimel/reveal.js#configuration
 Reveal.initialize({
-
-controls: true,
-progress: true,
-history: false,
-center: true,
-slideNumber: false,
-rollingLinks: false,
-keyboard: true,
-mouseWheel: false,
-fragmentInURL: false,
-hashOneBasedIndex: false,
-pdfSeparateFragments: true,
-overview: true,
-
-transition: 'none',
-transitionSpeed: 'default',
-
-// Plugins with reveal.js 4.x
-plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom, RevealMenu, RevealChalkboard ],
-
-// Optional libraries used to extend reveal.js
-dependencies: [
-]
-
-,chalkboard: {storage: "math-for-ds", toggleChalkboardButton: { left: "80px" }, toggleNotesButton: { left: "130px" }, colorButtons: 5}});
+  hash: true,
+  transition: 'none',
+  width: 1200,
+  height: 700,
+  margin: 0.04,
+  mathjax3: {
+    tex: {
+      macros: {
+        R: "\\mathbb{R}",
+        norm: ["\\left\\|#1\\right\\|", 1],
+        inner: ["\\left\\langle #1,#2\\right\\rangle", 2]
+      }
+    }
+  },
+  chalkboard: {
+    storage: "math-for-ds",
+    toggleChalkboardButton: { left: "80px" },
+    toggleNotesButton: { left: "130px" },
+    colorButtons: 5
+  },
+  plugins: [ RevealMath.MathJax3, RevealNotes, RevealMenu, RevealChalkboard ]
+});
 </script>
 </body>
 </html>

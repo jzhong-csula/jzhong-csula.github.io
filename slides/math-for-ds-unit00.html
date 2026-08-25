@@ -3,1806 +3,468 @@
 <head>
 <meta charset="utf-8"/>
 <title>Mathematical Foundations for Data Science and AI</title>
-<meta name="author" content="\\
-Jie Zhong \\
-Department of Mathematics \\
-California State University, Los Angeles"/>
-<style type="text/css">
-.underline { text-decoration: underline; }
-</style>
 <link rel="stylesheet" href="../dist/reveal.css"/>
-
-<link rel="stylesheet" href="../dist/theme/serif.css" id="theme"/>
-
+<link rel="stylesheet" href="../dist/theme/serif.css"/>
 <link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
-
 <link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
-
-<link rel="stylesheet" href="../css/math-for-ds.css"/>
-<script>window.MathJax = { TeX: {Macros: {R: "\\mathbb{R}", norm: ["\\left\\|#1\\right\\|", 1], inner: ["\\left\\langle #1,#2\\right\\rangle", 2]}} }</script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link rel="stylesheet" href="../css/math-for-ds.css?v=4"/>
+<!-- MathJax macros configured in Reveal.initialize mathjax3 config below -->
+<style>
+.reveal ul { margin-top: 0.3em; }
+.reveal li { margin-bottom: 0.2em; }
+.reveal td, .reveal th { padding: 0.25em 0.5em; }
+</style>
 </head>
 <body>
 <div class="reveal">
 <div class="slides">
-<section id="sec-title-slide">
-<h1>Mathematical Foundations for Data Science and AI</h1><h2>Unit 0 — What Can Mathematics Explain About AI?</h2><h6> <br />
-Jie Zhong <br />
-Department of Mathematics <br />
-California State University, Los Angeles</h6>
-</section>
+
+<!-- 1: Title -->
 <section>
-<section id="slide-orgd3656b4">
-<h2 id="orgd3656b4">Part I — You Already Use AI Every Day</h2>
-<div class="outline-text-2" id="text-orgd3656b4">
-</div>
+<h1 style="font-size:1.6em;">Mathematical Foundations for Data Science and AI</h1>
+<h2 style="font-size:1.0em;">Unit 0 — What Can Mathematics Explain About AI?</h2>
+<p><br/>Jie Zhong<br/>Department of Mathematics<br/>California State University, Los Angeles</p>
 </section>
-</section>
+
+<!-- 2: Code vs Formula -->
 <section>
-<section id="slide-orge34bb52">
-<h3 id="orge34bb52">Why this course matters</h3>
-<div class="outline-text-3" id="text-orge34bb52">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org4f499c2">
-<h4 id="org4f499c2">One line of code vs. one formula</h4>
+<h4>One line of code vs. one formula</h4>
 <img src="../images/unit00/fig-0-00-transformer.png" alt="Transformer architecture" style="float:right; max-height:450px; max-width:50%; margin:0 0 0.3em 1em; border-radius:6px;">
 <div style="overflow:hidden;">
-
-<p>
-<b>What AI can do for you:</b>
-</p>
-
+<p style="margin-bottom:0.2em;"><strong>What AI can do for you:</strong></p>
 <pre style="background:#1e1e1e; color:#d4d4d4; padding:0.4em 0.6em; border-radius:6px; font-size:0.7em; width:fit-content;"><code>output = F.scaled_dot_product_attention(Q, K, V)</code></pre>
-
-<p data-fragment-index="1" class="fragment">
-One line. Written by AI in 2 seconds. Anyone can run it.
-</p>
-
-<p>
-<b>What this course teaches you:</b>
-</p>
-
-<p>
+<p class="fragment" style="margin:0.3em 0;">One line. Written by AI in 2 seconds. Anyone can run it.</p>
+<p style="margin:0.5em 0 0.2em;"><strong>What this course teaches you:</strong></p>
+<p style="font-size:0.95em; margin:0.1em 0;">
 \[\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V\]
 </p>
-
-<p>
-<i>&#x2014; Vaswani et al. (2017)</i>
-</p>
-
-<p data-fragment-index="2" class="fragment">
-Understanding <b>why</b> this works. Knowing what to change when it doesn't.
-</p>
-
+<p style="font-size:0.55em; color:#666; margin:0;"><em>— Vaswani et al. (2017)</em></p>
+<p class="fragment" style="margin:0.3em 0;">Understanding <strong>why</strong> this works. Knowing what to change when it doesn't.</p>
 </div>
-
-<div class="key-question" style="clear:both;">
-<p data-fragment-index="3" class="fragment">
-Which person is harder to replace &#x2014; the one who <b>calls</b> the function, or the one who <b>understands</b> it?
-</p>
-</div>
-
-<aside class="notes">
-<p>
-This is the opening pitch. Don't explain the formula yet &#x2014; just SHOW it.
-</p>
-
-<p>
-"Look at the left side. One line of Python. ChatGPT can write this for you in 2 seconds. Anyone can copy-paste it and get a result."
-</p>
-
-<p>
-"Now look at the right side. This is the actual formula from the paper that invented the technology behind ChatGPT. It was published in 2017 by researchers at Google. Every AI system you use today is built on this."
-</p>
-
-<p>
-"Here's my question: which person has more value? The one who copies the code, or the one who understands the formula? Which one can debug it when it fails? Which one can improve it? Which one can build the NEXT breakthrough?"
-</p>
-
-<p>
-"That's what this course gives you. Not just how to USE AI &#x2014; how to UNDERSTAND it. And understanding starts with math."
-</p>
-
-<p>
-Let this sink in. Don't rush. This slide sets up WHY they should care about the entire semester.
-</p>
-
-</aside>
+<div class="key-question fragment" style="clear:both;">Which person is harder to replace — the one who <strong>calls</strong> the function, or the one who <strong>understands</strong> it?</div>
+<aside class="notes">"Left side: one line of Python. ChatGPT writes this in 2 seconds. Anyone can copy-paste it." "Right side: the actual formula from the 2017 paper that invented the technology behind ChatGPT. Every AI system you use today is built on this." "Which person has more value? The one who copies the code, or the one who understands the formula? Who can debug it? Improve it? Build the NEXT breakthrough?" "That's what this course gives you. Not just how to USE AI — how to UNDERSTAND it."</aside>
 </section>
-</section>
+
+<!-- 3: You used AI today -->
 <section>
-<section id="slide-orga6dcd10">
-<h3 id="orga6dcd10">Starting from your daily life</h3>
-<div class="outline-text-3" id="text-orga6dcd10">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org373a797">
-<h4 id="org373a797">You used AI today &#x2014; probably more than once</h4>
+<h4>You used AI today — probably more than once</h4>
 <img src="../images/unit00/fig-0-01-ai-apps.png" alt="AI apps you use every day" style="float:right; max-height:380px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
-
-<p>
-Think about your morning:
-</p>
-
+<p>Think about your morning:</p>
 <ul>
-<li data-fragment-index="1" class="fragment">You asked ChatGPT to help you write an email.</li>
-<li data-fragment-index="2" class="fragment">Instagram showed you exactly the posts you'd like.</li>
-<li data-fragment-index="3" class="fragment">Google Maps found you the fastest route to campus.</li>
-<li data-fragment-index="4" class="fragment">Spotify played a song you've never heard &#x2014; and you loved it.</li>
-
+<li class="fragment">You asked ChatGPT to help you write an email.</li>
+<li class="fragment">Instagram showed you exactly the posts you'd like.</li>
+<li class="fragment">Google Maps found you the fastest route to campus.</li>
+<li class="fragment">Spotify played a song you've never heard — and you loved it.</li>
 </ul>
-
-<p data-fragment-index="5" class="fragment">
-These apps are not magic. They are <b>math</b>.
-</p>
-
-<aside class="notes">
-<p>
-Start by connecting to their REAL lives. Ask: "How many of you used ChatGPT this week? Raise your hands." Almost everyone. "Instagram? Maps? Spotify?" All hands.
-</p>
-
-<p>
-"Here's what's wild: every single one of these apps is doing the SAME math. Not complicated math. Not PhD-level math. Math that you can learn this semester."
-</p>
-
-<p>
-The goal is to create a gap: "I use this every day but I have NO idea how it works." That gap is what drives the whole course.
-</p>
-
-</aside>
+<p class="fragment" style="font-size:1.1em; margin-top:0.5em; clear:both;">These apps are not magic. They are <strong>math</strong>.</p>
+<aside class="notes">Start by connecting to their REAL lives. Ask: "How many of you used ChatGPT this week?" Almost everyone. "Instagram? Maps? Spotify?" All hands. "Here's what's wild: every single one of these apps is doing the SAME math. Not PhD-level math. Math you can learn this semester." Goal: create a gap — "I use this every day but have NO idea how it works."</aside>
 </section>
-</section>
+
+<!-- 3: Spotify -->
 <section>
-<section id="slide-org7372bce">
-<h4 id="org7372bce">So how does Spotify know what song you want?</h4>
+<h4>So how does Spotify know what song you want?</h4>
 <img src="../images/unit00/fig-0-02-spotify-recommendation.png" alt="Spotify recommendation" style="float:right; max-height:400px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
-
-<p>
-Imagine you listen to a lot of Taylor Swift and Adele.
-</p>
-
+<p>Imagine you listen to a lot of Taylor Swift and Adele.</p>
 <ol>
-<li data-fragment-index="1" class="fragment">Spotify turns each song into a list of numbers: tempo, energy, mood, &#x2026;</li>
-<li data-fragment-index="2" class="fragment">Your favorites cluster together &#x2014; they're "nearby" in number-space.</li>
-<li data-fragment-index="3" class="fragment">Spotify finds OTHER songs that are "nearby" your cluster.</li>
-<li data-fragment-index="4" class="fragment">It plays those. You like them. It feels like mind-reading.</li>
-
+<li class="fragment">Spotify turns each song into a list of numbers: tempo, energy, mood, ...</li>
+<li class="fragment">Your favorites cluster together — they're "nearby" in number-space.</li>
+<li class="fragment">Spotify finds OTHER songs that are "nearby" your cluster.</li>
+<li class="fragment">It plays those. You like them. It feels like mind-reading.</li>
 </ol>
-
-
-
-<div class="key-question" style="clear:both;">
-<p data-fragment-index="5" class="fragment">
-No mind-reading. Just three steps: <b>turn things into numbers</b>, <b>measure closeness</b>, <b>pick the closest</b>.
-</p>
-</div>
-
-<aside class="notes">
-<p>
-Use an artist the students know. Taylor Swift and Adele work because almost everyone has heard of them.
-</p>
-
-<p>
-"Spotify doesn't know anything about music. It doesn't have ears. What it has is a LIST OF NUMBERS for each song. Fast tempo? High number. Sad lyrics? High number in the 'melancholy' slot. Then it just looks for other songs whose numbers are close to the songs you already like."
-</p>
-
-<p>
-Draw on the board: two dots close together labeled "Shake It Off" and "Uptown Funk" (both high energy), one dot far away labeled "Someone Like You" (low energy, high emotion). "Closeness = similarity. That's it."
-</p>
-
-<p>
-This is the first encounter with the idea: DATA = NUMBERS = VECTORS. Don't use the word "vector" yet.
-</p>
-
-</aside>
+<div class="key-question fragment" style="clear:both;">No mind-reading. Just three steps: <strong>turn things into numbers</strong>, <strong>measure closeness</strong>, <strong>pick the closest</strong>.</div>
+<aside class="notes">"Spotify doesn't have ears. It has a LIST OF NUMBERS for each song. Fast tempo? High number. Sad lyrics? High number. Then it just looks for other songs whose numbers are close to yours." Draw on the board: two dots close together = "Shake It Off" and "Uptown Funk", one dot far away = "Someone Like You." Closeness = similarity. This is the first encounter with DATA = NUMBERS = VECTORS. Don't say "vector" yet.</aside>
 </section>
-</section>
+
+<!-- 4: Same trick -->
 <section>
-<section id="slide-org88bf40c">
-<h4 id="org88bf40c">The same trick powers everything</h4>
+<h4>The same trick powers everything</h4>
 <img src="../images/unit00/fig-0-03-four-apps.png" alt="Four apps, one pattern" style="float:right; max-height:220px; max-width:30%; margin:0 0 0.5em 1em; border-radius:6px;">
-
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">App</th>
-<th scope="col" class="org-left">Step 1: Numbers</th>
-<th scope="col" class="org-left">Step 2: Closeness</th>
-<th scope="col" class="org-left">Step 3: Decision</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left"><b>Spotify</b></td>
-<td class="org-left">Song features</td>
-<td class="org-left">Similar songs</td>
-<td class="org-left">Play recommendation</td>
-</tr>
-
-<tr>
-<td class="org-left"><b>Instagram</b></td>
-<td class="org-left">Post features</td>
-<td class="org-left">Similar to your likes</td>
-<td class="org-left">Show in feed</td>
-</tr>
-
-<tr>
-<td class="org-left"><b>Google Maps</b></td>
-<td class="org-left">Road segments</td>
-<td class="org-left">Shortest total distance</td>
-<td class="org-left">Best route</td>
-</tr>
-
-<tr>
-<td class="org-left"><b>ChatGPT</b></td>
-<td class="org-left">Word meanings</td>
-<td class="org-left">Most related context</td>
-<td class="org-left">Next word</td>
-</tr>
-</tbody>
+<table>
+<tr><th>App</th><th>Step 1: Numbers</th><th>Step 2: Closeness</th><th>Step 3: Decision</th></tr>
+<tr><td><strong>Spotify</strong></td><td>Song features</td><td>Similar songs</td><td>Play recommendation</td></tr>
+<tr><td><strong>Instagram</strong></td><td>Post features</td><td>Similar to your likes</td><td>Show in feed</td></tr>
+<tr><td><strong>Google Maps</strong></td><td>Road segments</td><td>Shortest distance</td><td>Best route</td></tr>
+<tr><td><strong>ChatGPT</strong></td><td>Word meanings</td><td>Most related context</td><td>Next word</td></tr>
 </table>
-
-<p data-fragment-index="1" class="fragment">
-Four completely different apps. One pattern: <b>numbers → closeness → decision</b>.
-</p>
-
-<div class="applied" style="clear:both;">
-<p data-fragment-index="2" class="fragment">
-This pattern IS the math we're learning. By the end of this course, you'll understand exactly how each column works.
-</p>
-</div>
-
-<aside class="notes">
-<p>
-This table is the thesis of the course. Come back to it throughout the semester.
-</p>
-
-<p>
-"Every time we learn a new math concept, I want you to look at this table and ask: which column does this concept belong to? Vectors are Column 1. Dot product is Column 2. Softmax is Column 3."
-</p>
-
-<p>
-The deeper point: AI is not one thing. It's a PATTERN. And the pattern is built from math you can learn. Not in 4 years. This semester.
-</p>
-
-</aside>
+<p class="fragment">Four completely different apps. One pattern: <strong>numbers → closeness → decision</strong>.</p>
+<div class="applied fragment" style="clear:both;">This pattern IS the math we're learning. By the end of this course, you'll understand how each column works.</div>
+<aside class="notes">This table is the thesis of the course. Come back to it throughout the semester. "Every time we learn a new math concept, ask: which column does it belong to? Vectors = Column 1. Dot product = Column 2. Softmax = Column 3." AI is not one thing — it's a PATTERN. Built from math you can learn. Not in 4 years. This semester.</aside>
 </section>
-</section>
+
+<!-- 5: Triangle -->
 <section>
-<section id="slide-org1863c6c">
-<h3 id="org1863c6c">The big idea</h3>
-<div class="outline-text-3" id="text-org1863c6c">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org93b7966">
-<h4 id="org93b7966">Math, AI, and the real world: a triangle</h4>
+<h4>Math, AI, and the real world: a triangle</h4>
 <img src="../images/unit00/fig-0-07-triangle.png" alt="Math ↔ AI ↔ Real World triangle" style="float:right; max-height:420px; max-width:48%; margin:0 0 0.5em 1em; border-radius:6px;">
-<div style="padding-top:3em;">
-
-<ul>
-<li data-fragment-index="1" class="fragment"><b>Math → AI</b>: Math is the <i>language</i> that AI speaks. Without it, AI is a black box.</li>
-<li data-fragment-index="2" class="fragment"><b>AI → Real World</b>: AI uses math to solve real problems you care about.</li>
-<li data-fragment-index="3" class="fragment"><b>Real World → Math</b>: Real problems show us <i>why</i> math matters &#x2014; they motivate us to learn.</li>
-
+<ul style="padding-top:3em;">
+<li class="fragment"><strong>Math → AI</strong>: Math is the <em>language</em> that AI speaks. Without it, AI is a black box.</li>
+<li class="fragment"><strong>AI → Real World</strong>: AI uses math to solve real problems you care about.</li>
+<li class="fragment"><strong>Real World → Math</strong>: Real problems show us <em>why</em> math matters.</li>
 </ul>
-
-</div>
-
-<div class="key-question" style="clear:both;">
-<p data-fragment-index="4" class="fragment">
-This course lives in the middle of this triangle. We learn math <b>through</b> AI, and we understand AI <b>through</b> math.
-</p>
-</div>
-
-<aside class="notes">
-<p>
-Draw the triangle on the board. BIG. Three corners: MATH, AI, REAL WORLD.
-</p>
-
-<p>
-"Most math classes live in the 'Math' corner. They teach you formulas and expect you to trust that they matter. Most AI classes live in the 'AI' corner. They give you code and expect you to trust that it works."
-</p>
-
-<p>
-"We're going to live in the MIDDLE. Every time we learn a math concept, I'll show you how AI uses it. Every time we see an AI application, I'll show you the math inside. And we'll always start from something REAL that you actually use."
-</p>
-
-<p>
-"Why? Because math without motivation is boring. AI without understanding is dangerous. You need BOTH."
-</p>
-
-<p>
-This is the slide to reference throughout the semester whenever students ask "why do we need to learn this?"
-</p>
-
-</aside>
+<div class="key-question fragment" style="clear:both;">This course lives in the middle. We learn math <strong>through</strong> AI, and understand AI <strong>through</strong> math.</div>
+<aside class="notes">Draw the triangle on the board. BIG. Three corners: MATH, AI, REAL WORLD. "Most math classes live in the 'Math' corner — formulas without motivation. Most AI classes live in the 'AI' corner — code without understanding. We live in the MIDDLE. Every math concept connects to AI. Every AI application reveals the math inside. We always start from something REAL." This is the slide to reference whenever students ask "why do we need this?"</aside>
 </section>
-</section>
+
+<!-- 6: Guiding question -->
 <section>
-<section id="slide-orgd3a0708">
-<h4 id="orgd3a0708">Our guiding question</h4>
-<p>
-You use ChatGPT every day. But have you ever wondered:
-</p>
-
-<div class="key-question">
-<p>
-When you type a sentence and ChatGPT writes back&#x2026; what is actually happening inside the machine?
-</p>
-</div>
-
+<h4>Our guiding question</h4>
+<p>You use ChatGPT every day. But have you ever wondered:</p>
+<div class="key-question">When you type a sentence and ChatGPT writes back... what is actually happening inside the machine?</div>
 <ul>
-<li data-fragment-index="1" class="fragment">It's not thinking. It's not understanding. It doesn't have a brain.</li>
-<li data-fragment-index="2" class="fragment">It's doing <b>arithmetic</b>. Very simple arithmetic, repeated billions of times.</li>
-
+<li class="fragment">It's not thinking. It's not understanding. It doesn't have a brain.</li>
+<li class="fragment">It's doing <strong>arithmetic</strong>. Very simple arithmetic, repeated billions of times.</li>
 </ul>
-
-<p data-fragment-index="3" class="fragment">
-Today, I'm going to show you <b>exactly</b> what arithmetic it's doing.
-</p>
-
-<aside class="notes">
-<p>
-Make this personal: "I know you all use ChatGPT. Some of you probably used it to write your admission essay. That's fine. But here's my question: do you know HOW it wrote that essay?"
-</p>
-
-<p>
-"It's not thinking. I know it looks like thinking. But inside, it's doing something much simpler: it's multiplying numbers, adding them up, and picking the biggest result. Over and over. Billions of times per second."
-</p>
-
-<p>
-"By the end of today, you will see the exact arithmetic. It's not hard. A high schooler could do it. The hard part is understanding WHY that arithmetic produces something that looks like intelligence."
-</p>
-
-</aside>
+<p class="fragment">Today, I'm going to show you <strong>exactly</strong> what arithmetic it's doing.</p>
+<aside class="notes">"I know you all use ChatGPT. Some of you probably used it for your admission essay. But do you know HOW it wrote it? It's not thinking. Inside, it's multiplying numbers, adding them up, picking the biggest result. Over and over. Billions of times per second. By the end of today, you will see the exact arithmetic. A high schooler could do it. The hard part is understanding WHY it produces something that looks like intelligence."</aside>
 </section>
-</section>
+
+<!-- 7: Fill in the blank -->
 <section>
-<section id="slide-orgc0e340f">
-<h2 id="orgc0e340f">Part II — Inside ChatGPT</h2>
-<div class="outline-text-2" id="text-orgc0e340f">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org11e5d0b">
-<h3 id="org11e5d0b">How it picks the next word</h3>
-<div class="outline-text-3" id="text-org11e5d0b">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org37e3b18">
-<h4 id="org37e3b18">ChatGPT plays one game: fill in the blank</h4>
-<p>
-When you type "The cat sat on the <span class="underline">_</span>", ChatGPT's entire job is to guess the next word.
-</p>
-
+<h4>ChatGPT plays one game: fill in the blank</h4>
+<p>When you type "The cat sat on the ___", ChatGPT's entire job is to guess the next word.</p>
 <ul>
-<li data-fragment-index="1" class="fragment">It looks at all the words before the blank.</li>
-<li data-fragment-index="2" class="fragment">It asks: "Based on these words, what word is most likely next?"</li>
-
+<li class="fragment">It looks at all the words before the blank.</li>
+<li class="fragment">It asks: "Based on these words, what word is most likely next?"</li>
 </ul>
-
-<div class="mathbox">
-<p data-fragment-index="3" class="fragment">
-That's literally all it does. It fills in one blank. Then the sentence is longer, so it fills in the NEXT blank. Then the NEXT. One word at a time.
-</p>
-</div>
-
-<aside class="notes">
-<p>
-"Here's a secret: ChatGPT doesn't write paragraphs. It writes ONE WORD. Then it reads everything including that new word, and writes the NEXT word. It's like a student writing an essay one word at a time, reading the whole thing before each new word."
-</p>
-
-<p>
-Write on the board: "The cat sat on the <span class="underline">_</span>"
-Ask: "What word goes here?" Everyone says "mat" or "floor" or "couch."
-"How did YOU know? You looked at the words 'cat', 'sat', 'on' and your brain figured out what fits. ChatGPT does the exact same thing — but with arithmetic instead of intuition."
-</p>
-
-<p>
-This is the bridge: YOUR brain and ChatGPT are solving the same problem. Your brain uses intuition. ChatGPT uses math. We're going to learn that math.
-</p>
-
-</aside>
+<div class="applied fragment">That's literally all it does. It fills in one blank. Then the sentence is longer, so it fills in the NEXT blank. Then the NEXT. One word at a time.</div>
+<aside class="notes">Write on the board: "The cat sat on the ___". Ask: "What word goes here?" Everyone says "mat." "How did YOUR brain know? You looked at 'cat', 'sat', 'on' and figured out what fits. ChatGPT does the exact same thing — but with arithmetic instead of intuition." Bridge: YOUR brain and ChatGPT solve the same problem. Yours uses intuition. ChatGPT uses math. We're going to learn that math.</aside>
 </section>
-</section>
+
+<!-- 8: Four steps -->
 <section>
-<section id="slide-orgddbe8c4">
-<h4 id="orgddbe8c4">But how? Four steps of arithmetic.</h4>
-<p>
-"The cat sat on the <span class="underline">_</span>"
-</p>
-
+<h4>But how? Four steps of arithmetic.</h4>
+<p>"The cat sat on the ___"</p>
 <ol>
-<li data-fragment-index="1" class="fragment">Turn every word into <b>a list of numbers</b>. ("cat" → some numbers, "sat" → some numbers, &#x2026;)</li>
-<li data-fragment-index="2" class="fragment">For each word, ask: <b>how related is it to the blank?</b> (Score each word.)</li>
-<li data-fragment-index="3" class="fragment">Turn the scores into <b>percentages</b>. (cat gets 40%, sat gets 30%, the gets 15%, on gets 15%.)</li>
-<li data-fragment-index="4" class="fragment">Mix the words' information using those percentages → <b>predict "mat"</b>.</li>
-
+<li class="fragment">Turn every word into <strong>a list of numbers</strong>. ("cat" → some numbers, ...)</li>
+<li class="fragment">For each word, ask: <strong>how related is it to the blank?</strong> (Score each word.)</li>
+<li class="fragment">Turn the scores into <strong>percentages</strong>. (cat 40%, sat 30%, the 15%, on 15%.)</li>
+<li class="fragment">Mix the words' information using those percentages → <strong>predict "mat"</strong>.</li>
 </ol>
-
-<div class="applied">
-<p data-fragment-index="5" class="fragment">
-That's it. Four steps. Each step is a math concept we'll learn.
-</p>
-</div>
-
-<aside class="notes">
-<p>
-Write the four steps on the board. Number them clearly.
-</p>
-
-<p>
-"Step 1 is about REPRESENTATION: how do you turn a word into numbers? That's vectors. We learn this Week 1."
-"Step 2 is about COMPARISON: how do you measure if two things are related? That's the dot product. Also Week 1."
-"Step 3 is about DECISION: how do you convert 'this is more related than that' into 'give 40% attention here and 15% there'? That's probability. We learn this in Week 12."
-"Step 4 is about COMBINATION: how do you mix several things together with different weights? That's like computing your GPA. We learn this Week 1."
-</p>
-
-<p>
-"Four steps. Four math ideas. All things you can understand by Christmas."
-</p>
-
-</aside>
+<div class="applied fragment">That's it. Four steps. Each step is a math concept we'll learn.</div>
+<aside class="notes">Write 4 steps on the board. "Step 1: REPRESENTATION — turn words into numbers. That's vectors. Week 1." "Step 2: COMPARISON — how related? That's the dot product. Week 1." "Step 3: DECISION — convert to percentages. That's probability. Week 12." "Step 4: COMBINATION — mix with different weights. Like GPA. Week 1." Four math ideas you can understand by Christmas.</aside>
 </section>
-</section>
+
+<!-- 9: Report card -->
 <section>
-<section id="slide-org557ea2a">
-<h3 id="org557ea2a">Step 1: Words become numbers</h3>
-<div class="outline-text-3" id="text-org557ea2a">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-orgd74615b">
-<h4 id="orgd74615b">How do you turn "cat" into numbers?</h4>
-<p>
-A computer can't read. It only understands numbers. So we need a way to turn every word into numbers.
-</p>
-
+<h4>Step 1: How do you turn "cat" into numbers?</h4>
+<p>A computer can't read. So we give every word a <strong>report card</strong>:</p>
 <ul>
-<li data-fragment-index="1" class="fragment">Think of it like a <b>report card</b> for the word.</li>
-<li data-fragment-index="2" class="fragment">Each number measures one <i>quality</i>: how "animal-like" is this word? How "action-like"?</li>
-
+<li class="fragment">Think of it like a <strong>report card</strong> for the word.</li>
+<li class="fragment">Each number measures one <em>quality</em>: how "animal-like"? How "action-like"?</li>
 </ul>
-
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-right" />
-
-<col  class="org-right" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Word</th>
-<th scope="col" class="org-right">Animal score</th>
-<th scope="col" class="org-right">Action score</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left">cat</td>
-<td class="org-right">4</td>
-<td class="org-right">1</td>
-</tr>
-
-<tr>
-<td class="org-left">dog</td>
-<td class="org-right">4.5</td>
-<td class="org-right">2</td>
-</tr>
-
-<tr>
-<td class="org-left">run</td>
-<td class="org-right">0</td>
-<td class="org-right">5</td>
-</tr>
-
-<tr>
-<td class="org-left">democracy</td>
-<td class="org-right">0</td>
-<td class="org-right">0</td>
-</tr>
-</tbody>
+<table>
+<tr><th>Word</th><th>Animal score</th><th>Action score</th></tr>
+<tr><td>cat</td><td>4</td><td>1</td></tr>
+<tr><td>dog</td><td>4.5</td><td>2</td></tr>
+<tr><td>run</td><td>0</td><td>5</td></tr>
+<tr><td>democracy</td><td>0</td><td>0</td></tr>
 </table>
-
-<p data-fragment-index="3" class="fragment">
-"cat" becomes the numbers \((4, 1)\). "dog" becomes \((4.5, 2)\). Now we can do math with words!
-</p>
-
-<aside class="notes">
-<p>
-The report card analogy is KEY. Every student understands report cards.
-</p>
-
-<p>
-"Think of each word getting a report card. But instead of 'Math: B+, English: A-', it's 'Animal: 4, Action: 1.' Cat gets a high animal score and a low action score. Run gets a low animal score and a high action score."
-</p>
-
-<p>
-Draw on the board: a 2D coordinate system. Plot the four words.
-</p>
-<ul>
-<li>cat at (4, 1)</li>
-<li>dog at (4.5, 2) — CLOSE to cat</li>
-<li>run at (0, 5) — far from cat</li>
-<li>democracy at (0, 0) — far from everything</li>
-
-</ul>
-
-<p>
-"Look at the picture. Which words are close together?" Cat and dog. "Which are far apart?" Cat and democracy. "The computer doesn't need to 'understand' language. It just needs to see that cat and dog are NEARBY in number-space."
-</p>
-
-<p>
-"In math, we call this list of numbers a VECTOR. A vector is just a list of numbers. That's it. Nothing scary."
-</p>
-
-<p>
-"In real AI systems, the list has 768 numbers or more, not 2. But the idea is exactly the same: similar words are nearby."
-</p>
-
-<p>
-This slide shows why math is the LANGUAGE AI speaks: without turning words into numbers, AI literally cannot function. Math is not decoration — it's the foundation.
-</p>
-
-</aside>
+<p class="fragment">"cat" becomes \((4, 1)\). "dog" becomes \((4.5, 2)\). Now we can do math with words!</p>
+<div class="key-question fragment">"Turning things into numbers" is <strong>the</strong> foundational idea of AI. In math, a list of numbers is called a <strong>vector</strong>. (Unit 1)</div>
+<aside class="notes">The report card analogy is KEY. "Each word gets a report card. Instead of 'Math: B+, English: A-', it's 'Animal: 4, Action: 1.'" Draw 2D coordinates on the board: cat at (4,1), dog at (4.5,2) — CLOSE. run at (0,5) — far. democracy at (0,0) — far. "Which are close? Cat and dog. The computer doesn't 'understand' — it sees cat and dog are NEARBY in number-space." In real AI, lists have 768+ numbers, not 2. Same idea. "In math, a list of numbers is called a VECTOR. Nothing scary."</aside>
 </section>
-</section>
+
+<!-- 10: Why vectors matter -->
 <section>
-<section id="slide-orgfbc9508">
-<h4 id="orgfbc9508">Why does this matter for AI?</h4>
+<h4>Why does this matter for AI?</h4>
 <img src="../images/unit00/fig-0-04-vectors-everywhere.png" alt="Everything becomes vectors" style="float:right; max-height:420px; max-width:50%; margin:0 0 0.5em 1em; border-radius:6px;">
-
-<div style="height:2.5em;"></div>
-
-<p>
-Without this step, AI cannot function. Period.
-</p>
-
+<p style="padding-top:2.5em;">Without this step, AI cannot function. Period.</p>
 <ul>
-<li data-fragment-index="1" class="fragment">A computer that can't turn words into numbers <b>cannot process language</b>.</li>
-<li data-fragment-index="2" class="fragment">A computer that can't turn images into numbers <b>cannot see</b>.</li>
-<li data-fragment-index="3" class="fragment">A computer that can't turn songs into numbers <b>cannot recommend music</b>.</li>
-
+<li class="fragment">Can't turn words into numbers → <strong>cannot process language</strong>.</li>
+<li class="fragment">Can't turn images into numbers → <strong>cannot see</strong>.</li>
+<li class="fragment">Can't turn songs into numbers → <strong>cannot recommend music</strong>.</li>
 </ul>
-
-<div class="key-question" style="clear:both;">
-<p data-fragment-index="4" class="fragment">
-"Turning things into numbers" is not a minor detail. It is <b>the</b> foundational idea of AI. And in math, this is called a <b>vector</b>. (Unit 1)
-</p>
+<div class="applied fragment" style="clear:both;">
+Math (vectors) enables AI (word processing), which powers your Real World (ChatGPT). <br/>
+And wanting to understand ChatGPT motivates you to learn Math (vectors). <br/>
+<strong>The triangle in action.</strong>
 </div>
-
-<aside class="notes">
-<p>
-"This is where the Math → AI arrow of our triangle is really obvious. AI NEEDS this math. Without vectors, there is no ChatGPT, no Spotify, no Instagram. Vectors are not something mathematicians invented for fun — they are something AI cannot live without."
-</p>
-
-<p>
-"And the reverse: knowing about vectors helps YOU understand AI. When someone says 'GPT-4 has 12,288-dimensional embeddings', you now know what that means: every word gets a report card with 12,288 grades. That's all."
-</p>
-
-<p>
-Come back to the triangle: Math (vectors) enables AI (word processing), which powers Real World (ChatGPT). Real World (wanting to chat with AI) motivates learning Math (vectors).
-</p>
-
-</aside>
+<aside class="notes">"Math → AI: without vectors, there is no ChatGPT. Vectors aren't something mathematicians invented for fun — they're something AI cannot live without." "And the reverse: knowing vectors helps YOU. When someone says 'GPT-4 has 12,288-dimensional embeddings', you now know: every word gets a report card with 12,288 grades. That's all." Triangle: Math (vectors) enables AI, which powers Real World (ChatGPT). Wanting to understand ChatGPT motivates Math.</aside>
 </section>
-</section>
+
+<!-- 11: Dot product -->
 <section>
-<section id="slide-org24ca51d">
-<h3 id="org24ca51d">Step 2: Measuring closeness</h3>
-<div class="outline-text-3" id="text-org24ca51d">
-</div>
+<h4>Step 2: Measuring closeness with the dot product</h4>
+<p>Given two lists of numbers, multiply matching entries and add up:</p>
+<p>"cat" \(= (4, 1)\), "dog" \(= (4.5, 2)\):</p>
+\[4 \times 4.5\; +\; 1 \times 2\; =\; 18 + 2\; =\; 20 \quad \leftarrow \textbf{big = very similar!}\]
+<p>"cat" \(= (4, 1)\), "democracy" \(= (0, 0)\):</p>
+\[4 \times 0\; +\; 1 \times 0\; =\; 0 \quad \leftarrow \textbf{zero = not related}\]
+<p class="fragment">20 vs 0. The math confirms what you already felt: cat and dog are similar; cat and democracy are not.</p>
+<div class="key-question fragment">This is middle-school arithmetic (multiply and add). But it's the single most important operation in all of AI.</div>
+<aside class="notes">DO THIS ON THE BOARD. Slowly. "4 times 4.5 is 18. 1 times 2 is 2. Add them: 20. Big number. Cat and dog are similar." "4 times 0 is 0. 1 times 0 is 0. Add: 0. Cat and democracy have nothing in common." Ask: "Could you do this? It's multiplication and addition. Middle school math." "This middle-school arithmetic is EXACTLY what ChatGPT does trillions of times. The dot product is not fancy math. It's multiply and add. But it's the single most important operation in all of AI."</aside>
 </section>
-</section>
+
+<!-- 12: Why dot product works -->
 <section>
-<section id="slide-org42aed66">
-<h4 id="org42aed66">How do you measure "is cat more related to dog or to democracy"?</h4>
-<p>
-We need a simple rule: <b>given two lists of numbers, output one number that says "how similar are they?"</b>
-</p>
-
-<div class="mathbox">
-<p>
-The rule is called the <b>dot product</b>. It's just: multiply matching numbers and add up.
-</p>
-
-<p>
-"cat" \(= (4, 1)\), "dog" \(= (4.5, 2)\):
-</p>
-
-<p>
-\[4 \times 4.5\; +\; 1 \times 2\; =\; 18 + 2\; =\; 20 \quad \text{← big number = very similar!}\]
-</p>
-
-<p>
-"cat" \(= (4, 1)\), "democracy" \(= (0, 0)\):
-</p>
-
-<p>
-\[4 \times 0\; +\; 1 \times 0\; =\; 0 \quad \text{← zero = not related at all}\]
-</p>
-</div>
-
-<p data-fragment-index="1" class="fragment">
-20 vs. 0. The math confirms what you already felt: cat and dog are similar; cat and democracy are not.
-</p>
-
-<aside class="notes">
-<p>
-DO THIS ON THE BOARD. Slowly. Step by step.
-</p>
-
-<p>
-"4 times 4.5 is 18. 1 times 2 is 2. Add them: 20. Big number. Cat and dog are similar."
-"4 times 0 is 0. 1 times 0 is 0. Add them: 0. Zero. Cat and democracy have nothing in common."
-</p>
-
-<p>
-Ask: "Could you do this arithmetic? It's multiplication and addition. Middle school math."
-</p>
-
-<p>
-"But here's the amazing part: this middle-school arithmetic is EXACTLY what ChatGPT does trillions of times to understand language. When ChatGPT reads your sentence, it computes this dot product between every pair of words to figure out which words are related."
-</p>
-
-<p>
-"The dot product is not fancy math. It's multiply and add. But it's the single most important operation in all of AI."
-</p>
-
-<p>
-This is the AI → Math arrow: AI uses the dot product, and that motivates us to understand what the dot product really measures. We'll spend two lectures in Unit 1 going deep on this.
-</p>
-
-</aside>
-</section>
-</section>
-<section>
-<section id="slide-org1264acf">
-<h4 id="org1264acf">Why does multiply-and-add measure similarity?</h4>
-<p>
-Here's the intuition:
-</p>
-
+<h4>Why does multiply-and-add measure similarity?</h4>
 <ul>
-<li data-fragment-index="1" class="fragment">If both words score <b>high</b> on "animal" (4 and 4.5), the product is a <b>big positive</b> (18).</li>
-<li data-fragment-index="2" class="fragment">If both words score <b>low</b> on "action" (1 and 2), the product is <b>small but positive</b> (2).</li>
-<li data-fragment-index="3" class="fragment">If one word scores high and the other scores zero, the product is <b>zero</b> (no agreement).</li>
-
+<li class="fragment">Both words score <strong>high</strong> on "animal" → product is a <strong>big positive</strong> (18).</li>
+<li class="fragment">Both words score <strong>low</strong> on "action" → product is <strong>small positive</strong> (2).</li>
+<li class="fragment">One high, other zero → product is <strong>zero</strong> (no agreement).</li>
 </ul>
-
-<p data-fragment-index="4" class="fragment">
-The dot product adds up all the agreements. More agreement → bigger number → more similar.
-</p>
-
-<div class="applied">
-<p data-fragment-index="5" class="fragment">
-This is how ChatGPT decides which words in your sentence are related to each other. It computes this for <b>every pair</b>. That operation is called \(QK^\top\) in the attention formula.
-</p>
-</div>
-
-<aside class="notes">
-<p>
-"Why does this work? Because the dot product is adding up how much the two words AGREE on every quality."
-</p>
-
-<p>
-"If both words are very 'animal-like', that dimension contributes a big number. If both are very 'action-like', that contributes too. The total is the sum of all their agreements."
-</p>
-
-<p>
-"Zero means no agreement. Negative would mean they're OPPOSITE — pointing in different directions."
-</p>
-
-<p>
-"This is the deep math intuition: the dot product measures how much two vectors POINT IN THE SAME DIRECTION. We'll make this precise in Unit 1. But for now, just remember: multiply, add, bigger = more similar."
-</p>
-
-<p>
-The Math → Real World connection: this simple arithmetic lets Spotify find songs similar to your favorites, lets Google find web pages similar to your search, lets ChatGPT find words similar to your context.
-</p>
-
-</aside>
+<p class="fragment">The dot product adds up all the <strong>agreements</strong>. More agreement → bigger number → more similar.</p>
+<div class="applied fragment">This is how ChatGPT decides which words are related. It computes this for <em>every pair</em>. That operation is called \(QK^\top\).</div>
+<aside class="notes">"The dot product adds up how much two words AGREE on every quality. Both animal-like? Big contribution. Both action-like? Also contributes. One high, one zero? Zero contribution." "The deep intuition: the dot product measures how much two vectors POINT IN THE SAME DIRECTION. We'll make this precise in Unit 1." Math → Real World: this simple arithmetic lets Spotify find similar songs, Google find similar pages, ChatGPT find related words.</aside>
 </section>
-</section>
+
+<!-- 13: Scores to percentages -->
 <section>
-<section id="slide-orgefc1aec">
-<h3 id="orgefc1aec">Step 3: Scores become percentages</h3>
-<div class="outline-text-3" id="text-orgefc1aec">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-orgf836398">
-<h4 id="orgf836398">From "how related" to "how much attention"</h4>
-<p>
-After computing dot products, ChatGPT has a score for each word:
-</p>
-
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-right" />
-
-<col  class="org-right" />
-
-<col  class="org-right" />
-
-<col  class="org-right" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Word</th>
-<th scope="col" class="org-right">The</th>
-<th scope="col" class="org-right">cat</th>
-<th scope="col" class="org-right">sat</th>
-<th scope="col" class="org-right">on</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left">Score</td>
-<td class="org-right">2</td>
-<td class="org-right">20</td>
-<td class="org-right">15</td>
-<td class="org-right">5</td>
-</tr>
-</tbody>
+<h4>Step 3: From scores to percentages</h4>
+<p>After dot products, ChatGPT has a score for each word:</p>
+<table>
+<tr><th>Word</th><th>The</th><th>cat</th><th>sat</th><th>on</th></tr>
+<tr><td><strong>Score</strong></td><td>2</td><td>20</td><td>15</td><td>5</td></tr>
 </table>
-
-<p>
-But these are just numbers. We need <b>percentages</b>: out of 100% of my attention, how much goes to each word?
-</p>
-
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" data-fragment-index="1" class="fragment">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-right" />
-
-<col  class="org-right" />
-
-<col  class="org-right" />
-
-<col  class="org-right" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Word</th>
-<th scope="col" class="org-right">The</th>
-<th scope="col" class="org-right">cat</th>
-<th scope="col" class="org-right">sat</th>
-<th scope="col" class="org-right">on</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left">Attention</td>
-<td class="org-right">5%</td>
-<td class="org-right">47%</td>
-<td class="org-right">36%</td>
-<td class="org-right">12%</td>
-</tr>
-</tbody>
+<p>But we need <em>percentages</em>: out of 100% of my attention, how much goes to each word?</p>
+<table class="fragment">
+<tr><th>Word</th><th>The</th><th>cat</th><th>sat</th><th>on</th></tr>
+<tr><td><strong>Attention</strong></td><td>5%</td><td>47%</td><td>36%</td><td>12%</td></tr>
 </table>
-
-<p data-fragment-index="2" class="fragment">
-"cat" gets 47% of the attention. Makes sense &#x2014; it's the most important word for predicting what comes next.
-</p>
-
-<aside class="notes">
-<p>
-"The scores say cat = 20, sat = 15, on = 5, the = 2. But what does '20' mean? Is that a lot? We need context."
-</p>
-
-<p>
-"Converting to percentages gives us context. Now we can say: 'almost half the attention goes to cat, about a third to sat, a little to on, barely any to the.' This makes sense — for 'the cat sat on the <span class="underline">_</span>', the word 'cat' is the most important clue."
-</p>
-
-<p>
-"The math function that converts scores to percentages is called SOFTMAX. It's a little more complicated than simple division (it uses the exponential function), but the idea is the same: turn raw numbers into percentages that add up to 100%."
-</p>
-
-<p>
-"We'll learn exactly how softmax works in Week 12 when we study probability. For now, just know: scores go in, percentages come out."
-</p>
-
-<p>
-This is where probability enters the picture. The Real World → Math arrow: we need probability because AI needs to make DECISIONS, not just compute scores. Probability tells us HOW MUCH to trust each option.
-</p>
-
-</aside>
+<p class="fragment">"cat" gets 47% — it's the most important clue for predicting the blank.</p>
+<aside class="notes">"Scores: cat=20, sat=15, on=5, the=2. But what does '20' mean? Is it a lot? We need context." "Percentages give context: almost half to cat, about a third to sat, a little to on, barely any to the. Makes sense — 'cat' is the most important clue for 'the cat sat on the ___'." "The math function that does this is SOFTMAX. Scores in, percentages out. We'll learn exactly how in Week 12." This is where probability enters — AI needs to make DECISIONS, not just compute scores.</aside>
 </section>
-</section>
+
+<!-- 14: GPA -->
 <section>
-<section id="slide-org18a9620">
-<h3 id="org18a9620">Step 4: The weighted mix</h3>
-<div class="outline-text-3" id="text-org18a9620">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-orgd91291b">
-<h4 id="orgd91291b">Mixing information with percentages &#x2014; like computing your GPA</h4>
-<p>
-You all know how GPA works:
-</p>
-
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-right" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Class</th>
-<th scope="col" class="org-right">Grade</th>
-<th scope="col" class="org-left">Credits</th>
-<th scope="col" class="org-left">&#xa0;</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left">Math</td>
-<td class="org-right">3.5</td>
-<td class="org-left">4 credits</td>
-<td class="org-left">3.5 × 4 = 14.0</td>
-</tr>
-
-<tr>
-<td class="org-left">English</td>
-<td class="org-right">3.0</td>
-<td class="org-left">3 credits</td>
-<td class="org-left">3.0 × 3 = 9.0</td>
-</tr>
-
-<tr>
-<td class="org-left">Art</td>
-<td class="org-right">4.0</td>
-<td class="org-left">1 credit</td>
-<td class="org-left">4.0 × 1 = 4.0</td>
-</tr>
-
-<tr>
-<td class="org-left"><b>Total</b></td>
-<td class="org-right">&#xa0;</td>
-<td class="org-left">8 credits</td>
-<td class="org-left">27.0</td>
-</tr>
-
-<tr>
-<td class="org-left"><b>GPA</b></td>
-<td class="org-right">&#xa0;</td>
-<td class="org-left">&#xa0;</td>
-<td class="org-left"><b>27 ÷ 8 = 3.375</b></td>
-</tr>
-</tbody>
+<h4>Step 4: The weighted mix — like computing your GPA</h4>
+<p>You all know how GPA works:</p>
+<table>
+<tr><th>Class</th><th>Grade</th><th>Credits</th><th></th></tr>
+<tr><td>Math</td><td>3.5</td><td>4</td><td>3.5 × 4 = 14.0</td></tr>
+<tr><td>English</td><td>3.0</td><td>3</td><td>3.0 × 3 = 9.0</td></tr>
+<tr><td>Art</td><td>4.0</td><td>1</td><td>4.0 × 1 = 4.0</td></tr>
+<tr><td><strong>GPA</strong></td><td></td><td>8 total</td><td><strong>27 ÷ 8 = 3.375</strong></td></tr>
 </table>
-
 <ul>
-<li data-fragment-index="1" class="fragment">4-credit Math counts <b>more</b> than 1-credit Art. That's a <i>weighted</i> average.</li>
-<li data-fragment-index="2" class="fragment">The credits are the <b>weights</b>. They decide what matters most.</li>
-
+<li class="fragment">4-credit Math counts <strong>more</strong> than 1-credit Art. That's a <em>weighted average</em>.</li>
+<li class="fragment">ChatGPT does the same: relevant words get more "credits" (attention).</li>
 </ul>
-
-<aside class="notes">
-<p>
-EVERY student knows GPA. This is the most relatable analogy in the course.
-</p>
-
-<p>
-"Your GPA is not a simple average. Math counts 4 times as much as Art because it has 4 credits. That's a weighted average — some things count more."
-</p>
-
-<p>
-Do the arithmetic on the board: 3.5 × 4 = 14, 3.0 × 3 = 9, 4.0 × 1 = 4. Total = 27. Divide by 8 credits = 3.375.
-</p>
-
-<p>
-"This is middle school arithmetic. Multiply, add, divide."
-</p>
-
-</aside>
+<div class="key-question fragment">This weighted average is called a <strong>linear combination</strong> — the central operation of linear algebra. (Units 1–2)</div>
+<aside class="notes">EVERY student knows GPA. "Your GPA is not a simple average. Math counts 4 times as much as Art. That's a weighted average." Do the arithmetic: 3.5 × 4 = 14, 3.0 × 3 = 9, 4.0 × 1 = 4. Total = 27. Divide by 8 = 3.375. "Middle school arithmetic." Attention is literally a GPA of words. Weights = how many credits each word gets. Output = weighted mix of word information. This is a linear combination — the first topic of Unit 1.</aside>
 </section>
-</section>
+
+<!-- 15: Learning = cooking rice -->
 <section>
-<section id="slide-orgfc7b6c1">
-<h4 id="orgfc7b6c1">ChatGPT computes a GPA of words</h4>
-<p>
-The attention percentages are like credits &#x2014; they decide which words count more.
-</p>
-
-<div class="mathbox">
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-right" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Word</th>
-<th scope="col" class="org-left">Info the word carries</th>
-<th scope="col" class="org-right">Attention (weight)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left">cat</td>
-<td class="org-left">(animal, pet, furry, &#x2026;)</td>
-<td class="org-right">47%</td>
-</tr>
-
-<tr>
-<td class="org-left">sat</td>
-<td class="org-left">(past tense, position, &#x2026;)</td>
-<td class="org-right">36%</td>
-</tr>
-
-<tr>
-<td class="org-left">on</td>
-<td class="org-left">(preposition, surface, &#x2026;)</td>
-<td class="org-right">12%</td>
-</tr>
-
-<tr>
-<td class="org-left">the</td>
-<td class="org-left">(article, &#x2026;)</td>
-<td class="org-right">5%</td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<p data-fragment-index="1" class="fragment">
-Result = 47% × (cat info) + 36% × (sat info) + 12% × (on info) + 5% × (the info)
-</p>
-
-<div class="key-question">
-<p data-fragment-index="2" class="fragment">
-This is a <b>weighted average</b> of word information. In math, we call it a <b>linear combination</b>. It's the most important operation in linear algebra &#x2014; and we start learning it <b>Week 1</b>.
-</p>
-</div>
-
-<aside class="notes">
-<p>
-"Attention is literally a GPA of words. The weights (47%, 36%, &#x2026;) are like credits. The word information is like grades. The output is a weighted mix."
-</p>
-
-<p>
-Write the formula on the board:
-  output = 0.47 × v<sub>cat</sub> + 0.36 × v<sub>sat</sub> + 0.12 × v<sub>on</sub> + 0.05 × v<sub>the</sub>
-</p>
-
-<p>
-"This is a linear combination. It's the first topic of Unit 1. The entire semester is building up to understanding why this simple operation — multiply and add — is so powerful."
-</p>
-
-<p>
-"What makes this powerful is the WEIGHTS. If you change the weights, you change what the model pays attention to. Learning the right weights is what makes ChatGPT smart."
-</p>
-
-<p>
-Math → AI: linear combinations are the language of attention.
-AI → Real World: attention is how ChatGPT understands your sentences.
-Real World → Math: wanting to understand ChatGPT motivates learning linear algebra.
-The triangle in action.
-</p>
-
-</aside>
-</section>
-</section>
-<section>
-<section id="slide-org1c192f0">
-<h3 id="org1c192f0">One more thing: how does it learn?</h3>
-<div class="outline-text-3" id="text-org1c192f0">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org0a8a85b">
-<h4 id="org0a8a85b">The machine tunes itself &#x2014; like learning to cook</h4>
+<h4>How does the machine learn? Like learning to cook.</h4>
 <img src="../images/unit00/fig-0-05-learning-to-cook.png" alt="Learning to cook rice" style="float:right; max-height:390px; max-width:50%; margin:0 0 0.5em 1em; border-radius:6px;">
-
-<p>
-Imagine you're learning to cook rice.
-</p>
-
+<p>Imagine you're learning to cook rice:</p>
 <ol>
-<li data-fragment-index="1" class="fragment">First try: too much water. <b>Mushy</b>. Lesson: use less water.</li>
-<li data-fragment-index="2" class="fragment">Second try: too little water. <b>Crunchy</b>. Lesson: use a bit more.</li>
-<li data-fragment-index="3" class="fragment">Third try: almost right. <b>Slightly dry</b>. Lesson: just a tiny bit more.</li>
-<li data-fragment-index="4" class="fragment">Eventually: <b>perfect rice</b>. You learned by adjusting one thing at a time.</li>
-
+<li class="fragment">First try: too much water. <strong>Mushy.</strong> Use less water.</li>
+<li class="fragment">Second try: too little water. <strong>Crunchy.</strong> Use a bit more.</li>
+<li class="fragment">Third try: almost right. <strong>Slightly dry.</strong> Tiny bit more.</li>
+<li class="fragment">Eventually: <strong>perfect rice.</strong> You learned by adjusting one thing at a time.</li>
 </ol>
-
-<p data-fragment-index="5" class="fragment">
-ChatGPT learns the same way &#x2014; except it adjusts <b>billions</b> of numbers instead of one.
-</p>
-
-<aside class="notes">
-<p>
-"Learning to cook rice: you try, fail, adjust, try again. Each time, you change ONE thing and see if it gets better."
-</p>
-
-<p>
-"ChatGPT has 175 billion numbers to adjust — those are the weights. It makes a prediction. Checks if it's right. If not, it figures out WHICH numbers to change and by HOW MUCH. Then it does it again. Billions of times."
-</p>
-
-<p>
-"The math tool for 'which direction to adjust' is called the GRADIENT. It's a concept from calculus. The algorithm for 'keep adjusting until it's good enough' is called GRADIENT DESCENT. These are the topics of Weeks 5-10."
-</p>
-
-<p>
-"But notice: the core idea is simple. Try, fail, adjust. You already know this from cooking, from sports, from any skill. The math just makes it precise."
-</p>
-
-</aside>
+<p class="fragment">ChatGPT learns the same way — except it adjusts <strong>billions</strong> of numbers instead of one.</p>
+<aside class="notes">"Try, fail, adjust, repeat. Each time, change ONE thing and see if it gets better. ChatGPT has 175 billion numbers to adjust. It makes a prediction, checks if it's right, figures out WHICH numbers to change and by HOW MUCH. Then again. Billions of times." "The math for 'which direction to adjust' is the GRADIENT (calculus). The algorithm for 'keep adjusting' is GRADIENT DESCENT (Weeks 5-10)." "But the core idea is simple. Try, fail, adjust. You know this from cooking, sports, any skill. The math just makes it precise."</aside>
 </section>
-</section>
+
+<!-- 16: Try fail adjust -->
 <section>
-<section id="slide-orge479bcf">
-<h4 id="orge479bcf">The math of "try, fail, adjust"</h4>
+<h4>The math of "try, fail, adjust"</h4>
 <ol>
-<li data-fragment-index="1" class="fragment"><b>Try</b>: The model makes a prediction. ("The next word is 'dog'.")</li>
-<li data-fragment-index="2" class="fragment"><b>Fail</b>: We measure how wrong it was. (The answer was "mat", not "dog".)</li>
-<li data-fragment-index="3" class="fragment"><b>Adjust</b>: Calculus tells us which numbers to change and by how much.</li>
-
+<li class="fragment"><strong>Try</strong>: The model predicts. ("Next word is 'dog'.")</li>
+<li class="fragment"><strong>Fail</strong>: Measure how wrong. (Answer was "mat", not "dog".)</li>
+<li class="fragment"><strong>Adjust</strong>: Calculus tells us which numbers to change and by how much.</li>
 </ol>
-
-<div class="key-question">
-<p data-fragment-index="4" class="fragment">
-"How wrong" → this is the <b>loss function</b> (Week 2, Mean Squared Error).
-"Which direction to change" → this is the <b>gradient</b> (Weeks 5&#x2013;7).
-"Keep adjusting" → this is <b>gradient descent</b> (Weeks 8&#x2013;10).
-</p>
+<div class="key-question fragment">
+"How wrong" → <strong>loss function</strong> (Week 2).<br/>
+"Which direction" → <strong>gradient</strong> (Weeks 5–7).<br/>
+"Keep adjusting" → <strong>gradient descent</strong> (Weeks 8–10).
 </div>
-
-<p data-fragment-index="5" class="fragment">
-We won't do this today. But by Week 10, you'll compute a gradient by hand and watch a model learn.
-</p>
-
-<aside class="notes">
-<p>
-"Three steps. Try, fail, adjust. Each step has a math name."
-</p>
-
-<p>
-"Measuring 'how wrong': that's the loss function. The simplest one is Mean Squared Error — take the difference between your answer and the right answer, square it. We'll build one in Week 2."
-</p>
-
-<p>
-"Figuring out 'which direction to change': that's the gradient. It's a list of numbers that says 'increase weight #1, decrease weight #2, &#x2026;' We'll compute gradients starting Week 5."
-</p>
-
-<p>
-"Doing the adjusting repeatedly: that's gradient descent. Walk downhill on the error surface. We'll implement it in Weeks 8-10."
-</p>
-
-<p>
-"This is the calculus part of the course. Calculus isn't about abstract curves — it's about LEARNING. Every time ChatGPT improves, it's because calculus told it which direction to go."
-</p>
-
-<p>
-This drives the AI → Math motivation: "I want to understand how AI LEARNS. For that, I need calculus."
-</p>
-
-</aside>
+<p class="fragment">By Week 10, you'll compute a gradient by hand and watch a model learn.</p>
+<aside class="notes">"Measuring 'how wrong': the loss function. Simplest = Mean Squared Error — difference squared. Week 2." "Which direction: the gradient. A list that says 'increase #1, decrease #2...' Weeks 5-7." "Keep adjusting: gradient descent. Walk downhill on the error surface. Weeks 8-10." "Calculus isn't about abstract curves — it's about LEARNING. Every time ChatGPT improves, calculus told it which direction to go." AI → Math motivation: "I want to understand how AI LEARNS. For that, I need calculus."</aside>
 </section>
-</section>
+
+<!-- 17: Full formula -->
 <section>
-<section id="slide-orgb0f88ae">
-<h2 id="orgb0f88ae">Part III — The Formula</h2>
-<div class="outline-text-2" id="text-orgb0f88ae">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org92bf4ab">
-<h3 id="org92bf4ab">Putting it all together</h3>
-<div class="outline-text-3" id="text-org92bf4ab">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org99a7128">
-<h4 id="org99a7128">The attention formula &#x2014; now you know what it means</h4>
-<p>
+<h4>The attention formula — now you know what it means</h4>
+<p style="text-align:center; font-size:1.2em; margin:0.4em 0;">
 \[\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V\]
 </p>
-
-<p>
-Let's read it left to right, using what we just learned:
-</p>
-
+<p>Read it using what we just learned:</p>
 <ol>
-<li data-fragment-index="1" class="fragment">\(QK^\top\) → Compute the <b>dot product</b> between every pair of words. (Step 2: how related?)</li>
-<li data-fragment-index="2" class="fragment">\(\div\sqrt{d_k}\) → <b>Scale down</b> so the numbers don't get too extreme. (More on this in a moment.)</li>
-<li data-fragment-index="3" class="fragment">softmax → Convert scores to <b>percentages</b>. (Step 3: how much attention?)</li>
-<li data-fragment-index="4" class="fragment">\(\cdot\; V\) → Take the <b>weighted average</b>. (Step 4: mix the information.)</li>
-
+<li class="fragment">\(QK^\top\) → <strong>Dot product</strong> between every pair of words. (How related?)</li>
+<li class="fragment">\(\div\sqrt{d_k}\) → <strong>Scale down</strong> so numbers don't get extreme.</li>
+<li class="fragment">softmax → Convert scores to <strong>percentages</strong>.</li>
+<li class="fragment">\(\cdot\; V\) → Take the <strong>weighted average</strong>.</li>
 </ol>
-
-<div class="applied">
-<p data-fragment-index="5" class="fragment">
-This is the complete recipe. Everything else in ChatGPT is repetition and plumbing.
-</p>
-</div>
-
-<aside class="notes">
-<p>
-"You now know what every piece of this formula does. Let me say that again: you can READ this formula. An hour ago it was hieroglyphics. Now you know what Q, K, V are, what the dot product does, what softmax does, what multiplying by V does."
-</p>
-
-<p>
-"We haven't done the math rigorously yet — that's what the rest of the semester is for. But you know the STORY. And in math, knowing the story is half the battle."
-</p>
-
-<p>
-Point at each piece on the board as you read it. Make it physical.
-</p>
-
-</aside>
+<div class="applied fragment">This is the complete recipe. Everything else in ChatGPT is repetition and plumbing.</div>
+<aside class="notes">"You can now READ this formula. An hour ago it was hieroglyphics. Now you know what Q, K, V are, what the dot product does, what softmax does, what ·V does." "We haven't done the math rigorously — that's the semester. But you know the STORY. In math, knowing the story is half the battle." Point at each piece on the board as you read it.</aside>
 </section>
-</section>
+
+<!-- 18: Scaling -->
 <section>
-<section id="slide-orgc8bf5cc">
-<h4 id="orgc8bf5cc">Why the \(\div\sqrt{d_k}\)? A quick detour.</h4>
-<p>
-What happens if you skip dividing by \(\sqrt{d_k}\)?
-</p>
-
-<div class="mathbox">
-<p>
-Without scaling: scores \(= [50,\ 10,\ 2]\) → percentages → \([99.9\%,\ 0.1\%,\ 0.0\%]\)
-With scaling: scores \(= [5,\ 1,\ 0.2]\) → percentages → \([84\%,\ 12\%,\ 4\%]\)
-</p>
-</div>
-
+<h4>Why the \(\div\sqrt{d_k}\)?</h4>
+<p>Without scaling: scores \(= [50,\ 10,\ 2]\) → \([99.9\%,\ 0.1\%,\ 0.0\%]\)</p>
+<p>With scaling: scores \(= [5,\ 1,\ 0.2]\) → \([84\%,\ 12\%,\ 4\%]\)</p>
 <ul>
-<li data-fragment-index="1" class="fragment">Without scaling: the model puts 99.9% on ONE word. It can only "look at" one thing.</li>
-<li data-fragment-index="2" class="fragment">With scaling: the model spreads attention across <b>several</b> words. Much better.</li>
-
+<li class="fragment">Without scaling: 99.9% on ONE word. Can only "look at" one thing.</li>
+<li class="fragment">With scaling: spreads attention across <strong>several</strong> words. Much better.</li>
 </ul>
-
-<p data-fragment-index="3" class="fragment">
-It's like a student who only reads one textbook chapter vs. one who reads several. The second student understands better.
-</p>
-
-<aside class="notes">
-<p>
-"When vectors are long (768 dimensions in real GPT), the dot products are huge because you're adding 768 terms. Huge scores go into softmax and softmax turns them into near-100%-or-near-0%."
-</p>
-
-<p>
-"That's bad. It means the model can only pay attention to ONE word. But understanding a sentence requires looking at MULTIPLE words."
-</p>
-
-<p>
-"Dividing by √d<sub>k</sub> brings the scores back to a reasonable range. It's like adjusting the volume on headphones — too loud and you hear only the loudest instrument, turn it down and you hear the whole band."
-</p>
-
-<p>
-"We'll make this precise in Unit 1 when we talk about norms (measuring the 'size' of a vector). For now, just know: scaling = keeping the model flexible."
-</p>
-
-</aside>
+<p class="fragment">Like a student who reads one chapter vs. several — the second understands better.</p>
+<aside class="notes">"When vectors are long (768 dimensions), dot products sum 768 terms → huge numbers → softmax goes near-100% or near-0%." "That's bad: model can only attend to ONE word. Understanding requires MULTIPLE words." "Dividing by √d_k brings scores to a reasonable range. Like adjusting headphone volume — too loud, you hear only the loudest instrument. Turn it down, you hear the whole band." We'll make this precise in Unit 1 (norms).</aside>
 </section>
-</section>
+
+<!-- 19: Course map table -->
 <section>
-<section id="slide-org71d1fbc">
-<h4 id="org71d1fbc">Each piece = one unit of the course</h4>
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Formula piece</th>
-<th scope="col" class="org-left">What it does</th>
-<th scope="col" class="org-left">Math concept</th>
-<th scope="col" class="org-left">When we learn it</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left">Words → numbers</td>
-<td class="org-left">Represent data</td>
-<td class="org-left">Vectors</td>
-<td class="org-left">Week 1</td>
-</tr>
-
-<tr>
-<td class="org-left">\(QK^\top\)</td>
-<td class="org-left">Measure similarity</td>
-<td class="org-left">Dot product</td>
-<td class="org-left">Week 1</td>
-</tr>
-
-<tr>
-<td class="org-left">\(\div\sqrt{d_k}\)</td>
-<td class="org-left">Keep scores reasonable</td>
-<td class="org-left">Norms</td>
-<td class="org-left">Week 1</td>
-</tr>
-
-<tr>
-<td class="org-left">softmax</td>
-<td class="org-left">Scores → percentages</td>
-<td class="org-left">Probability</td>
-<td class="org-left">Week 12</td>
-</tr>
-
-<tr>
-<td class="org-left">\(\cdot\; V\)</td>
-<td class="org-left">Weighted average</td>
-<td class="org-left">Linear combination</td>
-<td class="org-left">Weeks 1&#x2013;2</td>
-</tr>
-
-<tr>
-<td class="org-left">Learn \(W\)</td>
-<td class="org-left">Improve by adjusting</td>
-<td class="org-left">Gradient descent</td>
-<td class="org-left">Weeks 5&#x2013;10</td>
-</tr>
-</tbody>
+<h4>Each piece = one unit of the course</h4>
+<table>
+<tr><th>Formula piece</th><th>What it does</th><th>Math concept</th><th>When</th></tr>
+<tr><td>Words → numbers</td><td>Represent data</td><td>Vectors</td><td>Week 1</td></tr>
+<tr><td>\(QK^\top\)</td><td>Measure similarity</td><td>Dot product</td><td>Week 1</td></tr>
+<tr><td>\(\div\sqrt{d_k}\)</td><td>Keep scores reasonable</td><td>Norms</td><td>Week 1</td></tr>
+<tr><td>softmax</td><td>Scores → percentages</td><td>Probability</td><td>Week 12</td></tr>
+<tr><td>\(\cdot\; V\)</td><td>Weighted average</td><td>Linear combination</td><td>Wk 1–2</td></tr>
+<tr><td>Learn \(W\)</td><td>Improve by adjusting</td><td>Gradient descent</td><td>Wk 5–10</td></tr>
 </table>
-
-<div class="key-question">
-<p>
-This table IS the course. Remove any row and AI breaks.
-</p>
-</div>
-
-<aside class="notes">
-<p>
-"Let me say this clearly: every row in this table is something that AI CANNOT function without. Take away vectors and AI can't process data. Take away dot products and AI can't measure similarity. Take away gradient descent and AI can't learn."
-</p>
-
-<p>
-"So when we're in Week 5 learning about derivatives and you think 'why do I need this?' — look at this table. Row 6. Derivatives make learning possible. Without them, ChatGPT would be as dumb as a random number generator."
-</p>
-
-<p>
-"This is the power of the Math ↔ AI connection. Math isn't abstract — it's the toolkit that makes AI work. And AI isn't magic — it's math you can learn."
-</p>
-
-</aside>
+<div class="key-question">This table IS the course. Remove any row and AI breaks.</div>
+<aside class="notes">"Every row is something AI CANNOT function without. Take away vectors — can't process data. Take away dot products — can't measure similarity. Take away gradient descent — can't learn." "When you're in Week 5 thinking 'why do I need derivatives?' — look at this table. Row 6. Derivatives make learning possible. Without them, ChatGPT is as dumb as a random number generator." This is the Math ↔ AI connection. Math is the toolkit. AI is the application.</aside>
 </section>
-</section>
+
+<!-- 20: Five lenses -->
 <section>
-<section id="slide-orgb9e313b">
-<h3 id="orgb9e313b">The course arc</h3>
-<div class="outline-text-3" id="text-orgb9e313b">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-orgf1ae7df">
-<h4 id="orgf1ae7df">One problem, five ways</h4>
+<h4>One problem, five ways</h4>
 <img src="../images/unit00/fig-0-06-five-ways.png" alt="One problem five ways" style="float:right; max-height:420px; max-width:50%; margin:0 0 0.5em 1em; border-radius:6px;">
-
-<div style="height:1.5em;"></div>
-
-<p>
-This semester we'll solve the <b>same</b> problem five different times:
-</p>
-
-<p>
-<b>How do you fit a line to data?</b>
-</p>
-
+<p style="padding-top:1.5em;">We'll solve the <em>same</em> problem five times: <strong>fit a line to data</strong>.</p>
 <ol>
-<li data-fragment-index="1" class="fragment"><b>By geometry</b> (Week 2): Drop a perpendicular. The closest line is the best line.</li>
-<li data-fragment-index="2" class="fragment"><b>By algebra</b> (Week 3): Solve a system of equations.</li>
-<li data-fragment-index="3" class="fragment"><b>By calculus</b> (Week 5): Take the slope of the error, find where it's zero.</li>
-<li data-fragment-index="4" class="fragment"><b>By optimization</b> (Week 8): Start anywhere, walk downhill.</li>
-<li data-fragment-index="5" class="fragment"><b>By probability</b> (Week 13): Find the line that best explains the randomness in data.</li>
-
+<li class="fragment"><strong>Geometry</strong> (Wk 2): drop a perpendicular.</li>
+<li class="fragment"><strong>Algebra</strong> (Wk 3): solve a system of equations.</li>
+<li class="fragment"><strong>Calculus</strong> (Wk 5): find where the error slope is zero.</li>
+<li class="fragment"><strong>Optimization</strong> (Wk 8): start anywhere, walk downhill.</li>
+<li class="fragment"><strong>Probability</strong> (Wk 13): find the line that best explains randomness.</li>
 </ol>
-
-<p data-fragment-index="6" class="fragment">
-Five approaches, <b>same answer every time</b>. But each one teaches you something the others can't.
-</p>
-
-<aside class="notes">
-<p>
-"Why would we solve the same problem five times? Because each approach gives you a different INSIGHT."
-</p>
-
-<p>
-"Geometry shows you the SHAPE: the best fit line is the closest one, like dropping a perpendicular."
-"Algebra shows you the CALCULATION: you can solve it exactly with a formula."
-"Calculus shows you the SLOPE: you find where the error stops decreasing."
-"Optimization shows you the PROCESS: how a computer actually finds the answer step by step."
-"Probability shows you the NOISE: the data has randomness, and the best line is the one that best explains it."
-</p>
-
-<p>
-"It's like looking at a building from five angles. Front view, side view, top view, inside view, night view. No single view tells you everything. Together, you understand the whole building."
-</p>
-
-<p>
-"And here's the payoff: when you understand regression five ways, you understand HOW ChatGPT learns. Because ChatGPT learning is just regression at scale — fitting a model to data by walking downhill on the error."
-</p>
-
-</aside>
+<p class="fragment">Five approaches, <strong>same answer every time</strong>. Each teaches something the others can't.</p>
+<aside class="notes">"Each approach gives a different INSIGHT. Geometry shows SHAPE. Calculus shows SLOPE. Probability shows NOISE. Like looking at a building from five angles — no single view is complete." "Payoff: understanding regression five ways means understanding HOW ChatGPT learns. ChatGPT learning = regression at scale — fitting a model to data by walking downhill on the error."</aside>
 </section>
-</section>
+
+<!-- 21: Final project -->
 <section>
-<section id="slide-org8f0ab85">
-<h4 id="org8f0ab85">The final project: YOU explain AI</h4>
-<p>
-At the end of the semester, you will:
-</p>
-
+<h4>The final project: YOU explain AI</h4>
 <ol>
-<li data-fragment-index="1" class="fragment">Take the attention formula and label every piece with the math concept it uses.</li>
-<li data-fragment-index="2" class="fragment">Compute a tiny attention example <b>by hand</b> &#x2014; 3 words, 2 numbers each.</li>
-<li data-fragment-index="3" class="fragment">Check your hand calculation with Python code.</li>
-<li data-fragment-index="4" class="fragment">Record a 10&#x2013;15 minute video explaining "how does attention work?" to someone who hasn't taken this course.</li>
-
+<li class="fragment">Label every piece of the attention formula with its math concept.</li>
+<li class="fragment">Compute a tiny attention example <strong>by hand</strong> (3 words, 2 numbers each).</li>
+<li class="fragment">Verify your calculation in Python.</li>
+<li class="fragment">Record a 10–15 minute video explaining attention to someone who hasn't taken this course.</li>
 </ol>
-
-<div class="applied">
-<p data-fragment-index="5" class="fragment">
-If you can explain this formula to a friend, you've learned the math — and you'll understand AI better than most college students, even from CS and engineering.
-</p>
-</div>
-
-<aside class="notes">
-<p>
-"This is the real test of understanding: can you EXPLAIN it? Not to me — to a friend, a family member, someone who hasn't taken this course."
-</p>
-
-<p>
-"If you can say 'the dot product is how ChatGPT decides which words are related, and here's a tiny example with numbers' — you've got it."
-</p>
-
-<p>
-"The final project is 100 points: Math Map (30), Hand Computation (30), Python Verification (15), Video (25). Details come in Week 11."
-</p>
-
-<p>
-"And here's the cool part: the math you compute by hand is EXACTLY the same math that runs inside ChatGPT. Just smaller matrices."
-</p>
-
-</aside>
+<div class="applied fragment">If you can explain this formula to a friend, you've learned the math — and you'll understand AI better than most college students, even from CS and engineering.</div>
+<aside class="notes">"The real test: can you EXPLAIN it? Not to me — to a friend, a family member." "100 points: Math Map (30), Hand Computation (30), Python (15), Video (25). Details in Week 11." "The math you compute by hand is EXACTLY what runs inside ChatGPT. Just smaller matrices."</aside>
 </section>
-</section>
+
+<!-- 22: Weekly cycle -->
 <section>
-<section id="slide-orge10bd13">
-<h2 id="orge10bd13">Part IV — How the Course Works</h2>
-<div class="outline-text-2" id="text-orge10bd13">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-orgaccc6c0">
-<h3 id="orgaccc6c0">The weekly rhythm</h3>
-<div class="outline-text-3" id="text-orgaccc6c0">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org73264a5">
-<h4 id="org73264a5">What a typical week looks like</h4>
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Step</th>
-<th scope="col" class="org-left">When</th>
-<th scope="col" class="org-left">Time</th>
-<th scope="col" class="org-left">What you do</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left"><b>Preview</b></td>
-<td class="org-left">Before class</td>
-<td class="org-left">15 min</td>
-<td class="org-left">Read 3&#x2013;5 pages, answer 3 questions</td>
-</tr>
-
-<tr>
-<td class="org-left"><b>Lecture</b></td>
-<td class="org-left">In class</td>
-<td class="org-left">75 min</td>
-<td class="org-left">WHY → example → definition → practice</td>
-</tr>
-
-<tr>
-<td class="org-left"><b>Lab</b></td>
-<td class="org-left">After class (biweekly)</td>
-<td class="org-left">30 min</td>
-<td class="org-left">Verify math with Python (Colab)</td>
-</tr>
-
-<tr>
-<td class="org-left"><b>Homework</b></td>
-<td class="org-left">Due Sunday</td>
-<td class="org-left">2 hours</td>
-<td class="org-left">Calculate → Verify → Interpret</td>
-</tr>
-</tbody>
+<h4>What a typical week looks like</h4>
+<table>
+<tr><th>Step</th><th>When</th><th>Time</th><th>What you do</th></tr>
+<tr><td><strong>Preview</strong></td><td>Before class</td><td>15 min</td><td>Read 3–5 pages, answer 3 questions</td></tr>
+<tr><td><strong>Lecture</strong></td><td>In class</td><td>75 min</td><td>WHY → example → definition → practice</td></tr>
+<tr><td><strong>Lab</strong></td><td>Biweekly</td><td>30 min</td><td>Verify math with Python (Colab)</td></tr>
+<tr><td><strong>Homework</strong></td><td>Due Sunday</td><td>2 hrs</td><td>Calculate → Verify → Interpret</td></tr>
 </table>
-
-<p data-fragment-index="1" class="fragment">
-The pattern: <b>understand WHY first, do the math second, explain what it means third</b>.
-</p>
-
-<aside class="notes">
-<p>
-"Every week follows this rhythm. Preview before class — it's short, just 15 minutes. It's like reading the movie synopsis before watching the movie. It makes the lecture make 10x more sense."
-</p>
-
-<p>
-"Lecture starts with WHY: what real problem does this math solve? Then a concrete example with numbers. Then the definition. Then you practice."
-</p>
-
-<p>
-"Homework follows the CVI pattern: Calculate by hand, Verify with Python, Interpret in one sentence. The interpretation is the most important part. Anyone can plug numbers — but explaining WHAT THE ANSWER MEANS is what separates understanding from memorization."
-</p>
-
-</aside>
+<p class="fragment">The pattern: <strong>understand WHY first, do the math second, explain what it means third</strong>.</p>
+<aside class="notes">"Preview: 15 min, like reading the movie synopsis before watching. Makes the lecture 10x better." "Lecture: WHY first, then example, then definition, then practice." "Homework CVI: Calculate by hand, Verify with Python, Interpret in one sentence. Interpretation is the most important part — anyone can plug numbers, but explaining WHAT THE ANSWER MEANS is what separates understanding from memorization."</aside>
 </section>
-</section>
+
+<!-- 23: Assessment -->
 <section>
-<section id="slide-org81fe6de">
-<h4 id="org81fe6de">The textbook (it's free)</h4>
-<p>
-<b>Mathematics for Machine Learning</b> (MML) by Deisenroth, Faisal, and Ong.
-</p>
-
-<ul>
-<li data-fragment-index="1" class="fragment">Free PDF online. No need to buy anything.</li>
-<li data-fragment-index="2" class="fragment">Preview assignments tell you <b>exactly</b> which pages: "Read pages 27&#x2013;31, focus on Definition 2.1."</li>
-<li data-fragment-index="3" class="fragment">You will never be asked to read a whole chapter blind.</li>
-
-</ul>
-
-<aside class="notes">
-<p>
-"The textbook is free. You have no excuse not to read it. But I know math textbooks can be intimidating. That's why I give you EXACT pages. Not 'read Chapter 2.' Instead: 'read pages 27-31 and focus on Definition 2.1.' That takes 15 minutes."
-</p>
-
-<p>
-"And here's the deal: the preview check is 10% of your grade. Just for reading 5 pages and answering 3 questions. That's the easiest 10% you'll ever earn. Don't leave it on the table."
-</p>
-
-</aside>
-</section>
-</section>
-<section>
-<section id="slide-orgf00ae0c">
-<h3 id="orgf00ae0c">Assessment</h3>
-<div class="outline-text-3" id="text-orgf00ae0c">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-orgc139401">
-<h4 id="orgc139401">How you're evaluated</h4>
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-right" />
-
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Component</th>
-<th scope="col" class="org-right">Weight</th>
-<th scope="col" class="org-left">What it tests</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left">Preview checks</td>
-<td class="org-right">10%</td>
-<td class="org-left">Did you prepare?</td>
-</tr>
-
-<tr>
-<td class="org-left">Homework (CVI)</td>
-<td class="org-right">25%</td>
-<td class="org-left">Can you do the math and explain it?</td>
-</tr>
-
-<tr>
-<td class="org-left">Labs (Colab)</td>
-<td class="org-right">10%</td>
-<td class="org-left">Can you connect math to code?</td>
-</tr>
-
-<tr>
-<td class="org-left">4 Quizzes</td>
-<td class="org-right">15%</td>
-<td class="org-left">Do you know the key ideas?</td>
-</tr>
-
-<tr>
-<td class="org-left">Final Project</td>
-<td class="org-right">20%</td>
-<td class="org-left">Can you connect everything to AI?</td>
-</tr>
-
-<tr>
-<td class="org-left">Final Exam</td>
-<td class="org-right">20%</td>
-<td class="org-left">Can you work independently?</td>
-</tr>
-</tbody>
+<h4>How you're evaluated</h4>
+<table>
+<tr><th>Component</th><th>Weight</th><th>What it tests</th></tr>
+<tr><td>Preview checks</td><td>10%</td><td>Did you prepare?</td></tr>
+<tr><td>Homework (CVI)</td><td>25%</td><td>Can you do the math and explain it?</td></tr>
+<tr><td>Labs (Colab)</td><td>10%</td><td>Can you connect math to code?</td></tr>
+<tr><td>4 Quizzes</td><td>15%</td><td>Do you know the key ideas?</td></tr>
+<tr><td>Final Project</td><td>20%</td><td>Can you connect everything to AI?</td></tr>
+<tr><td>Final Exam</td><td>20%</td><td>Can you work independently?</td></tr>
 </table>
-
-<p data-fragment-index="1" class="fragment">
-No hidden topics. No trick questions. If you do the homework, you can do the exams.
-</p>
-
-<aside class="notes">
-<p>
-"Look at the weights. Homework is the biggest at 25%. That's because homework is where learning HAPPENS. The quizzes just check that the learning stuck."
-</p>
-
-<p>
-"Quizzes: 4 quizzes, 30 minutes each, in class. I give you a study guide with practice problems before every quiz. The practice problems use DIFFERENT numbers from the quiz, but test the same skills. If you can do the study guide, you can do the quiz."
-</p>
-
-<p>
-"Final exam: 2 hours, closed-book except for one formula sheet you make yourself. Making the formula sheet is actually great study — it forces you to decide what's important."
-</p>
-
-</aside>
+<p class="fragment">No hidden topics. No trick questions. If you do the homework, you can do the exams.</p>
+<aside class="notes">"Homework 25% — the biggest. That's where learning happens." "4 quizzes, 30 min each, in class. Study guide with practice problems before every quiz — different numbers, same skills. If you can do the study guide, you can do the quiz." "Final: 2 hours, closed-book except one formula sheet you make yourself. Making the sheet is itself great study."</aside>
 </section>
-</section>
+
+<!-- 24: AI tools -->
 <section>
-<section id="slide-orga0e0403">
-<h4 id="orga0e0403">About AI tools</h4>
-<div class="key-question">
-<p>
-You <b>may</b> use ChatGPT, Claude, etc. for learning.
-</p>
-</div>
-
-<p>
-But:
-</p>
-
+<h4>About AI tools</h4>
+<div class="key-question">You <em>may</em> use ChatGPT, Claude, etc. for learning.</div>
+<p>But:</p>
 <ul>
-<li data-fragment-index="1" class="fragment">You must be able to <b>redo</b> the calculation by hand.</li>
-<li data-fragment-index="2" class="fragment">You must be able to <b>explain</b> why the answer is what it is.</li>
-<li data-fragment-index="3" class="fragment">If you can't → the AI didn't help you learn. It <i>replaced</i> your learning.</li>
-
+<li class="fragment">You must be able to <strong>redo</strong> the calculation by hand.</li>
+<li class="fragment">You must be able to <strong>explain</strong> why the answer is what it is.</li>
+<li class="fragment">If you can't → the AI replaced your learning, not helped it.</li>
 </ul>
-
-<div class="applied">
-<p data-fragment-index="4" class="fragment">
-Use AI as a tutor ("explain this concept to me"), not as a ghostwriter ("do problem 3 for me").
-</p>
-</div>
-
-<aside class="notes">
-<p>
-"I am not anti-AI. I use it myself. But this course is about building YOUR mathematical understanding."
-</p>
-
-<p>
-"Here's the test: if I give you the same problem with different numbers, can you do it? If yes, the AI helped you learn. If no, the AI did your homework."
-</p>
-
-<p>
-"And here's the practical reality: quizzes are in-class, handwritten, no AI. If you don't build the skills yourself, you'll bomb the quizzes. That's 15% of your grade gone."
-</p>
-
-</aside>
+<div class="applied fragment">Use AI as a tutor ("explain this to me"), not a ghostwriter ("do problem 3").</div>
+<aside class="notes">"I'm not anti-AI. I use it myself. But this course builds YOUR understanding." "The test: same problem, different numbers — can you do it? If yes, AI helped you learn. If no, AI did your homework." "Quizzes are in-class, handwritten, no AI. If you didn't build the skills, you'll bomb them. 15% of your grade."</aside>
 </section>
-</section>
+
+<!-- 25: Expectations -->
 <section>
-<section id="slide-org4006f60">
-<h3 id="org4006f60">The contract</h3>
-<div class="outline-text-3" id="text-org4006f60">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-orgd3fba4d">
-<h4 id="orgd3fba4d">What I expect from you</h4>
+<h4>What I expect / what you can expect</h4>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:1em; font-size:inherit; align-items:start;">
+<div>
+<strong>From you:</strong>
 <ul>
-<li data-fragment-index="1" class="fragment">Do the preview <b>before</b> every class. (15 minutes. Not optional.)</li>
-<li data-fragment-index="2" class="fragment">Attempt every homework honestly. Partial credit is generous.</li>
-<li data-fragment-index="3" class="fragment">Ask questions &#x2014; post on <b>Canvas first</b> so everyone benefits.</li>
-<li data-fragment-index="4" class="fragment">Come to office hours (ST F315) or book a <b>Zoom appointment</b>.</li>
-
+<li class="fragment">Preview before every class (15 min).</li>
+<li class="fragment">Attempt every homework honestly.</li>
+<li class="fragment">Ask questions — post on <strong>Canvas first</strong> so everyone benefits.</li>
+<li class="fragment">Come to office hours (ST F315) or book a <strong>Zoom appointment</strong>.</li>
 </ul>
-
-<aside class="notes">
-<p>
-"The preview is the one non-negotiable. If you skip the preview and come to class, you'll be lost in 10 minutes. It's like showing up to a game without warming up — you'll pull something."
-</p>
-
-<p>
-"On homework: I give generous partial credit. I would rather you TRY and get it half right than copy an answer you don't understand. Show me your thinking."
-</p>
-
-</aside>
-</section>
-</section>
-<section>
-<section id="slide-orgbf504ed">
-<h4 id="orgbf504ed">What you can expect from me</h4>
+</div>
+<div>
+<strong>From me:</strong>
 <ul>
-<li data-fragment-index="1" class="fragment">Every concept starts with a <b>concrete example</b> before any definition.</li>
-<li data-fragment-index="2" class="fragment">Every formula connects to a <b>real AI application</b>.</li>
-<li data-fragment-index="3" class="fragment">Grading is <b>fair and transparent</b>. No surprises.</li>
-<li data-fragment-index="4" class="fragment">I tell you <b>exactly</b> what to study for every quiz and the final.</li>
-
+<li class="fragment">Example before every definition.</li>
+<li class="fragment">Every formula connects to AI.</li>
+<li class="fragment">Fair, transparent grading.</li>
+<li class="fragment">Exactly what to study for exams.</li>
 </ul>
-
-<div class="key-question">
-<p data-fragment-index="5" class="fragment">
-My promise: if you do the work, you will succeed. This course is designed for you to learn, not to weed you out.
-</p>
 </div>
-
-<aside class="notes">
-<p>
-"I believe in 'example first.' I will NEVER walk in and say 'Definition: a linear map is a function f such that&#x2026;' and expect you to understand. I will always start with: 'Here's a concrete thing. Watch what happens. Let's name it.'"
-</p>
-
-<p>
-"And every formula connects to AI. There is no moment in this course where you'll think 'why am I learning this?' Because the answer is always on slide 1: this math is what makes ChatGPT work."
-</p>
-
-<p>
-"My promise: this course is not designed to weed you out. It's designed to build you up. If you put in the work, you WILL understand. I'm here to make sure of that."
-</p>
-
-</aside>
-</section>
-</section>
-<section>
-<section id="slide-orgfb49d8a">
-<h3 id="orgfb49d8a">Let's begin</h3>
-<div class="outline-text-3" id="text-orgfb49d8a">
 </div>
+<div class="key-question fragment">My promise: this course is designed for you to <strong>learn</strong>, not to weed you out.</div>
+<aside class="notes">"Preview is the one non-negotiable. Skip it = lost in 10 min. Like showing up to a game without warming up." "I believe in 'example first.' I will NEVER start with 'Definition: a linear map is...' I always start with 'Here's a concrete thing. Watch. Let's name it.'" "My promise: this course is not designed to weed you out. It's designed to build you up."</aside>
 </section>
-</section>
+
+<!-- 26: Let's begin -->
 <section>
-<section id="slide-org9b64af5">
-<h4 id="org9b64af5">Let's get started</h4>
-<p>
+<h4>Let's begin</h4>
+<p style="text-align:center; font-size:1.2em; margin:0.5em 0;">
 \[\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V\]
 </p>
-
-<div class="applied">
-<p>
-Week 1: Words become numbers. Numbers have closeness. Closeness is the dot product.
-</p>
-</div>
-
-<p>
-We start with the first row of the table: <i>What is a vector? What does the dot product measure? Why does it capture similarity?</i>
-</p>
-
-<p data-fragment-index="1" class="fragment">
-Let's get started.
-</p>
-
-<aside class="notes">
-<p>
-"Now we start the real math. Vectors and dot products. By the end of this next unit, you'll compute a dot product by hand and know WHY it measures similarity. You'll understand the first step of how ChatGPT reads your sentences."
-</p>
-
-<p>
-"Remember the triangle: the math is the language, AI is the application, your daily life is the motivation. Every class, all three."
-</p>
-
-</aside>
+<div class="applied">Week 1: Words become numbers. Numbers have closeness. Closeness is the dot product.</div>
+<p>We start with: <em>What is a vector? What does the dot product measure? Why does it capture similarity?</em></p>
+<p class="fragment" style="text-align:center; font-size:1.1em; margin-top:0.6em;">Let's get started.</p>
+<aside class="notes">"Thursday: vectors and dot products. By the end, you'll compute a dot product by hand and know WHY it measures similarity. You'll understand the first step of how ChatGPT reads your sentences." "Remember the triangle: math is the language, AI is the application, your daily life is the motivation. Every class, all three." "See you Thursday."</aside>
 </section>
-</section>
-</div>
-</div>
+
+</div><!-- .slides -->
+</div><!-- .reveal -->
+
 <script src="../dist/reveal.js"></script>
-<script src="../plugin/markdown/markdown.js"></script>
+<script src="../plugin/math/math.js"></script>
 <script src="../plugin/notes/notes.js"></script>
-<script src="../plugin/search/search.js"></script>
-<script src="../plugin/zoom/zoom.js"></script>
 <script src="../plugin/reveal.js-menu/menu.js"></script>
 <script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
 <script>
-// Full list of configuration options available here:
-// https://github.com/hakimel/reveal.js#configuration
 Reveal.initialize({
-
-controls: true,
-progress: true,
-history: false,
-center: true,
-slideNumber: false,
-rollingLinks: false,
-keyboard: true,
-mouseWheel: false,
-fragmentInURL: false,
-hashOneBasedIndex: false,
-pdfSeparateFragments: true,
-overview: true,
-
-transition: 'none',
-transitionSpeed: 'default',
-
-// Plugins with reveal.js 4.x
-plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom, RevealMenu, RevealChalkboard ],
-
-// Optional libraries used to extend reveal.js
-dependencies: [
-]
-
-,chalkboard: {storage: "math-for-ds", toggleChalkboardButton: { left: "80px" }, toggleNotesButton: { left: "130px" }, colorButtons: 5}});
+  hash: true,
+  transition: 'none',
+  width: 1200,
+  height: 700,
+  margin: 0.04,
+  mathjax3: {
+    tex: {
+      macros: {
+        R: "\\mathbb{R}",
+        norm: ["\\left\\|#1\\right\\|", 1],
+        inner: ["\\left\\langle #1,#2\\right\\rangle", 2]
+      }
+    }
+  },
+  chalkboard: {
+    storage: "math-for-ds",
+    toggleChalkboardButton: { left: "80px" },
+    toggleNotesButton: { left: "130px" },
+    colorButtons: 5
+  },
+  plugins: [ RevealMath.MathJax3, RevealNotes, RevealMenu, RevealChalkboard ]
+});
 </script>
 </body>
 </html>
