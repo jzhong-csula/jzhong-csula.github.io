@@ -427,56 +427,64 @@ Distance is the <strong>size of the difference</strong> — so <em>every</em> no
 <aside class="notes">"Imagine a harsh critic who gives every movie a 2. And a generous critic who gives the same movies an 8. They AGREE on which movies are good and which are bad — they just use different scales. Euclidean distance says they're far apart. But a recommendation system should treat them as identical. Cosine similarity does exactly that."</aside>
 </section>
 
-<!-- S29: Unit vectors — the key insight -->
+<!-- S29: Unit vectors — strip the length -->
 <section>
 <h4>First, strip the length: unit vectors</h4>
+<p>We want direction without size. So divide any <strong>nonzero</strong> vector by its own length — whatever is left <em>is</em> its direction:</p>
+<div class="mathbox">
+\[\hat{\mathbf{x}} = \frac{\mathbf{x}}{\norm{\mathbf{x}}_2}\]
+</div>
+<ul>
+<li class="fragment">\(\hat{\mathbf{x}}\) points the <strong>same way</strong> as \(\mathbf{x}\) but has length exactly 1. (\(\mathbf{x} = \mathbf{0}\) is excluded: length \(0\), nothing to divide by, no direction.)</li>
+<li class="fragment">Our two movie fans: \(\norm{(8,2,0)}_2 = \sqrt{68}\) and \(\norm{(4,1,0)}_2 = \sqrt{17} = \sqrt{68}/2\), so <strong>both</strong> become \((8,2,0)/\sqrt{68} \approx (0.97,\, 0.24,\, 0)\) — the <em>same</em> vector. Check: \(0.97^2 + 0.24^2 \approx 1\). The intensity gap is gone; the shared taste survives.</li>
+</ul>
+<div class="key-question fragment">Now the payoff. Two unit vectors, one dot product — <strong>that number turns out to be the cosine of the angle between them.</strong> Next slide proves it.</div>
+<aside class="notes">"This is the whole idea; everything after it is bookkeeping. If two people disagree only in how loudly they rate, normalizing makes them literally the same vector." "Watch the check: it is the sum of SQUARES that is 1, not the sum. 0.97 + 0.24 is 1.21 and that is fine — length is Pythagoras, not addition. Someone will trip on this." "End on the question, do not answer it. Why bother with unit vectors at all? Because once both have length 1, their dot product is exactly the cosine — that is the next slide and it is a real proof, not a naming convention."</aside>
+</section>
+
+<!-- S28b: dot product of unit vectors IS a cosine -->
+<section>
+<h4>Two unit vectors: the dot product <em>is</em> a cosine</h4>
 <div style="display:flex; align-items:center; gap:1em;">
 <div style="flex:1;">
-<p>We want direction without size. So divide any <strong>nonzero</strong> vector by its own length — whatever is left <em>is</em> its direction:</p>
-\[\hat{\mathbf{x}} = \frac{\mathbf{x}}{\norm{\mathbf{x}}_2}\]
 <ul>
-<li class="fragment">\(\hat{\mathbf{x}}\) points in the <strong>same direction</strong> as \(\mathbf{x}\), but has length exactly 1.</li>
-<li class="fragment">Every \(\hat{\mathbf{x}}\) has length 1, so in the picture they all sit on the unit <strong>circle</strong> — in \(\R^3\) it is the unit <strong>sphere</strong>, and in \(\R^d\) the same idea. Size is gone; only the angle is left.</li>
-<li class="fragment">\(\mathbf{x} = \mathbf{0}\) is the exception: length \(0\), nothing to divide by, and no direction to speak of. Cosine similarity is <strong>undefined</strong> there — a real case, e.g. a user who has rated nothing.</li>
+<li class="fragment">In the plane, a unit vector sits on the unit circle, so it is fixed by its own angle:
+\(\hat{\mathbf{x}} = (\cos\alpha,\ \sin\alpha)\), \(\hat{\mathbf{y}} = (\cos\beta,\ \sin\beta)\).</li>
+<li class="fragment">Dot them, then use the angle-subtraction identity you already know:
+\[\hat{\mathbf{x}}^\top \hat{\mathbf{y}} = \cos\alpha\cos\beta + \sin\alpha\sin\beta = \cos(\alpha - \beta).\]</li>
+<li class="fragment">And \(\alpha - \beta\) <em>is</em> the angle between them. Nothing was named — it was <strong>derived</strong>.</li>
 </ul>
-<div class="applied fragment">Try it on the last slide: \(\norm{(8,2,0)}_2 = \sqrt{68}\) and \(\norm{(4,1,0)}_2 = \sqrt{17} = \sqrt{68}/2\), so <strong>both</strong> normalize to \((8,2,0)/\sqrt{68} \approx (0.97,\, 0.24,\, 0)\) — the <em>same</em> vector. The intensity gap is gone; the shared taste survives.</div>
 </div>
-<img src="../images/unit01/u1-L01-fig04-cosine-unit-circle.png" alt="Cosine similarity on unit circle" style="max-height:450px; max-width:45%; border-radius:6px;">
+<img src="../images/unit01/u1-L01-fig04-cosine-unit-circle.png" alt="Two unit vectors at angles alpha and beta on the unit circle" style="max-height:330px; max-width:42%; border-radius:6px;">
 </div>
-<aside class="notes">"This slide is the whole idea; the formula on the next slide is just bookkeeping. If two people disagree only in how loudly they rate, normalizing makes them literally the same vector." "Normalizing = shrinking to length 1. It removes magnitude and keeps only direction. Like converting a recipe from '4 cups flour, 2 cups sugar' to '2 parts flour, 1 part sugar' — the proportions are what matter, not the absolute amounts."</aside>
+<aside class="notes">"Do this on the board even with the figure up — one precalculus identity, thirty seconds." "Check the two ends with them: alpha = beta gives cos 0 = 1, same direction; alpha - beta = 90 degrees gives cos 90 = 0, perpendicular." "This slide is why unit vectors were worth introducing. Say so."</aside>
 </section>
 
 <!-- S28: Now name it: cosine similarity -->
 <section>
 <h4>Now name it: cosine similarity</h4>
-<p>Now just take the dot product of the two unit vectors — and the denominators fall out:</p>
+<p>That settles unit vectors. What about two <strong>ordinary</strong> vectors, of any length? Normalize each one first, then dot — which is the same as dividing at the end:</p>
 <div class="mathbox">
 \[\cos\theta \;=\; \hat{\mathbf{x}}^\top \hat{\mathbf{y}} \;=\; \frac{\mathbf{x}^\top \mathbf{y}}{\norm{\mathbf{x}}_2 \, \norm{\mathbf{y}}_2}\]
 </div>
-<p class="fragment">The denominator is not a fudge factor: it <em>is</em> the normalizing step, done to both vectors at once. The value always lands in \([-1,1]\) — next slide shows why it deserves the name \(\cos\).</p>
+<p class="fragment">So the denominator is not a fudge factor: it <em>is</em> the normalizing step, written into the formula. For unit vectors it equals 1 and the formula collapses back to the last slide.</p>
+<div class="applied fragment">In \(\R^{300}\) there is no picture to read an angle off, so we run it backwards and <strong>define</strong> the angle by \(\theta = \arccos(\cdot)\). Legal because the value never leaves \([-1,1]\), and safe because in the plane we just proved it agrees with the ordinary angle.</div>
+<aside class="notes">"The first sentence is the one that matters: unit vectors were the special case, and this is the general one. Normalizing first and dividing at the end are the same arithmetic." "For unit vectors the denominator is 1 times 1, so this formula IS the previous slide. Say that; it stops the formula looking new." "The last box is the honest part — in high dimensions this stops being a theorem and becomes a definition, which is also how MML introduces it. Cauchy-Schwarz is the reason the value stays in [-1, 1]; name it, do not prove it today."</aside>
+</section>
+
+<!-- S28c: reading the number -->
+<section>
+<h4>Reading the number</h4>
 <table>
 <tr><th>Value</th><th>Meaning</th><th>Example</th></tr>
 <tr><td>\(\cos\theta = 1\)</td><td>Same direction</td><td>Two action fans (different intensity)</td></tr>
+<tr><td>\(\cos\theta \approx 0.9\)</td><td>Strong agreement</td><td>Mostly the same taste, minor disagreements</td></tr>
 <tr><td>\(\cos\theta = 0\)</td><td>Perpendicular</td><td>Action fan vs. someone who only cares about comedy</td></tr>
 <tr><td>\(\cos\theta = -1\)</td><td>Opposite direction</td><td>One loves what the other hates</td></tr>
 </table>
-<div class="applied fragment">Google Search ranks pages by cosine similarity between your query vector and each page's vector.</div>
-<aside class="notes">"When you Google something, the search engine turns your query into a vector and every web page into a vector. It computes cosine similarity between your query and each page. Highest cosine = best match. That's why a search for 'best pizza near me' returns pizza reviews, not sushi restaurants — high cosine similarity."</aside>
-</section>
-
-<!-- S28b: why is it a cosine -->
-<section>
-<h4>Why is that number a cosine?</h4>
-<p>Fair question — so far we only <em>called</em> it \(\cos\theta\). In the plane we can check it.</p>
-<ul>
-<li class="fragment">Every unit vector sits on the unit circle, so it is fixed by its own angle:
-\(\hat{\mathbf{x}} = (\cos\alpha,\ \sin\alpha)\), \(\hat{\mathbf{y}} = (\cos\beta,\ \sin\beta)\).</li>
-<li class="fragment">Dot them, and use the angle-subtraction identity you already know:
-\[\hat{\mathbf{x}}^\top \hat{\mathbf{y}} = \cos\alpha\cos\beta + \sin\alpha\sin\beta = \cos(\alpha - \beta).\]</li>
-<li class="fragment">And \(\alpha - \beta\) <em>is</em> the angle between them. So the name is earned, not assumed.</li>
-</ul>
-<div class="applied fragment">In \(\R^{300}\) there is no picture to read an angle off. So we turn it around and <strong>define</strong> the angle by \(\theta = \arccos(\hat{\mathbf{x}}^\top\hat{\mathbf{y}})\) — legal because the value never leaves \([-1,1]\), and safe because the line above shows it agrees with the ordinary angle whenever we <em>can</em> see one.</div>
-<aside class="notes">"This is the slide that answers the question they are already thinking. Do the algebra on the board — it is one identity from precalculus and it takes thirty seconds." "Check the two ends with them: alpha = beta gives cos 0 = 1, same direction; alpha - beta = 90 degrees gives cos 90 = 0, perpendicular. Those are two of the three rows in the table they just saw, now derived rather than asserted." "The last box is the honest part. In high dimensions this stops being a theorem and becomes a definition. Say that out loud — students respect it, and it is how MML does it too. The fact that the ratio never escapes [-1, 1] is the Cauchy-Schwarz inequality; name it, do not prove it today."</aside>
+<p class="fragment">Two of these are already proved: \(\alpha = \beta\) gives \(\cos 0 = 1\), and \(\alpha - \beta = 90^\circ\) gives \(\cos 90^\circ = 0\).</p>
+<div class="applied fragment">Google turns your query into a vector and every page into a vector, then ranks by cosine similarity. Highest cosine wins — which is why "best pizza near me" returns pizza reviews and not sushi.</div>
+<aside class="notes">"Add the 0.9 row deliberately — students anchor on the three extremes and then read 0.14 as agreement. Put a number on what 'strong' means." "Point back at the derivation for the first and third rows: those two are not conventions, we proved them two slides ago."</aside>
 </section>
 
 <!-- S27: Worked example step 1 -->
