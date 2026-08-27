@@ -196,10 +196,11 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 <ul>
 <li class="fragment">Multiply matching entries. Add the products. Get one number.</li>
 <li class="fragment"><strong>Why the two forms are the same:</strong> our vectors are <strong>column vectors</strong>, so transposing \(\mathbf{x}\) makes it a row, and row \(\times\) column gives one number. We write \(\mathbf{x}^\top \mathbf{y}\) from now on.</li>
+<li class="fragment">In MML this sits in <strong>§3.2 Inner Products</strong>. The book calls \(\mathbf{x}^\top\mathbf{y}\) the <strong>dot product</strong> or <strong>scalar product</strong>, and treats it as one example of an <em>inner product</em>. When you meet "inner product" in the reading, this is the one it means.</li>
 <li class="fragment">This is <em>exactly</em> the same operation inside the attention formula: \(QK^\top\).</li>
 </ul>
 <div class="applied fragment">When ChatGPT asks "how related is this word to that word?" — it computes a dot product.</div>
-<aside class="notes">"The dot product literally used to be written with a dot: x · y. We write x^T y instead because our convention is that vectors are columns. Transposing x makes it a row, then row × column = a single number. Same operation, just matrix notation. From now on, x^T y means dot product." "QK^T is a matrix of dot products — each entry asks 'how related is word i to word j?'"</aside>
+<aside class="notes">"Name inner product out loud here, even though we will not use the general definition. The assigned section is titled Inner Products and a student who has read it needs to know it is the same thing." "The dot product literally used to be written with a dot: x · y. We write x^T y instead because our convention is that vectors are columns. Transposing x makes it a row, then row × column = a single number. Same operation, just matrix notation. From now on, x^T y means dot product." "QK^T is a matrix of dot products — each entry asks 'how related is word i to word j?'"</aside>
 </section>
 
 <!-- S11: First example — similar movies -->
@@ -267,7 +268,7 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 
 <!-- S17: L2 norm — Pythagorean theorem -->
 <section>
-<h4>The Pythagorean way: L2 norm</h4>
+<h4>Pythagoras in any dimension: the Euclidean norm</h4>
 <p>You know the Pythagorean theorem: for a right triangle with sides 3 and 4, the hypotenuse is 5.</p>
 <div class="fragment">\[\sqrt{3^2 + 4^2} = \sqrt{9 + 16} = \sqrt{25} = 5.\]</div>
 <p class="fragment">The <strong>\(\ell_2\) norm</strong> is the same idea applied to any vector:</p>
@@ -278,7 +279,7 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 
 <!-- S18: L1 norm — city blocks -->
 <section>
-<h4>The city-block way: L1 norm</h4>
+<h4>Walking the grid: the Manhattan norm</h4>
 <p>In Manhattan, you can't walk diagonally. You walk <strong>3 blocks east</strong>, then <strong>4 blocks north</strong>. Total: 7 blocks.</p>
 <p class="fragment">The <strong>\(\ell_1\) norm</strong> adds absolute values.</p>
 <p class="fragment">That walk <em>is</em> the vector \((3,4)\) — the same one from the last slide:</p>
@@ -298,11 +299,12 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 \[\norm{\mathbf{x}}_2 = \sqrt{\sum_{i=1}^d x_i^2}, \qquad \norm{\mathbf{x}}_1 = \sum_{i=1}^d |x_i|.\]
 </div>
 <ul>
-<li class="fragment">\(\ell_2\) penalizes large entries harshly (squaring). One big error dominates.</li>
-<li class="fragment">\(\ell_1\) treats all entries equally (absolute value). Many small errors add up.</li>
+<li class="fragment">MML calls \(\norm{\mathbf{x}}_2\) the <strong>Euclidean norm</strong> and \(\norm{\mathbf{x}}_1\) the <strong>Manhattan norm</strong>, and says each "is also called" the \(\ell_2\) and \(\ell_1\) norm. <strong>Same objects, two names each</strong> — you will meet both.</li>
+<li class="fragment">The book's convention, and ours: <strong>\(\norm{\mathbf{x}}\) with no subscript means the Euclidean one.</strong></li>
+<li class="fragment">Euclidean penalizes large entries harshly (squaring) — one big error dominates. Manhattan treats every entry equally (absolute value) — many small errors add up.</li>
 </ul>
 <div class="applied fragment">AI training measures prediction error with exactly these two. Squaring gives <strong>mean squared error</strong> (MSE); absolute values give <strong>mean absolute error</strong> (MAE). Each is one of these norms applied to the error vector, divided by \(n\).</div>
-<aside class="notes">"MSE = Mean Squared Error = average of squared errors. That's L2 norm squared, divided by n. MAE = Mean Absolute Error = average of absolute errors. That's L1 norm divided by n. When you see 'loss function' in AI — it's usually one of these norms in disguise."</aside>
+<aside class="notes">"A student will ask whether the L2 norm is the Euclidean norm. Yes — and say so before they ask, because MML leads with Euclidean and Manhattan while everyone in machine learning says L1 and L2. Both names, once, out loud." "MSE = Mean Squared Error = average of squared errors. That's L2 norm squared, divided by n. MAE = Mean Absolute Error = average of absolute errors. That's L1 norm divided by n. When you see 'loss function' in AI — it's usually one of these norms in disguise."</aside>
 </section>
 
 <!-- S20a: L1 vs L2 — the two shapes -->
@@ -375,7 +377,7 @@ Distance is the <strong>size of the difference</strong> — so <em>every</em> no
 </div>
 <ul>
 <li class="fragment">With \(\ell_2\): \(\sqrt{\sum_i (x_i-y_i)^2}\) — straight-line distance. <strong>This is the default</strong>: when we write "distance" with no subscript, we mean this one.</li>
-<li class="fragment">With \(\ell_1\): \(\sum_i |x_i-y_i|\) — city-block distance. The right one for anything that has to travel on a grid.</li>
+<li class="fragment">With \(\ell_1\) (Manhattan): \(\sum_i |x_i-y_i|\). The right one for anything that has to travel on a grid.</li>
 <li class="fragment">Whichever you pick, the same three properties hold:</li>
 <li class="fragment">Always \(\ge 0\). Equals \(0\) only when \(\mathbf{x} = \mathbf{y}\) (same point).</li>
 <li class="fragment">Symmetric: distance from A to B = distance from B to A.</li>
@@ -518,10 +520,10 @@ Distance is the <strong>size of the difference</strong> — so <em>every</em> no
 <table>
 <tr><th>Tool</th><th>Input</th><th>Output</th><th>What it measures</th><th>Tier</th></tr>
 <tr><td>Dot product</td><td>two vectors</td><td>a number</td><td>agreement / alignment</td><td style="color:#2563eb;">MASTER</td></tr>
-<tr><td>L2 Norm</td><td>one vector</td><td>a number \(\ge 0\)</td><td>size / length</td><td style="color:#2563eb;">MASTER</td></tr>
+<tr><td>Euclidean (\(\ell_2\)) norm</td><td>one vector</td><td>a number \(\ge 0\)</td><td>size / length</td><td style="color:#2563eb;">MASTER</td></tr>
 <tr><td>Distance</td><td>two vectors</td><td>a number \(\ge 0\)</td><td>how far apart</td><td style="color:#2563eb;">MASTER</td></tr>
 <tr><td>Cosine</td><td>two vectors</td><td>\([-1, 1]\)</td><td>direction similarity</td><td style="color:#2563eb;">MASTER</td></tr>
-<tr><td>L1 Norm</td><td>one vector</td><td>a number \(\ge 0\)</td><td>city-block size</td><td style="color:#d97706;">UNDERSTAND</td></tr>
+<tr><td>Manhattan (\(\ell_1\)) norm</td><td>one vector</td><td>a number \(\ge 0\)</td><td>size along the grid</td><td style="color:#d97706;">UNDERSTAND</td></tr>
 </table>
 <div class="applied fragment">These tools are the foundation of step 2 ("measure closeness") in every AI application we saw in Unit 0.</div>
 <aside class="notes">"Four tools, all built from the same three operations: multiply, add, square root. That's all the arithmetic you need for the similarity engine inside Spotify, Google, and ChatGPT. Next time: the machine that TRANSFORMS these vectors — matrices."</aside>
