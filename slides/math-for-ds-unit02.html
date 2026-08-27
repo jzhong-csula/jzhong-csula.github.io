@@ -228,17 +228,17 @@ DALL-E prompt for fig-2-02-closest-point:
 <!-- S12: Deriving the projection formula -->
 <section>
 <h4>Deriving the formula: where does the projection land?</h4>
-<img src="../images/unit02/u2-L03-fig05-projection-decomposition.png" alt="Right triangle: x is the hypotenuse, p the projection, r the residual" style="float:right; width:38%; margin:0 0 0.4em 1em; border-radius:6px;">
-<p>The closest point on the line is \(\mathbf{p} = \lambda \mathbf{b}\) for some scalar \(\lambda\). Which \(\lambda\)?</p>
-<div class="mathbox">
-<strong>Step 1:</strong> The residual must be perpendicular to the line:
+<p style="margin-bottom:0.3em;">The closest point on the line is \(\mathbf{p} = \lambda \mathbf{b}\) for some scalar \(\lambda\). Which \(\lambda\)?</p>
+<div style="display:flex; align-items:center; gap:1.2em;">
+<div style="flex:1;">
+<p style="margin:0.2em 0;"><strong>Step 1.</strong> The residual must be perpendicular to the line:</p>
 \[\mathbf{b}^\top \underbrace{(\mathbf{x} - \lambda \mathbf{b})}_{\text{residual}} = 0\]
-
-<strong>Step 2:</strong> Expand:
+<p style="margin:0.2em 0;"><strong>Step 2.</strong> Expand:</p>
 \[\mathbf{b}^\top \mathbf{x} - \lambda\,\mathbf{b}^\top \mathbf{b} = 0\]
-
-<strong>Step 3:</strong> Solve for \(\lambda\):
+<p style="margin:0.2em 0;"><strong>Step 3.</strong> Solve for \(\lambda\):</p>
 \[\boxed{\lambda = \frac{\mathbf{b}^\top \mathbf{x}}{\mathbf{b}^\top \mathbf{b}}}\]
+</div>
+<img src="../images/unit02/u2-L03-fig05-projection-decomposition.png" alt="Right triangle: x is the hypotenuse, p the projection, r the residual" style="width:40%; align-self:center; border-radius:6px;">
 </div>
 <div class="key-question fragment">The projection formula is not magic — it comes directly from one requirement: <strong>make the error perpendicular</strong>.</div>
 <aside class="notes">"This is a three-line derivation that every student should be able to reproduce. Start from the perpendicularity condition, expand, solve for lambda. That's it. The formula is a consequence of one geometric principle: perpendicular = closest."</aside>
