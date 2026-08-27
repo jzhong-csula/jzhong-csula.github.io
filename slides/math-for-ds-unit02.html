@@ -436,7 +436,7 @@ DALL-E prompt for fig-2-05-apartment-scatter:
 <div class="mathbox">
 \[X = \begin{bmatrix} 8 & 1 \\ 6 & 2 \\ 10 & 0.5 \end{bmatrix} \quad \text{(features: size in 100s, distance)}\]
 
-\[\mathbf{y} = \begin{bmatrix} 3 \\ 2 \\ 5 \end{bmatrix} \quad \text{(rent in $1000s)}\]
+\[\mathbf{y} = \begin{bmatrix} 3 \\ 2 \\ 5 \end{bmatrix} \quad \text{(rent in \$1000s)}\]
 </div>
 <ul>
 <li class="fragment">Each <strong>row</strong> = one apartment (one data point).</li>
@@ -1070,6 +1070,14 @@ Reveal.initialize({
   margin: 0.04,
   mathjax3: {
     tex: {
+      // Only \( \) and \[ \] delimit math. The Reveal MathJax3 plugin also
+      // treats $...$ as inline math by default, which silently ate every
+      // currency amount on the slides -- "$3000, $2000, $5000" rendered as
+      // math "3000," plus a stray "$5000", and a $ inside \text{} broke the
+      // formula outright with "math not terminated". No deck uses $ for math.
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true,
       macros: {
         R: "\\mathbb{R}",
         norm: ["\\left\\|#1\\right\\|", 1],
