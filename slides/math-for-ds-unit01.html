@@ -308,17 +308,18 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 <h4>L1 vs L2: different shapes</h4>
 <div style="display:flex; align-items:center; gap:1em;">
 <div style="flex:1;">
-<p>Both norms measure size. Do they agree on what "size \(\le 1\)" <em>looks like</em>? Draw the whole set and see.</p>
+<p>Both measure size. Do they agree on what "size \(\le 1\)" <em>looks like</em>?</p>
 <ul>
 <li class="fragment">\(\ell_2\): \(x^2 + y^2 \le 1\) — a <strong>disk</strong>, with a round boundary.</li>
 <li class="fragment">\(\ell_1\): \(|x| + |y| \le 1\) — a <strong>diamond</strong>, with four straight edges.</li>
 </ul>
-<p class="fragment">They touch at exactly four points. Check one: \((1,0)\) has \(\norm{\cdot}_2 = 1\) <em>and</em> \(\norm{\cdot}_1 = 1\), so it is on both boundaries — and so are \((-1,0)\), \((0,\pm 1)\).</p>
-<p class="fragment">Everywhere else the diamond is strictly <strong>inside</strong> the disk — which is to say \(\norm{\mathbf{v}}_2 \le \norm{\mathbf{v}}_1\) for every \(\mathbf{v}\), with equality only on the axes. The quick check in a moment pins this down with numbers.</p>
+<p class="fragment">They touch at exactly four points, \((\pm 1, 0)\) and \((0, \pm 1)\). Check one: \((1,0)\) has \(\norm{\cdot}_2 = \norm{\cdot}_1 = 1\), so it lies on both boundaries.</p>
+<p class="fragment">Everywhere else the diamond is strictly <strong>inside</strong> the disk. Backwards? Smaller shape, bigger number \((\norm{\mathbf{v}}_2 \le \norm{\mathbf{v}}_1)\) — one fact, not two: \(\ell_1\) is the <strong>harsher ruler</strong>, and a harsher ruler calls things bigger, so <strong>fewer</strong> clear \(\text{size}\le 1\).</p>
+<p class="fragment">Try \(\mathbf{v} = (0.7, 0.7)\): \(\norm{\mathbf{v}}_2 \approx 0.99\) (inside the disk), \(\norm{\mathbf{v}}_1 = 1.4\) (outside the diamond).</p>
 </div>
 <img src="../images/unit01/u1-L01-fig03-L1-L2-unit-balls.png" alt="L1 diamond inside L2 circle" style="max-height:420px; max-width:48%; border-radius:6px;">
 </div>
-<aside class="notes">"Ask them to predict the shape before you reveal it. Most guess the diamond wrong — they expect another round blob." "The containment is the inequality the quick check is about to make them verify, drawn ahead of time. Point at the four touch points and at the quick check answer on the board if it is still up."</aside>
+<aside class="notes">"Ask them to predict the shape before you reveal it. Most guess the diamond wrong — they expect another round blob." "Expect the objection: how can the smaller shape have the bigger norm? Answer it with the ruler image — a stricter ruler reports bigger sizes, so fewer things fit under the limit. Set of vectors versus number assigned to one vector; they are not the same kind of thing." "Then walk (0.7, 0.7) with them: it clears the disk by a hair and misses the diamond by 40 percent. That single vector is worth more than the inequality." Point at the four touch points and at the quick check answer on the board if it is still up."</aside>
 </section>
 
 <!-- S20b: why the corners matter -->
