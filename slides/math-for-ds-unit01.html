@@ -313,8 +313,8 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 <li class="fragment">\(\ell_2\) ball: a circle (all points at distance 1 from origin).</li>
 <li class="fragment">\(\ell_1\) ball: a diamond (corners on the axes).</li>
 </ul>
-<p class="fragment">Both shapes contain the <em>same</em> four points \((\pm 1, 0)\), \((0, \pm 1)\). What differs is what happens <strong>at</strong> them: on the diamond they are sharp <strong>corners</strong>; on the circle they are ordinary rim.</p>
-<div class="applied fragment">A corner sticks out, so it is easy to land exactly on — and there an entry is exactly zero, a feature switched <strong>off</strong>. A smooth rim has no standout spot: you land with everything still <strong>on</strong>, just turned down. Unit 5 is where we choose.</div>
+<p class="fragment">Both contain the <em>same</em> four points \((\pm 1, 0)\), \((0, \pm 1)\). What differs is what happens <strong>at</strong> them: on the diamond, sharp <strong>corners</strong>; on the circle, ordinary rim.</p>
+<div class="applied fragment">In Unit 5 we force a weight vector to stay inside one of these balls; the answer lands on the boundary. On the <strong>diamond</strong> it lands on a corner — where some entries are <strong>exactly 0</strong>, so those features leave the model. The <strong>circle</strong> has no corners: nothing is ever exactly 0, so every feature stays, just smaller. <strong>\(\ell_1\) deletes features; \(\ell_2\) shrinks them.</strong></div>
 </div>
 <img src="../images/unit01/u1-L01-fig03-L1-L2-unit-balls.png" alt="L1 diamond vs L2 circle unit balls" style="max-height:420px; max-width:50%; border-radius:6px;">
 </div>
@@ -347,17 +347,6 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 <aside class="notes">"This is literally what recommendation systems do. Every song is a point in number-space. Your favorite song is one point. Spotify calculates the distance from your point to every other point, then plays the closest ones. The math: subtract the two vectors, measure the length of the difference."</aside>
 </section>
 
-<!-- S23: Worked example -->
-<section>
-<h4>Worked example: how far apart?</h4>
-<p>Two data points: \(\mathbf{x} = (1, 2)\) and \(\mathbf{y} = (4, 6)\).</p>
-<p class="fragment">Step 1 — find the difference: \(\mathbf{x} - \mathbf{y} = (1 - 4,\; 2 - 6) = (-3, -4)\).</p>
-<p class="fragment">Step 2 — measure the length: \(\norm{(-3, -4)}_2 = \sqrt{9 + 16} = 5.\)</p>
-<div class="fragment">\[d(\mathbf{x}, \mathbf{y}) = \norm{\mathbf{x} - \mathbf{y}}_2 = 5.\]</div>
-<div class="applied fragment">Distance = the norm of the difference. Subtract, then measure.</div>
-<aside class="notes">"Two steps: subtract, then Pythagoras. That's it. The distance between two points = the length of the arrow connecting them. In AI, when we say 'these two items are close,' we mean this number is small."</aside>
-</section>
-
 <!-- S24: Formal definition -->
 <section>
 <h4>Now name it: distance</h4>
@@ -374,6 +363,17 @@ Distance is the <strong>size of the difference</strong> — so <em>every</em> no
 <li class="fragment">Triangle inequality: the direct path is never longer than a detour.</li>
 </ul>
 <aside class="notes">"Say the general statement first: distance is just the size of a difference, so any norm you have gives you a distance. We happen to use L2 by default, but that is a choice, not a law." "A student may reasonably ask which one is correct. Neither — it depends on how movement is actually constrained. The delivery robot on the grid is the case where L1 is the honest answer and L2 would understate the trip." "These three properties are what make something a true distance; any function with them is called a metric. Both L1 and L2 satisfy all three." Homework P3 asks them to compute both for the same pair of points.</aside>
+</section>
+
+<!-- S23: Worked example -->
+<section>
+<h4>Worked example: how far apart?</h4>
+<p>Two data points: \(\mathbf{x} = (1, 2)\) and \(\mathbf{y} = (4, 6)\).</p>
+<p class="fragment">Step 1 — find the difference: \(\mathbf{x} - \mathbf{y} = (1 - 4,\; 2 - 6) = (-3, -4)\).</p>
+<p class="fragment">Step 2 — measure the length: \(\norm{(-3, -4)}_2 = \sqrt{9 + 16} = 5.\)</p>
+<div class="fragment">\[d(\mathbf{x}, \mathbf{y}) = \norm{\mathbf{x} - \mathbf{y}}_2 = 5.\]</div>
+<div class="applied fragment">The order is the whole trick: <strong>subtract first, then measure</strong>. Doing it the other way round is the mistake on the next slide.</div>
+<aside class="notes">"Two steps: subtract, then Pythagoras. That's it. The distance between two points = the length of the arrow connecting them. In AI, when we say 'these two items are close,' we mean this number is small."</aside>
 </section>
 
 <!-- S25: Common mistake -->
@@ -407,6 +407,42 @@ Distance is the <strong>size of the difference</strong> — so <em>every</em> no
 <aside class="notes">"Imagine a harsh critic who gives every movie a 2. And a generous critic who gives the same movies an 8. They AGREE on which movies are good and which are bad — they just use different scales. Euclidean distance says they're far apart. But a recommendation system should treat them as identical. Cosine similarity does exactly that."</aside>
 </section>
 
+<!-- S29: Unit vectors — the key insight -->
+<section>
+<h4>First, strip the length: unit vectors</h4>
+<div style="display:flex; align-items:center; gap:1em;">
+<div style="flex:1;">
+<p>We want direction without size. So divide every vector by its own length — whatever is left <em>is</em> its direction:</p>
+\[\hat{\mathbf{x}} = \frac{\mathbf{x}}{\norm{\mathbf{x}}_2}\]
+<ul>
+<li class="fragment">\(\hat{\mathbf{x}}\) points in the <strong>same direction</strong> as \(\mathbf{x}\), but has length exactly 1.</li>
+<li class="fragment">Every \(\hat{\mathbf{x}}\) sits on the unit circle. Size is gone; only the angle is left.</li>
+</ul>
+<div class="applied fragment">Try it on the last slide: \(\norm{(8,2,0)} = \sqrt{68}\) and \(\norm{(4,1,0)} = \sqrt{17} = \sqrt{68}/2\), so <strong>both</strong> normalize to \((8,2,0)/\sqrt{68} \approx (0.97,\, 0.24,\, 0)\) — the <em>same</em> vector. The intensity gap is gone; the shared taste survives.</div>
+</div>
+<img src="../images/unit01/u1-L01-fig04-cosine-unit-circle.png" alt="Cosine similarity on unit circle" style="max-height:450px; max-width:45%; border-radius:6px;">
+</div>
+<aside class="notes">"This slide is the whole idea; the formula on the next slide is just bookkeeping. If two people disagree only in how loudly they rate, normalizing makes them literally the same vector." "Normalizing = shrinking to length 1. It removes magnitude and keeps only direction. Like converting a recipe from '4 cups flour, 2 cups sugar' to '2 parts flour, 1 part sugar' — the proportions are what matter, not the absolute amounts."</aside>
+</section>
+
+<!-- S28: Now name it: cosine similarity -->
+<section>
+<h4>Now name it: cosine similarity</h4>
+<p>Now just take the dot product of the two unit vectors — and the denominators fall out:</p>
+<div class="mathbox">
+\[\cos\theta \;=\; \hat{\mathbf{x}}^\top \hat{\mathbf{y}} \;=\; \frac{\mathbf{x}^\top \mathbf{y}}{\norm{\mathbf{x}}_2 \, \norm{\mathbf{y}}_2}\]
+</div>
+<p class="fragment">The denominator is not a fudge factor: it <em>is</em> the normalizing step, done to both vectors at once. Always between \(-1\) and \(1\).</p>
+<table>
+<tr><th>Value</th><th>Meaning</th><th>Example</th></tr>
+<tr><td>\(\cos\theta = 1\)</td><td>Same direction</td><td>Two action fans (different intensity)</td></tr>
+<tr><td>\(\cos\theta = 0\)</td><td>Perpendicular</td><td>Action fan vs. someone who only cares about comedy</td></tr>
+<tr><td>\(\cos\theta = -1\)</td><td>Opposite direction</td><td>One loves what the other hates</td></tr>
+</table>
+<div class="applied fragment">Google Search ranks pages by cosine similarity between your query vector and each page's vector.</div>
+<aside class="notes">"When you Google something, the search engine turns your query into a vector and every web page into a vector. It computes cosine similarity between your query and each page. Highest cosine = best match. That's why a search for 'best pizza near me' returns pizza reviews, not sushi restaurants — high cosine similarity."</aside>
+</section>
+
 <!-- S27: Worked example step 1 -->
 <section>
 <h4>Worked example: three steps</h4>
@@ -421,51 +457,17 @@ Distance is the <strong>size of the difference</strong> — so <em>every</em> no
 <aside class="notes">"Three steps: dot product on top, product of norms on bottom. The denominator normalizes away the lengths, so you're only measuring the angle. Result is always between -1 and 1."</aside>
 </section>
 
-<!-- S28: Now name it: cosine similarity -->
-<section>
-<h4>Now name it: cosine similarity</h4>
-<div class="mathbox">
-\[\cos\theta = \frac{\mathbf{x}^\top \mathbf{y}}{\norm{\mathbf{x}}_2 \, \norm{\mathbf{y}}_2}\]
-</div>
-<table>
-<tr><th>Value</th><th>Meaning</th><th>Example</th></tr>
-<tr><td>\(\cos\theta = 1\)</td><td>Same direction</td><td>Two action fans (different intensity)</td></tr>
-<tr><td>\(\cos\theta = 0\)</td><td>Perpendicular</td><td>Action fan vs. someone who only cares about comedy</td></tr>
-<tr><td>\(\cos\theta = -1\)</td><td>Opposite direction</td><td>One loves what the other hates</td></tr>
-</table>
-<div class="applied fragment">Google Search ranks pages by cosine similarity between your query vector and each page's vector.</div>
-<aside class="notes">"When you Google something, the search engine turns your query into a vector and every web page into a vector. It computes cosine similarity between your query and each page. Highest cosine = best match. That's why a search for 'best pizza near me' returns pizza reviews, not sushi restaurants — high cosine similarity."</aside>
-</section>
-
-<!-- S29: Unit vectors — the key insight -->
-<section>
-<h4>Why this works: unit vectors</h4>
-<div style="display:flex; align-items:center; gap:1em;">
-<div style="flex:1;">
-<p>Dividing by the norm shrinks any vector to length 1:</p>
-\[\hat{\mathbf{x}} = \frac{\mathbf{x}}{\norm{\mathbf{x}}_2}\]
-<ul>
-<li class="fragment">\(\hat{\mathbf{x}}\) points in the <strong>same direction</strong> as \(\mathbf{x}\), but has length exactly 1.</li>
-<li class="fragment">Cosine similarity = dot product of unit vectors: \(\cos\theta = \hat{\mathbf{x}}^\top \hat{\mathbf{y}}\).</li>
-</ul>
-<div class="applied fragment">This is why your harsh-critic and generous-critic friends get the same cosine score — after normalizing, their vectors are identical.</div>
-</div>
-<img src="../images/unit01/u1-L01-fig04-cosine-unit-circle.png" alt="Cosine similarity on unit circle" style="max-height:450px; max-width:45%; border-radius:6px;">
-</div>
-<aside class="notes">"Normalizing = shrinking to length 1. It removes magnitude and keeps only direction. Like converting a recipe from '4 cups flour, 2 cups sugar' to '2 parts flour, 1 part sugar' — the proportions are what matter, not the absolute amounts."</aside>
-</section>
-
 <!-- S30: Quick check: cosine similarity -->
 <section>
 <h4>Quick check: cosine similarity</h4>
-<div class="quickcheck">If \(\mathbf{y} = 5\mathbf{x}\) for some nonzero \(\mathbf{x}\), what is \(\cos\theta\)?</div>
-<p class="fragment">Answer: \(\cos\theta = 1\). Scaling does not change the angle.</p>
-<p class="fragment"><strong>Follow-up</strong>: If \(\mathbf{y} = -3\mathbf{x}\), what is \(\cos\theta\)?</p>
-<p class="fragment">Answer: \(\cos\theta = -1\). Flipping direction gives the exact opposite.</p>
-<aside class="notes">"If y is just a scaled-up version of x, they point the same way → cosine = 1. If y is a negative multiple of x, they point in opposite directions → cosine = -1. Cosine is BLIND to magnitude. That's its superpower for recommendation and search."</aside>
+<div class="quickcheck">1. \(\mathbf{x} = (1,0)\), \(\mathbf{y} = (1,1)\).</div>
+<p class="fragment">\(\cos\theta = \dfrac{1}{1 \cdot \sqrt{2}} = \dfrac{1}{\sqrt 2} \approx 0.71\) — and \(\theta = 45^\circ\), which the picture agrees with.</p>
+<div class="quickcheck fragment">2. \(\mathbf{x} = (3,1)\), \(\mathbf{y} = (-1,3)\). Do it in your head.</div>
+<p class="fragment">Numerator \(= -3 + 3 = 0\), so \(\cos\theta = 0\): perpendicular. The <strong>sign and the zero come from the dot product alone</strong> — the norms only rescale.</p>
+<div class="quickcheck fragment">3. Harder: \(\cos\theta = 1\). Must \(\mathbf{x} = \mathbf{y}\)?</div>
+<p class="fragment"><strong>No.</strong> It only forces \(\mathbf{y} = c\,\mathbf{x}\) for some \(c &gt; 0\) — same direction, any length. Equal is the special case \(c = 1\). That blindness to length is the entire point.</p>
+<aside class="notes">"Part 1 is the only one they should compute in full; it is worth doing because 45 degrees is checkable against the unit-circle picture." "Part 2: stop them before they touch the norms. A cosine is zero exactly when the dot product is zero, and it is negative exactly when the dot product is negative — the denominator is always positive, so it can never change the sign. That is a real time-saver." "Part 3 is the one that separates understanding from pattern-matching. The common wrong answer is yes. Push back with (1,1) and (5,5): cosine 1, obviously not equal." Follow this into the takeaway table.</aside>
 </section>
-
-<!-- ─── L01 Summary ─── -->
 
 <!-- L01 takeaways -->
 <section>
@@ -610,7 +612,7 @@ For \(A \in \R^{m \times n}\) and \(\mathbf{x} \in \R^n\):
 
 <!-- S41: Second worked example -->
 <section>
-<h4>Worked example 2</h4>
+<h4>Worked example: a \(2\times 2\) machine</h4>
 \[A = \begin{bmatrix} 1 & 2 \\ -1 & 3 \end{bmatrix}, \quad \mathbf{x} = \begin{bmatrix} 2 \\ -1 \end{bmatrix}.\]
 <ul>
 <li class="fragment">Row 1: \(1(2) + 2(-1) = 2 - 2 = 0\).</li>
@@ -693,19 +695,6 @@ For \(A \in \R^{m \times n}\) and \(\mathbf{x} \in \R^n\):
 <aside class="notes">"A neural network with 100 layers does 100 matrix multiplications in sequence. Each layer transforms the data a little. Matrix-matrix multiplication lets us compose transformations — chain them together. Understanding this is understanding the backbone of deep learning."</aside>
 </section>
 
-<!-- S48: Setup and computation -->
-<section>
-<h4>Worked example: composing two transformations</h4>
-\[A = \begin{bmatrix} 1 & 2 \\ -1 & 3 \end{bmatrix}, \quad B = \begin{bmatrix} 0 & 1 \\ 4 & -2 \end{bmatrix}.\]
-<p class="fragment">We want \(C = AB\): first apply \(B\), then apply \(A\). Compute each entry:</p>
-<ul>
-<li class="fragment">\(c_{11} = 1(0) + 2(4) = 8\). \(\quad c_{12} = 1(1) + 2(-2) = -3\).</li>
-<li class="fragment">\(c_{21} = (-1)(0) + 3(4) = 12\). \(\quad c_{22} = (-1)(1) + 3(-2) = -7\).</li>
-</ul>
-<div class="fragment">\[AB = \begin{bmatrix} 8 & -3 \\ 12 & -7 \end{bmatrix}.\]</div>
-<aside class="notes">"Each entry is a dot product: row i of A with column k of B. That's 4 dot products for a 2×2 result. For bigger matrices: a 100×100 times a 100×100 means 10,000 dot products. GPUs do this in milliseconds."</aside>
-</section>
-
 <!-- S49: Formal definition -->
 <section>
 <h4>Now name it: matrix multiplication</h4>
@@ -718,6 +707,19 @@ For \(A \in \R^{m \times n}\) and \(B \in \R^{n \times p}\):
 <li class="fragment">Dimensions: \(\R^{m \times n} \cdot \R^{n \times p} \Rightarrow \R^{m \times p}\). The inner \(n\)'s must match.</li>
 </ul>
 <aside class="notes">"The pattern: row from A, column from B, dot product gives one entry. The dimension rule: inner dimensions must match. A is m×n, B is n×p. The n's match, so the product is m×p. If they don't match, multiplication is not defined."</aside>
+</section>
+
+<!-- S48: Setup and computation -->
+<section>
+<h4>Worked example: composing two transformations</h4>
+\[A = \begin{bmatrix} 1 & 2 \\ -1 & 3 \end{bmatrix}, \quad B = \begin{bmatrix} 0 & 1 \\ 4 & -2 \end{bmatrix}.\]
+<p class="fragment">We want \(C = AB\): first apply \(B\), then apply \(A\). Compute each entry:</p>
+<ul>
+<li class="fragment">\(c_{11} = 1(0) + 2(4) = 8\). \(\quad c_{12} = 1(1) + 2(-2) = -3\).</li>
+<li class="fragment">\(c_{21} = (-1)(0) + 3(4) = 12\). \(\quad c_{22} = (-1)(1) + 3(-2) = -7\).</li>
+</ul>
+<div class="fragment">\[AB = \begin{bmatrix} 8 & -3 \\ 12 & -7 \end{bmatrix}.\]</div>
+<aside class="notes">"Each entry is a dot product: row i of A with column k of B. That's 4 dot products for a 2×2 result. For bigger matrices: a 100×100 times a 100×100 means 10,000 dot products. GPUs do this in milliseconds."</aside>
 </section>
 
 <!-- S50: Order matters! -->
