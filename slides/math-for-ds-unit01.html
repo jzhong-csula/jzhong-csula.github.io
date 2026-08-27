@@ -299,7 +299,7 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 <li class="fragment">\(\ell_2\) penalizes large entries harshly (squaring). One big error dominates.</li>
 <li class="fragment">\(\ell_1\) treats all entries equally (absolute value). Many small errors add up.</li>
 </ul>
-<div class="applied fragment">AI training uses \(\ell_2\) (MSE loss) or \(\ell_1\) (MAE loss) to measure prediction quality.</div>
+<div class="applied fragment">AI training measures prediction error with exactly these two. Squaring gives <strong>mean squared error</strong> (MSE); absolute values give <strong>mean absolute error</strong> (MAE). Each is one of these norms applied to the error vector, divided by \(n\).</div>
 <aside class="notes">"MSE = Mean Squared Error = average of squared errors. That's L2 norm squared, divided by n. MAE = Mean Absolute Error = average of absolute errors. That's L1 norm divided by n. When you see 'loss function' in AI — it's usually one of these norms in disguise."</aside>
 </section>
 
@@ -856,7 +856,7 @@ Data matrix \(X \in \R^{n \times d}\), weight vector \(\mathbf{w} \in \R^d\), pr
 <div class="applied">These tools will appear again and again throughout the course:</div>
 <ul>
 <li class="fragment">Vectors → <strong>error vectors</strong> in regression (Unit 2).</li>
-<li class="fragment">Norms → measuring <strong>prediction error</strong> (MSE, MAE).</li>
+<li class="fragment">Norms → measuring <strong>prediction error</strong> (mean squared error, mean absolute error).</li>
 <li class="fragment">Matrix-vector multiplication → computing predictions \(X\mathbf{w}\).</li>
 <li class="fragment">Cosine similarity → <strong>attention weights</strong> in transformers (Unit 7).</li>
 </ul>
