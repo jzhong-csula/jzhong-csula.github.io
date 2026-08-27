@@ -425,13 +425,14 @@ Distance is the <strong>size of the difference</strong> — so <em>every</em> no
 <h4>First, strip the length: unit vectors</h4>
 <div style="display:flex; align-items:center; gap:1em;">
 <div style="flex:1;">
-<p>We want direction without size. So divide every vector by its own length — whatever is left <em>is</em> its direction:</p>
+<p>We want direction without size. So divide any <strong>nonzero</strong> vector by its own length — whatever is left <em>is</em> its direction:</p>
 \[\hat{\mathbf{x}} = \frac{\mathbf{x}}{\norm{\mathbf{x}}_2}\]
 <ul>
 <li class="fragment">\(\hat{\mathbf{x}}\) points in the <strong>same direction</strong> as \(\mathbf{x}\), but has length exactly 1.</li>
-<li class="fragment">Every \(\hat{\mathbf{x}}\) sits on the unit circle. Size is gone; only the angle is left.</li>
+<li class="fragment">Every \(\hat{\mathbf{x}}\) has length 1, so in the picture they all sit on the unit <strong>circle</strong> — in \(\R^3\) it is the unit <strong>sphere</strong>, and in \(\R^d\) the same idea. Size is gone; only the angle is left.</li>
+<li class="fragment">\(\mathbf{x} = \mathbf{0}\) is the exception: length \(0\), nothing to divide by, and no direction to speak of. Cosine similarity is <strong>undefined</strong> there — a real case, e.g. a user who has rated nothing.</li>
 </ul>
-<div class="applied fragment">Try it on the last slide: \(\norm{(8,2,0)} = \sqrt{68}\) and \(\norm{(4,1,0)} = \sqrt{17} = \sqrt{68}/2\), so <strong>both</strong> normalize to \((8,2,0)/\sqrt{68} \approx (0.97,\, 0.24,\, 0)\) — the <em>same</em> vector. The intensity gap is gone; the shared taste survives.</div>
+<div class="applied fragment">Try it on the last slide: \(\norm{(8,2,0)}_2 = \sqrt{68}\) and \(\norm{(4,1,0)}_2 = \sqrt{17} = \sqrt{68}/2\), so <strong>both</strong> normalize to \((8,2,0)/\sqrt{68} \approx (0.97,\, 0.24,\, 0)\) — the <em>same</em> vector. The intensity gap is gone; the shared taste survives.</div>
 </div>
 <img src="../images/unit01/u1-L01-fig04-cosine-unit-circle.png" alt="Cosine similarity on unit circle" style="max-height:450px; max-width:45%; border-radius:6px;">
 </div>
@@ -466,8 +467,8 @@ Distance is the <strong>size of the difference</strong> — so <em>every</em> no
 <div class="fragment">\[\norm{\mathbf{x}}_2 = \sqrt{1 + 4} = \sqrt{5}, \qquad \norm{\mathbf{y}}_2 = \sqrt{9 + 1} = \sqrt{10}.\]</div>
 <p class="fragment"><strong>Step 3</strong> — Divide:</p>
 <div class="fragment">\[\cos\theta = \frac{1}{\sqrt{5} \cdot \sqrt{10}} = \frac{1}{\sqrt{50}} \approx 0.14.\]</div>
-<p class="fragment">Small positive value = mild directional agreement. They point in <em>roughly</em> the same direction.</p>
-<aside class="notes">"Three steps: dot product on top, product of norms on bottom. The denominator normalizes away the lengths, so you're only measuring the angle. Result is always between -1 and 1."</aside>
+<p class="fragment">Read it honestly: \(0.14\) is barely above \(0\). Since \(\cos 90^\circ = 0\), this is \(\theta \approx 82^\circ\) — <strong>nearly perpendicular</strong>. The positive sign says they lean the same way rather than opposite ways, and that is <em>all</em> it says.</p>
+<aside class="notes">"Do not let them read 0.14 as agreement — a cosine near zero is near-perpendicular, and 0.14 is 82 degrees. Ask what value would mean strong agreement; you want them reaching for something like 0.9." "Three steps: dot product on top, product of norms on bottom. The denominator normalizes away the lengths, so you're only measuring the angle. Result is always between -1 and 1."</aside>
 </section>
 
 <!-- S30: Quick check: cosine similarity -->
