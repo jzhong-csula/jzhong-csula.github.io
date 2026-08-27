@@ -314,27 +314,31 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 <li class="fragment">\(\ell_1\): \(|x| + |y| \le 1\) — a <strong>diamond</strong>, with four straight edges.</li>
 </ul>
 <p class="fragment">They touch at exactly four points, \((\pm 1, 0)\) and \((0, \pm 1)\). Check one: \((1,0)\) has \(\norm{\cdot}_2 = \norm{\cdot}_1 = 1\), so it lies on both boundaries.</p>
-<p class="fragment">Everywhere else the diamond is strictly <strong>inside</strong> the disk. Backwards? Smaller shape, bigger number \((\norm{\mathbf{v}}_2 \le \norm{\mathbf{v}}_1)\) — one fact, not two: \(\ell_1\) is the <strong>harsher ruler</strong>, and a harsher ruler calls things bigger, so <strong>fewer</strong> clear \(\text{size}\le 1\).</p>
-<p class="fragment">Try \(\mathbf{v} = (0.7, 0.7)\): \(\norm{\mathbf{v}}_2 \approx 0.99\) (inside the disk), \(\norm{\mathbf{v}}_1 = 1.4\) (outside the diamond).</p>
+<p class="fragment">Everywhere else the diamond is strictly <strong>inside</strong> the disk — which looks backwards, since \(\ell_1\) gives the <em>bigger</em> number. But recall \(\mathbf{u}=(-2,5)\): \(\ell_1\) said \(7\), \(\ell_2\) said \(5.4\). <strong>Walking the blocks is never shorter than cutting across.</strong> And bigger numbers mean <strong>fewer</strong> vectors get under \(\text{size}\le 1\) — so the \(\ell_1\) shape is the smaller one.</p>
+<p class="fragment">\(\mathbf{v} = (0.7, 0.7)\): \(0.99\) from \(\ell_2\), \(1.4\) from \(\ell_1\) — <em>inside</em> the disk, <em>outside</em> the diamond.</p>
 </div>
-<img src="../images/unit01/u1-L01-fig03-L1-L2-unit-balls.png" alt="L1 diamond inside L2 circle" style="max-height:420px; max-width:48%; border-radius:6px;">
+<img src="../images/unit01/u1-L01-fig03-L1-L2-unit-balls.png" alt="L1 diamond inside L2 circle" style="max-height:360px; max-width:45%; border-radius:6px;">
 </div>
-<aside class="notes">"Ask them to predict the shape before you reveal it. Most guess the diamond wrong — they expect another round blob." "Expect the objection: how can the smaller shape have the bigger norm? Answer it with the ruler image — a stricter ruler reports bigger sizes, so fewer things fit under the limit. Set of vectors versus number assigned to one vector; they are not the same kind of thing." "Then walk (0.7, 0.7) with them: it clears the disk by a hair and misses the diamond by 40 percent. That single vector is worth more than the inequality." Point at the four touch points and at the quick check answer on the board if it is still up."</aside>
+<aside class="notes">"Ask them to predict the shape before you reveal it. Most guess the diamond wrong — they expect another round blob." "Expect the objection: how can the smaller shape have the bigger norm? Do not reach for a new metaphor — point back at the Manhattan slide they just did. Walking 7 blocks versus cutting across 5.4 is the whole reason L1 is bigger, and it is already on the board." "Then make the logical step explicit, because that is the part they skip: bigger numbers mean fewer vectors get under the limit, so the shape shrinks. A set of vectors and a number attached to one vector are not the same kind of object; that is why it feels like a contradiction and is not." "Then walk (0.7, 0.7) with them: it clears the disk by a hair and misses the diamond by 40 percent. That single vector is worth more than the inequality." Point at the four touch points and at the quick check answer on the board if it is still up."</aside>
 </section>
 
 <!-- S20b: why the corners matter -->
 <section>
 <h4>Why the corners matter</h4>
-<p>On the circle those four points are ordinary rim. On the diamond they are sharp <strong>corners</strong>. Everything below follows from that one difference.</p>
-<div class="key-question fragment">Slide a straight line in from far away until it just touches the shape. <strong>Where does it touch first?</strong></div>
+<div style="display:flex; align-items:flex-start; gap:1em;">
+<div style="flex:1;">
+<div class="key-question">Slide a straight line in from outside until it just touches. <strong>Where does it touch first?</strong></div>
 <ul>
-<li class="fragment"><strong>Diamond:</strong> at a <strong>corner</strong> — and tilting the line a little changes nothing, it still touches the <em>same</em> corner. Only a line exactly parallel to an edge touches along that edge.</li>
-<li class="fragment"><strong>Circle:</strong> a different point for every tilt, each point reached by exactly one tilt. No point is special.</li>
-<li class="fragment">In the plane, the diamond's corners are exactly the boundary points with an entry equal to <strong>0</strong>.</li>
+<li class="fragment"><strong>Diamond:</strong> a <strong>corner</strong> — tilt the line and it still stops at the <em>same</em> corner. Only a line parallel to an edge stops along that edge.</li>
+<li class="fragment"><strong>Circle:</strong> a different point for every tilt, each reached by exactly one tilt. No point is special.</li>
+<li class="fragment">In the plane, those corners are exactly the boundary points with an entry equal to <strong>0</strong>.</li>
 </ul>
-<div class="applied fragment">Unit 5 is that picture with the line being what we are trying to minimize, slid in until it reaches the allowed region. Diamond \(\Rightarrow\) it stops at a corner \(\Rightarrow\) some weights come out <strong>exactly 0</strong> and those features drop out. Circle \(\Rightarrow\) it stops somewhere new for every problem, so every weight survives, just smaller.</div>
+</div>
+<img src="../images/unit01/u1-L01-fig07-sliding-line.png" alt="Sliding a line onto the L1 diamond vs the L2 circle" style="max-height:300px; max-width:47%; border-radius:6px;">
+</div>
+<div class="applied fragment"><strong>What a corner means in ML:</strong> a weight of exactly \(0\) is a feature the model switched <strong>off</strong>. Landing on corners is therefore automatic <strong>feature selection</strong> — give it 50,000 candidate inputs, get back a few hundred, and read off <em>which</em>. Unit 5 calls this <strong>Lasso</strong>.</div>
 <div class="key-question fragment">\(\ell_1\) <strong>deletes</strong> features; \(\ell_2\) <strong>shrinks</strong> them.</div>
-<aside class="notes">"Draw it. One diamond, one circle, and a ruler you slide in at three or four different angles. They will see the corner catching every angle before you finish the third one — that is the entire argument and it costs ninety seconds of board time." "The reason is worth saying once: a straight line is flat, and a flat thing pressed onto a polygon meets it at a corner. There is nothing to prove and nothing to take on faith." "Higher dimensions: the diamond also grows edges and flat faces where only SOME entries are zero, so the effect is the same but less extreme. Do not open that today unless asked." "Do not attempt the Unit 5 claim as a derivation. We have no constrained optimization yet. Say plainly: this is the picture, we earn it in Unit 5."</aside>
+<aside class="notes">"Open by naming the difference: on the circle those four points are ordinary rim; on the diamond they are sharp corners. Then run the test." "Draw it live even though the figure is there. One diamond, one circle, a ruler slid in at three angles. They see the corner catching every angle before you finish the third — ninety seconds, and it is the entire argument." "Say why it works, once: a straight line is flat, and a flat thing pressed onto a polygon meets it at a corner. Nothing to prove, nothing to take on faith." "The ML box is the payoff and it is worth dwelling on. Sparsity is not a mathematical curiosity — it is the difference between a model that reports 50,000 coefficients and one that reports 200 you can actually look at. Genomics and text classification are the standard examples if they want one." "Higher dimensions: the ball also grows edges and flat faces where only SOME entries are zero, so the effect survives but is less extreme. Do not open that today unless asked." "Do not attempt the Unit 5 claim as a derivation — no constrained optimization yet. This is the picture; we earn it in Unit 5."</aside>
 </section>
 
 <!-- S21: Quick check: norms -->
