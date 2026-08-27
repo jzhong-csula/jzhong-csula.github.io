@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Mathematical Foundations for Data Science and AI</title>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+<link rel="stylesheet" href="../dist/theme/serif.css"/>
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+<link rel="stylesheet" href="../css/math-for-ds.css?v=4"/>
+<!-- MathJax macros configured in Reveal.initialize mathjax3 config below -->
+<style>
+.reveal ul { margin-top: 0.3em; }
+.reveal li { margin-bottom: 0.2em; }
+.reveal td, .reveal th { padding: 0.25em 0.5em; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ═══════════════════════════════════════ -->
+<!-- S00: Title slide                       -->
+<!-- ═══════════════════════════════════════ -->
+<section>
+<h1 style="font-size:1.6em;">Mathematical Foundations for Data Science and AI</h1>
+<h2 style="font-size:1.0em;">Unit 2 — Learning Means Reducing Error</h2>
+<p><br/>Jie Zhong<br/>Department of Mathematics<br/>California State University, Los Angeles</p>
+</section>
+
+<!-- S01: Unit map -->
+<section>
+<h4>Unit map</h4>
+<div class="key-question">When data give more equations than unknowns, what does "best fit" mean — and how do we compute it?</div>
+<ul>
+<li class="fragment">L03: projection — the geometry behind "closest."</li>
+<li class="fragment">L04: linear regression, MSE, the normal equation.</li>
+<li class="fragment">L05: linear systems, column space — when does an exact answer exist?</li>
+<li class="fragment">L06: pseudoinverse, stability — what to do when formulas break.</li>
+</ul>
+<aside class="notes">"This unit is about one big question: how does a model learn from data? The answer turns out to be geometric — the best model is the closest point in a certain space. We'll build to that step by step."</aside>
+</section>
+
+<!-- S02: What this unit should answer -->
+<section>
+<h4>What this unit should answer</h4>
+<table>
+<tr><th>Question</th><th>Math idea</th><th>Lecture</th></tr>
+<tr><td>What is "best fit" when exact solutions fail?</td><td>least squares, projection</td><td>L03</td></tr>
+<tr><td>How does regression find the best line?</td><td>MSE, normal equation</td><td>L04</td></tr>
+<tr><td>When can a linear system be solved exactly?</td><td>column space, rank</td><td>L05</td></tr>
+<tr><td>What if the exact formula is unstable?</td><td>pseudoinverse, conditioning</td><td>L06</td></tr>
+</table>
+</section>
+
+<!-- S03: The regression spiral -->
+<section>
+<h4>Five lenses on regression</h4>
+<div class="applied">Linear regression will appear through five different lenses across this course. Unit 2 shows the first two.</div>
+<ol>
+<li class="fragment"><strong>Lens 1 (L03–L04)</strong>: <em>Geometric</em> — regression is a projection.</li>
+<li class="fragment"><strong>Lens 2 (L05–L06)</strong>: <em>Algebraic</em> — solve the normal equation.</li>
+<li class="fragment"><strong>Lens 3 (L09–L10)</strong>: <em>Calculus</em> — set the derivative to zero.</li>
+<li class="fragment"><strong>Lens 4 (L15–L16)</strong>: <em>Optimization</em> — gradient descent.</li>
+<li class="fragment"><strong>Lens 5 (L25)</strong>: <em>Probabilistic</em> — maximum likelihood.</li>
+</ol>
+<aside class="notes">"Why five lenses? Because each one reveals something the others hide. The geometric lens gives intuition; the algebraic lens gives a formula; the calculus lens shows why that formula works; the optimization lens scales to millions of data points; and the probabilistic lens handles uncertainty. By the end of the course, you'll see they all agree."</aside>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- L03: Projections and Least Squares     -->
+<!-- ═══════════════════════════════════════ -->
+
+<!-- S04: L03 Opening — GPS story -->
+<section>
+<h4>L03 — Projection: The Geometry of "Closest"</h4>
+<img src="../images/unit02/u2-L03-fig01-gps-overdetermined.png" alt="GPS overdetermined: circles don't meet" style="float:right; max-height:380px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Your phone gets distance readings from three satellites. Each says "you're <em>this</em> far from me." Three circles should cross at one point — <strong>but they never do</strong>, because every measurement has noise.</p>
+<ul>
+<li class="fragment">Three equations, two unknowns — <strong>no exact answer</strong>.</li>
+<li class="fragment">Your phone still shows a dot on the map. How?</li>
+<li class="fragment">It finds the <strong>best compromise</strong> — the point that "breaks the rules the least."</li>
+</ul>
+<div class="key-question fragment" style="clear:both;">Today's question: when the data give conflicting answers, what does "best" mean — and how do we find it?</div>
+<aside class="notes">"Everyone uses GPS daily. The math behind that little blue dot on Google Maps is exactly what we'll learn today. The key idea: when you can't satisfy every equation perfectly, find the solution that comes closest to satisfying all of them. This 'closest' has a precise geometric meaning."</aside>
+</section>
+
+<!--
+DALL-E prompt for fig-2-00-gps-satellites:
+"Clean, professional 2D infographic on a white background. A smartphone in the center with three satellites around it. Each satellite emits a circle (representing distance), and the three circles almost but don't quite intersect at one point. A small question mark at the near-intersection. Thin clean lines, blue and gray palette, university-level technical style. No text labels."
+-->
+
+<!-- S05: A simpler version — three friends, one number -->
+<section>
+<h4>A simpler version of the GPS problem</h4>
+<p>Three friends each guess your age:</p>
+<table>
+<tr><th>Friend</th><th>Guess</th></tr>
+<tr><td>Alice</td><td>19</td></tr>
+<tr><td>Bob</td><td>21</td></tr>
+<tr><td>Carol</td><td>20</td></tr>
+</table>
+<ul>
+<li class="fragment">Three equations: \(x = 19\), \(x = 21\), \(x = 20\).</li>
+<li class="fragment">No single \(x\) satisfies all three.</li>
+<li class="fragment">What's the best single number? You'd probably say <strong>the average</strong>: \(x^* = \frac{19+21+20}{3} = 20\).</li>
+</ul>
+<div class="applied fragment">But <em>why</em> the average? What makes it "best"? We need a principle.</div>
+<aside class="notes">"I start with the simplest possible version of the problem — one unknown, three conflicting answers. Everyone's intuition says 'take the average.' That's correct, but the question is why? The answer will give us a tool that works for much harder problems, like GPS or training an AI model."</aside>
+</section>
+
+<!-- S06: Why the average? Squared error -->
+<section>
+<h4>Why the average? Minimizing squared error</h4>
+<p>Try different guesses for \(x\) and measure the total error:</p>
+<table>
+<tr><th>Guess \(x\)</th><th>\((x-19)^2\)</th><th>\((x-21)^2\)</th><th>\((x-20)^2\)</th><th>Total</th></tr>
+<tr><td>18</td><td>1</td><td>9</td><td>4</td><td>14</td></tr>
+<tr><td>19</td><td>0</td><td>4</td><td>1</td><td>5</td></tr>
+<tr class="fragment" style="font-weight:bold; color:#2563eb;"><td>20</td><td>1</td><td>1</td><td>0</td><td><strong>2</strong></td></tr>
+<tr><td>21</td><td>4</td><td>0</td><td>1</td><td>5</td></tr>
+<tr><td>22</td><td>9</td><td>1</td><td>4</td><td>14</td></tr>
+</table>
+<div class="key-question fragment">The average gives the <strong>smallest total squared error</strong>. This is not a coincidence — it's a theorem.</div>
+<aside class="notes">"We square the errors for two reasons: (1) it makes all errors positive so they don't cancel, and (2) it penalizes big mistakes more than small ones. A guess that's off by 3 counts 9 times as much as one that's off by 1. This is the principle behind almost all AI training."</aside>
+</section>
+
+<!-- S07: From average to least squares -->
+<section>
+<h4>From the average to least squares</h4>
+<div class="mathbox">
+The best \(x\) minimizes the sum of squared errors:
+\[x^* = \arg\min_x \sum_{i=1}^n (x - b_i)^2\]
+For our example: \(x^* = \arg\min_x \left[(x-19)^2 + (x-21)^2 + (x-20)^2\right]\).
+</div>
+<ul>
+<li class="fragment">The answer is the average: \(x^* = \bar{b} = 20\).</li>
+<li class="fragment">This works for any number of conflicting measurements.</li>
+</ul>
+<div class="applied fragment">This principle — <strong>minimize squared error</strong> — is how every linear AI model learns. The average is just the simplest case.</div>
+<aside class="notes">"We've just discovered the fundamental principle of supervised learning: find the parameters that minimize squared error. The average is the 1D case. Linear regression is the multi-dimensional version. The principle is exactly the same — just more variables."</aside>
+</section>
+
+<!-- S08: AI connection — training a model -->
+<section>
+<h4>This is how AI models train</h4>
+<img src="../images/unit02/u2-L04-fig02-training-loop.png" alt="Training loop: data → model → prediction → error → adjust" style="float:right; max-height:380px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Every AI training loop does the same thing:</p>
+<ol>
+<li class="fragment">Make a <strong>prediction</strong>.</li>
+<li class="fragment">Compare to the <strong>true answer</strong>.</li>
+<li class="fragment">Measure the <strong>error</strong> (usually squared).</li>
+<li class="fragment"><strong>Adjust</strong> to reduce the error.</li>
+</ol>
+<div class="key-question fragment" style="clear:both;">The "three friends guessing your age" problem is the simplest version of step 1–3. Today we'll build the geometry of step 4.</div>
+<aside class="notes">"ChatGPT, image generators, self-driving cars — they all train this way. The difference is scale and complexity, but the core loop is: predict, check, measure error, adjust. The math of 'adjust' is what this entire unit is about."</aside>
+</section>
+
+<!--
+DALL-E prompt for fig-2-01-training-loop:
+"Clean, professional infographic showing the machine learning training loop on white background. Four boxes in a cycle connected by arrows: 'Data' → 'Model' → 'Prediction' → 'Error' → back to 'Model'. The 'Error' box has a red glow. The 'Model' box has a green glow showing 'adjust weights'. Minimalist, blue/gray palette, university-level technical style."
+-->
+
+<!-- S09: Overdetermined systems — naming the pattern -->
+<section>
+<h4>Name the pattern: overdetermined system</h4>
+<p>The GPS problem and the age-guessing problem share the same structure:</p>
+<div class="mathbox">
+A system \(A\mathbf{x} = \mathbf{b}\) with more equations than unknowns (\(m > n\)) is called <strong>overdetermined</strong>.
+<br/><br/>
+A best-fit solution minimizes \(\norm{A\mathbf{x} - \mathbf{b}}\).
+</div>
+<ul>
+<li class="fragment"><strong>More measurements than parameters</strong> — extra data, not enough freedom.</li>
+<li class="fragment">GPS: 3 distances, 2 coordinates (\(m=3 > n=2\)).</li>
+<li class="fragment">AI training: millions of examples, thousands of weights (\(m \gg n\)).</li>
+</ul>
+<aside class="notes">"In real AI, you might have a million training examples but only 10,000 weights. That's an overdetermined system with m = 1,000,000 and n = 10,000. The math is the same as our three-friends problem, just bigger."</aside>
+</section>
+
+<!-- S10: Quick check -->
+<section>
+<h4>Quick check</h4>
+<div class="quickcheck">
+Alice adds a fourth friend's guess: 20.5. Does the best-fit error go up or down compared to three friends?
+</div>
+<p class="fragment"><strong>Up</strong> — adding another constraint to satisfy usually increases the total error. More data means more equations to juggle, so the best compromise gets slightly worse per equation.</p>
+<div class="applied fragment">This is why training error in machine learning usually <em>decreases</em> as you add parameters but <em>increases</em> as you add data — more data means more constraints.</div>
+<aside class="notes">"This is a subtle but important point. More data gives a better model for new predictions (generalization), but the in-sample error on the training data goes up because there are more constraints to satisfy. We'll revisit this tradeoff in Unit 5 when we talk about regularization."</aside>
+</section>
+
+<!-- S11: The real question — closest point -->
+<section>
+<h4>The real question: closest point</h4>
+<img src="../images/unit02/u2-L03-fig03-projection-idea.png" alt="Projection = closest point on subspace" style="float:right; max-height:400px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Imagine you're standing on a hill and you want to get to a road below. What's the shortest path to the road?</p>
+<ul>
+<li class="fragment">Walk <strong>straight toward the road</strong> — perpendicular.</li>
+<li class="fragment">Any other path would be longer.</li>
+<li class="fragment">The point where you hit the road is the <strong>closest point</strong>.</li>
+</ul>
+<div class="key-question fragment" style="clear:both;">In math: given a point and a line (or subspace), the closest point on the line is the <strong>orthogonal projection</strong>.</div>
+<aside class="notes">"This everyday intuition — the shortest path is the perpendicular one — is the key geometric insight behind regression. If you understand this, you understand least squares."</aside>
+</section>
+
+<!--
+DALL-E prompt for fig-2-02-closest-point:
+"Clean, professional 2D math diagram on white background. A point labeled 'you' above a straight line (labeled 'road'). A dashed perpendicular line from the point to the road, ending at a dot labeled 'closest point'. A right-angle mark at the intersection. A curved longer path shown in lighter gray for comparison. Minimalist, blue/gray palette, no other text."
+-->
+
+<!-- S12: Deriving the projection formula -->
+<section>
+<h4>Deriving the formula: where does the projection land?</h4>
+<p>The closest point on the line is \(\mathbf{p} = \lambda \mathbf{b}\) for some scalar \(\lambda\). Which \(\lambda\)?</p>
+<div class="mathbox">
+<strong>Step 1:</strong> The residual must be perpendicular to the line:
+\[\mathbf{b}^\top \underbrace{(\mathbf{x} - \lambda \mathbf{b})}_{\text{residual}} = 0\]
+
+<strong>Step 2:</strong> Expand:
+\[\mathbf{b}^\top \mathbf{x} - \lambda\,\mathbf{b}^\top \mathbf{b} = 0\]
+
+<strong>Step 3:</strong> Solve for \(\lambda\):
+\[\boxed{\lambda = \frac{\mathbf{b}^\top \mathbf{x}}{\mathbf{b}^\top \mathbf{b}}}\]
+</div>
+<div class="key-question fragment">The projection formula is not magic — it comes directly from one requirement: <strong>make the error perpendicular</strong>.</div>
+<aside class="notes">"This is a three-line derivation that every student should be able to reproduce. Start from the perpendicularity condition, expand, solve for lambda. That's it. The formula is a consequence of one geometric principle: perpendicular = closest."</aside>
+</section>
+
+<!-- S13: Projection example — concrete numbers -->
+<section>
+<h4>Projection: a concrete example</h4>
+<div class="twocol">
+<div>
+<p>Line direction: \(\mathbf{b} = (1,1)\). Point: \(\mathbf{x} = (2,0)\).</p>
+<div class="mathbox fragment">
+\[\hat{\mathbf{x}} = \frac{\mathbf{b}^\top \mathbf{x}}{\mathbf{b}^\top \mathbf{b}}\,\mathbf{b} = \frac{2}{2}\begin{pmatrix}1\\1\end{pmatrix} = \begin{pmatrix}1\\1\end{pmatrix}\]
+</div>
+<p class="fragment">Closest point on the line to \((2,0)\) is \((1,1)\).</p>
+</div>
+<div>
+<img src="../images/unit02/u2-L03-fig04-projection-1d-example.png" alt="Projection of x=(2,0) onto b=(1,1)" style="max-height:420px; max-width:100%; border-radius:6px;">
+</div>
+</div>
+<aside class="notes">"Let's do the calculation step by step. The numerator b^T x is the dot product we learned in Unit 1 — it measures how much x agrees with b. The denominator b^T b is the squared length of b. We divide, then scale b by that ratio. The result (1,1) is the point on the line closest to (2,0)."</aside>
+</section>
+
+<!--
+DALL-E prompt for fig-2-03-projection-example:
+"Clean, precise 2D vector diagram on a white background with a coordinate grid. Vector x = (2,0) shown as a blue arrow from the origin to (2,0). A gray line through the origin in direction (1,1). The projection point at (1,1) marked with a dot. A dashed red arrow from (1,1) to (2,0) labeled 'residual'. A right-angle mark where the residual meets the line. Thin clean lines, university-level math style."
+-->
+
+<!-- S13: The residual is the error -->
+<section>
+<h4>The residual: what's left over</h4>
+<p>The <strong>residual</strong> is the gap between the original point and the projection:</p>
+<div class="mathbox">
+\[\mathbf{r} = \mathbf{x} - \text{projection} = (2,0) - (1,1) = (1,-1)\]
+</div>
+<ul>
+<li class="fragment">The residual points from the projection back to the original point.</li>
+<li class="fragment">Its length \(\norm{\mathbf{r}} = \sqrt{1^2+(-1)^2} = \sqrt{2}\) is the <strong>distance</strong> from \(\mathbf{x}\) to the line.</li>
+</ul>
+<div class="key-question fragment">Key property: the residual is <strong>perpendicular</strong> to the line.</div>
+<p class="fragment">Check: \(\mathbf{r} \cdot \mathbf{b} = (1)(1) + (-1)(1) = 0\). ✓ Perpendicular!</p>
+<aside class="notes">"The residual is the error — what the line can't explain. And it's perpendicular to the line, which is exactly the hill-to-road intuition: the shortest path is the straight-down path. This perpendicularity is what makes the projection optimal."</aside>
+</section>
+
+<!-- S14: Why perpendicular = optimal -->
+<section>
+<h4>Why perpendicular = optimal</h4>
+<p>Think about it with the Pythagorean theorem:</p>
+<img src="../images/unit02/u2-L03-fig05-projection-decomposition.png" alt="Projection decomposition: x = projection + residual" style="float:right; max-height:350px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<div class="mathbox fragment">
+\[\norm{\mathbf{x}}^2 = \norm{\text{projection}}^2 + \norm{\text{residual}}^2\]
+</div>
+<ul>
+<li class="fragment">The projection and residual form a <strong>right triangle</strong>.</li>
+<li class="fragment">If the error had <em>any</em> component along the line, you could slide closer.</li>
+<li class="fragment">Perpendicular means: <strong>nothing left to improve</strong>.</li>
+</ul>
+<aside class="notes" style="clear:both;">"This is just the Pythagorean theorem from high school. The vector x is the hypotenuse. The projection is one leg. The residual is the other leg. Because they form a right angle, the residual is as short as possible. If you moved the projection point left or right along the line, the residual would get longer."</aside>
+</section>
+
+<!--
+DALL-E prompt for fig-2-04-pythagorean-projection:
+"Clean 2D math diagram on white background. A right triangle formed by: (1) a blue arrow from origin to a point labeled 'x', (2) a green arrow from origin along a line to a point labeled 'proj', (3) a red dashed arrow from 'proj' up to 'x' labeled 'residual'. Right-angle mark at 'proj'. Labels showing ||x||^2 = ||proj||^2 + ||r||^2. Minimalist, university-level."
+-->
+
+<!-- S15: Proof — any other point is farther -->
+<section>
+<h4>Proof: any other point on the line is farther</h4>
+<p>Let \(\mathbf{p} = \lambda \mathbf{b}\) be the projection and \(\mathbf{q} = \mu \mathbf{b}\) be any <em>other</em> point on the line (\(\mu \neq \lambda\)).</p>
+<div class="mathbox">
+Split the distance to \(\mathbf{q}\):
+\[\mathbf{x} - \mathbf{q} = \underbrace{(\mathbf{x} - \lambda\mathbf{b})}_{\mathbf{r}} + \underbrace{(\lambda - \mu)\mathbf{b}}_{\text{along the line}}\]
+
+Since \(\mathbf{r} \perp \mathbf{b}\), the Pythagorean theorem gives:
+\[\|\mathbf{x} - \mathbf{q}\|^2 = \|\mathbf{r}\|^2 + (\lambda-\mu)^2\|\mathbf{b}\|^2\]
+</div>
+<ul>
+<li class="fragment">\(\|\mathbf{r}\|^2\) is the distance to the projection — <strong>fixed</strong>.</li>
+<li class="fragment">\((\lambda-\mu)^2\|\mathbf{b}\|^2 > 0\) — moving away from \(\mathbf{p}\) <strong>only adds distance</strong>.</li>
+<li class="fragment">Therefore \(\|\mathbf{x} - \mathbf{q}\| > \|\mathbf{x} - \mathbf{p}\|\). The projection is <strong>uniquely closest</strong>. ∎</li>
+</ul>
+<aside class="notes">"This is the proof. It uses one fact: perpendicular vectors satisfy the Pythagorean theorem. The distance to any other point on the line equals the distance to the projection PLUS an extra positive term. So the projection is strictly the closest. Three lines of algebra, one big idea."</aside>
+</section>
+
+<!-- S16: Quick check — projection -->
+<section>
+<h4>Quick check</h4>
+<div class="quickcheck">
+If \(\mathbf{x}\) already lies on the line through \(\mathbf{b}\), what is the projection of \(\mathbf{x}\)?
+</div>
+<p class="fragment"><strong>\(\mathbf{x}\) itself</strong> — it's already on the line, so the closest point is itself. The residual is zero.</p>
+<div class="applied fragment">In AI terms: if the model already perfectly predicts the data, the error is zero and there's nothing to improve.</div>
+</section>
+
+<!-- S16: Projection formula — general -->
+<section>
+<h4>The projection formula</h4>
+<div class="mathbox">
+<strong>Onto a line</strong> (1D subspace \(U = \text{span}\{\mathbf{b}\}\)):
+\[\pi_U(\mathbf{x}) = \frac{\mathbf{b}^\top \mathbf{x}}{\mathbf{b}^\top \mathbf{b}}\,\mathbf{b}\]
+
+<strong>Onto a subspace</strong> (with basis columns \(B\)):
+\[\pi_U(\mathbf{x}) = B(B^\top B)^{-1}B^\top \mathbf{x}\]
+</div>
+<ul>
+<li class="fragment">The line formula uses the <strong>dot product</strong> from Unit 1.</li>
+<li class="fragment">The subspace formula uses <strong>matrix multiplication</strong> from Unit 1.</li>
+<li class="fragment">Three properties: (1) result lies in the subspace, (2) it's unique, (3) residual is perpendicular.</li>
+</ul>
+<aside class="notes">"Notice how everything builds on Unit 1. The dot product in the numerator measures agreement. The matrix multiplication in the general formula is the multi-dimensional version. Units in this course are like Lego blocks — each one snaps onto the previous."</aside>
+</section>
+
+<!-- S17: From projection to least squares -->
+<section>
+<h4>The big connection: least squares = projection</h4>
+<div class="key-question">
+Minimizing \(\norm{A\mathbf{x} - \mathbf{b}}\) is the same as projecting \(\mathbf{b}\) onto the column space of \(A\).
+</div>
+<ul>
+<li class="fragment">\(A\mathbf{x}\) lives in the <strong>column space</strong> of \(A\) — the set of all outputs the system can produce.</li>
+<li class="fragment">The best-fit \(\mathbf{x}^*\) makes \(A\mathbf{x}^*\) the <strong>closest point</strong> in that column space to \(\mathbf{b}\).</li>
+<li class="fragment">The residual \(\mathbf{b} - A\mathbf{x}^*\) is <strong>perpendicular</strong> to the column space.</li>
+</ul>
+<div class="applied fragment">This one idea — <strong>best fit is a projection</strong> — is the geometric foundation of all linear AI models.</div>
+<aside class="notes">"This is the single most important idea in this unit. When you train a linear model, you're projecting the true labels onto the space of things the model can produce. The best model is the closest point. And 'closest' means perpendicular residual. Everything else in this unit is just computing that projection."</aside>
+</section>
+
+<!-- S18: Least squares example — fitting a line -->
+<section>
+<h4>Example: fitting a line through data</h4>
+<p>Three data points: \((0, 1)\), \((1, 2)\), \((2, 2)\). We want the best line \(\hat{y} = w_0 + w_1 t\).</p>
+<div class="mathbox fragment">
+\[A = \begin{bmatrix} 1 & 0 \\ 1 & 1 \\ 1 & 2 \end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix}\]
+Each row: (1, \(t_i\)). The "1" column handles the intercept \(w_0\).
+</div>
+<ul>
+<li class="fragment">The columns of \(A\) span a <strong>plane</strong> in \(\mathbb{R}^3\).</li>
+<li class="fragment">We want the point on that plane closest to \(\mathbf{b}\).</li>
+<li class="fragment">That's a projection — exactly what we just learned!</li>
+</ul>
+<aside class="notes">"Each data point gives one equation. Three points, two unknowns (slope and intercept). The system is overdetermined. The best line is the projection of b onto the column space of A. We'll compute this with the normal equation in L04."</aside>
+</section>
+
+<!-- S19: Quick check — least squares -->
+<section>
+<h4>Quick check</h4>
+<div class="quickcheck">
+If all three points lie exactly on a line, what is the least-squares residual?
+</div>
+<p class="fragment"><strong>Zero</strong> — \(\mathbf{b}\) is already in the column space of \(A\), so the "closest point" is \(\mathbf{b}\) itself.</p>
+</section>
+
+<!-- S20: L03 takeaways -->
+<section>
+<h4>L03 takeaways</h4>
+<ul>
+<li class="fragment"><strong>Overdetermined systems</strong> have more equations than unknowns — no exact answer. <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment"><strong>Projection</strong> gives the closest point; the residual is perpendicular. <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment"><strong>Projection formula</strong> onto a line: \(\lambda = \frac{\mathbf{b}^\top \mathbf{x}}{\mathbf{b}^\top \mathbf{b}}\). <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment"><strong>Subspace projection</strong> formula: \(B(B^\top B)^{-1}B^\top\). <span style="color:#d97706; font-size:0.85em;">[UNDERSTAND]</span></li>
+</ul>
+<div class="applied fragment">Next lecture: we'll use this geometry to derive a formula for the best-fit line. That formula is how every linear regression model works.</div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- L04: Linear Regression & Normal Eq.    -->
+<!-- ═══════════════════════════════════════ -->
+
+<!-- S21: L04 opening — predicting rent -->
+<section>
+<h4>L04 — Predicting apartment rent</h4>
+<img src="../images/unit02/u2-L04-fig06-scatter-bestfit.png" alt="Apartment size vs rent with best-fit line" style="float:right; max-height:380px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>You're apartment hunting. You notice: bigger apartments cost more, and farther from campus costs less.</p>
+<ul>
+<li class="fragment">Size: 800, 600, 1000 sqft.</li>
+<li class="fragment">Distance to campus: 1, 2, 0.5 miles.</li>
+<li class="fragment">Rent: $3000, $2000, $5000.</li>
+</ul>
+<div class="key-question fragment" style="clear:both;">Can we find a formula that predicts rent from size and distance? What line (or plane) fits best?</div>
+<aside class="notes">"Everyone's dealt with apartment hunting — or at least compared prices online. Today we'll build the exact formula that Zillow, Redfin, and every real estate app uses to estimate prices. It's called linear regression, and it's the same projection from L03, just written as a formula."</aside>
+</section>
+
+<!--
+DALL-E prompt for fig-2-05-apartment-scatter:
+"Clean 2D scatter plot on white background. X-axis labeled 'Size (sqft)', Y-axis labeled 'Rent ($)'. Five or six data points scattered around a best-fit line drawn through them. Small vertical dashed lines from each point to the line showing residuals. One residual labeled 'error'. Clean, minimal, blue dots, gray line, university-level style."
+-->
+
+<!-- S22: Data as a matrix -->
+<section>
+<h4>Your data is a matrix</h4>
+<p>Organize the apartment data into a matrix:</p>
+<div class="mathbox">
+\[X = \begin{bmatrix} 8 & 1 \\ 6 & 2 \\ 10 & 0.5 \end{bmatrix} \quad \text{(features: size in 100s, distance)}\]
+
+\[\mathbf{y} = \begin{bmatrix} 3 \\ 2 \\ 5 \end{bmatrix} \quad \text{(rent in $1000s)}\]
+</div>
+<ul>
+<li class="fragment">Each <strong>row</strong> = one apartment (one data point).</li>
+<li class="fragment">Each <strong>column</strong> = one feature.</li>
+<li class="fragment">This is the <strong>feature matrix</strong> from Unit 1 — now we'll use it to predict.</li>
+</ul>
+<aside class="notes">"Remember from Unit 1: a matrix is a grid of numbers. Here each row is an apartment, each column is a feature. We want to find weights w1 and w2 such that w1 × size + w2 × distance ≈ rent."</aside>
+</section>
+
+<!-- S23: Prediction as matrix multiplication -->
+<section>
+<h4>Prediction = matrix × weights</h4>
+<p>Try weights \(\mathbf{w} = (0.4, -0.6)^\top\): "each 100 sqft adds $400, each mile subtracts $600."</p>
+<div class="mathbox fragment">
+\[\hat{\mathbf{y}} = X\mathbf{w} = \begin{bmatrix} 8 & 1 \\ 6 & 2 \\ 10 & 0.5 \end{bmatrix}\begin{bmatrix} 0.4 \\ -0.6 \end{bmatrix} = \begin{bmatrix} 2.6 \\ 1.2 \\ 3.7 \end{bmatrix}\]
+</div>
+<ul>
+<li class="fragment">Each prediction is a <strong>dot product</strong>: \(\hat{y}_i = \mathbf{x}_i^\top \mathbf{w}\).</li>
+<li class="fragment">Predictions: $2600, $1200, $3700. True rents: $3000, $2000, $5000.</li>
+<li class="fragment">Not great — but how bad exactly?</li>
+</ul>
+<aside class="notes">"This is matrix-vector multiplication from Unit 1 in action. Each prediction is one row of X dotted with w. The predictions are off — we need a single number to measure 'how off', and then find the w that makes that number as small as possible."</aside>
+</section>
+
+<!-- S24: The bias trick -->
+<section>
+<h4>The intercept trick</h4>
+<p>The formula \(\hat{y} = w_1 x_1 + w_2 x_2\) forces the line through the origin. To add a baseline rent \(w_0\):</p>
+<div class="mathbox">
+Add a column of 1s to \(X\):
+\[\tilde{X} = \begin{bmatrix} 1 & 8 & 1 \\ 1 & 6 & 2 \\ 1 & 10 & 0.5 \end{bmatrix}, \quad \mathbf{w} = \begin{bmatrix} w_0 \\ w_1 \\ w_2 \end{bmatrix}\]
+
+Now \(\hat{y}_i = w_0 + w_1 x_{i1} + w_2 x_{i2}\) — intercept included automatically.
+</div>
+<div class="applied fragment">Every real model uses this trick. The "1" column is a <strong>fake feature</strong> that's always on, so its weight becomes the baseline.</div>
+<aside class="notes">"This is a very common trick. Rather than treating the intercept specially, we add a fake feature that's always 1. Then the weight for that column is the intercept. Everything stays as matrix multiplication — clean and uniform."</aside>
+</section>
+
+<!-- S25: MSE — measuring how bad the fit is -->
+<section>
+<h4>Mean Squared Error: one number for "how bad"</h4>
+<p>True rents: \(\mathbf{y} = (3, 2, 5)\). Predictions: \(\hat{\mathbf{y}} = (2.6, 1.2, 3.7)\).</p>
+<table>
+<tr><th>Apartment</th><th>True</th><th>Predicted</th><th>Error</th><th>Squared error</th></tr>
+<tr><td>A</td><td>3.0</td><td>2.6</td><td>0.4</td><td>0.16</td></tr>
+<tr><td>B</td><td>2.0</td><td>1.2</td><td>0.8</td><td>0.64</td></tr>
+<tr><td>C</td><td>5.0</td><td>3.7</td><td>1.3</td><td>1.69</td></tr>
+</table>
+<div class="mathbox fragment">
+\[\text{MSE} = \frac{1}{n}\sum_{i=1}^n(y_i - \hat{y}_i)^2 = \frac{0.16+0.64+1.69}{3} = 0.83\]
+</div>
+<div class="key-question fragment">MSE = <strong>one number</strong> that lets us compare any two models: lower is better.</div>
+<aside class="notes">"MSE is the report card for your model. Just like your GPA is one number that summarizes your academic performance, MSE is one number that summarizes how well your model predicts. The goal of training is to make this number as small as possible."</aside>
+</section>
+
+<!-- S26: MSE as a norm -->
+<section>
+<h4>MSE in matrix notation</h4>
+<div class="mathbox">
+\[J(\mathbf{w}) = \frac{1}{n}\norm{X\mathbf{w} - \mathbf{y}}^2 = \frac{1}{n}\sum_{i=1}^n (y_i - \mathbf{x}_i^\top \mathbf{w})^2\]
+</div>
+<ul>
+<li class="fragment">\(X\mathbf{w} - \mathbf{y}\) is the <strong>residual vector</strong> from L03.</li>
+<li class="fragment">\(\norm{\cdot}^2\) is the <strong>squared norm</strong> from Unit 1.</li>
+<li class="fragment">Everything connects: <strong>dot product → norm → residual → MSE</strong>.</li>
+</ul>
+<div class="applied fragment">The entire vocabulary of Unit 1 (vectors, norms, dot products) was preparation for this moment: measuring model error.</div>
+<aside class="notes">"See how everything fits together? The dot product computes each prediction. The norm measures the total error. The residual is the gap between prediction and truth. MSE is just the squared norm of the residual, divided by n. This is not a coincidence — we designed the course this way."</aside>
+</section>
+
+<!-- S27: Quick check — MSE -->
+<section>
+<h4>Quick check</h4>
+<div class="quickcheck">
+If one residual doubles (say apartment B's error goes from 0.8 to 1.6), how does its squared contribution change?
+</div>
+<p class="fragment"><strong>It quadruples</strong> — from 0.64 to 2.56. Squared error amplifies large mistakes.</p>
+<div class="applied fragment">This is why AI models care more about big errors than small ones. A prediction that's off by 10 counts <strong>100×</strong> as much as one that's off by 1.</div>
+</section>
+
+<!-- S28: Connection to L03 — regression is projection -->
+<section>
+<h4>Wait — we've seen this before!</h4>
+<div class="key-question">
+Minimize \(\norm{X\mathbf{w} - \mathbf{y}}\) — this is exactly the least squares problem from L03!
+</div>
+<ul>
+<li class="fragment">\(X\mathbf{w}^*\) is the <strong>projection</strong> of \(\mathbf{y}\) onto the column space of \(X\).</li>
+<li class="fragment">The residual \(\mathbf{y} - X\mathbf{w}^*\) is <strong>perpendicular</strong> to the column space.</li>
+<li class="fragment">The best weights \(\mathbf{w}^*\) are the coordinates of that projection.</li>
+</ul>
+<div class="applied fragment">The best-fit line isn't arbitrary — it's the <strong>unique prediction</strong> that is geometrically closest to the true data.</div>
+<aside class="notes">"This is the payoff from L03. We learned that the closest point is a projection, and the residual is perpendicular. Now we're applying the same idea: the best linear model is the one whose predictions are the projection of the true labels onto the model's output space."</aside>
+</section>
+
+<!-- S29: Constant model = the mean -->
+<section>
+<h4>Worked example: the simplest model</h4>
+<p>The simplest model predicts the same number for everything: \(\hat{y} = w\) (constant).</p>
+<div class="mathbox">
+\[X = \begin{bmatrix}1\\1\\1\end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix}2\\3\\5\end{bmatrix}\]
+</div>
+<p class="fragment">The column space of \(X\) is the line \((c, c, c)\). We're projecting \(\mathbf{y}\) onto that line.</p>
+<p class="fragment">Best \(w\): \(\displaystyle w^* = \frac{X^\top \mathbf{y}}{X^\top X} = \frac{2+3+5}{3} = \frac{10}{3} \approx 3.33\).</p>
+<div class="key-question fragment">The constant best-fit model predicts <strong>the mean</strong>! Our age-guessing problem returns.</div>
+<aside class="notes">"Full circle: the average from the beginning of this lecture is just the simplest regression. A constant model has one parameter, and the best constant is the mean. Linear regression with a slope and intercept is the same idea but with more parameters."</aside>
+</section>
+
+<!-- S30: Deriving the normal equation — step by step -->
+<section>
+<h4>Deriving the normal equation</h4>
+<p>We know from L03: the best fit makes the residual perpendicular to the column space. Let's turn this into a formula.</p>
+<div class="mathbox">
+<strong>Step 1 — State the goal:</strong> the residual \(\mathbf{r} = \mathbf{y} - X\mathbf{w}\) must be perpendicular to every column of \(X\).
+<br/><br/>
+<strong>Step 2 — Write it in math:</strong> "\(\mathbf{r}\) is perpendicular to every column" means:
+\[X^\top \mathbf{r} = \mathbf{0}\]
+<em>(Each row of \(X^\top\) dots with \(\mathbf{r}\) and gives zero.)</em>
+<br/><br/>
+<strong>Step 3 — Substitute \(\mathbf{r}\):</strong>
+\[X^\top(\mathbf{y} - X\mathbf{w}) = \mathbf{0}\]
+<br/>
+<strong>Step 4 — Expand and rearrange:</strong>
+\[X^\top \mathbf{y} - X^\top X \mathbf{w} = \mathbf{0} \quad\Longrightarrow\quad \boxed{X^\top X \,\mathbf{w} = X^\top \mathbf{y}}\]
+</div>
+<div class="key-question fragment">Four steps: goal → math → substitute → rearrange. The normal equation is a <strong>direct consequence</strong> of perpendicularity.</div>
+<aside class="notes">"This is the same three-line derivation as the projection formula from L03, just in matrix form. Step 1: state the geometric principle (perpendicular). Step 2: write it as an equation. Step 3-4: do the algebra. I want every student to be able to reproduce this on the board."</aside>
+</section>
+
+<!-- S31: The normal equation — summary -->
+<section>
+<h4>The normal equation: summary</h4>
+<div class="mathbox">
+\[\boxed{X^\top X \,\mathbf{w} = X^\top \mathbf{y}}\]
+</div>
+<ul>
+<li class="fragment"><strong>Where it comes from:</strong> residual ⊥ column space (the projection principle).</li>
+<li class="fragment"><strong>What it does:</strong> finds the weights that minimize squared error.</li>
+<li class="fragment">If \(X^\top X\) is invertible: \(\mathbf{w}^* = (X^\top X)^{-1}X^\top \mathbf{y}\).</li>
+<li class="fragment">The word "normal" means <strong>perpendicular</strong> (not "ordinary").</li>
+</ul>
+<div class="applied fragment">This is the same idea as the 1D projection formula \(\lambda = \frac{\mathbf{b}^\top \mathbf{x}}{\mathbf{b}^\top \mathbf{b}}\), generalized to multiple dimensions.</div>
+<aside class="notes">"Compare: in 1D, b^T(x - λb) = 0 gave us λ = b^T x / b^T b. In multiple dimensions, X^T(y - Xw) = 0 gives us X^T X w = X^T y. Same idea, bigger matrices."</aside>
+</section>
+
+<!-- S31: Solve by hand -->
+<section>
+<h4>Worked example: solve the normal equation by hand</h4>
+<p>Model: \(\hat{y} = ax\) (no intercept). Data: \(x = (1,2,3)\), \(y = (2,2,3)\).</p>
+<div class="mathbox">
+\[X^\top X = 1^2 + 2^2 + 3^2 = 14\]
+\[X^\top \mathbf{y} = 1\cdot 2 + 2\cdot 2 + 3\cdot 3 = 15\]
+\[a^* = \frac{15}{14} \approx 1.07\]
+</div>
+<p class="fragment">Best-fit line: \(\hat{y} = 1.07x\).</p>
+<div class="applied fragment">You just did what <code>sklearn.linear_model.LinearRegression</code> does internally — with pencil and paper!</div>
+<aside class="notes">"This is a one-parameter problem so the normal equation is just division. For two parameters you solve a 2×2 system. For 100 features it's a 100×100 system — that's where computers help. But the math is the same."</aside>
+</section>
+
+<!-- S32: Quick check — normal equation -->
+<section>
+<h4>Quick check</h4>
+<div class="quickcheck">
+If \(X^\top X\) is not invertible, what does that suggest about the columns of \(X\)?
+</div>
+<p class="fragment"><strong>The columns are linearly dependent</strong> — some features are redundant. For example, if one column is twice another, you can't tell which feature is "doing the work."</p>
+<div class="applied fragment">Real-world example: if you include both temperature in °C and °F as features, one is redundant. The formula can't separate their contributions.</div>
+</section>
+
+<!-- S33: L04 takeaways -->
+<section>
+<h4>L04 takeaways</h4>
+<ul>
+<li class="fragment">Regression predicts with \(\hat{\mathbf{y}} = X\mathbf{w}\) — <strong>matrix × vector</strong>. <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment">MSE is the <strong>one number</strong> that defines "best fit." <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment">The normal equation \(X^\top X\mathbf{w} = X^\top \mathbf{y}\) — a <strong>direct formula</strong>. <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment">Solve by hand for small examples (1-2 parameters). <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+</ul>
+<div class="applied fragment">But the normal equation has limits: it requires computing \(X^\top X\) and inverting it. What if that matrix is too big, or nearly singular? Next lectures: we'll explore when things go wrong — and what to do about it.</div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- L05: Linear Systems & Column Space     -->
+<!-- ═══════════════════════════════════════ -->
+
+<!-- S34: L05 opening — scheduling classes -->
+<section>
+<h4>L05 — Can you take all the classes you want?</h4>
+<img src="../images/unit02/u2-L05-fig07-schedule-conflict.png" alt="Schedule conflict: no solution" style="float:right; max-height:380px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>You want to take 4 classes, but some meet at the same time. Can you find a schedule that satisfies every constraint?</p>
+<ul>
+<li class="fragment">Each constraint: "this class needs this time slot."</li>
+<li class="fragment">Sometimes <strong>all constraints</strong> can be satisfied (exact solution).</li>
+<li class="fragment">Sometimes <strong>some conflict</strong> — you have to compromise.</li>
+</ul>
+<div class="key-question fragment" style="clear:both;">Linear systems are the math of constraints. Today: when do exact solutions exist, and what structure tells us?</div>
+<aside class="notes">"Everyone's experienced this: you want certain classes, but time slots conflict. A linear system is the mathematical version of this problem. Each equation is a constraint. We want to know: can all constraints be satisfied simultaneously? If not, what's the best we can do? We already know the 'best we can do' part from L03–L04. Today we focus on when exact solutions exist."</aside>
+</section>
+
+<!--
+DALL-E prompt for fig-2-06-schedule-conflict:
+"Clean infographic on white background showing a weekly class schedule grid (Monday-Friday, 8am-5pm). Four colored blocks representing different classes. Two of them overlap in the same time slot, with a red X showing the conflict. Modern, clean design with blue/green/orange/purple blocks. University-level style."
+-->
+
+<!-- S35: A 2×2 system — two friends, one restaurant -->
+<section>
+<h4>Example: two equations, two unknowns</h4>
+<p>You and a friend are splitting a restaurant bill. You ordered differently:</p>
+<ul>
+<li>You: 1 taco + 1 drink = $5</li>
+<li>Friend: 1 taco − 1 drink = $1 (friend paid less for just a taco)</li>
+</ul>
+<div class="mathbox fragment">
+\[\begin{cases} x + y = 5 \\ x - y = 1 \end{cases}\]
+Add: \(2x = 6 \Rightarrow x = 3\). Substitute: \(y = 2\).
+</div>
+<p class="fragment">Taco costs $3, drink costs $2. <strong>One exact solution</strong>.</p>
+<aside class="notes">"Two equations, two unknowns — and they agree on one answer. But what if the equations conflict? That's the question we'll explore."</aside>
+</section>
+
+<!-- S36: Three possibilities -->
+<section>
+<h4>Three possible outcomes for a linear system</h4>
+<div class="mathbox">
+A linear system \(A\mathbf{x} = \mathbf{b}\) can have:
+</div>
+<div class="twocol">
+<div>
+<ol>
+<li class="fragment"><strong>Exactly one</strong> solution — lines cross at one point.</li>
+<li class="fragment"><strong>No</strong> solution — parallel lines, contradictory constraints.</li>
+<li class="fragment"><strong>Infinitely many</strong> — same line, redundant constraints.</li>
+</ol>
+</div>
+<div class="fragment">
+<img src="../images/unit02/u2-L05-fig08-three-outcomes.png" alt="Three outcomes: unique, no, infinite solutions" style="display:block; max-width:90%; max-height:280px; margin:0.3em auto; border-radius:6px;">
+</div>
+</div>
+<aside class="notes">"In 2D, these correspond to lines crossing, lines being parallel, or lines being the same. In higher dimensions, the geometry is harder to visualize but the three cases still apply."</aside>
+</section>
+
+<!--
+DALL-E prompt for fig-2-07-three-cases:
+"Three-panel diagram on white background. Panel 1: two lines crossing at one point (labeled 'one solution'). Panel 2: two parallel lines (labeled 'no solution'). Panel 3: two overlapping lines (labeled 'infinitely many solutions'). Clean, minimal, blue lines on coordinate grids. University-level math style."
+-->
+
+<!-- S37: Quick check — linear systems -->
+<section>
+<h4>Quick check</h4>
+<div class="quickcheck">
+What if the second equation were \(x + y = 10\) instead of \(x - y = 1\)?
+<br/>\(\begin{cases} x + y = 5 \\ x + y = 10 \end{cases}\)
+</div>
+<p class="fragment"><strong>No solution</strong> — \(x + y\) can't be both 5 and 10. The equations are contradictory (parallel lines).</p>
+</section>
+
+<!-- S38: Column space — what the system can produce -->
+<section>
+<h4>Column space: what can the model produce?</h4>
+<p>Think of a vending machine with two buttons. Button A dispenses a combo of items, Button B dispenses a different combo. You can press each button any number of times.</p>
+<ul>
+<li class="fragment">The <strong>column space</strong> is everything you can get from combining button presses.</li>
+<li class="fragment">If what you want is in the column space → exact solution exists.</li>
+<li class="fragment">If it's outside the column space → <strong>no exact solution</strong>.</li>
+</ul>
+<div class="mathbox fragment">
+The column space of \(A\): \(\text{col}(A) = \{A\mathbf{x} : \mathbf{x} \in \mathbb{R}^n\}\) — all possible outputs.
+<br/><br/>
+\(A\mathbf{x} = \mathbf{b}\) has a solution \(\iff\) \(\mathbf{b} \in \text{col}(A)\).
+</div>
+<aside class="notes">"The column space is all the targets the system can hit. Think of it as the menu of the vending machine. If what you want is on the menu, great. If not, the best you can do is get the closest available item — and that's the projection from L03."</aside>
+</section>
+
+<!-- S39: Column space example -->
+<section>
+<h4>Example: what can this matrix produce?</h4>
+<div class="mathbox">
+\[A = \begin{bmatrix} 1 & 0 \\ 0 & 1 \\ 0 & 0 \end{bmatrix}\]
+Any \(A\mathbf{x}\) has the form \(\begin{pmatrix}x_1\\x_2\\0\end{pmatrix}\).
+</div>
+<ul>
+<li class="fragment">The column space is a <strong>plane</strong> in \(\mathbb{R}^3\) — the \(xy\)-plane.</li>
+<li class="fragment">Can we hit \(\mathbf{b} = (1, 2, 3)^\top\)? <strong>No</strong> — the third entry must be 0.</li>
+<li class="fragment">Can we hit \(\mathbf{b} = (1, 2, 0)^\top\)? <strong>Yes</strong> — \(\mathbf{x} = (1, 2)^\top\).</li>
+</ul>
+<div class="applied fragment">In AI: the column space tells you what your model <em>can</em> predict. A linear model can't produce curved predictions — that's outside its column space.</div>
+<aside class="notes">"This matrix can only produce vectors with a zero in the third position. It's like a model that can't predict certain patterns — they're outside its capabilities. When the target is outside the column space, we project — which is exactly regression."</aside>
+</section>
+
+<!-- S40: Rank tells the dimension -->
+<section>
+<h4>Rank: how many independent directions?</h4>
+<div class="mathbox">
+The <strong>rank</strong> of \(A\) = dimension of its column space = number of independent columns.
+</div>
+<ul>
+<li class="fragment">Rank 1: the model can only produce multiples of one direction.</li>
+<li class="fragment">Rank 2: the model spans a plane.</li>
+<li class="fragment">Rank = number of columns: the model is as flexible as possible (full rank).</li>
+</ul>
+<div class="applied fragment">More independent features = higher rank = more flexible model. But too much flexibility leads to <strong>overfitting</strong> — a topic for Unit 5.</div>
+<aside class="notes">"Rank is like the degrees of freedom of your model. A rank-1 model can only scale one pattern. A rank-2 model can mix two patterns. Ideally you have as many independent patterns as you need to explain the data — but not more."</aside>
+</section>
+
+<!-- S41: Quick check — column space -->
+<section>
+<h4>Quick check</h4>
+<div class="quickcheck">
+If every row of \(A\) has last entry zero, what must be true about \(\mathbf{b}\) for \(A\mathbf{x} = \mathbf{b}\) to be solvable?
+</div>
+<p class="fragment"><strong>The last entry of \(\mathbf{b}\) must be zero</strong> — because \(A\mathbf{x}\) can never produce anything else in that position.</p>
+</section>
+
+<!-- S42: Overdetermined revisited -->
+<section>
+<h4>Overdetermined systems: putting it together</h4>
+<p>Back to the age-guessing problem: \(x = 19, x = 21, x = 20\).</p>
+<div class="mathbox">
+\[A = \begin{bmatrix}1\\1\\1\end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix}19\\21\\20\end{bmatrix}\]
+Column space = the line \((c, c, c)\). But \(\mathbf{b} = (19, 21, 20)\) is NOT on that line.
+</div>
+<ul>
+<li class="fragment">\(\mathbf{b}\) is <strong>outside</strong> the column space → no exact solution.</li>
+<li class="fragment">Best fit: <strong>project \(\mathbf{b}\) onto the column space</strong> → get \((20, 20, 20)\).</li>
+<li class="fragment">This is the normal equation from L04: \(x^* = 20\) (the mean).</li>
+</ul>
+<div class="key-question fragment">Column space + projection = the complete picture of least squares.</div>
+<aside class="notes">"Now we have the full story. The column space tells you what's reachable. If the target isn't reachable, project. The projection gives the best fit. The normal equation computes it. Everything from L03 and L04 snaps together."</aside>
+</section>
+
+<!-- S43: The normal equation — geometric meaning -->
+<section>
+<h4>The normal equation means: residual ⊥ column space</h4>
+<div class="mathbox">
+\[A^\top(A\mathbf{x} - \mathbf{b}) = \mathbf{0}\]
+This says: the residual \(\mathbf{b} - A\mathbf{x}\) is perpendicular to every column of \(A\).
+</div>
+<img src="../images/unit02/u2-L05-fig09-column-space-projection.png" alt="Column space projection in 3D" style="float:right; max-height:400px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<ul>
+<li class="fragment" style="clear:none;">The residual has <strong>no component</strong> the model could explain.</li>
+<li class="fragment">Everything the model <em>can</em> do, it <em>has</em> done.</li>
+<li class="fragment">The leftover is pure noise — perpendicular to the model's reach.</li>
+</ul>
+<aside class="notes" style="clear:both;">"This is a beautiful result. The normal equation isn't just a formula — it's a geometric statement. It says: the best model uses up all its explanatory power. Whatever's left over is noise that no linear model can reduce."</aside>
+</section>
+
+<!--
+DALL-E prompt for fig-2-08-residual-perpendicular:
+"Clean 3D math diagram on white background. A tilted plane representing the column space. A point 'b' floating above the plane. A dashed perpendicular line from b down to a point 'Ax*' on the plane. The perpendicular is labeled 'residual r'. A right-angle mark where the line meets the plane. Thin clean lines, blue plane, red residual. University-level style."
+-->
+
+<!-- S44: Quick check — normal equation geometry -->
+<section>
+<h4>Quick check</h4>
+<div class="quickcheck">
+If \(\mathbf{b}\) is already in the column space of \(A\), what is the residual at the normal-equation solution?
+</div>
+<p class="fragment"><strong>Zero</strong> — \(\mathbf{b}\) is already on the plane, so no perpendicular drop is needed.</p>
+</section>
+
+<!-- S45: L05 takeaways -->
+<section>
+<h4>L05 takeaways</h4>
+<ul>
+<li class="fragment"><strong>Linear systems</strong>: three outcomes (one, none, infinitely many solutions). <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment"><strong>Column space</strong> determines which targets are reachable. <span style="color:#d97706; font-size:0.85em;">[UNDERSTAND]</span></li>
+<li class="fragment"><strong>Rank</strong> = number of independent columns = flexibility of the model. <span style="color:#d97706; font-size:0.85em;">[UNDERSTAND]</span></li>
+</ul>
+<div class="applied fragment">Next: what happens when the normal equation <em>exists</em> but gives unreliable answers? That's the stability problem, and we'll need the pseudoinverse to handle it.</div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- L06: Pseudoinverse & Stability         -->
+<!-- ═══════════════════════════════════════ -->
+
+<!-- S46: L06 opening — autocorrect gone wrong -->
+<section>
+<h4>L06 — When the formula gives garbage</h4>
+<img src="../images/unit02/u2-L06-fig10-autocorrect-instability.png" alt="Instability: nearly parallel lines" style="float:right; max-height:380px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>You've seen autocorrect go wildly wrong — you type one wrong letter and get a completely different word.</p>
+<ul>
+<li class="fragment">A small change in input → a <strong>huge</strong> change in output.</li>
+<li class="fragment">The same thing can happen with the normal equation.</li>
+<li class="fragment">Tiny noise in the data → wildly different best-fit weights.</li>
+</ul>
+<div class="key-question fragment" style="clear:both;">When can we trust the formula? And what do we do when we can't?</div>
+<aside class="notes">"Everyone's had an autocorrect fail where one typo completely changes the message. The same thing happens in math: some formulas are 'sensitive' — small changes in the input cause wild swings in the output. Today we'll see when the normal equation has this problem and what to do about it."</aside>
+</section>
+
+<!--
+DALL-E prompt for fig-2-09-autocorrect-fail:
+"Clean, modern phone screen mockup on white background showing a text message conversation. The last message has a funny autocorrect mistake where a small typo changed the meaning completely. Think: 'I love cooking my family and my pets' vs 'I love cooking, my family, and my pets'. Clean, realistic phone UI, not cartoon. University-appropriate humor."
+-->
+
+<!-- S47: The pseudoinverse — a best-effort inverse -->
+<section>
+<h4>What if the matrix isn't square?</h4>
+<p>We can only invert <strong>square</strong> matrices. But data matrices are usually tall (more rows than columns):</p>
+<div class="mathbox">
+\[X = \begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix} \quad \text{(3 data points, 1 parameter)}\]
+\(X\) is 3×1 — no inverse exists. But we still want to "undo" \(X\) to find the best weights.
+</div>
+<div class="key-question fragment">The <strong>pseudoinverse</strong> \(A^+\) acts like an inverse for non-square matrices. It gives the best-fit solution.</div>
+<aside class="notes">"Regular inverses only exist for square matrices. But most data matrices aren't square — you have more data points than parameters. The pseudoinverse is a 'best-effort' inverse that handles this case. For our purposes, you can think of it as the formula that the computer uses internally when you call a regression function."</aside>
+</section>
+
+<!-- S48: Pseudoinverse example -->
+<section>
+<h4>Example: pseudoinverse in action</h4>
+<p>Data: \(x = (1, 2, 3)\), \(y = (1, 2, 2.5)\). Model: \(\hat{y} = ax\).</p>
+<div class="mathbox">
+\[A = \begin{bmatrix}1\\2\\3\end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix}1\\2\\2.5\end{bmatrix}\]
+\[A^\top A = 1+4+9 = 14\]
+\[A^\top \mathbf{b} = 1+4+7.5 = 12.5\]
+\[a^* = \frac{12.5}{14} \approx 0.893\]
+</div>
+<p class="fragment">Best-fit line: \(\hat{y} = 0.893x\). The pseudoinverse produced this: \(A^+ = \frac{A^\top}{A^\top A}\).</p>
+<aside class="notes">"For a single-column matrix, the pseudoinverse is just A^T divided by A^T A. For larger matrices, computers use more sophisticated methods (like SVD), but the result is the same: the least-squares solution."</aside>
+</section>
+
+<!-- S49: Pseudoinverse — formal definition -->
+<section>
+<h4>The pseudoinverse: key properties</h4>
+<div class="mathbox">
+The pseudoinverse \(A^+\) gives:
+\[\mathbf{x}^* = A^+\mathbf{b}\]
+<ul style="margin-top:0.5em;">
+<li>If \(A\mathbf{x} = \mathbf{b}\) has a solution → \(A^+\mathbf{b}\) finds it.</li>
+<li>If no exact solution → \(A^+\mathbf{b}\) gives the <strong>least-squares</strong> fit.</li>
+<li>If multiple solutions → \(A^+\mathbf{b}\) picks the one with <strong>smallest norm</strong>.</li>
+</ul>
+</div>
+<div class="applied fragment">When \(A\) is square and invertible: \(A^+ = A^{-1}\). The pseudoinverse is a <strong>generalization</strong> of the regular inverse.</div>
+<aside class="notes">"The pseudoinverse handles every case: exact solutions, overdetermined systems, underdetermined systems. It's the Swiss Army knife of linear algebra. In Python, numpy.linalg.pinv computes it for you."</aside>
+</section>
+
+<!-- S50: Multiple solutions — which one to pick? -->
+<section>
+<h4>When many solutions exist: pick the simplest</h4>
+<p>Sometimes a system has infinitely many solutions:</p>
+<div class="mathbox">
+\[A = \begin{bmatrix}1 & 0\\1 & 0\\1 & 0\end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix}2\\2\\2\end{bmatrix}\]
+Any \(\mathbf{x} = (2, t)^\top\) works for any \(t\). Which one to pick?
+</div>
+<ul>
+<li class="fragment">The pseudoinverse picks \(t = 0\): \(\mathbf{x}^* = (2, 0)^\top\).</li>
+<li class="fragment">This has the <strong>smallest length</strong> — the simplest solution.</li>
+</ul>
+<div class="key-question fragment">Prefer simplicity when accuracy is tied. This is a preview of <strong>regularization</strong> (Unit 5).</div>
+<aside class="notes">"When many solutions give the same error, pick the simplest one. 'Simplest' means smallest parameter values — don't use a complicated model when a simple one works equally well. This idea will come back as regularization in Unit 5, where we'll deliberately penalize complexity."</aside>
+</section>
+
+<!-- S51: Quick check — pseudoinverse -->
+<section>
+<h4>Quick check</h4>
+<div class="quickcheck">
+If \(\mathbf{b}\) lies in the column space of \(A\), what does \(A^+\mathbf{b}\) give?
+</div>
+<p class="fragment"><strong>An exact solution</strong> — no approximation needed. The pseudoinverse reduces to the regular inverse (or finds one of the exact solutions, the one with minimum norm).</p>
+</section>
+
+<!-- S52: When formulas break — nearly dependent columns -->
+<section>
+<h4>The stability problem</h4>
+<p>Consider two features that are <em>almost</em> identical:</p>
+<div class="mathbox">
+\[A = \begin{bmatrix} 1 & 1 \\ 1 & 1.001 \end{bmatrix}\]
+The columns are 99.9% the same. What happens?
+</div>
+<ul>
+<li class="fragment">\(A^\top A\) is <strong>nearly singular</strong> — almost has determinant zero.</li>
+<li class="fragment">Change one data point by 0.001 → the solution moves <strong>1000&times; as far</strong>. Concretely: \(\mathbf{x}\) goes from \((1,1)\) to \((0,2)\), a shift of 1 in each entry from a nudge of 0.001.</li>
+<li class="fragment">The formula is <em>correct</em> but <strong>unreliable</strong>.</li>
+</ul>
+<div class="key-question fragment">A correct formula can still give garbage if the inputs are nearly dependent.</div>
+<aside class="notes">"This is like weighing yourself on a scale that changes by 10 pounds every time you shift your foot slightly. The scale is correct — it's just amplifying tiny differences. The same thing happens when your features are almost identical: the formula amplifies noise instead of finding a stable answer."</aside>
+</section>
+
+<!-- S53: Real-world example of instability -->
+<section>
+<h4>Real-world instability</h4>
+<img src="../images/unit02/u2-L06-fig11-multicollinearity.png" alt="Multicollinearity: correlated features cause instability" style="float:right; max-height:350px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Imagine predicting house prices using:</p>
+<ul>
+<li>Feature 1: temperature in °C</li>
+<li>Feature 2: temperature in °F</li>
+</ul>
+<p class="fragment">These are linearly related: \(F = 1.8C + 32\). The columns of \(X\) are almost proportional.</p>
+<div class="applied fragment" style="clear:both;">Result: the normal equation produces weights like \(w_1 = +500, w_2 = -499\). The individual weights are <strong>meaningless</strong> — only their combination matters. Tiny noise → wildly different \(w_1, w_2\) values.</div>
+<aside class="notes">"This is called multicollinearity in statistics. It doesn't mean the prediction is bad — it means the individual weights can't be trusted. The model can't tell which feature is doing the work because they carry almost the same information."</aside>
+</section>
+
+<!--
+DALL-E prompt for fig-2-10-redundant-features:
+"Clean infographic on white background. Two thermometers side by side, one labeled °C and one labeled °F, showing the same temperature. A red warning symbol between them with text 'redundant information'. Below: a regression equation with wildly large positive and negative coefficients. Clean, professional, university-level style."
+-->
+
+<!-- S54: The condition number -->
+<section>
+<h4>Condition number: how fragile is the system?</h4>
+<div class="mathbox">
+The <strong>condition number</strong> \(\kappa(A)\) measures how much small changes in data get amplified in the solution.
+<ul style="margin-top:0.5em;">
+<li>\(\kappa \approx 1\): stable — small changes in data → small changes in solution.</li>
+<li>\(\kappa \gg 1\): unstable — small changes in data → <strong>huge</strong> changes in solution.</li>
+</ul>
+</div>
+<ul>
+<li class="fragment">Our \(A = \begin{bmatrix}1&1\\1&1.001\end{bmatrix}\) has \(\kappa \approx 4000\).</li>
+<li class="fragment">An error of 0.001 in the data could cause an error of \(0.001 \times 4000 = 4\) in the solution.</li>
+</ul>
+<div class="applied fragment">In Python: <code>np.linalg.cond(A)</code> tells you if you should worry. Condition number &gt; 1000? Be cautious.</div>
+<aside class="notes">"Think of the condition number as a sensitivity dial. Low condition number means the formula is trustworthy. High condition number means proceed with caution — the answer might change a lot if you measure slightly differently."</aside>
+</section>
+
+<!-- S55: What to do about instability -->
+<section>
+<h4>Three fixes for instability</h4>
+<ol>
+<li class="fragment"><strong>Remove redundant features</strong> — if two columns are nearly identical, drop one.
+<div class="small-note">Check with <code>np.corrcoef()</code> — correlation near ±1 means redundancy.</div></li>
+<li class="fragment"><strong>Use better algorithms</strong> — QR decomposition instead of forming \(X^\top X\).
+<div class="small-note">This is what <code>np.linalg.lstsq</code> does internally — more numerically stable.</div></li>
+<li class="fragment"><strong>Add regularization</strong> — penalize large weights to keep them stable.
+<div class="small-note">Coming in Unit 5: Ridge and Lasso regression.</div></li>
+</ol>
+<div class="key-question fragment">The normal equation is the <em>starting point</em>, not the final tool. Real AI uses smarter methods — but they all solve the same projection problem.</div>
+<aside class="notes">"You won't need to implement QR decomposition by hand. But you should know it exists, and you should always check the condition number before trusting the normal equation. In practice, sklearn handles this for you — but understanding why it matters makes you a better data scientist."</aside>
+</section>
+
+<!-- S56: Quick check — stability -->
+<section>
+<h4>Quick check</h4>
+<div class="quickcheck">
+If two columns of \(A\) are <em>exactly</em> identical (not just close), what happens to \(A^\top A\)?
+</div>
+<p class="fragment"><strong>It becomes singular</strong> — determinant is zero, no inverse exists. The normal equation has no unique solution.</p>
+<div class="applied fragment">This is the extreme case of instability. Nearly identical = unstable. Exactly identical = formula doesn't work at all. The pseudoinverse still gives <em>a</em> solution (minimum norm), but the weights are not interpretable.</div>
+</section>
+
+<!-- S57: L06 takeaways -->
+<section>
+<h4>L06 takeaways</h4>
+<ul>
+<li class="fragment">The <strong>pseudoinverse</strong> generalizes the inverse for non-square matrices. <span style="color:#d97706; font-size:0.85em;">[UNDERSTAND]</span></li>
+<li class="fragment"><strong>Stability matters</strong>: nearly dependent features amplify noise. <span style="color:#d97706; font-size:0.85em;">[UNDERSTAND]</span></li>
+<li class="fragment">The <strong>condition number</strong> tells you how fragile the system is. <span style="color:#d97706; font-size:0.85em;">[UNDERSTAND]</span></li>
+<li class="fragment">Three fixes: remove redundancy, better algorithms, regularization. <span style="color:#d97706; font-size:0.85em;">[UNDERSTAND]</span></li>
+</ul>
+<div class="applied fragment">Preview: gradient descent (Unit 4) avoids forming \(X^\top X\) entirely. Regularization (Unit 5) tames instability by penalizing complexity. The math you've built in this unit is the foundation for both.</div>
+</section>
+
+<!-- Learning Boundary -->
+<section>
+<h4>What should I know after Unit 2?</h4>
+<div style="display:flex; gap:1.5em;">
+<div style="flex:1;">
+<p><strong style="color:#2563eb;">You should be able to:</strong></p>
+<ul>
+<li>Explain why overdetermined systems have no exact solution</li>
+<li>Project a vector onto a line and compute the residual</li>
+<li>State why perpendicular = closest (Pythagorean argument)</li>
+<li>Set up a regression problem as \(X\mathbf{w} \approx \mathbf{y}\)</li>
+<li>Compute MSE from a table of predictions and true values</li>
+<li>Derive and solve the normal equation for a small example</li>
+<li>Explain what "the residual is perpendicular to the column space" means</li>
+</ul>
+</div>
+<div style="flex:1;">
+<p><strong style="color:#6b7280;">You do NOT need to:</strong></p>
+<ul>
+<li>Compute subspace projections with \(B(B^\top B)^{-1}B^\top\) by hand</li>
+<li>Prove the normal equation from scratch (reproduce the 4-step derivation is enough)</li>
+<li>Compute a pseudoinverse by hand</li>
+<li>Calculate condition numbers</li>
+<li>Know QR decomposition or SVD</li>
+</ul>
+<p style="margin-top:0.8em;"><strong>Want to learn more?</strong></p>
+<ul>
+<li>MML: Ch 3.8 (projection, least squares)</li>
+<li>MML: Ch 9.1–9.2 (linear regression)</li>
+<li>MML: Ch 2.3, 2.6 (column space, rank)</li>
+</ul>
+</div>
+</div>
+</section>
+
+<!-- Unit 2 summary — two lenses -->
+<section>
+<h4>Unit 2 summary: two lenses on regression</h4>
+<div class="applied">We now have two complete lenses on linear regression:</div>
+<ol>
+<li class="fragment"><strong>Geometric</strong> (L03–L04): regression is a <strong>projection</strong>; the residual is perpendicular.</li>
+<li class="fragment"><strong>Algebraic</strong> (L05–L06): the <strong>normal equation</strong> gives a closed-form solution.</li>
+</ol>
+<ul>
+<li class="fragment">The formula can be <strong>unstable</strong> for near-dependent features.</li>
+<li class="fragment">The pseudoinverse handles edge cases; regularization prevents instability.</li>
+</ul>
+<div class="key-question fragment">Next unit: eigenvectors will reveal hidden directions in data — the geometry behind PCA and dimensionality reduction.</div>
+<aside class="notes">"We've gone from 'three friends guessing your age' to the full machinery of linear regression. Two lenses: geometry (projection) and algebra (normal equation). Three more lenses are coming in later units. Each one reveals something new — the same problem, seen from a different angle."</aside>
+</section>
+
+<!-- S59: Regression spiral recap -->
+<section>
+<h4>Where we are on the regression spiral</h4>
+<table>
+<tr><th>Lens</th><th>Unit</th><th>Key idea</th><th>Status</th></tr>
+<tr style="font-weight:bold; color:#16a34a;"><td>1. Geometric</td><td>2 (L03–L04)</td><td>Projection</td><td>✓ Done</td></tr>
+<tr style="font-weight:bold; color:#16a34a;"><td>2. Algebraic</td><td>2 (L05–L06)</td><td>Normal equation</td><td>✓ Done</td></tr>
+<tr><td>3. Calculus</td><td>4 (L09–L10)</td><td>Set derivative = 0</td><td>Coming</td></tr>
+<tr><td>4. Optimization</td><td>5 (L15–L16)</td><td>Gradient descent</td><td>Coming</td></tr>
+<tr><td>5. Probabilistic</td><td>6 (L25)</td><td>Maximum likelihood</td><td>Coming</td></tr>
+</table>
+<div class="applied fragment">By the end of the course, you'll see the same regression problem from <strong>five completely different angles</strong> — and understand why they all agree.</div>
+</section>
+
+</div>
+</div>
+
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/math/math.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script src="../reveal.js-plugins/menu/menu.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  transition: 'none',
+  width: 1200,
+  height: 700,
+  margin: 0.04,
+  mathjax3: {
+    tex: {
+      macros: {
+        R: "\\mathbb{R}",
+        norm: ["\\left\\|#1\\right\\|", 1],
+        inner: ["\\left\\langle #1,#2\\right\\rangle", 2]
+      }
+    }
+  },
+  plugins: [ RevealMath.MathJax3, RevealChalkboard, RevealMenu ],
+  chalkboard: {
+    storage: "math-for-ds",
+    toggleChalkboardButton: { left: "80px" },
+    toggleNotesButton: { left: "130px" },
+    colorButtons: 5
+  }
+});
+</script>
+</body>
+</html>
