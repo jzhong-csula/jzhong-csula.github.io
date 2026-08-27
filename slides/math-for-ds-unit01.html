@@ -185,6 +185,22 @@ Compute \(2\mathbf{x} - \mathbf{y}\) for \(\mathbf{x} = (2, -1)\) and \(\mathbf{
 <aside class="notes">"Think of it like this: you and your friend both rate 3 categories. If you both give action a high score, multiplying them gives a big positive number. If you love action but your friend hates it — one positive, one negative — the product is negative. Add up all three products and you get an 'agreement score.' That's ALL the dot product is."</aside>
 </section>
 
+<!-- S12: Now name it: dot product -->
+<section>
+<h4>Now name it: dot product</h4>
+<div class="mathbox">
+The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
+\[\mathbf{x} \cdot \mathbf{y} \;=\; \mathbf{x}^\top \mathbf{y} \;=\; x_1 y_1 + x_2 y_2 + \cdots + x_d y_d \;=\; \sum_{i=1}^d x_i y_i.\]
+</div>
+<ul>
+<li class="fragment">Multiply matching entries. Add the products. Get one number.</li>
+<li class="fragment"><strong>Why the two forms are the same:</strong> our vectors are <strong>column vectors</strong>, so transposing \(\mathbf{x}\) makes it a row, and row \(\times\) column gives one number. We write \(\mathbf{x}^\top \mathbf{y}\) from now on.</li>
+<li class="fragment">This is <em>exactly</em> the same operation inside the attention formula: \(QK^\top\).</li>
+</ul>
+<div class="applied fragment">When ChatGPT asks "how related is this word to that word?" — it computes a dot product.</div>
+<aside class="notes">"The dot product literally used to be written with a dot: x · y. We write x^T y instead because our convention is that vectors are columns. Transposing x makes it a row, then row × column = a single number. Same operation, just matrix notation. From now on, x^T y means dot product." "QK^T is a matrix of dot products — each entry asks 'how related is word i to word j?'"</aside>
+</section>
+
 <!-- S11: First example — similar movies -->
 <section>
 <h4>Worked example: similar movies</h4>
@@ -195,22 +211,6 @@ Compute \(2\mathbf{x} - \mathbf{y}\) for \(\mathbf{x} = (2, -1)\) and \(\mathbf{
 <div class="fragment">\[\mathbf{x}^\top \mathbf{z} = 3 \times 0 + 1 \times 1 + 0 \times 3 = 0 + 1 + 0 = 1.\]</div>
 <p class="fragment">Score = 1. Much smaller. Almost no agreement.</p>
 <aside class="notes">"X and Y agree on action (3×6=18), agree on romance (1×2=2), and both ignore comedy (0×0=0). Total: 20. Strong agreement." "X and Z: action doesn't match (3×0=0), slight romance overlap (1×1=1), comedy doesn't match (0×3=0). Total: 1. Almost strangers." "The dot product QUANTIFIED what your intuition already knew: X and Y are similar, X and Z are not."</aside>
-</section>
-
-<!-- S12: Now name it: dot product -->
-<section>
-<h4>Now name it: dot product</h4>
-<div class="mathbox">
-The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
-\[\mathbf{x} \cdot \mathbf{y} = x_1 y_1 + x_2 y_2 + \cdots + x_d y_d = \sum_{i=1}^d x_i y_i.\]
-</div>
-<ul>
-<li class="fragment">Multiply matching entries. Add the products. Get one number.</li>
-<li class="fragment"><strong>Notation:</strong> since our vectors are <strong>column vectors</strong>, the dot product equals \(\mathbf{x}^\top \mathbf{y}\) — transpose the first, then multiply. We use \(\mathbf{x}^\top \mathbf{y}\) from now on.</li>
-<li class="fragment">This is <em>exactly</em> the same operation inside the attention formula: \(QK^\top\).</li>
-</ul>
-<div class="applied fragment">When ChatGPT asks "how related is this word to that word?" — it computes a dot product.</div>
-<aside class="notes">"The dot product literally used to be written with a dot: x · y. We write x^T y instead because our convention is that vectors are columns. Transposing x makes it a row, then row × column = a single number. Same operation, just matrix notation. From now on, x^T y means dot product." "QK^T is a matrix of dot products — each entry asks 'how related is word i to word j?'"</aside>
 </section>
 
 <!-- S13: What does the sign tell you? -->
