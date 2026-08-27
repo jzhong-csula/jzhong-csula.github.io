@@ -228,6 +228,7 @@ DALL-E prompt for fig-2-02-closest-point:
 <!-- S12: Deriving the projection formula -->
 <section>
 <h4>Deriving the formula: where does the projection land?</h4>
+<img src="../images/unit02/u2-L03-fig05-projection-decomposition.png" alt="Right triangle: x is the hypotenuse, p the projection, r the residual" style="float:right; width:38%; margin:0 0 0.4em 1em; border-radius:6px;">
 <p>The closest point on the line is \(\mathbf{p} = \lambda \mathbf{b}\) for some scalar \(\lambda\). Which \(\lambda\)?</p>
 <div class="mathbox">
 <strong>Step 1:</strong> The residual must be perpendicular to the line:
@@ -269,9 +270,10 @@ DALL-E prompt for fig-2-03-projection-example:
 <!-- S13: The residual is the error -->
 <section>
 <h4>The residual: what's left over</h4>
+<img src="../images/unit02/u2-L03-fig04-projection-1d-example.png" alt="x, its projection p, and the residual r on the line through b" style="float:right; width:36%; margin:0 0 0.4em 1em; border-radius:6px;">
 <p>The <strong>residual</strong> is the gap between the original point and the projection:</p>
 <div class="mathbox">
-\[\mathbf{r} = \mathbf{x} - \text{projection} = (2,0) - (1,1) = (1,-1)\]
+\[\mathbf{r} = \mathbf{x} - \mathbf{p} = (2,0) - (1,1) = (1,-1)\]
 </div>
 <ul>
 <li class="fragment">The residual points from the projection back to the original point.</li>
@@ -287,8 +289,8 @@ DALL-E prompt for fig-2-03-projection-example:
 <h4>Why perpendicular = optimal</h4>
 <p>Think about it with the Pythagorean theorem:</p>
 <img src="../images/unit02/u2-L03-fig05-projection-decomposition.png" alt="Projection decomposition: x = projection + residual" style="float:right; max-height:350px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
-<div class="mathbox fragment">
-\[\norm{\mathbf{x}}^2 = \norm{\text{projection}}^2 + \norm{\text{residual}}^2\]
+<div class="fragment">
+\[\norm{\mathbf{x}}^2 = \norm{\mathbf{p}}^2 + \norm{\mathbf{r}}^2\]
 </div>
 <ul>
 <li class="fragment">The projection and residual form a <strong>right triangle</strong>.</li>
