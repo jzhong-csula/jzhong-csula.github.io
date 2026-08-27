@@ -313,7 +313,8 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 <li class="fragment">\(\ell_2\) ball: a circle (all points at distance 1 from origin).</li>
 <li class="fragment">\(\ell_1\) ball: a diamond (corners on the axes).</li>
 </ul>
-<div class="applied fragment">The diamond shape of the \(\ell_1\) ball is why L1 regularization pushes weights to exactly zero — the corners are on the axes.</div>
+<p class="fragment">A <strong>corner</strong> of the diamond is a vector with <strong>one entry exactly zero</strong> — like \((1, 0)\). The circle has no corners: to sit on it, both entries are normally nonzero.</p>
+<div class="applied fragment">Remember that contrast. Sitting on a corner means a feature is switched <strong>off</strong>; sitting anywhere on the circle means every feature is still <strong>on</strong>, just turned down. In Unit 5 that is exactly the choice we will have to make.</div>
 </div>
 <img src="../images/unit01/u1-L01-fig03-L1-L2-unit-balls.png" alt="L1 diamond vs L2 circle unit balls" style="max-height:420px; max-width:50%; border-radius:6px;">
 </div>
@@ -323,10 +324,12 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 <!-- S21: Quick check: norms -->
 <section>
 <h4>Quick check: norms</h4>
-<div class="quickcheck">Compute \(\norm{(3, -4)}_2\) and \(\norm{(3, -4)}_1\).</div>
-<p class="fragment">Answer: \(\norm{(3, -4)}_2 = \sqrt{9 + 16} = 5\). \(\norm{(3, -4)}_1 = 3 + 4 = 7\).</p>
-<p class="fragment">Notice: \(\ell_2 \le \ell_1\) always. The straight line is never longer than the city blocks.</p>
-<aside class="notes">"3-4-5 right triangle — the most famous Pythagorean triple. The L2 norm is 5, the hypotenuse. The L1 norm is 7, walking along the two legs. The direct path is always shorter than the grid path."</aside>
+<div class="quickcheck">Let \(\mathbf{v} = (1, -2, 2)\). Compute \(\norm{\mathbf{v}}_2\) and \(\norm{\mathbf{v}}_1\).</div>
+<p class="fragment">Answer: \(\norm{\mathbf{v}}_2 = \sqrt{1 + 4 + 4} = \sqrt{9} = 3\). \(\norm{\mathbf{v}}_1 = 1 + 2 + 2 = 5\).</p>
+<div class="quickcheck fragment">Harder: name a vector whose two norms are <strong>equal</strong>.</div>
+<p class="fragment">Any vector with <strong>at most one nonzero entry</strong> — \((3, 0, 0)\), \((0, -4, 0)\). Nothing to add up, so both norms give \(|{\cdot}|\) of that one entry.</p>
+<p class="fragment">Those are exactly the diamond's corners from the last slide. Everywhere else \(\ell_2 &lt; \ell_1\): the straight line beats the city blocks.</p>
+<aside class="notes">"Three dimensions this time, and a negative entry — the absolute value matters for L1, the square kills the sign for L2. Both come out to whole numbers: 3 and 5." "The second part is the real question. Push them: when can the diagonal shortcut save you nothing? Only when you never turn a corner — when the vector points along a single axis. That is the same set of points as the diamond's corners, which is not a coincidence and is worth naming out loud." "So the general fact is L2 <= L1, with equality exactly on the axes."</aside>
 </section>
 
 <!-- ─── Distance ─── -->
