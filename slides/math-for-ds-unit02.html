@@ -141,7 +141,7 @@ Its smallest value is \(\sum_i (\bar{b} - b_i)^2\).
 <section>
 <h4>Why the average wins</h4>
 <p>You already know how to minimize a function: differentiate, set it to zero.</p>
-<div class="mathbox">
+<div>
 \[f(x)=\sum_{i=1}^n (x-b_i)^2
 \qquad\Longrightarrow\qquad
 f'(x)=2\sum_{i=1}^n (x-b_i)=2\Big(nx-\sum_{i=1}^n b_i\Big)\]
@@ -250,7 +250,7 @@ DALL-E prompt for fig-2-02-closest-point:
 <div class="twocol">
 <div>
 <p>Line direction: \(\mathbf{b} = (1,1)\). Point: \(\mathbf{x} = (2,0)\).</p>
-<div class="mathbox fragment">
+<div class="fragment">
 \[\hat{\mathbf{x}} = \frac{\mathbf{b}^\top \mathbf{x}}{\mathbf{b}^\top \mathbf{b}}\,\mathbf{b} = \frac{2}{2}\begin{pmatrix}1\\1\end{pmatrix} = \begin{pmatrix}1\\1\end{pmatrix}\]
 </div>
 <p class="fragment">Closest point on the line to \((2,0)\) is \((1,1)\).</p>
@@ -272,7 +272,7 @@ DALL-E prompt for fig-2-03-projection-example:
 <h4>The residual: what's left over</h4>
 <img src="../images/unit02/u2-L03-fig04-projection-1d-example.png" alt="x, its projection p, and the residual r on the line through b" style="float:right; width:36%; margin:0 0 0.4em 1em; border-radius:6px;">
 <p>The <strong>residual</strong> is the gap between the original point and the projection:</p>
-<div class="mathbox">
+<div>
 \[\mathbf{r} = \mathbf{x} - \mathbf{p} = (2,0) - (1,1) = (1,-1)\]
 </div>
 <ul>
@@ -309,7 +309,7 @@ DALL-E prompt for fig-2-04-pythagorean-projection:
 <section>
 <h4>Proof: any other point on the line is farther</h4>
 <p>Let \(\mathbf{p} = \lambda \mathbf{b}\) be the projection and \(\mathbf{q} = \mu \mathbf{b}\) be any <em>other</em> point on the line (\(\mu \neq \lambda\)).</p>
-<div class="mathbox">
+<div>
 Split the distance to \(\mathbf{q}\):
 \[\mathbf{x} - \mathbf{q} = \underbrace{(\mathbf{x} - \lambda\mathbf{b})}_{\mathbf{r}} + \underbrace{(\lambda - \mu)\mathbf{b}}_{\text{along the line}}\]
 
@@ -433,7 +433,7 @@ DALL-E prompt for fig-2-05-apartment-scatter:
 <section>
 <h4>Your data is a matrix</h4>
 <p>Organize the apartment data into a matrix:</p>
-<div class="mathbox">
+<div>
 \[X = \begin{bmatrix} 8 & 1 \\ 6 & 2 \\ 10 & 0.5 \end{bmatrix} \quad \text{(features: size in 100s, distance)}\]
 
 \[\mathbf{y} = \begin{bmatrix} 3 \\ 2 \\ 5 \end{bmatrix} \quad \text{(rent in \$1000s)}\]
@@ -450,7 +450,7 @@ DALL-E prompt for fig-2-05-apartment-scatter:
 <section>
 <h4>Prediction = matrix × weights</h4>
 <p>Try weights \(\mathbf{w} = (0.4, -0.6)^\top\): "each 100 sqft adds $400, each mile subtracts $600."</p>
-<div class="mathbox fragment">
+<div class="fragment">
 \[\hat{\mathbf{y}} = X\mathbf{w} = \begin{bmatrix} 8 & 1 \\ 6 & 2 \\ 10 & 0.5 \end{bmatrix}\begin{bmatrix} 0.4 \\ -0.6 \end{bmatrix} = \begin{bmatrix} 2.6 \\ 1.2 \\ 3.7 \end{bmatrix}\]
 </div>
 <ul>
@@ -465,7 +465,7 @@ DALL-E prompt for fig-2-05-apartment-scatter:
 <section>
 <h4>The intercept trick</h4>
 <p>The formula \(\hat{y} = w_1 x_1 + w_2 x_2\) forces the line through the origin. To add a baseline rent \(w_0\):</p>
-<div class="mathbox">
+<div>
 Add a column of 1s to \(X\):
 \[\tilde{X} = \begin{bmatrix} 1 & 8 & 1 \\ 1 & 6 & 2 \\ 1 & 10 & 0.5 \end{bmatrix}, \quad \mathbf{w} = \begin{bmatrix} w_0 \\ w_1 \\ w_2 \end{bmatrix}\]
 
@@ -485,7 +485,7 @@ Now \(\hat{y}_i = w_0 + w_1 x_{i1} + w_2 x_{i2}\) — intercept included automat
 <tr><td>B</td><td>2.0</td><td>1.2</td><td>0.8</td><td>0.64</td></tr>
 <tr><td>C</td><td>5.0</td><td>3.7</td><td>1.3</td><td>1.69</td></tr>
 </table>
-<div class="mathbox fragment">
+<div class="fragment">
 \[\text{MSE} = \frac{1}{n}\sum_{i=1}^n(y_i - \hat{y}_i)^2 = \frac{0.16+0.64+1.69}{3} = 0.83\]
 </div>
 <div class="key-question fragment">MSE = <strong>one number</strong> that lets us compare any two models: lower is better.</div>
@@ -536,7 +536,7 @@ Minimize \(\norm{X\mathbf{w} - \mathbf{y}}\) — this is exactly the least squar
 <section>
 <h4>Worked example: the simplest model</h4>
 <p>The simplest model predicts the same number for everything: \(\hat{y} = w\) (constant).</p>
-<div class="mathbox">
+<div>
 \[X = \begin{bmatrix}1\\1\\1\end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix}2\\3\\5\end{bmatrix}\]
 </div>
 <p class="fragment">The column space of \(X\) is the line \((c, c, c)\). We're projecting \(\mathbf{y}\) onto that line.</p>
@@ -549,19 +549,13 @@ Minimize \(\norm{X\mathbf{w} - \mathbf{y}}\) — this is exactly the least squar
 <section>
 <h4>Deriving the normal equation</h4>
 <p>We know from L03: the best fit makes the residual perpendicular to the column space. Let's turn this into a formula.</p>
-<div class="mathbox">
-<strong>Step 1 — State the goal:</strong> the residual \(\mathbf{r} = \mathbf{y} - X\mathbf{w}\) must be perpendicular to every column of \(X\).
-<br/><br/>
-<strong>Step 2 — Write it in math:</strong> "\(\mathbf{r}\) is perpendicular to every column" means:
+<p style="margin:0.25em 0;"><strong>Step 1.</strong> The residual \(\mathbf{r} = \mathbf{y} - X\mathbf{w}\) must be perpendicular to <em>every</em> column of \(X\).</p>
+<p style="margin:0.25em 0;"><strong>Step 2.</strong> Say that in symbols — each row of \(X^\top\) dots with \(\mathbf{r}\) and gives zero:</p>
 \[X^\top \mathbf{r} = \mathbf{0}\]
-<em>(Each row of \(X^\top\) dots with \(\mathbf{r}\) and gives zero.)</em>
-<br/><br/>
-<strong>Step 3 — Substitute \(\mathbf{r}\):</strong>
+<p style="margin:0.25em 0;"><strong>Step 3.</strong> Substitute \(\mathbf{r}\):</p>
 \[X^\top(\mathbf{y} - X\mathbf{w}) = \mathbf{0}\]
-<br/>
-<strong>Step 4 — Expand and rearrange:</strong>
+<p style="margin:0.25em 0;"><strong>Step 4.</strong> Expand and rearrange:</p>
 \[X^\top \mathbf{y} - X^\top X \mathbf{w} = \mathbf{0} \quad\Longrightarrow\quad \boxed{X^\top X \,\mathbf{w} = X^\top \mathbf{y}}\]
-</div>
 <div class="key-question fragment">Four steps: goal → math → substitute → rearrange. The normal equation is a <strong>direct consequence</strong> of perpendicularity.</div>
 <aside class="notes">"This is the same three-line derivation as the projection formula from L03, just in matrix form. Step 1: state the geometric principle (perpendicular). Step 2: write it as an equation. Step 3-4: do the algebra. I want every student to be able to reproduce this on the board."</aside>
 </section>
@@ -586,7 +580,7 @@ Minimize \(\norm{X\mathbf{w} - \mathbf{y}}\) — this is exactly the least squar
 <section>
 <h4>Worked example: solve the normal equation by hand</h4>
 <p>Model: \(\hat{y} = ax\) (no intercept). Data: \(x = (1,2,3)\), \(y = (2,2,3)\).</p>
-<div class="mathbox">
+<div>
 \[X^\top X = 1^2 + 2^2 + 3^2 = 14\]
 \[X^\top \mathbf{y} = 1\cdot 2 + 2\cdot 2 + 3\cdot 3 = 15\]
 \[a^* = \frac{15}{14} \approx 1.07\]
@@ -649,7 +643,7 @@ DALL-E prompt for fig-2-06-schedule-conflict:
 <li>You: 1 taco + 1 drink = $5</li>
 <li>Friend: 1 taco − 1 drink = $1 (friend paid less for just a taco)</li>
 </ul>
-<div class="mathbox fragment">
+<div class="fragment">
 \[\begin{cases} x + y = 5 \\ x - y = 1 \end{cases}\]
 Add: \(2x = 6 \Rightarrow x = 3\). Substitute: \(y = 2\).
 </div>
@@ -713,7 +707,7 @@ The column space of \(A\): \(\text{col}(A) = \{A\mathbf{x} : \mathbf{x} \in \mat
 <!-- S39: Column space example -->
 <section>
 <h4>Example: what can this matrix produce?</h4>
-<div class="mathbox">
+<div>
 \[A = \begin{bmatrix} 1 & 0 \\ 0 & 1 \\ 0 & 0 \end{bmatrix}\]
 Any \(A\mathbf{x}\) has the form \(\begin{pmatrix}x_1\\x_2\\0\end{pmatrix}\).
 </div>
@@ -754,7 +748,7 @@ If every row of \(A\) has last entry zero, what must be true about \(\mathbf{b}\
 <section>
 <h4>Overdetermined systems: putting it together</h4>
 <p>Back to the age-guessing problem: \(x = 19, x = 21, x = 20\).</p>
-<div class="mathbox">
+<div>
 \[A = \begin{bmatrix}1\\1\\1\end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix}19\\21\\20\end{bmatrix}\]
 Column space = the line \((c, c, c)\). But \(\mathbf{b} = (19, 21, 20)\) is NOT on that line.
 </div>
@@ -847,7 +841,7 @@ DALL-E prompt for fig-2-09-autocorrect-fail:
 <section>
 <h4>Example: pseudoinverse in action</h4>
 <p>Data: \(x = (1, 2, 3)\), \(y = (1, 2, 2.5)\). Model: \(\hat{y} = ax\).</p>
-<div class="mathbox">
+<div>
 \[A = \begin{bmatrix}1\\2\\3\end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix}1\\2\\2.5\end{bmatrix}\]
 \[A^\top A = 1+4+9 = 14\]
 \[A^\top \mathbf{b} = 1+4+7.5 = 12.5\]
@@ -877,7 +871,7 @@ The pseudoinverse \(A^+\) gives:
 <section>
 <h4>When many solutions exist: pick the simplest</h4>
 <p>Sometimes a system has infinitely many solutions:</p>
-<div class="mathbox">
+<div>
 \[A = \begin{bmatrix}1 & 0\\1 & 0\\1 & 0\end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix}2\\2\\2\end{bmatrix}\]
 Any \(\mathbf{x} = (2, t)^\top\) works for any \(t\). Which one to pick?
 </div>
@@ -902,7 +896,7 @@ If \(\mathbf{b}\) lies in the column space of \(A\), what does \(A^+\mathbf{b}\)
 <section>
 <h4>The stability problem</h4>
 <p>Consider two features that are <em>almost</em> identical:</p>
-<div class="mathbox">
+<div>
 \[A = \begin{bmatrix} 1 & 1 \\ 1 & 1.001 \end{bmatrix}\]
 The columns are 99.9% the same. What happens?
 </div>
