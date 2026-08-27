@@ -161,12 +161,13 @@ Its smallest value is \(\sum_i (\bar{b} - b_i)^2\).
 <p>Every AI training loop does the same thing:</p>
 <ol>
 <li class="fragment">Make a <strong>prediction</strong>.</li>
-<li class="fragment">Compare to the <strong>true answer</strong>.</li>
-<li class="fragment">Measure the <strong>error</strong> (usually squared).</li>
-<li class="fragment"><strong>Adjust</strong> to reduce the error.</li>
+<li class="fragment">Compare it to the answer <strong>recorded in the data</strong>.</li>
+<li class="fragment">Measure the <strong>error</strong> — square it, then add up over all the data.</li>
+<li class="fragment"><strong>Adjust</strong> to make that total smaller.</li>
 </ol>
-<div class="key-question fragment" style="clear:both;">The "three friends guessing your age" problem is the simplest version of step 1–3. Today we'll build the geometry of step 4.</div>
-<aside class="notes">"ChatGPT, image generators, self-driving cars — they all train this way. The difference is scale and complexity, but the core loop is: predict, check, measure error, adjust. The math of 'adjust' is what this entire unit is about."</aside>
+<p class="fragment" style="clear:both;">Step 2 says <em>recorded in the data</em> — not <em>the truth</em>. A model never sees the truth. It only sees what was written down, and that can be noisy, or disagree with itself, exactly like three friends who give you three different ages.</p>
+<div class="key-question fragment">The age problem is steps 1–3, with the three guesses as the recorded answers. Today we build the geometry of step 4.</div>
+<aside class="notes">"ChatGPT, image generators, self-driving cars — all train this way. Scale and complexity differ; the loop does not." "Be careful with step 2, and say this out loud: we are NOT comparing against truth. We compare against recorded data. A student who asks 'but how do we know the right answer?' has caught the most important thing on this slide — we don't, and we never will. Least squares needs only the recorded answers." "The math of 'adjust' is what this entire unit is about."</aside>
 </section>
 
 <!--
