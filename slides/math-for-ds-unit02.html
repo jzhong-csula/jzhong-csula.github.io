@@ -83,7 +83,7 @@
 <section>
 <h4>L03 — Projection: The Geometry of "Closest"</h4>
 <p>Three friends guess your age:</p>
-<table style="width:auto; margin:0.2em 0;">
+<table style="width:auto; margin:0.4em auto;">
 <tr><th>Alice</th><th>Bob</th><th>Carol</th></tr>
 <tr><td>19</td><td>21</td><td>20</td></tr>
 </table>
@@ -106,7 +106,7 @@ DALL-E prompt for fig-2-00-gps-satellites:
 <section>
 <h4>Why the average? Minimizing squared error</h4>
 <p>We never find out your real age. All we have is the three answers — so "error" here does <strong>not</strong> mean distance from the truth. It means <strong>how far our one answer sits from each friend's</strong>.</p>
-<p class="fragment">Pick a candidate \(x\). It misses Alice by \(x-19\), Bob by \(x-21\), Carol by \(x-20\). Square each — so overshooting and undershooting both count as being off — and add them up:</p>
+<p class="fragment">Pick a candidate \(x\). It misses Alice by \(x-19\), Bob by \(x-21\), Carol by \(x-20\). Square each one, so being 2 too high counts the same as being 2 too low. Then add them up:</p>
 <table class="fragment">
 <tr><th>Our answer \(x\)</th><th>miss Alice \((x-19)^2\)</th><th>miss Bob \((x-21)^2\)</th><th>miss Carol \((x-20)^2\)</th><th>Total</th></tr>
 <tr><td>18</td><td>1</td><td>9</td><td>4</td><td>14</td></tr>
