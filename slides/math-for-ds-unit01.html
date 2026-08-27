@@ -362,14 +362,18 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 <section>
 <h4>Now name it: distance</h4>
 <div class="mathbox">
-\[d(\mathbf{x}, \mathbf{y}) = \norm{\mathbf{x} - \mathbf{y}}_2 = \sqrt{\sum_{i=1}^d (x_i - y_i)^2}.\]
+Distance is the <strong>size of the difference</strong> — so <em>every</em> norm gives one:
+\[d(\mathbf{x}, \mathbf{y}) = \norm{\mathbf{x} - \mathbf{y}}\]
 </div>
 <ul>
+<li class="fragment">With \(\ell_2\): \(\sqrt{\sum_i (x_i-y_i)^2}\) — straight-line distance. <strong>This is the default</strong>: when we write "distance" with no subscript, we mean this one.</li>
+<li class="fragment">With \(\ell_1\): \(\sum_i |x_i-y_i|\) — city-block distance. The right one for anything that has to travel on a grid.</li>
+<li class="fragment">Whichever you pick, the same three properties hold:</li>
 <li class="fragment">Always \(\ge 0\). Equals \(0\) only when \(\mathbf{x} = \mathbf{y}\) (same point).</li>
 <li class="fragment">Symmetric: distance from A to B = distance from B to A.</li>
 <li class="fragment">Triangle inequality: the direct path is never longer than a detour.</li>
 </ul>
-<aside class="notes">"These three properties are what make it a 'true' distance. Any function with these three properties is called a metric. Different norms give different distances — L1 distance is the city-block distance, L2 is the straight-line distance."</aside>
+<aside class="notes">"Say the general statement first: distance is just the size of a difference, so any norm you have gives you a distance. We happen to use L2 by default, but that is a choice, not a law." "A student may reasonably ask which one is correct. Neither — it depends on how movement is actually constrained. The delivery robot on the grid is the case where L1 is the honest answer and L2 would understate the trip." "These three properties are what make something a true distance; any function with them is called a metric. Both L1 and L2 satisfy all three." Homework P3 asks them to compute both for the same pair of points.</aside>
 </section>
 
 <!-- S25: Common mistake -->
