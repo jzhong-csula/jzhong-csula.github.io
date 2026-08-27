@@ -446,7 +446,7 @@ Distance is the <strong>size of the difference</strong> — so <em>every</em> no
 <div class="mathbox">
 \[\cos\theta \;=\; \hat{\mathbf{x}}^\top \hat{\mathbf{y}} \;=\; \frac{\mathbf{x}^\top \mathbf{y}}{\norm{\mathbf{x}}_2 \, \norm{\mathbf{y}}_2}\]
 </div>
-<p class="fragment">The denominator is not a fudge factor: it <em>is</em> the normalizing step, done to both vectors at once. Always between \(-1\) and \(1\).</p>
+<p class="fragment">The denominator is not a fudge factor: it <em>is</em> the normalizing step, done to both vectors at once. The value always lands in \([-1,1]\) — next slide shows why it deserves the name \(\cos\).</p>
 <table>
 <tr><th>Value</th><th>Meaning</th><th>Example</th></tr>
 <tr><td>\(\cos\theta = 1\)</td><td>Same direction</td><td>Two action fans (different intensity)</td></tr>
@@ -455,6 +455,21 @@ Distance is the <strong>size of the difference</strong> — so <em>every</em> no
 </table>
 <div class="applied fragment">Google Search ranks pages by cosine similarity between your query vector and each page's vector.</div>
 <aside class="notes">"When you Google something, the search engine turns your query into a vector and every web page into a vector. It computes cosine similarity between your query and each page. Highest cosine = best match. That's why a search for 'best pizza near me' returns pizza reviews, not sushi restaurants — high cosine similarity."</aside>
+</section>
+
+<!-- S28b: why is it a cosine -->
+<section>
+<h4>Why is that number a cosine?</h4>
+<p>Fair question — so far we only <em>called</em> it \(\cos\theta\). In the plane we can check it.</p>
+<ul>
+<li class="fragment">Every unit vector sits on the unit circle, so it is fixed by its own angle:
+\(\hat{\mathbf{x}} = (\cos\alpha,\ \sin\alpha)\), \(\hat{\mathbf{y}} = (\cos\beta,\ \sin\beta)\).</li>
+<li class="fragment">Dot them, and use the angle-subtraction identity you already know:
+\[\hat{\mathbf{x}}^\top \hat{\mathbf{y}} = \cos\alpha\cos\beta + \sin\alpha\sin\beta = \cos(\alpha - \beta).\]</li>
+<li class="fragment">And \(\alpha - \beta\) <em>is</em> the angle between them. So the name is earned, not assumed.</li>
+</ul>
+<div class="applied fragment">In \(\R^{300}\) there is no picture to read an angle off. So we turn it around and <strong>define</strong> the angle by \(\theta = \arccos(\hat{\mathbf{x}}^\top\hat{\mathbf{y}})\) — legal because the value never leaves \([-1,1]\), and safe because the line above shows it agrees with the ordinary angle whenever we <em>can</em> see one.</div>
+<aside class="notes">"This is the slide that answers the question they are already thinking. Do the algebra on the board — it is one identity from precalculus and it takes thirty seconds." "Check the two ends with them: alpha = beta gives cos 0 = 1, same direction; alpha - beta = 90 degrees gives cos 90 = 0, perpendicular. Those are two of the three rows in the table they just saw, now derived rather than asserted." "The last box is the honest part. In high dimensions this stops being a theorem and becomes a definition. Say that out loud — students respect it, and it is how MML does it too. The fact that the ratio never escapes [-1, 1] is the Cauchy-Schwarz inequality; name it, do not prove it today."</aside>
 </section>
 
 <!-- S27: Worked example step 1 -->
