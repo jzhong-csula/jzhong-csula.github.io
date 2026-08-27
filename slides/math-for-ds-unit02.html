@@ -140,18 +140,19 @@ Its smallest value is \(\sum_i (\bar{b} - b_i)^2\).
 <!-- Proof of the averaging theorem -->
 <section>
 <h4>Why the average wins</h4>
-<p>The whole proof is one move: split each miss into two pieces.</p>
-\[x - b_i \;=\; \underbrace{(x - \bar b)}_{\text{you vs. the average}} \;+\; \underbrace{(\bar b - b_i)}_{\text{the average vs. } b_i}\]
-<p class="fragment">Square both sides and add over all \(i\). The middle term collapses, and what survives is</p>
-<div class="mathbox fragment">
-\[f(x) \;=\; \underbrace{n\,(x - \bar b)^2}_{\text{you control this}} \;+\; \underbrace{\sum_{i=1}^n (\bar b - b_i)^2}_{\text{no } x \text{ in it}}\]
+<p>You already know how to minimize a function: differentiate, set it to zero.</p>
+<div class="mathbox">
+\[f(x)=\sum_{i=1}^n (x-b_i)^2
+\qquad\Longrightarrow\qquad
+f'(x)=2\sum_{i=1}^n (x-b_i)=2\Big(nx-\sum_{i=1}^n b_i\Big)\]
 </div>
 <ul>
-<li class="fragment">The right piece has no \(x\) — nothing you choose can change it.</li>
-<li class="fragment">The left piece is never negative, and is zero <strong>only</strong> when \(x = \bar b\).</li>
-<li class="fragment">So \(\bar b\) is the minimizer, it is the only one, and the leftover is that right piece. <strong>∎</strong></li>
+<li class="fragment">Set \(f'(x)=0\): \(\;nx=\sum_i b_i\;\), so \(\;x=\frac{1}{n}\sum_i b_i=\bar b\). <strong>The average falls out.</strong></li>
+<li class="fragment">\(f''(x)=2n>0\) everywhere, so this is a minimum — and it's the only place \(f'\) is zero, so it's the only one. <strong>∎</strong></li>
+<li class="fragment">Our data: \(f'(x)=2(3x-60)=0 \Rightarrow x=20\).</li>
 </ul>
-<aside class="notes">"Do the splitting step on the board and stop there. Do not grind through the expansion in class — give them the move and the conclusion." "This identity is the entire unit in miniature: a quantity splits into a part you can control and a part you cannot, and the two do not interact. In two lectures the same split will be written as the Pythagorean theorem, with the second piece as the residual." "MML asserts that the projection is the closest point (Ch 3.8) but never proves it — it says 'using geometric arguments'. So this proof is ours, and it is worth telling them that."</aside>
+<div class="applied fragment">This is exactly what training a model does: write down the error, differentiate, and go where the derivative says. Every AI system in this course is doing this — just with many variables instead of one.</div>
+<aside class="notes">"They have Calculus 2, so lead with the derivative — it is the tool they trust, and it is literally what gradient descent does." "Emphasize f'' > 0: it is what upgrades 'critical point' to 'minimum', and it is why least squares has no local-minimum trouble. That single fact is why linear regression is solvable and neural networks are not." "The homework proves the same theorem again with pure algebra. That version reveals structure the derivative hides — the error splits into a piece you control and a piece you cannot — and that split becomes the Pythagorean theorem in L03. Tell them to watch for it." "MML asserts the projection is closest (Ch 3.8, 'using geometric arguments') but never proves it. This proof is ours."</aside>
 </section>
 
 <!-- S08: AI connection — training a model -->
