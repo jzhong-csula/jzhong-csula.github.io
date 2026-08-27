@@ -370,15 +370,17 @@ Minimizing \(\norm{A\mathbf{x} - \mathbf{b}}\) is the same as projecting \(\math
 <!-- S18: Least squares example — fitting a line -->
 <section>
 <h4>Example: fitting a line through data</h4>
-<p>Three data points: \((0, 1)\), \((1, 2)\), \((2, 2)\). We want the best line \(\hat{y} = w_0 + w_1 t\).</p>
-<div class="mathbox fragment">
-\[A = \begin{bmatrix} 1 & 0 \\ 1 & 1 \\ 1 & 2 \end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix}\]
-Each row: (1, \(t_i\)). The "1" column handles the intercept \(w_0\).
+<p>Three data points \((t_i, y_i)\): \((0, 1)\), \((1, 2)\), \((2, 2)\). We want the best line \(\hat{y} = w_0 + w_1 t\).</p>
+<p class="fragment"><strong>Both \(A\) and \(\mathbf{b}\) are read straight off those three points</strong> — nothing else goes in:</p>
+<div class="fragment">
+\[\underbrace{\begin{bmatrix} 1 & 0 \\ 1 & 1 \\ 1 & 2 \end{bmatrix}}_{A:\ \text{a row } (1,\, t_i) \text{ per point}}
+\qquad
+\underbrace{\begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix}}_{\mathbf{b}:\ \text{the observed } y_i}\]
 </div>
 <ul>
-<li class="fragment">The columns of \(A\) span a <strong>plane</strong> in \(\mathbb{R}^3\).</li>
-<li class="fragment">We want the point on that plane closest to \(\mathbf{b}\).</li>
-<li class="fragment">That's a projection — exactly what we just learned!</li>
+<li class="fragment">The \(1\) column of \(A\) is what lets the line have an intercept \(w_0\); the \(t_i\) column carries the slope \(w_1\). So \(A\mathbf{w}\) is the vector of <em>predictions</em>, and \(\mathbf{b}\) is the vector of <em>observations</em>.</li>
+<li class="fragment"><strong>Careful — \(\mathbf{b}\) has changed jobs.</strong> On the last few slides \(\mathbf{b}\) was the direction of the line we projected <em>onto</em>. Here it is the vector being <em>projected</em>, and the subspace is the <strong>column space of \(A\)</strong> — a plane in \(\R^3\).</li>
+<li class="fragment">We want the point on that plane closest to \(\mathbf{b}\). That is a projection — exactly what we just built.</li>
 </ul>
 <aside class="notes">"Each data point gives one equation. Three points, two unknowns (slope and intercept). The system is overdetermined. The best line is the projection of b onto the column space of A. We'll compute this with the normal equation in L04."</aside>
 </section>
