@@ -650,7 +650,7 @@ For \(A \in \R^{m \times n}\) and \(\mathbf{x} \in \R^n\):
 <li class="fragment">Each output entry = dot product of row \(i\) with \(\mathbf{x}\).</li>
 <li class="fragment">Dimensions: \(A \in \R^{m \times n}\), \(\mathbf{x} \in \R^n\) \(\Rightarrow\) \(A\mathbf{x} \in \R^m\). Input has \(n\) entries, output has \(m\).</li>
 </ul>
-<div class="applied fragment">In AI: \(A\) = model weights, \(\mathbf{x}\) = input features, \(A\mathbf{x}\) = predictions. This is a <strong>linear model</strong>.</div>
+<div class="applied fragment">In AI this is one layer of a network: \(A\) = learned weights, \(\mathbf{x}\) = one input, \(A\mathbf{x}\) = its output. Careful — linear regression writes the <em>same</em> operation the other way round, \(X\mathbf{w}\), with the data first. We sort the two out before the end of L02.</div>
 <aside class="notes">"The formal definition looks dense but it's saying: for each row, take the dot product with x. That's it. The dimension rule is crucial: the number of COLUMNS in A must equal the number of ENTRIES in x. Otherwise the dot products don't work — you'd be multiplying mismatched lists."</aside>
 </section>
 
@@ -791,6 +791,21 @@ For \(A \in \R^{m \times n}\) and \(B \in \R^{n \times p}\):
 <!-- ─── Data Matrix View ─── -->
 
 <!-- S52: The prediction pipeline -->
+<section>
+<h4>The same object, two jobs</h4>
+<p>A matrix is a rectangular array of numbers. What it <em>means</em> is not in the array — it is in where the array came from. This course uses two:</p>
+<table>
+<tr><th></th><th>Data matrix \(X\)</th><th>Transformation \(A\)</th></tr>
+<tr><td>a row is</td><td>one sample</td><td>one output coordinate</td></tr>
+<tr><td>a column is</td><td>one feature</td><td>one input coordinate</td></tr>
+<tr><td>it holds</td><td>measurements you collected</td><td>what the map does</td></tr>
+</table>
+<p class="fragment"><strong>The arithmetic is identical</strong> — row \(i\) dotted with the vector, every time. Only the story changes.</p>
+<div class="applied fragment">And you may switch stories on purpose. Hold \(X\) fixed and let \(\mathbf{w}\) vary: now \(X\) <em>is</em> a machine, turning any weight vector into \(n\) predictions. <strong>Unit 2 needs exactly that reading</strong> — least squares asks which of the reachable prediction vectors comes closest to the truth.</div>
+<div class="key-question fragment">Notation warning: regression writes \(X\mathbf{w}\) (data first), a network layer writes \(W\mathbf{x}\) (weights first). Same operation. <strong>Read the shapes, not the letter.</strong></div>
+<aside class="notes">"Students ask whether a matrix is data or a transformation, and the honest answer is that the question is malformed — it is neither, it is numbers in a grid, and the meaning comes from the modelling story." "The row-dot-vector arithmetic never changes. That is worth saying slowly, because it is the thing that stays fixed while everything else moves." "The switch-of-story box is the bridge to Unit 2 and it is not decoration. Projection onto the column space only makes sense once X is read as a map from weight space to prediction space. Plant it here and Unit 2 costs you nothing." "The notation warning saves real confusion in the reading. Tell them to check shapes: if the vector has d entries and the matrix has d columns, it goes on the right, whatever the letters are."</aside>
+</section>
+
 <section>
 <h4>The prediction pipeline</h4>
 <div class="key-question">How does matrix-vector multiplication look in a real prediction pipeline?</div>
