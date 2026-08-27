@@ -63,6 +63,7 @@
 <li class="fragment">Dot product — agreement score <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
 <li class="fragment">Norms — measuring size <span style="color:#2563eb; font-size:0.85em;">[MASTER: L2] [UNDERSTAND: L1]</span></li>
 <li class="fragment">Distance — how far apart <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment">Unit vectors — stripping size off a vector <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
 <li class="fragment">Cosine similarity — direction without magnitude <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
 </ul>
 </section>
@@ -279,13 +280,14 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 <section>
 <h4>The city-block way: L1 norm</h4>
 <p>In Manhattan, you can't walk diagonally. You walk <strong>3 blocks east</strong>, then <strong>4 blocks north</strong>. Total: 7 blocks.</p>
-<p class="fragment">The <strong>\(\ell_1\) norm</strong> adds absolute values:</p>
-<p class="fragment">For \(\mathbf{u} = (-2, 5)\): \(\norm{\mathbf{u}}_1 = |-2| + |5| = 2 + 5 = 7.\)</p>
+<p class="fragment">The <strong>\(\ell_1\) norm</strong> adds absolute values.</p>
+<p class="fragment">That walk <em>is</em> the vector \((3,4)\) — the same one from the last slide:</p>
 <ul>
-<li class="fragment">\(\ell_2\) (Pythagoras): straight-line distance = \(\sqrt{4 + 25} = \sqrt{29} \approx 5.4\).</li>
-<li class="fragment">\(\ell_1\) (Manhattan): walk along grid lines = \(7\).</li>
+<li class="fragment">\(\ell_2\) (Pythagoras): cut across, \(\norm{(3,4)}_2 = 5\).</li>
+<li class="fragment">\(\ell_1\) (Manhattan): walk the grid, \(\norm{(3,4)}_1 = 3 + 4 = 7\). The detour costs \(2\).</li>
+<li class="fragment">Signs never matter, only sizes: \(\norm{(-2,5)}_1 = |{-2}| + |5| = 7\) too.</li>
 </ul>
-<div class="applied fragment">Same vector, two ways to measure "how big." Each is useful in different AI applications.</div>
+<div class="applied fragment"><strong>One vector, two answers.</strong> Neither is wrong — they answer different questions, and different AI methods ask different ones.</div>
 <aside class="notes">"Why two norms? L2 penalizes big errors more (because of squaring). L1 treats every error equally. In machine learning, choosing L1 vs L2 changes what your model learns — L1 tends to zero out small features (sparsity), L2 spreads the error around. We'll see this again when we study regularization."</aside>
 </section>
 
@@ -306,19 +308,16 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 <!-- S20a: L1 vs L2 — the two shapes -->
 <section>
 <h4>L1 vs L2: different shapes</h4>
-<div style="display:flex; align-items:center; gap:1em;">
-<div style="flex:1;">
+<img src="../images/unit01/u1-L01-fig03-L1-L2-unit-balls.png" alt="L1 diamond inside L2 circle" style="float:right; width:36%; margin:0 0 0.5em 1.1em; border-radius:6px;">
 <p>Both measure size. Do they agree on what "size \(\le 1\)" <em>looks like</em>?</p>
 <ul>
 <li class="fragment">\(\ell_2\): \(x^2 + y^2 \le 1\) — a <strong>disk</strong>, with a round boundary.</li>
 <li class="fragment">\(\ell_1\): \(|x| + |y| \le 1\) — a <strong>diamond</strong>, with four straight edges.</li>
 </ul>
 <p class="fragment">They touch at exactly four points, \((\pm 1, 0)\) and \((0, \pm 1)\). Check one: \((1,0)\) has \(\norm{\cdot}_2 = \norm{\cdot}_1 = 1\), so it lies on both boundaries.</p>
-<p class="fragment">Everywhere else the diamond is strictly <strong>inside</strong> the disk — which looks backwards, since \(\ell_1\) gives the <em>bigger</em> number. But recall \(\mathbf{u}=(-2,5)\): \(\ell_1\) said \(7\), \(\ell_2\) said \(5.4\). <strong>Walking the blocks is never shorter than cutting across.</strong> And bigger numbers mean <strong>fewer</strong> vectors get under \(\text{size}\le 1\) — so the \(\ell_1\) shape is the smaller one.</p>
+<p class="fragment">Everywhere else the diamond is strictly <strong>inside</strong> the disk — which looks backwards, since \(\ell_1\) gives the <em>bigger</em> number. But recall \((3,4)\): \(\ell_1\) said \(7\), \(\ell_2\) said \(5\). <strong>Walking the blocks is never shorter than cutting across.</strong> And bigger numbers mean <strong>fewer</strong> vectors get under \(\text{size}\le 1\) — so the \(\ell_1\) shape is the smaller one.</p>
 <p class="fragment">\(\mathbf{v} = (0.7, 0.7)\): \(0.99\) from \(\ell_2\), \(1.4\) from \(\ell_1\) — <em>inside</em> the disk, <em>outside</em> the diamond.</p>
-</div>
-<img src="../images/unit01/u1-L01-fig03-L1-L2-unit-balls.png" alt="L1 diamond inside L2 circle" style="max-height:360px; max-width:45%; border-radius:6px;">
-</div>
+<div style="clear:both;"></div>
 <aside class="notes">"Ask them to predict the shape before you reveal it. Most guess the diamond wrong — they expect another round blob." "Expect the objection: how can the smaller shape have the bigger norm? Do not reach for a new metaphor — point back at the Manhattan slide they just did. Walking 7 blocks versus cutting across 5.4 is the whole reason L1 is bigger, and it is already on the board." "Then make the logical step explicit, because that is the part they skip: bigger numbers mean fewer vectors get under the limit, so the shape shrinks. A set of vectors and a number attached to one vector are not the same kind of object; that is why it feels like a contradiction and is not." "Then walk (0.7, 0.7) with them: it clears the disk by a hair and misses the diamond by 40 percent. That single vector is worth more than the inequality." Point at the four touch points and at the quick check answer on the board if it is still up."</aside>
 </section>
 
@@ -550,6 +549,7 @@ Distance is the <strong>size of the difference</strong> — so <em>every</em> no
 <li class="fragment">Matrix-vector multiplication = batch prediction <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
 <li class="fragment">Linear maps — what "linear" means geometrically <span style="color:#d97706; font-size:0.85em;">[UNDERSTAND]</span></li>
 <li class="fragment">Matrix-matrix multiplication = chaining transformations <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
+<li class="fragment">Dimension checking — inner dimensions must match <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
 </ul>
 </section>
 
@@ -663,7 +663,7 @@ For \(A \in \R^{m \times n}\) and \(\mathbf{x} \in \R^n\):
 <li class="fragment">Row 2: \((-1)(2) + 3(-1) = -2 - 3 = -5\).</li>
 <li class="fragment">\(A\mathbf{x} = \begin{bmatrix} 0 \\ -5 \end{bmatrix}\). The matrix turned \((2, -1)\) into \((0, -5)\).</li>
 </ul>
-<div class="key-question fragment">The matrix <strong>moved</strong> the vector. It transformed it. That's what matrices DO — they are transformation machines.</div>
+<div class="key-question fragment">The matrix <strong>moved</strong> the vector — it transformed it. That is one of the two jobs a matrix does; holding data was the other, and we settle how they fit together at the end of L02.</div>
 <aside class="notes">"Look at what happened: we put in (2, -1) and got out (0, -5). The matrix MOVED the point. Different matrices move points differently — some stretch, some rotate, some flip. That's the key insight: a matrix is not just a table of numbers. It's a MACHINE that transforms vectors."</aside>
 </section>
 
@@ -856,14 +856,14 @@ Data matrix \(X \in \R^{n \times d}\), weight vector \(\mathbf{w} \in \R^d\), pr
 <li class="fragment"><strong>Dimension check</strong>: always verify inner dimensions before computing. <span style="color:#2563eb; font-size:0.85em;">[MASTER]</span></li>
 <li class="fragment"><strong>Linear maps</strong>: lines stay straight, origin stays fixed. <span style="color:#d97706; font-size:0.85em;">[UNDERSTAND]</span></li>
 </ul>
-<div class="applied fragment">Matrices are the backbone of AI: data storage, prediction, and transformation — all in one object.</div>
+<div class="applied fragment">Matrices are the backbone of AI: data storage, prediction, and transformation — one object, and the arithmetic never changes.</div>
 <aside class="notes">"Four ideas, all connected. Matrices hold data. Multiplying a matrix by a vector makes predictions. Multiplying two matrices chains transformations. And the dimension check keeps everything consistent. These are the building blocks for everything that follows."</aside>
 </section>
 
 <!-- S56: Preview -->
 <section>
 <h4>Preview</h4>
-<div class="applied">We now have the building blocks: vectors for data, dot products for comparison, matrices for transformation.</div>
+<div class="applied">We now have the building blocks: vectors for data, dot products for comparison, matrices for both holding data and transforming it.</div>
 <p class="fragment">Next unit: what if the model <strong>cannot fit all data exactly</strong>? We will need projection, residuals, and least squares.</p>
 <aside class="notes">"So far we've been computing exact products. But real data is noisy — no line passes through every point. Next unit: what's the BEST line? How close can we get? That's regression — the most important algorithm in data science."</aside>
 </section>
@@ -882,9 +882,12 @@ Data matrix \(X \in \R^{n \times d}\), weight vector \(\mathbf{w} \in \R^d\), pr
 <li>Represent data as a vector and explain what each entry means</li>
 <li>Compute a dot product and interpret the sign</li>
 <li>Compute the L2 norm and Euclidean distance</li>
+<li>Normalize a vector to length 1, and say why two unit vectors' dot product <em>is</em> a cosine</li>
 <li>Compute cosine similarity and explain why it ignores magnitude</li>
+<li>Sketch both unit balls, say which has corners, and what a corner means for a model</li>
 <li>Multiply a matrix by a vector and check dimensions</li>
 <li>Multiply two matrices and state the output shape</li>
+<li>Say whether a matrix is playing the <em>data</em> role or the <em>transformation</em> role</li>
 </ul>
 </div>
 <div style="flex:1;">
@@ -892,7 +895,7 @@ Data matrix \(X \in \R^{n \times d}\), weight vector \(\mathbf{w} \in \R^d\), pr
 <ul>
 <li>Prove properties of norms or metrics</li>
 <li>State the formal definition of a linear map</li>
-<li>Understand L1 vs L2 unit ball geometry in detail</li>
+<li>Derive <em>why</em> \(\ell_1\) produces exact zeros — that needs constrained optimization (Unit 5)</li>
 <li>Know what regularization does (that's Unit 5)</li>
 <li>Multiply large matrices by hand — 2×2 and 2×3 are enough</li>
 </ul>
@@ -911,7 +914,7 @@ Data matrix \(X \in \R^{n \times d}\), weight vector \(\mathbf{w} \in \R^d\), pr
 <ul>
 <li class="fragment"><strong>Vectors</strong> represent data as ordered lists of numbers.</li>
 <li class="fragment"><strong>Dot products, norms, distances, and cosine</strong> compare vectors.</li>
-<li class="fragment"><strong>Matrices</strong> transform vectors: one dot product per row.</li>
+<li class="fragment"><strong>Matrices</strong> do two jobs — hold data (rows = samples) and transform vectors — with the same arithmetic: one dot product per row.</li>
 <li class="fragment"><strong>Matrix multiplication</strong> composes transformations.</li>
 </ul>
 <div class="applied fragment">These four ideas power every AI application we saw in Unit 0: Spotify, Google, ChatGPT.</div>
