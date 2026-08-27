@@ -31,15 +31,20 @@
 <!-- S01: Unit map -->
 <section>
 <h4>Unit map</h4>
-<p>A model has only a handful of numbers to tune. Every data point makes a demand on them: <em>"for this input, produce that output."</em></p>
+<div style="display:flex; align-items:flex-start; gap:1em;">
+<div style="flex:1.05;">
+<p style="margin-top:0;">A model has only a handful of numbers to tune. Every data point makes a demand on them: <em>"for this input, produce that output."</em></p>
 <p class="fragment">Real data always makes <strong>more demands than the model has numbers</strong>. So no setting satisfies every point — some error is unavoidable.</p>
-<div class="key-question fragment">If "get every point right" is impossible, what does <strong>best</strong> mean — and how do we compute it?</div>
-<ul>
+<div class="key-question fragment" style="margin:0.4em 0;">If "get every point right" is impossible, what does <strong>best</strong> mean — and how do we compute it?</div>
+<ul style="margin-bottom:0;">
 <li class="fragment">L03: projection — the geometry behind "closest."</li>
 <li class="fragment">L04: linear regression, MSE, the normal equation.</li>
 <li class="fragment">L05: linear systems, column space — when does an exact answer exist?</li>
 <li class="fragment">L06: pseudoinverse, stability — what to do when formulas break.</li>
 </ul>
+</div>
+<img src="../images/unit02/u2-L00-fig00-regression-one-picture.png" alt="Data points, the best-fit line, and the residual gaps" style="max-height:430px; max-width:44%; border-radius:6px;">
+</div>
 <aside class="notes">"This unit is about one big question: how does a model learn from data? The answer turns out to be geometric — the best model is the closest point in a certain space. We'll build to that step by step."</aside>
 </section>
 
