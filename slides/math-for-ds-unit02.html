@@ -71,7 +71,7 @@
 <li class="fragment"><strong>Lens 4 (L15–L16)</strong>: <em>Optimization</em> — gradient descent.</li>
 <li class="fragment"><strong>Lens 5 (L25)</strong>: <em>Probabilistic</em> — maximum likelihood.</li>
 </ul>
-<div class="applied fragment">Unit 2 shows the first two.</div>
+<p class="fragment">Unit 2 shows the first two.</p>
 <aside class="notes">"Why five lenses? Because each one reveals something the others hide. The geometric lens gives intuition; the algebraic lens gives a formula; the calculus lens shows why that formula works; the optimization lens scales to millions of data points; and the probabilistic lens handles uncertainty. By the end of the course, you'll see they all agree."</aside>
 </section>
 
@@ -82,15 +82,18 @@
 <!-- S04: L03 Opening — GPS story -->
 <section>
 <h4>L03 — Projection: The Geometry of "Closest"</h4>
-<img src="../images/unit02/u2-L03-fig01-gps-overdetermined.png" alt="GPS overdetermined: circles don't meet" style="float:right; max-height:380px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
-<p>Your phone gets distance readings from three satellites. Each says "you're <em>this</em> far from me." Three circles should cross at one point — <strong>but they never do</strong>, because every measurement has noise.</p>
+<p>Three friends guess your age:</p>
+<table style="width:auto; margin:0.2em 0;">
+<tr><th>Alice</th><th>Bob</th><th>Carol</th></tr>
+<tr><td>19</td><td>21</td><td>20</td></tr>
+</table>
 <ul>
-<li class="fragment">Three equations, two unknowns — <strong>no exact answer</strong>.</li>
-<li class="fragment">Your phone still shows a dot on the map. How?</li>
-<li class="fragment">It finds the <strong>best compromise</strong> — the point that "breaks the rules the least."</li>
+<li class="fragment">Written as equations: \(x = 19\), \(x = 21\), \(x = 20\). <strong>No single number satisfies all three.</strong></li>
+<li class="fragment">You cannot be right for everyone. You can only be <strong>wrong by as little as possible</strong>.</li>
+<li class="fragment">You'd probably say <strong>the average</strong>: \(x^* = \frac{19+21+20}{3} = 20\) — the <strong>best compromise</strong>.</li>
 </ul>
-<div class="key-question fragment" style="clear:both;">Today's question: when the data give conflicting answers, what does "best" mean — and how do we find it?</div>
-<aside class="notes">"Everyone uses GPS daily. The math behind that little blue dot on Google Maps is exactly what we'll learn today. The key idea: when you can't satisfy every equation perfectly, find the solution that comes closest to satisfying all of them. This 'closest' has a precise geometric meaning."</aside>
+<div class="key-question fragment">But <em>why</em> the average? When the answers conflict, what does "best" mean — and how do we find it?</div>
+<aside class="notes">"Start with the simplest possible version: one unknown, three conflicting answers. Everyone's intuition says take the average. The intuition is right — the question is WHY. Answering that gives us a tool that scales all the way to training a neural network." Ask the class for their guess before revealing the average.</aside>
 </section>
 
 <!--
@@ -98,24 +101,6 @@ DALL-E prompt for fig-2-00-gps-satellites:
 "Clean, professional 2D infographic on a white background. A smartphone in the center with three satellites around it. Each satellite emits a circle (representing distance), and the three circles almost but don't quite intersect at one point. A small question mark at the near-intersection. Thin clean lines, blue and gray palette, university-level technical style. No text labels."
 -->
 
-<!-- S05: A simpler version — three friends, one number -->
-<section>
-<h4>A simpler version of the GPS problem</h4>
-<p>Three friends each guess your age:</p>
-<table>
-<tr><th>Friend</th><th>Guess</th></tr>
-<tr><td>Alice</td><td>19</td></tr>
-<tr><td>Bob</td><td>21</td></tr>
-<tr><td>Carol</td><td>20</td></tr>
-</table>
-<ul>
-<li class="fragment">Three equations: \(x = 19\), \(x = 21\), \(x = 20\).</li>
-<li class="fragment">No single \(x\) satisfies all three.</li>
-<li class="fragment">What's the best single number? You'd probably say <strong>the average</strong>: \(x^* = \frac{19+21+20}{3} = 20\).</li>
-</ul>
-<div class="applied fragment">But <em>why</em> the average? What makes it "best"? We need a principle.</div>
-<aside class="notes">"I start with the simplest possible version of the problem — one unknown, three conflicting answers. Everyone's intuition says 'take the average.' That's correct, but the question is why? The answer will give us a tool that works for much harder problems, like GPS or training an AI model."</aside>
-</section>
 
 <!-- S06: Why the average? Squared error -->
 <section>
@@ -172,7 +157,8 @@ DALL-E prompt for fig-2-01-training-loop:
 <!-- S09: Overdetermined systems — naming the pattern -->
 <section>
 <h4>Name the pattern: overdetermined system</h4>
-<p>The GPS problem and the age-guessing problem share the same structure:</p>
+<img src="../images/unit02/u2-L03-fig01-gps-overdetermined.png" alt="Three satellite circles that do not meet at one point" style="float:right; max-height:330px; max-width:40%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>The age-guessing problem has a famous twin — the one in your pocket:</p>
 <div class="mathbox">
 A system \(A\mathbf{x} = \mathbf{b}\) with more equations than unknowns (\(m > n\)) is called <strong>overdetermined</strong>.
 <br/><br/>
@@ -180,7 +166,7 @@ A best-fit solution minimizes \(\norm{A\mathbf{x} - \mathbf{b}}\).
 </div>
 <ul>
 <li class="fragment"><strong>More measurements than parameters</strong> — extra data, not enough freedom.</li>
-<li class="fragment">GPS: 3 distances, 2 coordinates (\(m=3 > n=2\)).</li>
+<li class="fragment"><strong>GPS.</strong> Each satellite reports only <em>how far away it is</em> — that puts you somewhere on a circle around it. Three circles should pin down one point, but every reading carries noise, so they never quite meet. 3 distances, 2 coordinates (\(m=3>n=2\)). Your phone shows the best compromise.</li>
 <li class="fragment">AI training: millions of examples, thousands of weights (\(m \gg n\)).</li>
 </ul>
 <aside class="notes">"In real AI, you might have a million training examples but only 10,000 weights. That's an overdetermined system with m = 1,000,000 and n = 10,000. The math is the same as our three-friends problem, just bigger."</aside>
