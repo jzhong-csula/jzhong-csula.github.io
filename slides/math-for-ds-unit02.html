@@ -105,17 +105,18 @@ DALL-E prompt for fig-2-00-gps-satellites:
 <!-- S06: Why the average? Squared error -->
 <section>
 <h4>Why the average? Minimizing squared error</h4>
-<p>Try different guesses for \(x\) and measure the total error:</p>
-<table>
-<tr><th>Guess \(x\)</th><th>\((x-19)^2\)</th><th>\((x-21)^2\)</th><th>\((x-20)^2\)</th><th>Total</th></tr>
+<p>We never find out your real age. All we have is the three answers — so "error" here does <strong>not</strong> mean distance from the truth. It means <strong>how far our one answer sits from each friend's</strong>.</p>
+<p class="fragment">Pick a candidate \(x\). It misses Alice by \(x-19\), Bob by \(x-21\), Carol by \(x-20\). Square each — so overshooting and undershooting both count as being off — and add them up:</p>
+<table class="fragment">
+<tr><th>Our answer \(x\)</th><th>miss Alice \((x-19)^2\)</th><th>miss Bob \((x-21)^2\)</th><th>miss Carol \((x-20)^2\)</th><th>Total</th></tr>
 <tr><td>18</td><td>1</td><td>9</td><td>4</td><td>14</td></tr>
 <tr><td>19</td><td>0</td><td>4</td><td>1</td><td>5</td></tr>
 <tr class="fragment" style="font-weight:bold; color:#2563eb;"><td>20</td><td>1</td><td>1</td><td>0</td><td><strong>2</strong></td></tr>
 <tr><td>21</td><td>4</td><td>0</td><td>1</td><td>5</td></tr>
 <tr><td>22</td><td>9</td><td>1</td><td>4</td><td>14</td></tr>
 </table>
-<div class="key-question fragment">The average gives the <strong>smallest total squared error</strong>. This is not a coincidence — it's a theorem.</div>
-<aside class="notes">"We square the errors for two reasons: (1) it makes all errors positive so they don't cancel, and (2) it penalizes big mistakes more than small ones. A guess that's off by 3 counts 9 times as much as one that's off by 1. This is the principle behind almost all AI training."</aside>
+<div class="key-question fragment">The average gives the <strong>smallest total</strong>. Not a coincidence — it's a theorem, and it needed no true answer to find.</div>
+<aside class="notes">"Watch for this question, because it is the right one: how can we talk about error when we never learn the real age? We can't — and we don't have to. The quantity we minimize is disagreement with the data we were given, not distance from a truth we never see. That is exactly the situation in every AI model: you have training data, you never have the true function." "Why square? Two reasons: it stops a +2 and a -2 from cancelling to zero, and it makes a miss of 3 count nine times as much as a miss of 1." "The x here is not a fourth guess — it is our single proposed answer, the one number we have to commit to."</aside>
 </section>
 
 <!-- S07: From average to least squares -->
