@@ -148,7 +148,7 @@ f'(x)=2\sum_{i=1}^n (x-b_i)=2\Big(nx-\sum_{i=1}^n b_i\Big)\]
 </div>
 <ul>
 <li class="fragment">Set \(f'(x)=0\): \(\;nx=\sum_i b_i\;\), so \(\;x=\frac{1}{n}\sum_i b_i=\bar b\). <strong>The average falls out.</strong></li>
-<li class="fragment">\(f''(x)=2n>0\) everywhere, so this is a minimum — and it's the only place \(f'\) is zero, so it's the only one. <strong>∎</strong></li>
+<li class="fragment">\(f''(x)=2n>0\) everywhere, so this is a minimum — and it's the only place \(f'\) is zero, so it's the only one.</li>
 <li class="fragment">Our data: \(f'(x)=2(3x-60)=0 \Rightarrow x=20\).</li>
 </ul>
 <div class="applied fragment">This is exactly what training a model does: write down the error, differentiate, and go where the derivative says. Every AI system in this course is doing this — just with many variables instead of one.</div>
@@ -187,11 +187,12 @@ A system \(A\mathbf{x} = \mathbf{b}\) with more equations than unknowns (\(m > n
 A best-fit solution minimizes \(\norm{A\mathbf{x} - \mathbf{b}}\).
 </div>
 <ul>
-<li class="fragment"><strong>More measurements than parameters</strong> — extra data, not enough freedom.</li>
-<li class="fragment"><strong>GPS.</strong> Each satellite reports only <em>how far away it is</em> — that puts you somewhere on a circle around it. Three circles should pin down one point, but every reading carries noise, so they never quite meet. 3 distances, 2 coordinates (\(m=3>n=2\)). Your phone shows the best compromise.</li>
-<li class="fragment">AI training: millions of examples, thousands of weights (\(m \gg n\)).</li>
+<li class="fragment"><strong>GPS.</strong> Each satellite reports only <em>how far away it is</em> — that puts you somewhere on a circle around it. Two circles already cross at a point, so with <em>perfect</em> readings <strong>two satellites would be enough</strong>, and a third would pass through that same point.</li>
+<li class="fragment">But every reading carries error, so the three circles bound a small triangle instead of meeting. No point sits on all three. <strong>The error causes that — not the extra satellite.</strong></li>
+<li class="fragment">So why carry a third? Two satellites give an exact answer that is <em>exactly as wrong as your error</em>, with nothing to warn you. Three cannot all be satisfied — and that failure is the information.</li>
+<li class="fragment"><strong>\(m > n\) is not the problem; it is the redundancy that beats the noise.</strong> Your phone picks the point that misses all three by the least. AI training is the same trade: millions of examples, thousands of weights (\(m \gg n\)).</li>
 </ul>
-<aside class="notes">"In real AI, you might have a million training examples but only 10,000 weights. That's an overdetermined system with m = 1,000,000 and n = 10,000. The math is the same as our three-friends problem, just bigger."</aside>
+<aside class="notes">"Expect the objection, because it is the right one: three circles CAN meet at a point, so m > n does not by itself break anything. Say so plainly — with exact measurements the third satellite is redundant and consistent. Noise is what makes it inconsistent." "Then the inversion, which is the whole slide: redundancy is not the disease, it is the cure. Two satellites hand you a wrong answer with total confidence; three hand you a triangle whose size tells you how wrong you are." "If someone asks what we actually do about the noise — we do not fix the satellites. We pick the point minimising the total squared miss. That is least squares, and it is running in their pocket." "In real AI, you might have a million training examples but only 10,000 weights. That's an overdetermined system with m = 1,000,000 and n = 10,000. The math is the same as our three-friends problem, just bigger."</aside>
 </section>
 
 <!-- S10: Quick check -->
@@ -316,7 +317,7 @@ Since \(\mathbf{r} \perp \mathbf{b}\), the Pythagorean theorem gives:
 <ul>
 <li class="fragment">\(\|\mathbf{r}\|^2\) is the distance to the projection — <strong>fixed</strong>.</li>
 <li class="fragment">\((\lambda-\mu)^2\|\mathbf{b}\|^2 > 0\) — moving away from \(\mathbf{p}\) <strong>only adds distance</strong>.</li>
-<li class="fragment">Therefore \(\|\mathbf{x} - \mathbf{q}\| > \|\mathbf{x} - \mathbf{p}\|\). The projection is <strong>uniquely closest</strong>. ∎</li>
+<li class="fragment">Therefore \(\|\mathbf{x} - \mathbf{q}\| > \|\mathbf{x} - \mathbf{p}\|\). The projection is <strong>uniquely closest</strong>.</li>
 </ul>
 <aside class="notes">"This is the proof. It uses one fact: perpendicular vectors satisfy the Pythagorean theorem. The distance to any other point on the line equals the distance to the projection PLUS an extra positive term. So the projection is strictly the closest. Three lines of algebra, one big idea."</aside>
 </section>
