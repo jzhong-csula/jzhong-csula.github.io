@@ -251,7 +251,7 @@ DALL-E prompt for fig-2-02-closest-point:
 <div>
 <p>Line direction: \(\mathbf{b} = (1,1)\). Point: \(\mathbf{x} = (2,0)\).</p>
 <div class="fragment">
-\[\hat{\mathbf{x}} = \frac{\mathbf{b}^\top \mathbf{x}}{\mathbf{b}^\top \mathbf{b}}\,\mathbf{b} = \frac{2}{2}\begin{pmatrix}1\\1\end{pmatrix} = \begin{pmatrix}1\\1\end{pmatrix}\]
+\[\mathbf{p} = \frac{\mathbf{b}^\top \mathbf{x}}{\mathbf{b}^\top \mathbf{b}}\,\mathbf{b} = \frac{2}{2}\begin{pmatrix}1\\1\end{pmatrix} = \begin{pmatrix}1\\1\end{pmatrix}\]
 </div>
 <p class="fragment">Closest point on the line to \((2,0)\) is \((1,1)\).</p>
 </div>
@@ -898,11 +898,11 @@ If \(\mathbf{b}\) lies in the column space of \(A\), what does \(A^+\mathbf{b}\)
 <h4>The stability problem</h4>
 <p>Consider two features that are <em>almost</em> identical:</p>
 <div>
-\[A = \begin{bmatrix} 1 & 1 \\ 1 & 1.001 \end{bmatrix}\]
+\[X = \begin{bmatrix} 1 & 1 \\ 1 & 1.001 \end{bmatrix}\]
 The columns are 99.9% the same. What happens?
 </div>
 <ul>
-<li class="fragment">\(A^\top A\) is <strong>nearly singular</strong> — almost has determinant zero.</li>
+<li class="fragment">\(X^\top X\) is <strong>nearly singular</strong> — almost has determinant zero.</li>
 <li class="fragment">Change one data point by 0.001 → the solution moves <strong>1000&times; as far</strong>. Concretely: \(\mathbf{x}\) goes from \((1,1)\) to \((0,2)\), a shift of 1 in each entry from a nudge of 0.001.</li>
 <li class="fragment">The formula is <em>correct</em> but <strong>unreliable</strong>.</li>
 </ul>
@@ -940,7 +940,7 @@ The <strong>condition number</strong> \(\kappa(A)\) measures how much small chan
 </ul>
 </div>
 <ul>
-<li class="fragment">Our \(A = \begin{bmatrix}1&1\\1&1.001\end{bmatrix}\) has \(\kappa \approx 4000\).</li>
+<li class="fragment">Our \(X = \begin{bmatrix}1&1\\1&1.001\end{bmatrix}\) has \(\kappa \approx 4000\).</li>
 <li class="fragment">An error of 0.001 in the data could cause an error of \(0.001 \times 4000 = 4\) in the solution.</li>
 </ul>
 <div class="applied fragment">In Python: <code>np.linalg.cond(A)</code> tells you if you should worry. Condition number &gt; 1000? Be cautious.</div>
@@ -966,7 +966,7 @@ The <strong>condition number</strong> \(\kappa(A)\) measures how much small chan
 <section>
 <h4>Quick check</h4>
 <div class="quickcheck">
-If two columns of \(A\) are <em>exactly</em> identical (not just close), what happens to \(A^\top A\)?
+If two columns of \(X\) are <em>exactly</em> identical (not just close), what happens to \(X^\top X\)?
 </div>
 <p class="fragment"><strong>It becomes singular</strong> — determinant is zero, no inverse exists. The normal equation has no unique solution.</p>
 <div class="applied fragment">This is the extreme case of instability. Nearly identical = unstable. Exactly identical = formula doesn't work at all. The pseudoinverse still gives <em>a</em> solution (minimum norm), but the weights are not interpretable.</div>
