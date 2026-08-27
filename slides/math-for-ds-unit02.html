@@ -378,9 +378,10 @@ Minimizing \(\norm{A\mathbf{x} - \mathbf{b}}\) is the same as projecting \(\math
 \underbrace{\begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix}}_{\mathbf{b}:\ \text{the observed } y_i}\]
 </div>
 <ul>
-<li class="fragment">The \(1\) column of \(A\) is what lets the line have an intercept \(w_0\); the \(t_i\) column carries the slope \(w_1\). So \(A\mathbf{w}\) is the vector of <em>predictions</em>, and \(\mathbf{b}\) is the vector of <em>observations</em>.</li>
+<li class="fragment">The \(1\) column gives the line its intercept \(w_0\), the \(t_i\) column its slope \(w_1\). So \(A\mathbf{w}\) is <em>predictions</em>, \(\mathbf{b}\) is <em>observations</em>.</li>
 <li class="fragment"><strong>Careful — \(\mathbf{b}\) has changed jobs.</strong> On the last few slides \(\mathbf{b}\) was the direction of the line we projected <em>onto</em>. Here it is the vector being <em>projected</em>, and the subspace is the <strong>column space of \(A\)</strong> — a plane in \(\R^3\).</li>
-<li class="fragment">We want the point on that plane closest to \(\mathbf{b}\). That is a projection — exactly what we just built.</li>
+<li class="fragment">We want the point on that plane closest to \(\mathbf{b}\) — a projection, exactly what we just built.</li>
+<li class="fragment"><strong>One more rename, then we are settled.</strong> From L04 on this same picture gets its regression names: \(A \to X\) (data matrix), \(\mathbf{b} \to \mathbf{y}\) (observed), \(\mathbf{x} \to \mathbf{w}\) (weights), \(A\mathbf{x} \to \hat{\mathbf{y}} = X\mathbf{w}\) (predicted). <em>Same geometry, different alphabet.</em></li>
 </ul>
 <aside class="notes">"Each data point gives one equation. Three points, two unknowns (slope and intercept). The system is overdetermined. The best line is the projection of b onto the column space of A. We'll compute this with the normal equation in L04."</aside>
 </section>
@@ -749,12 +750,12 @@ If every row of \(A\) has last entry zero, what must be true about \(\mathbf{b}\
 <h4>Overdetermined systems: putting it together</h4>
 <p>Back to the age-guessing problem: \(x = 19, x = 21, x = 20\).</p>
 <div>
-\[A = \begin{bmatrix}1\\1\\1\end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix}19\\21\\20\end{bmatrix}\]
-Column space = the line \((c, c, c)\). But \(\mathbf{b} = (19, 21, 20)\) is NOT on that line.
+\[X = \begin{bmatrix}1\\1\\1\end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix}19\\21\\20\end{bmatrix}\]
+Column space = the line \((c, c, c)\). But \(\mathbf{y} = (19, 21, 20)\) is NOT on that line.
 </div>
 <ul>
-<li class="fragment">\(\mathbf{b}\) is <strong>outside</strong> the column space → no exact solution.</li>
-<li class="fragment">Best fit: <strong>project \(\mathbf{b}\) onto the column space</strong> → get \((20, 20, 20)\).</li>
+<li class="fragment">\(\mathbf{y}\) is <strong>outside</strong> the column space → no exact solution.</li>
+<li class="fragment">Best fit: <strong>project \(\mathbf{y}\) onto the column space</strong> → get \((20, 20, 20)\).</li>
 <li class="fragment">This is the normal equation from L04: \(x^* = 20\) (the mean).</li>
 </ul>
 <div class="key-question fragment">Column space + projection = the complete picture of least squares.</div>
@@ -765,8 +766,8 @@ Column space = the line \((c, c, c)\). But \(\mathbf{b} = (19, 21, 20)\) is NOT 
 <section>
 <h4>The normal equation means: residual ⊥ column space</h4>
 <div class="mathbox">
-\[A^\top(A\mathbf{x} - \mathbf{b}) = \mathbf{0}\]
-This says: the residual \(\mathbf{b} - A\mathbf{x}\) is perpendicular to every column of \(A\).
+\[X^\top(X\mathbf{w} - \mathbf{y}) = \mathbf{0}\]
+This says: the residual \(\mathbf{y} - X\mathbf{w}\) is perpendicular to every column of \(X\).
 </div>
 <img src="../images/unit02/u2-L05-fig09-column-space-projection.png" alt="Column space projection in 3D" style="float:right; max-height:400px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
 <ul>
@@ -786,9 +787,9 @@ DALL-E prompt for fig-2-08-residual-perpendicular:
 <section>
 <h4>Quick check</h4>
 <div class="quickcheck">
-If \(\mathbf{b}\) is already in the column space of \(A\), what is the residual at the normal-equation solution?
+If \(\mathbf{y}\) is already in the column space of \(X\), what is the residual at the normal-equation solution?
 </div>
-<p class="fragment"><strong>Zero</strong> — \(\mathbf{b}\) is already on the plane, so no perpendicular drop is needed.</p>
+<p class="fragment"><strong>Zero</strong> — \(\mathbf{y}\) is already on the plane, so no perpendicular drop is needed.</p>
 </section>
 
 <!-- S45: L05 takeaways -->
@@ -842,13 +843,13 @@ DALL-E prompt for fig-2-09-autocorrect-fail:
 <h4>Example: pseudoinverse in action</h4>
 <p>Data: \(x = (1, 2, 3)\), \(y = (1, 2, 2.5)\). Model: \(\hat{y} = ax\).</p>
 <div>
-\[A = \begin{bmatrix}1\\2\\3\end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix}1\\2\\2.5\end{bmatrix}\]
-\[A^\top A = 1+4+9 = 14\]
-\[A^\top \mathbf{b} = 1+4+7.5 = 12.5\]
+\[X = \begin{bmatrix}1\\2\\3\end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix}1\\2\\2.5\end{bmatrix}\]
+\[X^\top X = 1+4+9 = 14\]
+\[X^\top \mathbf{y} = 1+4+7.5 = 12.5\]
 \[a^* = \frac{12.5}{14} \approx 0.893\]
 </div>
-<p class="fragment">Best-fit line: \(\hat{y} = 0.893x\). The pseudoinverse produced this: \(A^+ = \frac{A^\top}{A^\top A}\).</p>
-<aside class="notes">"For a single-column matrix, the pseudoinverse is just A^T divided by A^T A. For larger matrices, computers use more sophisticated methods (like SVD), but the result is the same: the least-squares solution."</aside>
+<p class="fragment">Best-fit line: \(\hat{y} = 0.893x\). The pseudoinverse produced this: \(X^+ = \frac{X^\top}{X^\top X}\).</p>
+<aside class="notes">"For a single-column matrix, the pseudoinverse is just X^T divided by X^T X. For larger matrices, computers use more sophisticated methods (like SVD), but the result is the same: the least-squares solution."</aside>
 </section>
 
 <!-- S49: Pseudoinverse — formal definition -->
