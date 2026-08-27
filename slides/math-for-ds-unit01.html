@@ -325,14 +325,16 @@ The <strong>dot product</strong> of \(\mathbf{x}, \mathbf{y} \in \R^d\):
 <!-- S20b: why the corners matter -->
 <section>
 <h4>Why the corners matter</h4>
-<p>Those four points are ordinary rim on the circle, but on the diamond they are sharp <strong>corners</strong>. That difference is the whole story.</p>
-<div class="applied fragment">Roll a marble to rest against each shape from the outside. Against the <strong>diamond</strong>, pushes from many different directions all settle it into the <em>same</em> corner. Against the <strong>circle</strong>, every slightly different push settles at a slightly different spot — no place is special.</div>
+<p>On the circle those four points are ordinary rim. On the diamond they are sharp <strong>corners</strong>. Everything below follows from that one difference.</p>
+<div class="key-question fragment">Slide a straight line in from far away until it just touches the shape. <strong>Where does it touch first?</strong></div>
 <ul>
-<li class="fragment">And those four corners are exactly the boundary points with an entry <strong>equal to 0</strong>.</li>
-<li class="fragment">In Unit 5 we choose a weight vector by pushing it against one of these shapes. Against the diamond it keeps landing on a corner — some weights come out <strong>exactly 0</strong>, and those features drop out of the model. Against the circle it lands wherever the push points: every weight survives, just smaller.</li>
+<li class="fragment"><strong>Diamond:</strong> at a <strong>corner</strong> — and tilting the line a little changes nothing, it still touches the <em>same</em> corner. Only a line exactly parallel to an edge touches along that edge.</li>
+<li class="fragment"><strong>Circle:</strong> a different point for every tilt, each point reached by exactly one tilt. No point is special.</li>
+<li class="fragment">In the plane, the diamond's corners are exactly the boundary points with an entry equal to <strong>0</strong>.</li>
 </ul>
+<div class="applied fragment">Unit 5 is that picture with the line being what we are trying to minimize, slid in until it reaches the allowed region. Diamond \(\Rightarrow\) it stops at a corner \(\Rightarrow\) some weights come out <strong>exactly 0</strong> and those features drop out. Circle \(\Rightarrow\) it stops somewhere new for every problem, so every weight survives, just smaller.</div>
 <div class="key-question fragment">\(\ell_1\) <strong>deletes</strong> features; \(\ell_2\) <strong>shrinks</strong> them.</div>
-<aside class="notes">"The marble is the honest version of the argument. A corner catches a whole range of pushes; a smooth rim catches each push at its own point. That is why one shape produces exact zeros and the other never does, and it needs no optimization theory to see." "Do not try to prove this today — we have no constrained optimization yet. Say plainly: file the picture, we earn the claim in Unit 5. If someone asks why the answer sits on the boundary at all, tell them that is the part Unit 5 supplies."</aside>
+<aside class="notes">"Draw it. One diamond, one circle, and a ruler you slide in at three or four different angles. They will see the corner catching every angle before you finish the third one — that is the entire argument and it costs ninety seconds of board time." "The reason is worth saying once: a straight line is flat, and a flat thing pressed onto a polygon meets it at a corner. There is nothing to prove and nothing to take on faith." "Higher dimensions: the diamond also grows edges and flat faces where only SOME entries are zero, so the effect is the same but less extreme. Do not open that today unless asked." "Do not attempt the Unit 5 claim as a derivation. We have no constrained optimization yet. Say plainly: this is the picture, we earn it in Unit 5."</aside>
 </section>
 
 <!-- S21: Quick check: norms -->
