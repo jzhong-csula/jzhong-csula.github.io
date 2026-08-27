@@ -122,17 +122,36 @@ DALL-E prompt for fig-2-00-gps-satellites:
 <!-- S07: From average to least squares -->
 <section>
 <h4>From the average to least squares</h4>
+<p>The table showed it for five candidates. Here is the claim in full, for any data at all:</p>
 <div class="mathbox">
-The best \(x\) minimizes the sum of squared errors:
-\[x^* = \arg\min_x \sum_{i=1}^n (x - b_i)^2\]
-For our example: \(x^* = \arg\min_x \left[(x-19)^2 + (x-21)^2 + (x-20)^2\right]\).
+<strong>Theorem.</strong> For any numbers \(b_1,\dots,b_n\), the total squared miss
+\[f(x) \;=\; \sum_{i=1}^{n} (x - b_i)^2\]
+is smallest at <strong>exactly one</strong> value of \(x\): the average \(\;\bar{b} = \tfrac{1}{n}\sum_i b_i\).
+Its smallest value is \(\sum_i (\bar{b} - b_i)^2\).
 </div>
 <ul>
-<li class="fragment">The answer is the average: \(x^* = \bar{b} = 20\).</li>
-<li class="fragment">This works for any number of conflicting measurements.</li>
+<li class="fragment">Our data: \(\bar b = \frac{19+21+20}{3} = 20\), and the leftover is \(1+1+0 = 2\) — exactly the smallest row of the table.</li>
+<li class="fragment">"Exactly one" is part of the claim: no tie, no second-best answer.</li>
+<li class="fragment">That leftover \(\sum_i(\bar b - b_i)^2\) is the error <em>no</em> choice of \(x\) can remove. The friends disagree with each other; no single number can fix that.</li>
 </ul>
-<div class="applied fragment">This principle — <strong>minimize squared error</strong> — is how every linear AI model learns. The average is just the simplest case.</div>
-<aside class="notes">"We've just discovered the fundamental principle of supervised learning: find the parameters that minimize squared error. The average is the 1D case. Linear regression is the multi-dimensional version. The principle is exactly the same — just more variables."</aside>
+<aside class="notes">"State it as a theorem, on the board, before proving anything. Three parts: the minimizer is the average, it is unique, and the leftover has a formula." "Note what the theorem does NOT say: it says nothing about the true age. It is a statement about the numbers we were handed."</aside>
+</section>
+
+<!-- Proof of the averaging theorem -->
+<section>
+<h4>Why the average wins</h4>
+<p>The whole proof is one move: split each miss into two pieces.</p>
+\[x - b_i \;=\; \underbrace{(x - \bar b)}_{\text{you vs. the average}} \;+\; \underbrace{(\bar b - b_i)}_{\text{the average vs. } b_i}\]
+<p class="fragment">Square both sides and add over all \(i\). The middle term collapses, and what survives is</p>
+<div class="mathbox fragment">
+\[f(x) \;=\; \underbrace{n\,(x - \bar b)^2}_{\text{you control this}} \;+\; \underbrace{\sum_{i=1}^n (\bar b - b_i)^2}_{\text{no } x \text{ in it}}\]
+</div>
+<ul>
+<li class="fragment">The right piece has no \(x\) — nothing you choose can change it.</li>
+<li class="fragment">The left piece is never negative, and is zero <strong>only</strong> when \(x = \bar b\).</li>
+<li class="fragment">So \(\bar b\) is the minimizer, it is the only one, and the leftover is that right piece. <strong>∎</strong></li>
+</ul>
+<aside class="notes">"Do the splitting step on the board and stop there. Do not grind through the expansion in class — give them the move and the conclusion." "This identity is the entire unit in miniature: a quantity splits into a part you can control and a part you cannot, and the two do not interact. In two lectures the same split will be written as the Pythagorean theorem, with the second piece as the residual." "MML asserts that the projection is the closest point (Ch 3.8) but never proves it — it says 'using geometric arguments'. So this proof is ours, and it is worth telling them that."</aside>
 </section>
 
 <!-- S08: AI connection — training a model -->
