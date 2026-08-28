@@ -490,12 +490,15 @@ DALL-E prompt for fig-2-05-apartment-scatter:
 \[\hat{\mathbf{y}} = X\mathbf{w} = \begin{bmatrix} 8 & 1 \\ 6 & 2 \\ 10 & 0.5 \end{bmatrix}\begin{bmatrix} 0.4 \\ -0.6 \end{bmatrix} = \begin{bmatrix} 2.6 \\ 1.2 \\ 3.7 \end{bmatrix}\]
 </div>
 <ul>
-<li class="fragment">Each prediction is a <strong>dot product</strong>: \(\hat{y}_i = \mathbf{x}_i^\top \mathbf{w}\), where \(\mathbf{x}_i\) is <strong>row \(i\) of \(X\)</strong> — apartment \(i\)'s features — written as a column. So \(\mathbf{x}_i^\top\) is a row, \(\mathbf{w}\) a column, and the product is one number.</li>
-<li class="fragment">Row 1: \(8(0.4) + 1(-0.6) = 3.2 - 0.6 = 2.6\). One apartment, one prediction.</li>
+<li class="fragment">Each prediction is a <strong>dot product</strong>: \(\hat{y}_i = \mathbf{x}_i^\top \mathbf{w}\), where \(\mathbf{x}_i\) holds apartment \(i\)'s features:
+\[\mathbf{x}_1 = \begin{bmatrix} 8 \\ 1 \end{bmatrix},
+\qquad \mathbf{x}_1^\top \mathbf{w} = \begin{bmatrix} 8 & 1 \end{bmatrix}\begin{bmatrix} 0.4 \\ -0.6 \end{bmatrix} = 3.2 - 0.6 = 2.6.\]</li>
+<li class="fragment"><strong>\(\mathbf{x}_i\) is a column vector, but it is <em>not</em> a column of \(X\).</strong> It is row \(i\) stood on end. Column 1 of \(X\) is \((8,6,10)\) — the size of all three apartments — which has length \(3\) and cannot multiply a length-\(2\) \(\mathbf{w}\).</li>
+<li class="fragment">Rows are apartments, columns are features. A prediction needs one apartment's worth of numbers, so it reads a <em>row</em>.</li>
 <li class="fragment">Predictions: $2600, $1200, $3700. True rents: $3000, $2000, $5000.</li>
 <li class="fragment">Not great — but how bad exactly?</li>
 </ul>
-<aside class="notes">"This is matrix-vector multiplication from Unit 1 in action. Each prediction is one row of X dotted with w. The predictions are off — we need a single number to measure 'how off', and then find the w that makes that number as small as possible."</aside>
+<aside class="notes">"Expect this exact objection, because the wording invites it: if x_i transpose is a row then x_i is a column, so surely x_i is a column of X. It is not. 'Is a column vector' is a statement about shape; 'is a column of X' names a different object. Settle it by counting: w has length 2, a column of X has length 3, so only a row can multiply w." "This is matrix-vector multiplication from Unit 1 in action. Each prediction is one row of X dotted with w. The predictions are off — we need a single number to measure 'how off', and then find the w that makes that number as small as possible."</aside>
 </section>
 
 <!-- S24: The bias trick -->
