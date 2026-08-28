@@ -371,19 +371,31 @@ Minimizing \(\norm{A\mathbf{x} - \mathbf{b}}\) is the same as projecting \(\math
 <section>
 <h4>Example: fitting a line through data</h4>
 <p>Three data points \((t_i, y_i)\): \((0, 1)\), \((1, 2)\), \((2, 2)\). We want the best line \(\hat{y} = w_0 + w_1 t\).</p>
-<p class="fragment"><strong>Both \(A\) and \(\mathbf{b}\) are read straight off those three points</strong> — nothing else goes in:</p>
+<p class="fragment">Write one row per point. <strong>Two of these three columns come from the data; one does not:</strong></p>
 <div class="fragment">
-\[\underbrace{\begin{bmatrix} 1 & 0 \\ 1 & 1 \\ 1 & 2 \end{bmatrix}}_{A:\ \text{a row } (1,\, t_i) \text{ per point}}
+\[A = \left[\;\underbrace{\begin{matrix} 1 \\ 1 \\ 1 \end{matrix}}_{\text{we add this}}
+\quad \underbrace{\begin{matrix} 0 \\ 1 \\ 2 \end{matrix}}_{\text{measured } t_i}\;\right]
 \qquad
-\underbrace{\begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix}}_{\mathbf{b}:\ \text{the observed } y_i}\]
+\mathbf{b} = \underbrace{\begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix}}_{\text{observed } y_i}\]
 </div>
 <ul>
-<li class="fragment">The \(1\) column gives the line its intercept \(w_0\), the \(t_i\) column its slope \(w_1\). So \(A\mathbf{w}\) is <em>predictions</em>, \(\mathbf{b}\) is <em>observations</em>.</li>
-<li class="fragment"><strong>Careful — \(\mathbf{b}\) has changed jobs.</strong> On the last few slides \(\mathbf{b}\) was the direction of the line we projected <em>onto</em>. Here it is the vector being <em>projected</em>, and the subspace is the <strong>column space of \(A\)</strong> — a plane in \(\R^3\).</li>
-<li class="fragment">We want the point on that plane closest to \(\mathbf{b}\) — a projection, exactly what we just built.</li>
-<li class="fragment"><strong>One more rename, then we are settled.</strong> From L04 on this same picture gets its regression names: \(A \to X\) (data matrix), \(\mathbf{b} \to \mathbf{y}\) (observed), \(\mathbf{x} \to \mathbf{w}\) (weights), \(A\mathbf{x} \to \hat{\mathbf{y}} = X\mathbf{w}\) (predicted). <em>Same geometry, different alphabet.</em></li>
+<li class="fragment"><strong>Where the column of \(1\)s comes from: we add it.</strong> It is not measured. Row \(i\) of \(A\) times \(\mathbf{w}\) gives \(w_0 \cdot 1 + w_1 t_i = w_0 + w_1 t_i\) — that constant \(1\) is what carries \(w_0\) into every prediction.</li>
+<li class="fragment">Drop it and every row would read \(w_1 t_i\): a line forced through the origin. The \(1\) column is a <strong>modelling choice</strong> that buys the line its intercept.</li>
 </ul>
-<aside class="notes">"Each data point gives one equation. Three points, two unknowns (slope and intercept). The system is overdetermined. The best line is the projection of b onto the column space of A. We'll compute this with the normal equation in L04."</aside>
+<aside class="notes">"The column of ones is the thing students ask about, and rightly — it is the one number in the matrix that was not measured. Multiply it out on the board once: row i dotted with w is w0 times 1 plus w1 times t_i." "Then ask what happens without it. Every prediction becomes w1 t_i, so the line must pass through the origin, and these three points are not near the origin." "Each data point gives one equation. Three points, two unknowns. The system is overdetermined."</aside>
+</section>
+
+<!-- S18b: the same picture in regression clothes -->
+<section>
+<h4>Fitting a line <em>is</em> a projection</h4>
+<p>With \(A\) and \(\mathbf{b}\) built, \(A\mathbf{w}\) is the vector of <strong>predictions</strong> and \(\mathbf{b}\) the vector of <strong>observations</strong>. No \(\mathbf{w}\) makes them equal — three equations, two unknowns.</p>
+<ul>
+<li class="fragment"><strong>Careful — \(\mathbf{b}\) has changed jobs.</strong> Before, \(\mathbf{b}\) was the direction of the line we projected <em>onto</em>. Here it is the vector being <em>projected</em>.</li>
+<li class="fragment">The subspace is now the <strong>column space of \(A\)</strong> — every vector \(A\mathbf{w}\) the model can possibly produce, a plane inside \(\R^3\).</li>
+<li class="fragment">We want the point on that plane closest to \(\mathbf{b}\): a projection, exactly what we just built.</li>
+</ul>
+<div class="key-question fragment"><strong>One more rename, then we are settled.</strong> From L04 on the same picture gets its regression names: \(A \to X\) (data matrix), \(\mathbf{b} \to \mathbf{y}\) (observed), \(\mathbf{x} \to \mathbf{w}\) (weights), \(A\mathbf{x} \to \hat{\mathbf{y}} = X\mathbf{w}\) (predicted). <em>Same geometry, different alphabet.</em></div>
+<aside class="notes">"This is the payoff of L03 and it is worth saying slowly: fitting a line is not a new technique, it is the projection they just derived, with the subspace being everything the model can produce." "The rename matters because L04 onward uses X and y throughout, and a student who does not carry the correspondence will think a new method has appeared."</aside>
 </section>
 
 <!-- S19: Quick check — least squares -->
