@@ -370,33 +370,56 @@ Minimizing \(\norm{A\mathbf{x} - \mathbf{b}}\) is the same as projecting \(\math
 <!-- S18: Least squares example — fitting a line -->
 <section>
 <h4>Example: fitting a line through data</h4>
-<p>Three data points \((t_i, y_i)\): \((0, 1)\), \((1, 2)\), \((2, 2)\). We want the best line \(\hat{y} = w_0 + w_1 t\).</p>
-<p class="fragment">Write one row per point. <strong>Two of these three columns come from the data; one does not:</strong></p>
+<p>Three data points \((t_i, y_i)\): \((0, 1)\), \((1, 2)\), \((2, 2)\). The line is \(\hat{y} = w_0 + w_1 t\).</p>
+<p class="fragment"><strong>Fitting the line means finding \(w_0\) and \(w_1\).</strong> Fix those two numbers and the line is fixed — they are the unknowns.</p>
+<p class="fragment">Substitute each point and you get one equation per point:</p>
 <div class="fragment">
-\[A = \left[\;\underbrace{\begin{matrix} 1 \\ 1 \\ 1 \end{matrix}}_{\text{we add this}}
-\quad \underbrace{\begin{matrix} 0 \\ 1 \\ 2 \end{matrix}}_{\text{measured } t_i}\;\right]
-\qquad
-\mathbf{b} = \underbrace{\begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix}}_{\text{observed } y_i}\]
+\[\begin{aligned}
+w_0 + w_1(0) &= 1\\
+w_0 + w_1(1) &= 2\\
+w_0 + w_1(2) &= 2
+\end{aligned}\]
 </div>
-<ul>
-<li class="fragment"><strong>Where the column of \(1\)s comes from: we add it.</strong> It is not measured. Row \(i\) of \(A\) times \(\mathbf{w}\) gives \(w_0 \cdot 1 + w_1 t_i = w_0 + w_1 t_i\) — that constant \(1\) is what carries \(w_0\) into every prediction.</li>
-<li class="fragment">Drop it and every row would read \(w_1 t_i\): a line forced through the origin. The \(1\) column is a <strong>modelling choice</strong> that buys the line its intercept.</li>
-</ul>
-<aside class="notes">"The column of ones is the thing students ask about, and rightly — it is the one number in the matrix that was not measured. Multiply it out on the board once: row i dotted with w is w0 times 1 plus w1 times t_i." "Then ask what happens without it. Every prediction becomes w1 t_i, so the line must pass through the origin, and these three points are not near the origin." "Each data point gives one equation. Three points, two unknowns. The system is overdetermined."</aside>
+<p class="fragment"><strong>Three equations, two unknowns.</strong> Now stack the coefficients — row \(i\) holds what multiplies \(w_0\) and \(w_1\) in equation \(i\):</p>
+<div class="fragment">
+\[\begin{bmatrix} 1 & 0 \\ 1 & 1 \\ 1 & 2 \end{bmatrix}
+\begin{bmatrix} w_0 \\ w_1 \end{bmatrix}
+= \begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix}
+\qquad\text{that is}\qquad A\mathbf{w} = \mathbf{b}\]
+</div>
+<aside class="notes">"Do not hand them the matrix and then justify it. Write the three equations first — substituting each point is something they can do without being told — and the matrix is then just those equations stacked." "The column of ones stops being mysterious the moment the equations are on the board: w0 is added unchanged to every prediction, so its coefficient is 1 in every row. Nobody put it there by hand; it is what the equations say." "Three equations, two unknowns: that is the overdetermined system from earlier, now with real data in it."</aside>
 </section>
 
-<!-- S18b: the same picture in regression clothes -->
+<!-- S18b: reading the matrix -->
+<section>
+<h4>Reading that matrix</h4>
+<div style="display:flex; align-items:center; gap:1.2em;">
+<div style="flex:1;">
+<ul>
+<li><strong>The column of \(1\)s is not extra data.</strong> It is \(w_0\)'s coefficient, and it is \(1\) in every equation because \(w_0\) is added to every prediction unchanged.</li>
+<li class="fragment">The second column is \(w_1\)'s coefficient — the measured \(t_i\).</li>
+<li class="fragment">\(\mathbf{b}\) is the observed \(y_i\). So \(A\mathbf{w}\) is what the model <em>predicts</em>, \(\mathbf{b}\) is what was <em>observed</em>.</li>
+<li class="fragment">Drop the \(1\) column and every equation becomes \(w_1 t_i = y_i\): a line forced through the origin.</li>
+</ul>
+</div>
+</div>
+<div class="key-question fragment">No \(\mathbf{w}\) satisfies all three equations at once. That is the overdetermined system again — and the next slide says what to do about it.</div>
+<aside class="notes">"Ask what the model can produce: every vector of the form Aw, as w ranges over all pairs. That set is the column space, and it is a plane in R^3 while b is a point off it." "The origin point is worth making concrete — set w0 = 0 and the line through (0,1), (1,2), (2,2) has to start at (0,0), which is visibly wrong."</aside>
+</section>
+
+<!-- S18c: it is a projection -->
 <section>
 <h4>Fitting a line <em>is</em> a projection</h4>
-<p>With \(A\) and \(\mathbf{b}\) built, \(A\mathbf{w}\) is the vector of <strong>predictions</strong> and \(\mathbf{b}\) the vector of <strong>observations</strong>. No \(\mathbf{w}\) makes them equal — three equations, two unknowns.</p>
 <ul>
 <li class="fragment"><strong>Careful — \(\mathbf{b}\) has changed jobs.</strong> Before, \(\mathbf{b}\) was the direction of the line we projected <em>onto</em>. Here it is the vector being <em>projected</em>.</li>
-<li class="fragment">The subspace is now the <strong>column space of \(A\)</strong> — every vector \(A\mathbf{w}\) the model can possibly produce, a plane inside \(\R^3\).</li>
+<li class="fragment">The subspace is the <strong>column space of \(A\)</strong> — every vector \(A\mathbf{w}\) the model can possibly produce, a plane inside \(\R^3\).</li>
 <li class="fragment">We want the point on that plane closest to \(\mathbf{b}\): a projection, exactly what we just built.</li>
 </ul>
 <div class="key-question fragment"><strong>One more rename, then we are settled.</strong> From L04 on the same picture gets its regression names: \(A \to X\) (data matrix), \(\mathbf{b} \to \mathbf{y}\) (observed), \(\mathbf{x} \to \mathbf{w}\) (weights), \(A\mathbf{x} \to \hat{\mathbf{y}} = X\mathbf{w}\) (predicted). <em>Same geometry, different alphabet.</em></div>
-<aside class="notes">"This is the payoff of L03 and it is worth saying slowly: fitting a line is not a new technique, it is the projection they just derived, with the subspace being everything the model can produce." "The rename matters because L04 onward uses X and y throughout, and a student who does not carry the correspondence will think a new method has appeared."</aside>
+<aside class="notes">"This is the payoff of L03: fitting a line is not a new technique, it is the projection they just derived, with the subspace being everything the model can produce." "The rename matters because L04 onward uses X and y throughout, and a student who does not carry the correspondence will think a new method has appeared."</aside>
 </section>
+
+
 
 <!-- S19: Quick check — least squares -->
 <section>
