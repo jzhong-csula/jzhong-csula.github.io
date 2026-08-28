@@ -485,12 +485,13 @@ DALL-E prompt for fig-2-05-apartment-scatter:
 <!-- S23: Prediction as matrix multiplication -->
 <section>
 <h4>Prediction = matrix × weights</h4>
-<p>Try weights \(\mathbf{w} = (0.4, -0.6)^\top\): "each 100 sqft adds $400, each mile subtracts $600."</p>
+<p>Try weights \(\mathbf{w} = (0.4, -0.6)^\top\): each 100 sqft adds \$400, each mile subtracts \$600.</p>
 <div class="fragment">
 \[\hat{\mathbf{y}} = X\mathbf{w} = \begin{bmatrix} 8 & 1 \\ 6 & 2 \\ 10 & 0.5 \end{bmatrix}\begin{bmatrix} 0.4 \\ -0.6 \end{bmatrix} = \begin{bmatrix} 2.6 \\ 1.2 \\ 3.7 \end{bmatrix}\]
 </div>
 <ul>
-<li class="fragment">Each prediction is a <strong>dot product</strong>: \(\hat{y}_i = \mathbf{x}_i^\top \mathbf{w}\).</li>
+<li class="fragment">Each prediction is a <strong>dot product</strong>: \(\hat{y}_i = \mathbf{x}_i^\top \mathbf{w}\), where \(\mathbf{x}_i\) is <strong>row \(i\) of \(X\)</strong> — apartment \(i\)'s features — written as a column. So \(\mathbf{x}_i^\top\) is a row, \(\mathbf{w}\) a column, and the product is one number.</li>
+<li class="fragment">Row 1: \(8(0.4) + 1(-0.6) = 3.2 - 0.6 = 2.6\). One apartment, one prediction.</li>
 <li class="fragment">Predictions: $2600, $1200, $3700. True rents: $3000, $2000, $5000.</li>
 <li class="fragment">Not great — but how bad exactly?</li>
 </ul>
@@ -500,15 +501,14 @@ DALL-E prompt for fig-2-05-apartment-scatter:
 <!-- S24: The bias trick -->
 <section>
 <h4>The intercept trick</h4>
-<p>The formula \(\hat{y} = w_1 x_1 + w_2 x_2\) forces the line through the origin. To add a baseline rent \(w_0\):</p>
-<div>
-Add a column of 1s to \(X\):
-\[\tilde{X} = \begin{bmatrix} 1 & 8 & 1 \\ 1 & 6 & 2 \\ 1 & 10 & 0.5 \end{bmatrix}, \quad \mathbf{w} = \begin{bmatrix} w_0 \\ w_1 \\ w_2 \end{bmatrix}\]
-
-Now \(\hat{y}_i = w_0 + w_1 x_{i1} + w_2 x_{i2}\) — intercept included automatically.
+<p><strong>The problem.</strong> \(\hat{y}_i = w_1 x_{i1} + w_2 x_{i2}\) has no constant term, so a hypothetical \(0\)-sqft apartment at distance \(0\) must be predicted to rent for \(\$0\). Every real market has a baseline, and this model cannot express one.</p>
+<p class="fragment"><strong>Why not just add \(w_0\) separately?</strong> Because then the model is \(\hat{\mathbf{y}} = X\mathbf{w} + w_0\mathbf{1}\), and \(w_0\) is no longer one of the weights. Every formula after this — the projection, the normal equation — would need a special case for it.</p>
+<div class="fragment">
+Instead, make the baseline a <strong>feature that is always \(1\)</strong>:
+\[\tilde{X} = \begin{bmatrix} 1 & 8 & 1 \\ 1 & 6 & 2 \\ 1 & 10 & 0.5 \end{bmatrix}, \qquad \mathbf{w} = \begin{bmatrix} w_0 \\ w_1 \\ w_2 \end{bmatrix}\]
 </div>
-<div class="applied fragment">Every real model uses this trick. The "1" column is a <strong>fake feature</strong> that's always on, so its weight becomes the baseline.</div>
-<aside class="notes">"This is a very common trick. Rather than treating the intercept specially, we add a fake feature that's always 1. Then the weight for that column is the intercept. Everything stays as matrix multiplication — clean and uniform."</aside>
+<div class="applied fragment">Row \(i\) now reads \(w_0 \cdot 1 + w_1 x_{i1} + w_2 x_{i2}\). <strong>\(w_0\) is just another weight</strong>, the model is still one matrix multiplication, and everything we build from here applies to it unchanged. You already met this column in L03, where it appeared as \(w_0\)'s coefficient the moment we wrote the equations out.</div>
+<aside class="notes">"Lead with the question they will ask: why fake a feature instead of just adding a number? The answer is uniformity — the moment w0 is a weight like any other, every later formula covers it for free, and none of them need an exception." "Note the notation: x_{i1} is feature 1 of apartment i. Earlier x_i meant the whole row; the subscripts matter." "This is a very common trick. Rather than treating the intercept specially, we add a fake feature that's always 1. Then the weight for that column is the intercept. Everything stays as matrix multiplication — clean and uniform."</aside>
 </section>
 
 <!-- S25: MSE — measuring how bad the fit is -->
