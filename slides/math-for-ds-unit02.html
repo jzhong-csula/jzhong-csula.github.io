@@ -468,16 +468,16 @@ DALL-E prompt for fig-2-05-apartment-scatter:
 <!-- S22: Data as a matrix -->
 <section>
 <h4>Your data is a matrix</h4>
-<p>Organize the apartment data into a matrix:</p>
+<p>Organize the apartment data — the inputs in \(X\), the thing we want to predict in \(\mathbf{y}\):</p>
 <div>
-\[X = \begin{bmatrix} 8 & 1 \\ 6 & 2 \\ 10 & 0.5 \end{bmatrix} \quad \text{(features: size in 100s, distance)}\]
-
-\[\mathbf{y} = \begin{bmatrix} 3 \\ 2 \\ 5 \end{bmatrix} \quad \text{(rent in \$1000s)}\]
+\[\underbrace{\begin{bmatrix} 8 & 1 \\ 6 & 2 \\ 10 & 0.5 \end{bmatrix}}_{X:\ \text{size (100s sqft)},\ \text{distance (miles)}}
+\qquad\qquad
+\underbrace{\begin{bmatrix} 3 \\ 2 \\ 5 \end{bmatrix}}_{\mathbf{y}:\ \text{rent (\$1000s)}}\]
 </div>
 <ul>
-<li class="fragment">Each <strong>row</strong> = one apartment (one data point).</li>
-<li class="fragment">Each <strong>column</strong> = one feature.</li>
-<li class="fragment">This is the <strong>feature matrix</strong> from Unit 1 — now we'll use it to predict.</li>
+<li class="fragment">Each <strong>row of \(X\)</strong> is one apartment; each <strong>column of \(X\)</strong> is one feature. That is what makes \(X\) the <strong>feature matrix</strong> from Unit 1.</li>
+<li class="fragment"><strong>\(\mathbf{y}\) is not part of it.</strong> It has no feature columns — one entry per apartment, the rent we are trying to predict. Its rows line up with \(X\)'s, apartment by apartment.</li>
+<li class="fragment">Read row 1 across both: 800 sqft, 1 mile from campus, rents for \$3000.</li>
 </ul>
 <aside class="notes">"Remember from Unit 1: a matrix is a grid of numbers. Here each row is an apartment, each column is a feature. We want to find weights w1 and w2 such that w1 × size + w2 × distance ≈ rent."</aside>
 </section>
