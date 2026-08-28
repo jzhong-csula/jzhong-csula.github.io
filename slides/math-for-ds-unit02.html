@@ -184,7 +184,7 @@ DALL-E prompt for fig-2-01-training-loop:
 <div class="mathbox">
 A system \(A\mathbf{x} = \mathbf{b}\) with more equations than unknowns (\(m > n\)) is called <strong>overdetermined</strong>.
 <br/><br/>
-A best-fit solution minimizes \(\norm{A\mathbf{x} - \mathbf{b}}\).
+A best-fit solution minimizes \(\norm{A\mathbf{x} - \mathbf{b}}\), where \(\norm{\cdot}\) with no subscript is the <strong>Euclidean (\(\ell_2\)) norm</strong> — the Unit 1 default, and MML's.
 </div>
 <ul>
 <li class="fragment"><strong>GPS.</strong> Each satellite reports only <em>how far away it is</em> — that puts you somewhere on a circle around it. Two circles already cross at a point, so with <em>perfect</em> readings <strong>two satellites would be enough</strong>, and a third would pass through that same point.</li>
@@ -528,7 +528,7 @@ DALL-E prompt for fig-2-05-apartment-scatter:
 </div>
 <ul>
 <li class="fragment">\(X\mathbf{w} - \mathbf{y}\) is the <strong>residual vector</strong> from L03.</li>
-<li class="fragment">\(\norm{\cdot}^2\) is the <strong>squared norm</strong> from Unit 1.</li>
+<li class="fragment">\(\norm{\cdot}^2\) is the <strong>squared \(\ell_2\) norm</strong> from Unit 1 — squaring cancels the square root inside it, which is why the left side is a plain sum of squares on the right.</li>
 <li class="fragment">Everything connects: <strong>dot product → norm → residual → MSE</strong>.</li>
 </ul>
 <div class="applied fragment">The entire vocabulary of Unit 1 (vectors, norms, dot products) was preparation for this moment: measuring model error.</div>
