@@ -592,7 +592,7 @@ Minimize \(\norm{X\mathbf{w} - \mathbf{y}}\) — this is exactly the least squar
 <section>
 <h4>The normal equation: summary</h4>
 <div class="mathbox">
-\[\boxed{X^\top X \,\mathbf{w} = X^\top \mathbf{y}}\]
+\[X^\top X \,\mathbf{w} = X^\top \mathbf{y}\]
 </div>
 <ul>
 <li class="fragment"><strong>Where it comes from:</strong> residual ⊥ column space (the projection principle).</li>
@@ -682,7 +682,7 @@ Add: \(2x = 6 \Rightarrow x = 3\). Substitute: \(y = 2\).
 <!-- S36: Three possibilities -->
 <section>
 <h4>Three possible outcomes for a linear system</h4>
-<div class="mathbox">
+<div>
 A linear system \(A\mathbf{x} = \mathbf{b}\) can have:
 </div>
 <div class="twocol">
@@ -857,7 +857,7 @@ DALL-E prompt for fig-2-09-autocorrect-fail:
 <section>
 <h4>What if the matrix isn't square?</h4>
 <p>We can only invert <strong>square</strong> matrices. But data matrices are usually tall (more rows than columns):</p>
-<div class="mathbox">
+<div>
 \[X = \begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix} \quad \text{(3 data points, 1 parameter)}\]
 \(X\) is 3×1 — no inverse exists. But we still want to "undo" \(X\) to find the best weights.
 </div>
