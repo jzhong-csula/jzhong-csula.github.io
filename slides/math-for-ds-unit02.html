@@ -345,6 +345,8 @@ If \(\mathbf{x}\) already lies on the line through \(\mathbf{b}\), what is the p
 \[\pi_U(\mathbf{x}) = B(B^\top B)^{-1}B^\top \mathbf{x}\]
 </div>
 <ul>
+<li class="fragment"><strong>We proved the first one; we have not proved the second.</strong> It is the same three-step argument — residual ⊥ subspace, expand, solve — with the basis matrix \(B\) in place of the single vector \(\mathbf{b}\). <strong>We will do that derivation in L04, where it goes by another name: the normal equation.</strong></li>
+<li class="fragment">Compare the two shapes: dividing by the number \(\mathbf{b}^\top\mathbf{b}\) becomes multiplying by the matrix inverse \((B^\top B)^{-1}\). <em>Same formula, one dimension up.</em></li>
 <li class="fragment">The line formula uses the <strong>dot product</strong> from Unit 1.</li>
 <li class="fragment">The subspace formula uses <strong>matrix multiplication</strong> from Unit 1.</li>
 <li class="fragment">Three properties: (1) result lies in the subspace, (2) it's unique, (3) residual is perpendicular.</li>
@@ -525,9 +527,11 @@ DALL-E prompt for fig-2-05-apartment-scatter:
 <h4>MSE in matrix notation</h4>
 <div class="mathbox">
 \[J(\mathbf{w}) = \frac{1}{n}\norm{X\mathbf{w} - \mathbf{y}}^2 = \frac{1}{n}\sum_{i=1}^n (y_i - \mathbf{x}_i^\top \mathbf{w})^2\]
+\[\underbrace{X}_{n\times d} \qquad \underbrace{\mathbf{w}}_{d\times 1} \qquad \underbrace{\mathbf{y}}_{n\times 1} \qquad \underbrace{X\mathbf{w}-\mathbf{y}}_{n\times 1} \qquad \underbrace{J(\mathbf{w})}_{1\times 1}\]
 </div>
 <ul>
-<li class="fragment">\(X\mathbf{w} - \mathbf{y}\) is the <strong>residual vector</strong> from L03.</li>
+<li class="fragment"><strong>\(n\) = examples (rows), \(d\) = features (columns).</strong> One row per apartment, one weight per feature — so \(X\mathbf{w}\) is only defined because \(X\)'s columns match \(\mathbf{w}\)'s entries.</li>
+<li class="fragment">\(X\mathbf{w} - \mathbf{y}\) is the <strong>residual vector</strong> from L03 — still \(n\) numbers, one error per apartment. <strong>The norm is what collapses those \(n\) numbers into the single number \(J\)</strong> we can then minimize.</li>
 <li class="fragment">\(\norm{\cdot}^2\) is the <strong>squared \(\ell_2\) norm</strong> from Unit 1 — squaring cancels the square root inside it, which is why the left side is a plain sum of squares on the right.</li>
 <li class="fragment">Everything connects: <strong>dot product → norm → residual → MSE</strong>.</li>
 </ul>
@@ -565,10 +569,12 @@ Minimize \(\norm{X\mathbf{w} - \mathbf{y}}\) — this is exactly the least squar
 <h4>Worked example: the simplest model</h4>
 <p>The simplest model predicts the same number for everything: \(\hat{y} = w\) (constant).</p>
 <div>
-\[X = \begin{bmatrix}1\\1\\1\end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix}2\\3\\5\end{bmatrix}\]
+\[\underbrace{X = \begin{bmatrix}1\\1\\1\end{bmatrix}}_{3\times 1}, \quad \underbrace{\mathbf{y} = \begin{bmatrix}2\\3\\5\end{bmatrix}}_{3\times 1}\]
 </div>
+<p class="fragment"><strong>Still \(n=3\) examples, but now \(d=1\)</strong> — the one "feature" is the constant \(1\). So \(\mathbf{w}\) is \(d\times 1 = 1\times 1\): a vector with a single entry, which we may as well write as the plain number \(w\). Nothing about the rule changed.</p>
 <p class="fragment">The column space of \(X\) is the line \((c, c, c)\). We're projecting \(\mathbf{y}\) onto that line.</p>
 <p class="fragment">Best \(w\): \(\displaystyle w^* = \frac{X^\top \mathbf{y}}{X^\top X} = \frac{2+3+5}{3} = \frac{10}{3} \approx 3.33\).</p>
+<p class="fragment">That fraction is legal <em>only</em> because \(X^\top\mathbf{y}\) and \(X^\top X\) are both \(1\times 1\). For \(d>1\), \(X^\top X\) is \(d\times d\) — a matrix you solve against, never divide by. The general version is the next slide.</p>
 <div class="key-question fragment">The constant best-fit model predicts <strong>the mean</strong>! Our age-guessing problem returns.</div>
 <aside class="notes">"Full circle: the average from the beginning of this lecture is just the simplest regression. A constant model has one parameter, and the best constant is the mean. Linear regression with a slope and intercept is the same idea but with more parameters."</aside>
 </section>
@@ -595,25 +601,32 @@ Minimize \(\norm{X\mathbf{w} - \mathbf{y}}\) — this is exactly the least squar
 \[X^\top X \,\mathbf{w} = X^\top \mathbf{y}\]
 </div>
 <ul>
+<li class="fragment"><strong>What it does:</strong> it hands you the \(\mathbf{w}\) that minimizes the MSE we wrote down earlier —
+\[\mathbf{w}^* = \arg\min_{\mathbf{w}} J(\mathbf{w}), \qquad J(\mathbf{w}) = \frac{1}{n}\norm{X\mathbf{w} - \mathbf{y}}^2\]
+Solving one linear system replaces searching over every possible \(\mathbf{w}\).</li>
 <li class="fragment"><strong>Where it comes from:</strong> residual ⊥ column space (the projection principle).</li>
-<li class="fragment"><strong>What it does:</strong> finds the weights that minimize squared error.</li>
 <li class="fragment">If \(X^\top X\) is invertible: \(\mathbf{w}^* = (X^\top X)^{-1}X^\top \mathbf{y}\).</li>
 <li class="fragment">The word "normal" means <strong>perpendicular</strong> (not "ordinary").</li>
+<li class="fragment"><strong>Promise from L03, now paid.</strong> Substitute \(\mathbf{w}^*\) back to get the prediction:
+\[\hat{\mathbf{y}} = X\mathbf{w}^* = X(X^\top X)^{-1}X^\top \mathbf{y}\]
+That <em>is</em> the subspace projection formula \(\pi_U(\mathbf{x}) = B(B^\top B)^{-1}B^\top\mathbf{x}\) we stated without proof, with \(B = X\) — and the 1D version \(\lambda = \frac{\mathbf{b}^\top \mathbf{x}}{\mathbf{b}^\top \mathbf{b}}\) is the same statement with a single column. <strong>One geometric principle, three costumes.</strong></li>
 </ul>
-<div class="applied fragment">This is the same idea as the 1D projection formula \(\lambda = \frac{\mathbf{b}^\top \mathbf{x}}{\mathbf{b}^\top \mathbf{b}}\), generalized to multiple dimensions.</div>
 <aside class="notes">"Compare: in 1D, b^T(x - λb) = 0 gave us λ = b^T x / b^T b. In multiple dimensions, X^T(y - Xw) = 0 gives us X^T X w = X^T y. Same idea, bigger matrices."</aside>
 </section>
 
 <!-- S31: Solve by hand -->
 <section>
 <h4>Worked example: solve the normal equation by hand</h4>
-<p>Model: \(\hat{y} = ax\) (no intercept). Data: \(x = (1,2,3)\), \(y = (2,2,3)\).</p>
-<div>
+<p>Model: \(\hat{y} = ax\) (no intercept). Data: \(x = (1,2,3)\), \(y = (2,2,3)\). Here \(d=1\), so \(X^\top X\) is a single number.</p>
+<div style="display:flex; align-items:center; gap:1.4em;">
+<div style="flex:0 0 36%;">
 \[X^\top X = 1^2 + 2^2 + 3^2 = 14\]
 \[X^\top \mathbf{y} = 1\cdot 2 + 2\cdot 2 + 3\cdot 3 = 15\]
 \[a^* = \frac{15}{14} \approx 1.07\]
 </div>
-<p class="fragment">Best-fit line: \(\hat{y} = 1.07x\).</p>
+<img src="../images/unit02/u2-L04-fig12-normal-equation-by-hand.png" alt="Left: the three points with the best-fit line through the origin and its residuals. Right: the squared error as a parabola in a, with its minimum at 15/14" style="width:60%; border-radius:6px;">
+</div>
+<p class="fragment"><strong>The right picture is the same arithmetic.</strong> The two numbers you just computed <em>are</em> the parabola's coefficients — so solving \(X^\top X\,a = X^\top\mathbf{y}\) and finding the bottom of that curve are literally the same step.</p>
 <div class="applied fragment">You just did what <code>sklearn.linear_model.LinearRegression</code> does internally — with pencil and paper!</div>
 <aside class="notes">"This is a one-parameter problem so the normal equation is just division. For two parameters you solve a 2×2 system. For 100 features it's a 100×100 system — that's where computers help. But the math is the same."</aside>
 </section>
