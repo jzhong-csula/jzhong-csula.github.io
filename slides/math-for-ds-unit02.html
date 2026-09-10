@@ -308,6 +308,8 @@ DALL-E prompt for fig-2-04-pythagorean-projection:
 <!-- S15: Proof — any other point is farther -->
 <section>
 <h4>Proof: any other point on the line is farther</h4>
+<img src="../images/unit02/u2-L03-fig11-proof-triangle.png" alt="Right triangle: x-q is the hypotenuse, r and (lambda-mu)b are the legs" style="float:right; max-height:340px; max-width:46%; margin:0 0 0.4em 1em; border-radius:6px;">
+
 <p>Let \(\mathbf{p} = \lambda \mathbf{b}\) be the projection and \(\mathbf{q} = \mu \mathbf{b}\) be any <em>other</em> point on the line (\(\mu \neq \lambda\)).</p>
 <div>
 Split the distance to \(\mathbf{q}\):
@@ -322,6 +324,7 @@ Since \(\mathbf{r} \perp \mathbf{b}\), the Pythagorean theorem gives:
 <li class="fragment">Therefore \(\|\mathbf{x} - \mathbf{q}\| > \|\mathbf{x} - \mathbf{p}\|\). The projection is <strong>uniquely closest</strong>.</li>
 </ul>
 <aside class="notes">"This is the proof. It uses one fact: perpendicular vectors satisfy the Pythagorean theorem. The distance to any other point on the line equals the distance to the projection PLUS an extra positive term. So the projection is strictly the closest. Three lines of algebra, one big idea."</aside>
+<div style="clear:both"></div>
 </section>
 
 <!-- S16: Quick check — projection -->
@@ -450,16 +453,19 @@ If all three points lie exactly on a line, what is the least-squares residual?
 
 <!-- S21: L04 opening — predicting rent -->
 <section>
-<h4>L04 — Predicting apartment rent</h4>
-<img src="../images/unit02/u2-L04-fig06-scatter-bestfit.png" alt="Apartment size vs rent with best-fit line" style="float:right; max-height:380px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
-<p>You're apartment hunting. You notice: bigger apartments cost more, and farther from campus costs less.</p>
-<ul>
-<li class="fragment">Size: 800, 600, 1000 sqft.</li>
-<li class="fragment">Distance to campus: 1, 2, 0.5 miles.</li>
-<li class="fragment">Rent: $3000, $2000, $5000.</li>
-</ul>
-<div class="key-question fragment" style="clear:both;">Can we find a formula that predicts rent from size and distance? What line (or plane) fits best?</div>
-<aside class="notes">"Everyone's dealt with apartment hunting — or at least compared prices online. Today we'll build the exact formula that Zillow, Redfin, and every real estate app uses to estimate prices. It's called linear regression, and it's the same projection from L03, just written as a formula."</aside>
+<h4>L04 &mdash; Predicting apartment rent</h4>
+<p>You're apartment hunting. You notice two things: bigger apartments cost more,
+and being farther from campus costs less.</p>
+<table style="margin:0.5em auto; border-collapse:collapse">
+<tr><th style="padding:3px 18px">Apartment</th><th style="padding:3px 18px">Size</th>
+    <th style="padding:3px 18px">Distance to campus</th><th style="padding:3px 18px">Rent</th></tr>
+<tr><td style="text-align:center">A</td><td style="text-align:center">600 sqft</td><td style="text-align:center">1 mile</td><td style="text-align:center">$3,000</td></tr>
+<tr><td style="text-align:center">B</td><td style="text-align:center">800 sqft</td><td style="text-align:center">2 miles</td><td style="text-align:center">$2,000</td></tr>
+<tr><td style="text-align:center">C</td><td style="text-align:center">1000 sqft</td><td style="text-align:center">3 miles</td><td style="text-align:center">$4,000</td></tr>
+</table>
+<div class="key-question fragment">Can we find a formula that predicts rent from size and distance?
+And once we can write one down &mdash; which formula is <em>best</em>?</div>
+<aside class="notes">"Only three apartments so every number stays on the board. Note B: bigger than A but cheaper, because it is farther out. That is the whole reason we need two coefficients rather than one."</aside>
 </section>
 
 <!--
@@ -470,37 +476,38 @@ DALL-E prompt for fig-2-05-apartment-scatter:
 <!-- S22: Data as a matrix -->
 <section>
 <h4>Your data is a matrix</h4>
-<p>Organize the apartment data — the inputs in \(X\), the thing we want to predict in \(\mathbf{y}\):</p>
-<div>
-\[\underbrace{\begin{bmatrix} 8 & 1 \\ 6 & 2 \\ 10 & 0.5 \end{bmatrix}}_{X:\ \text{size (100s sqft)},\ \text{distance (miles)}}
+<p><strong>What are we actually trying to do?</strong> Take one apartment's numbers,
+multiply each by a coefficient, add them up, and get a predicted rent:</p>
+\[\text{predicted rent} = w_0\cdot(\text{size}) \;+\; w_1\cdot(\text{distance})\]
+<p class="fragment">\(w_0\) is "dollars per 100 sqft" and \(w_1\) is "dollars per mile."
+<strong>Those two numbers are the model.</strong> Find them and you can price any apartment;
+the rest of this lecture is about how to find the best pair.</p>
+<div class="fragment">
+<p>Stack the inputs into \(X\) and the thing we want to predict into \(\mathbf{y}\):</p>
+\[\underbrace{\begin{bmatrix} 6 & 1 \\ 8 & 2 \\ 10 & 3 \end{bmatrix}}_{X:\ \text{size (100s sqft)},\ \text{distance (miles)}}
 \qquad\qquad
-\underbrace{\begin{bmatrix} 3 \\ 2 \\ 5 \end{bmatrix}}_{\mathbf{y}:\ \text{rent (\$1000s)}}\]
+\underbrace{\begin{bmatrix} 3 \\ 2 \\ 4 \end{bmatrix}}_{\mathbf{y}:\ \text{rent (\$1000s)}}\]
 </div>
-<ul>
-<li class="fragment">Each <strong>row of \(X\)</strong> is one apartment; each <strong>column of \(X\)</strong> is one feature. That is what makes \(X\) the <strong>feature matrix</strong> from Unit 1.</li>
-<li class="fragment"><strong>\(\mathbf{y}\) is not part of it.</strong> It has no feature columns — one entry per apartment, the rent we are trying to predict. Its rows line up with \(X\)'s, apartment by apartment.</li>
-<li class="fragment">Read row 1 across both: 800 sqft, 1 mile from campus, rents for \$3000.</li>
-</ul>
-<aside class="notes">"Remember from Unit 1: a matrix is a grid of numbers. Here each row is an apartment, each column is a feature. We want to find weights w1 and w2 such that w1 × size + w2 × distance ≈ rent."</aside>
+<p class="fragment">Each <em>row</em> of \(X\) is one apartment; each <em>column</em> is one feature.
+\(\mathbf{y}\) is not part of \(X\) &mdash; it is the answer we are trying to reproduce.</p>
+<aside class="notes">"Say the sentence before showing the matrix. Students meet 'weights' two slides later and have no idea what a weight is unless they have already been told we are looking for two multipliers. Units help: dollars per 100 sqft, dollars per mile."</aside>
 </section>
 
 <!-- S23: Prediction as matrix multiplication -->
 <section>
-<h4>Prediction = matrix × weights</h4>
-<p>Try weights \(\mathbf{w} = (0.4, -0.6)^\top\): each 100 sqft adds \$400, each mile subtracts \$600.</p>
-<div class="fragment">
-\[\hat{\mathbf{y}} = X\mathbf{w} = \begin{bmatrix} 8 & 1 \\ 6 & 2 \\ 10 & 0.5 \end{bmatrix}\begin{bmatrix} 0.4 \\ -0.6 \end{bmatrix} = \begin{bmatrix} 2.6 \\ 1.2 \\ 3.7 \end{bmatrix}\]
-</div>
-<ul>
-<li class="fragment">Each prediction is a <strong>dot product</strong>: \(\hat{y}_i = \mathbf{x}_i^\top \mathbf{w}\), where \(\mathbf{x}_i\) holds apartment \(i\)'s features:
-\[\mathbf{x}_1 = \begin{bmatrix} 8 \\ 1 \end{bmatrix},
-\qquad \mathbf{x}_1^\top \mathbf{w} = \begin{bmatrix} 8 & 1 \end{bmatrix}\begin{bmatrix} 0.4 \\ -0.6 \end{bmatrix} = 3.2 - 0.6 = 2.6.\]</li>
-<li class="fragment"><strong>\(\mathbf{x}_i\) is a column vector, but it is <em>not</em> a column of \(X\).</strong> It is row \(i\) stood on end. Column 1 of \(X\) is \((8,6,10)\) — the size of all three apartments — which has length \(3\) and cannot multiply a length-\(2\) \(\mathbf{w}\).</li>
-<li class="fragment">Rows are apartments, columns are features. A prediction needs one apartment's worth of numbers, so it reads a <em>row</em>.</li>
-<li class="fragment">Predictions: $2600, $1200, $3700. True rents: $3000, $2000, $5000.</li>
-<li class="fragment">Not great — but how bad exactly?</li>
-</ul>
-<aside class="notes">"Expect this exact objection, because the wording invites it: if x_i transpose is a row then x_i is a column, so surely x_i is a column of X. It is not. 'Is a column vector' is a statement about shape; 'is a column of X' names a different object. Settle it by counting: w has length 2, a column of X has length 3, so only a row can multiply w." "This is matrix-vector multiplication from Unit 1 in action. Each prediction is one row of X dotted with w. The predictions are off — we need a single number to measure 'how off', and then find the w that makes that number as small as possible."</aside>
+<h4>Prediction = matrix &times; weights</h4>
+<p>We do not know the best \(w_0, w_1\) yet &mdash; so <strong>guess a pair and see what happens</strong>.
+Try \(\mathbf{w} = (0.4,\,-0.6)^\top\): each 100 sqft adds \$400, each mile subtracts \$600.</p>
+\[\hat{\mathbf{y}} = X\mathbf{w} =
+\begin{bmatrix} 6 & 1 \\ 8 & 2 \\ 10 & 3 \end{bmatrix}
+\begin{bmatrix} 0.4 \\ -0.6 \end{bmatrix} =
+\begin{bmatrix} 6(0.4)+1(-0.6) \\ 8(0.4)+2(-0.6) \\ 10(0.4)+3(-0.6) \end{bmatrix} =
+\begin{bmatrix} 1.8 \\ 2.0 \\ 2.2 \end{bmatrix}\]
+<p class="fragment">Each prediction is a <strong>dot product</strong>: \(\hat{y}_i = \mathbf{x}_i^\top\mathbf{w}\),
+where \(\mathbf{x}_i\) is apartment \(i\)'s row.</p>
+<p class="fragment">Actual rents are \((3,\,2,\,4)\). This guess predicts everything at roughly \$2000
+&mdash; it barely distinguishes the three apartments at all.</p>
+<aside class="notes">"Emphasise that 0.4 and -0.6 were picked out of the air. The point of guessing is to have something to measure, so that 'best' means something by the end of the lecture."</aside>
 </section>
 
 
@@ -508,18 +515,19 @@ DALL-E prompt for fig-2-05-apartment-scatter:
 <!-- S25: MSE — measuring how bad the fit is -->
 <section>
 <h4>Mean Squared Error: one number for "how bad"</h4>
-<p>True rents: \(\mathbf{y} = (3, 2, 5)\). Predictions: \(\hat{\mathbf{y}} = (2.6, 1.2, 3.7)\).</p>
-<table>
-<tr><th>Apartment</th><th>True</th><th>Predicted</th><th>Error</th><th>Squared error</th></tr>
-<tr><td>A</td><td>3.0</td><td>2.6</td><td>0.4</td><td>0.16</td></tr>
-<tr><td>B</td><td>2.0</td><td>1.2</td><td>0.8</td><td>0.64</td></tr>
-<tr><td>C</td><td>5.0</td><td>3.7</td><td>1.3</td><td>1.69</td></tr>
+<p>True rents \(\mathbf{y} = (3,\,2,\,4)\) against the guess \(\hat{\mathbf{y}} = (1.8,\,2.0,\,2.2)\):</p>
+<table style="margin:0.4em auto; border-collapse:collapse">
+<tr><th style="padding:3px 14px">Apartment</th><th style="padding:3px 14px">True</th>
+    <th style="padding:3px 14px">Predicted</th><th style="padding:3px 14px">Error</th>
+    <th style="padding:3px 14px">Squared error</th></tr>
+<tr><td style="text-align:center">A</td><td style="text-align:center">3.0</td><td style="text-align:center">1.8</td><td style="text-align:center">1.2</td><td style="text-align:center">1.44</td></tr>
+<tr><td style="text-align:center">B</td><td style="text-align:center">2.0</td><td style="text-align:center">2.0</td><td style="text-align:center">0.0</td><td style="text-align:center">0.00</td></tr>
+<tr><td style="text-align:center">C</td><td style="text-align:center">4.0</td><td style="text-align:center">2.2</td><td style="text-align:center">1.8</td><td style="text-align:center">3.24</td></tr>
 </table>
-<div class="fragment">
-\[\text{MSE} = \frac{1}{n}\sum_{i=1}^n(y_i - \hat{y}_i)^2 = \frac{0.16+0.64+1.69}{3} = 0.83\]
-</div>
-<div class="key-question fragment">MSE = <strong>one number</strong> that lets us compare any two models: lower is better.</div>
-<aside class="notes">"MSE is the report card for your model. Just like your GPA is one number that summarizes your academic performance, MSE is one number that summarizes how well your model predicts. The goal of training is to make this number as small as possible."</aside>
+\[\text{MSE} = \frac{1}{n}\sum_{i=1}^n (y_i-\hat{y}_i)^2 = \frac{1.44+0.00+3.24}{3} = \mathbf{1.56}\]
+<p class="fragment">One number for a whole model. <strong>Lower is better</strong> &mdash;
+so "find the best \(\mathbf{w}\)" now means something precise: make this number as small as it can go.</p>
+<aside class="notes">"Apartment B is predicted exactly right and still the model is bad. Worth saying: MSE judges the model as a whole, not one lucky row."</aside>
 </section>
 
 <!-- S26: MSE as a norm -->
@@ -565,19 +573,7 @@ Minimize \(\norm{X\mathbf{w} - \mathbf{y}}\) — this is exactly the least squar
 </section>
 
 <!-- S29: Constant model = the mean -->
-<section>
-<h4>Worked example: the simplest model</h4>
-<p>The simplest model predicts the same number for everything: \(\hat{y} = w\) (constant).</p>
-<div>
-\[\underbrace{X = \begin{bmatrix}1\\1\\1\end{bmatrix}}_{3\times 1}, \quad \underbrace{\mathbf{y} = \begin{bmatrix}2\\3\\5\end{bmatrix}}_{3\times 1}\]
-</div>
-<p class="fragment"><strong>Still \(n=3\) examples, but now \(d=1\)</strong> — the one "feature" is the constant \(1\). So \(\mathbf{w}\) is \(d\times 1 = 1\times 1\): a vector with a single entry, which we may as well write as the plain number \(w\). Nothing about the rule changed.</p>
-<p class="fragment">The column space of \(X\) is the line \((c, c, c)\). We're projecting \(\mathbf{y}\) onto that line.</p>
-<p class="fragment">Best \(w\): \(\displaystyle w^* = \frac{X^\top \mathbf{y}}{X^\top X} = \frac{2+3+5}{3} = \frac{10}{3} \approx 3.33\).</p>
-<p class="fragment">That fraction is legal <em>only</em> because \(X^\top\mathbf{y}\) and \(X^\top X\) are both \(1\times 1\). For \(d>1\), \(X^\top X\) is \(d\times d\) — a matrix you solve against, never divide by. The general version is the next slide.</p>
-<div class="key-question fragment">The constant best-fit model predicts <strong>the mean</strong>! Our age-guessing problem returns.</div>
-<aside class="notes">"Full circle: the average from the beginning of this lecture is just the simplest regression. A constant model has one parameter, and the best constant is the mean. Linear regression with a slope and intercept is the same idea but with more parameters."</aside>
-</section>
+
 
 <!-- S30: Deriving the normal equation — step by step -->
 <section>
@@ -616,19 +612,55 @@ That <em>is</em> the subspace projection formula \(\pi_U(\mathbf{x}) = B(B^\top 
 
 <!-- S31: Solve by hand -->
 <section>
-<h4>Worked example: solve the normal equation by hand</h4>
-<p>Model: \(\hat{y} = ax\) (no intercept). Data: \(x = (1,2,3)\), \(y = (2,2,3)\). Here \(d=1\), so \(X^\top X\) is a single number.</p>
-<div style="display:flex; align-items:center; gap:1.4em;">
-<div style="flex:0 0 36%;">
-\[X^\top X = 1^2 + 2^2 + 3^2 = 14\]
-\[X^\top \mathbf{y} = 1\cdot 2 + 2\cdot 2 + 3\cdot 3 = 15\]
-\[a^* = \frac{15}{14} \approx 1.07\]
+<h4>Worked example: solve it by hand (1 of 2)</h4>
+<p>Same three apartments. Now stop guessing and <strong>solve</strong>
+\(X^\top X\,\mathbf{w} = X^\top\mathbf{y}\):</p>
+\[X = \begin{bmatrix} 6 & 1 \\ 8 & 2 \\ 10 & 3 \end{bmatrix},\qquad
+  \mathbf{y} = \begin{bmatrix}3\\2\\4\end{bmatrix},\qquad
+  \mathbf{w} = \begin{bmatrix}w_0\\w_1\end{bmatrix}\]
+<p class="fragment">Every entry of \(X^\top X\) is a dot product of two columns of \(X\):</p>
+<div class="fragment">
+\[X^\top X = \begin{bmatrix}
+ 6^2+8^2+10^2 & 6(1)+8(2)+10(3)\\[2pt]
+ 6(1)+8(2)+10(3) & 1^2+2^2+3^2 \end{bmatrix}
+= \begin{bmatrix}200 & 52\\ 52 & 14\end{bmatrix}\]
 </div>
-<img src="../images/unit02/u2-L04-fig12-normal-equation-by-hand.png" alt="Left: the three points with the best-fit line through the origin and its residuals. Right: the squared error as a parabola in a, with its minimum at 15/14" style="width:60%; border-radius:6px;">
+<div class="fragment">
+\[X^\top\mathbf{y} = \begin{bmatrix} 6(3)+8(2)+10(4)\\[2pt] 1(3)+2(2)+3(4)\end{bmatrix}
+= \begin{bmatrix}74\\ 19\end{bmatrix}\]
 </div>
-<p class="fragment"><strong>The right picture is the same arithmetic.</strong> The two numbers you just computed <em>are</em> the parabola's coefficients — so solving \(X^\top X\,a = X^\top\mathbf{y}\) and finding the bottom of that curve are literally the same step.</p>
-<div class="applied fragment">You just did what <code>sklearn.linear_model.LinearRegression</code> does internally — with pencil and paper!</div>
-<aside class="notes">"This is a one-parameter problem so the normal equation is just division. For two parameters you solve a 2×2 system. For 100 features it's a 100×100 system — that's where computers help. But the math is the same."</aside>
+<p class="fragment">So the whole problem is now
+\(\begin{bmatrix}200 & 52\\ 52 & 14\end{bmatrix}\mathbf{w}=\begin{bmatrix}74\\19\end{bmatrix}\)
+&mdash; <strong>two equations, two unknowns.</strong></p>
+<aside class="notes">"Have them compute one entry out loud. X-transpose-X is symmetric because the off-diagonal is the same dot product read twice — worth pointing at."</aside>
+</section>
+
+<section>
+<h4>Worked example: solve it by hand (2 of 2)</h4>
+<p><strong>Step 1 &mdash; is it even invertible?</strong>
+\(\det = 200(14) - 52^2 = 2800 - 2704 = \mathbf{96}\).</p>
+<p class="fragment">Not zero, so \((X^\top X)^{-1}\) exists. Notice you had to actually
+subtract to find that out &mdash; \(2800\) and \(2704\) are not far apart.
+<em>Hold on to that thought; L06 is about what happens when they are closer still.</em></p>
+<div class="fragment">
+<p><strong>Step 2 &mdash; invert and multiply</strong>, with the \(2\times2\) formula you know:</p>
+\[\mathbf{w}^* = \frac{1}{96}\begin{bmatrix}14 & -52\\ -52 & 200\end{bmatrix}
+\begin{bmatrix}74\\19\end{bmatrix}
+= \frac{1}{96}\begin{bmatrix}1036-988\\ -3848+3800\end{bmatrix}
+= \frac{1}{96}\begin{bmatrix}48\\ -48\end{bmatrix}
+= \begin{bmatrix}\ \ 0.5\\ -0.5\end{bmatrix}\]
+</div>
+<div class="fragment">
+<p><strong>Step 3 &mdash; check it.</strong> Predictions \(X\mathbf{w}^* = (2.5,\,3,\,3.5)\),
+residual \(\mathbf{r} = \mathbf{y}-X\mathbf{w}^* = (0.5,\,-1,\,0.5)\), and</p>
+\[X^\top\mathbf{r} = \begin{bmatrix}6(0.5)+8(-1)+10(0.5)\\ 1(0.5)+2(-1)+3(0.5)\end{bmatrix}
+= \begin{bmatrix}0\\0\end{bmatrix}\ \checkmark\]
+<p>The residual really is perpendicular to both columns &mdash; exactly what we demanded.</p>
+</div>
+<div class="key-question fragment">\(\mathbf{w}^*=(0.5,-0.5)\): each 100 sqft adds \$500, each mile costs \$500.
+<strong>MSE drops from 1.56 to 0.5</strong>, and no searching was needed &mdash; one determinant,
+one \(2\times2\) inverse. This is what <code>LinearRegression</code> does inside.</div>
+<aside class="notes">"Three steps, and step 1 is the one students skip: check the determinant before inverting. It costs one subtraction and it is the difference between an answer and nonsense — which is exactly the lecture after this one."</aside>
 </section>
 
 <!-- S32: Quick check — normal equation -->
@@ -830,9 +862,9 @@ So \(\mathbf{b}\notin\mathrm{col}(A)\): no \(x\) satisfies all three equations.
 </section>
 
 <section>
-<h4>So compute the projection &mdash; and watch what it turns out to be</h4>
-<p>The closest reachable point is the projection of \(\mathbf{b}\) onto \(\mathrm{col}(A)\).
-That is the L03 formula, with \(A\) in place of the direction vector:</p>
+<h4>So compute the projection</h4>
+<p>\(\mathbf{b}\) is not reachable, so take the closest point that is: project \(\mathbf{b}\)
+onto \(\mathrm{col}(A)\), using the L03 formula with \(A\) as the direction:</p>
 <div class="fragment">
 \[A^\top A = 1+1+1 = 3,\qquad A^\top\mathbf{b} = 19+21+20 = 60\]
 \[x^* = \frac{A^\top\mathbf{b}}{A^\top A} = \frac{60}{3} = \mathbf{20}
@@ -843,10 +875,42 @@ That is the L03 formula, with \(A\) in place of the direction vector:</p>
 \[\mathbf{r} = \mathbf{b} - Ax^* = \begin{bmatrix}-1\\ 1\\ 0\end{bmatrix},
 \qquad A^\top\mathbf{r} = -1+1+0 = 0\ \checkmark\]
 </div>
-<div class="key-question fragment">\(x^* = 20\) is <strong>the average of 19, 21 and 20</strong>.
-The answer everyone's intuition reached for on the first slide of this unit
-<em>is</em> the orthogonal projection onto the column space. Now it is proved, not assumed.</div>
-<aside class="notes">"This closes the loop opened in L03. Mention that minimising S(x) = sum (x - b_i)^2 and setting the derivative to zero gives 3x = 60 as well — same answer by calculus, which is the route L04 took."</aside>
+<p class="fragment">So the closest reachable point is \((20,20,20)\), and the best single answer
+is \(x^* = 20\) &mdash; <strong>the average of 19, 21 and 20.</strong></p>
+<aside class="notes">"Compute it in front of them: three additions and one division. Let the last line sit for a second before turning the page — most of the room will notice it is the average on their own."</aside>
+</section>
+
+<section>
+<h4>Wait &mdash; is that a coincidence?</h4>
+<p>Back in <strong>L03</strong> we proved a theorem: for any numbers \(b_1,\dots,b_n\),
+the total squared miss \(\sum_i (x-b_i)^2\) is smallest at exactly the average.
+We got it by <em>differentiating</em>, and for these three friends it gave \(3x = 60\), so \(x=20\).</p>
+<p class="fragment">We have just arrived at \(20\) again by a completely different route &mdash;
+column space and orthogonal projection, <em>no calculus anywhere</em>.</p>
+<div class="key-question fragment">Two arguments with nothing in common, same answer.
+<strong>Is that luck?</strong> Take a moment before the next slide.</div>
+<aside class="notes">"Stop and actually ask. Some will say coincidence, some will say it must mean something. The answer lands harder if they have committed to a guess."</aside>
+</section>
+
+<section>
+<h4>No &mdash; the average <em>is</em> the normal equation, for this one \(A\)</h4>
+<p>Put our \(A = (1,1,1)^\top\) into the general formula and watch what each piece becomes:</p>
+<div class="fragment">
+\[A^\top A = \underbrace{1+1+\cdots+1}_{n} = n,
+\qquad A^\top\mathbf{b} = b_1+\cdots+b_n = \sum_i b_i\]
+</div>
+<div class="fragment">
+<p>So \(A^\top A\,x = A^\top\mathbf{b}\) reads</p>
+\[n\,x = \sum_i b_i \qquad\Longrightarrow\qquad x = \frac{1}{n}\sum_i b_i = \bar b\]
+<p><strong>That is the L03 theorem</strong> &mdash; the same equation the derivative gave us there.</p>
+</div>
+<div class="key-question fragment">Not a coincidence: <strong>a special case.</strong>
+The L03 theorem is what the normal equation becomes when \(A\) is a single column of \(1\)s.
+Averaging was never a separate technique &mdash; it is least squares with one all-ones feature.</div>
+<p class="fragment">The perpendicularity condition specialises too: \(A^\top\mathbf{r}=0\) becomes
+\(\sum_i r_i = 0\) &mdash; <em>the deviations from the mean sum to zero</em>, which you have known
+since school without knowing it was an orthogonality statement.</p>
+<aside class="notes">"They have known since school that deviations from the mean cancel. That fact is A-transpose-r = 0. The general machinery did not replace what they knew — it explained it."</aside>
 </section>
 
 <!-- S43: The normal equation — geometric meaning -->
@@ -906,16 +970,44 @@ If \(\mathbf{y}\) is already in the column space of \(X\), what is the residual 
 
 <!-- S46: L06 opening — autocorrect gone wrong -->
 <section>
-<h4>L06 — When the formula gives garbage</h4>
-<img src="../images/unit02/u2-L06-fig10-autocorrect-instability.png" alt="Instability: nearly parallel lines" style="float:right; max-height:380px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
-<p>You've seen autocorrect go wildly wrong — you type one wrong letter and get a completely different word.</p>
-<ul>
-<li class="fragment">A small change in input → a <strong>huge</strong> change in output.</li>
-<li class="fragment">The same thing can happen with the normal equation.</li>
-<li class="fragment">Tiny noise in the data → wildly different best-fit weights.</li>
-</ul>
-<div class="key-question fragment" style="clear:both;">When can we trust the formula? And what do we do when we can't?</div>
-<aside class="notes">"Everyone's had an autocorrect fail where one typo completely changes the message. The same thing happens in math: some formulas are 'sensitive' — small changes in the input cause wild swings in the output. Today we'll see when the normal equation has this problem and what to do about it."</aside>
+<h4>L06 &mdash; When the formula gives garbage</h4>
+<p>Two systems. Look at how little separates them, then look at the answers.</p>
+<div class="twocol">
+<div>
+\[\begin{cases} x + y = 2\\[2pt] x + \mathbf{0.999}\,y = 1.998 \end{cases}\]
+<p style="text-align:center">solve \(\Rightarrow\)
+<strong style="font-size:1.25em">\(\;(x,y) = (0,\;2)\)</strong></p>
+</div>
+<div>
+\[\begin{cases} x + y = 2\\[2pt] x + \mathbf{1.001}\,y = 1.998 \end{cases}\]
+<p style="text-align:center">solve \(\Rightarrow\)
+<strong style="font-size:1.25em">\(\;(x,y) = (4,\;-2)\)</strong></p>
+</div>
+</div>
+<div class="fragment" style="clear:both">
+<p>One coefficient moved by \(0.002\). Check both &mdash; they are exact:</p>
+\[0 + 0.999(2) = 1.998 \qquad\qquad 4 + 1.001(-2) = 4 - 2.002 = 1.998\]
+</div>
+<div class="key-question fragment"><strong>The input changed in the third decimal place.
+\(x\) went from \(0\) to \(4\), and \(y\) changed sign.</strong>
+Nothing was solved incorrectly &mdash; both answers are right for the system above them.
+So what went wrong?</div>
+<aside class="notes">"Put the two systems up and say nothing for a few seconds. Someone will spot that the only difference is 0.999 versus 1.001. Then reveal the answers. No figure on purpose: an ill-conditioned system looks completely ordinary, and that is exactly the problem."</aside>
+</section>
+
+<section>
+<h4>Two different things can go wrong</h4>
+<p>Our formula is \(\mathbf{w} = (X^\top X)^{-1}X^\top\mathbf{y}\). It can fail in two separate ways:</p>
+<ol>
+<li class="fragment"><strong>Does that inverse even exist?</strong> \(X\) is tall, not square, so
+\(X^{-1}\) does not exist at all &mdash; and \(X^\top X\) can fail to be invertible too.</li>
+<li class="fragment"><strong>If it exists, can I trust the number it gives?</strong>
+That is what you just watched fail.</li>
+</ol>
+<div class="key-question fragment">Separate problems, separate answers.
+<strong>Existence first</strong> &mdash; there is no point asking whether to trust a number
+you cannot compute. Then trust.</div>
+<aside class="notes">"This slide is the map for the rest of the lecture. Point back at it when you switch from Worry 1 to Worry 2."</aside>
 </section>
 
 <!--
@@ -925,7 +1017,7 @@ DALL-E prompt for fig-2-09-autocorrect-fail:
 
 <!-- S47: The pseudoinverse — a best-effort inverse -->
 <section>
-<h4>What if the matrix isn't square?</h4>
+<h4>Worry 1: does the formula even exist?</h4>
 <p>We can only invert <strong>square</strong> matrices. But data matrices are usually tall (more rows than columns):</p>
 <div>
 \[X = \begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix} \quad \text{(3 data points, 1 parameter)}\]
@@ -992,7 +1084,8 @@ If \(\mathbf{b}\) lies in the column space of \(A\), what does \(A^+\mathbf{b}\)
 
 <!-- S52: When formulas break — nearly dependent columns -->
 <section>
-<h4>Why "almost identical columns" is a problem &mdash; compute it</h4>
+<h4>Worry 2: it exists &mdash; can we trust it?</h4>
+<p style="color:#666;font-size:0.92em">The pseudoinverse settled <em>existence</em>. Now back to the two systems we opened with, and the question they left hanging.</p>
 <p>Two features that are almost the same thing:</p>
 \[X = \begin{bmatrix} 1 & 1 \\ 1 & 1.001 \end{bmatrix}\]
 <p class="fragment">You already know the 2&times;2 inverse:
