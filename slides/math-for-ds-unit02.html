@@ -88,7 +88,7 @@
 <tr><td>19</td><td>21</td><td>20</td></tr>
 </table>
 <ul>
-<li class="fragment">Written as equations: \(x = 19\), \(x = 21\), \(x = 20\). <strong>No single number satisfies all three.</strong></li>
+<li class="fragment">There is one unknown &mdash; your age. Call it \(x\). Each guess is a claim about that one number: \(x = 19\), \(x = 21\), \(x = 20\). <strong>No single number satisfies all three.</strong></li>
 <li class="fragment">You cannot be right for everyone. You can only be <strong>wrong by as little as possible</strong>.</li>
 <li class="fragment">You'd probably say <strong>the average</strong>: \(x^* = \frac{19+21+20}{3} = 20\) — the <strong>best compromise</strong>.</li>
 </ul>
@@ -679,17 +679,18 @@ DALL-E prompt for fig-2-06-schedule-conflict:
 <!-- S35: A 2×2 system — two friends, one restaurant -->
 <section>
 <h4>Example: two equations, two unknowns</h4>
-<p>You and a friend are splitting a restaurant bill. You ordered differently:</p>
+<p>You and a friend eat at the same taco place. Two receipts:</p>
 <ul>
-<li>You: 1 taco + 1 drink = $5</li>
-<li>Friend: 1 taco − 1 drink = $1 (friend paid less for just a taco)</li>
+<li>You: <strong>1 taco + 1 drink = $5</strong></li>
+<li>Friend: <strong>2 tacos + 1 drink = $8</strong></li>
 </ul>
+<p class="fragment">Let \(x\) = price of a taco, \(y\) = price of a drink. Each receipt is one equation:</p>
 <div class="fragment">
-\[\begin{cases} x + y = 5 \\ x - y = 1 \end{cases}\]
-Add: \(2x = 6 \Rightarrow x = 3\). Substitute: \(y = 2\).
+\[\begin{cases} x + y = 5 \\ 2x + y = 8 \end{cases}\]
+<p>Subtract the first from the second: \(x = 3\). Put that back: \(y = 2\).</p>
 </div>
-<p class="fragment">Taco costs $3, drink costs $2. <strong>One exact solution</strong>.</p>
-<aside class="notes">"Two equations, two unknowns — and they agree on one answer. But what if the equations conflict? That's the question we'll explore."</aside>
+<p class="fragment">Taco $3, drink $2. <strong>One exact solution.</strong></p>
+<aside class="notes">"Both lines are things you could actually be handed at a counter. Subtracting one receipt from the other cancels the drink and leaves one taco — that is elimination, and they have just done it without being told the name."</aside>
 </section>
 
 <!-- S36: Three possibilities -->
@@ -722,10 +723,14 @@ DALL-E prompt for fig-2-07-three-cases:
 <section>
 <h4>Quick check</h4>
 <div class="quickcheck">
-What if the second equation were \(x + y = 10\) instead of \(x - y = 1\)?
+A third friend orders <strong>exactly what you ordered</strong> &mdash; 1 taco + 1 drink &mdash;
+and the register charges <strong>$10</strong>.
 <br/>\(\begin{cases} x + y = 5 \\ x + y = 10 \end{cases}\)
 </div>
-<p class="fragment"><strong>No solution</strong> — \(x + y\) can't be both 5 and 10. The equations are contradictory (parallel lines).</p>
+<p class="fragment"><strong>No solution.</strong> \(x + y\) cannot be both 5 and 10.
+The same order rang up two different totals, so the two receipts contradict each other &mdash;
+parallel lines, no intersection.</p>
+<aside class="notes">"This one is worth a beat: it is not that the maths failed. The data is inconsistent, and the geometry is telling you so."</aside>
 </section>
 
 <!-- S38: Column space — what the system can produce -->
@@ -787,35 +792,87 @@ If every row of \(A\) has last entry zero, what must be true about \(\mathbf{b}\
 
 <!-- S42: Overdetermined revisited -->
 <section>
-<h4>Overdetermined systems: putting it together</h4>
-<p>Back to the age-guessing problem: \(x = 19, x = 21, x = 20\).</p>
-<div>
-\[X = \begin{bmatrix}1\\1\\1\end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix}19\\21\\20\end{bmatrix}\]
-Column space = the line \((c, c, c)\). But \(\mathbf{y} = (19, 21, 20)\) is NOT on that line.
+<h4>Putting it together: writing it as \(A\mathbf{x} = \mathbf{b}\)</h4>
+<p>Back to the very first problem of this unit. Three friends guess your age: \(19,\;21,\;20\).</p>
+<div class="fragment">
+<p><strong>What is unknown?</strong> One thing &mdash; your age, \(x\).
+One unknown quantity, so \(x\) is a <strong>single number</strong>, not a vector.</p>
+<p>Each guess is a claim about that number, so each guess is one equation:</p>
+\[1\cdot x = 19,\qquad 1\cdot x = 21,\qquad 1\cdot x = 20\]
+<p>The coefficient is \(1\) every time: each friend is guessing \(x\) itself, unscaled.</p>
 </div>
-<ul>
-<li class="fragment">\(\mathbf{y}\) is <strong>outside</strong> the column space → no exact solution.</li>
-<li class="fragment">Best fit: <strong>project \(\mathbf{y}\) onto the column space</strong> → get \((20, 20, 20)\).</li>
-<li class="fragment">This is the normal equation from L04: \(x^* = 20\) (the mean).</li>
-</ul>
-<div class="key-question fragment">Column space + projection = the complete picture of least squares.</div>
-<aside class="notes">"Now we have the full story. The column space tells you what's reachable. If the target isn't reachable, project. The projection gives the best fit. The normal equation computes it. Everything from L03 and L04 snaps together."</aside>
+<div class="fragment">
+<p>Stack the coefficients into \(A\), the guesses into \(\mathbf{b}\):</p>
+\[\underbrace{A = \begin{bmatrix}1\\1\\1\end{bmatrix}}_{3\times 1},\qquad
+  \underbrace{\mathbf{b} = \begin{bmatrix}19\\21\\20\end{bmatrix}}_{3\times 1},
+  \qquad A\mathbf{x} = \mathbf{b}\]
+</div>
+<p class="fragment">\(A\) is \(3\times1\), so \(\mathbf{x}\) is \(1\times1\) &mdash; the shapes force
+what the story already said. <strong>Three equations, one unknown: overdetermined.</strong></p>
+<aside class="notes">"Why x is one number: there is one unknown thing in the world, your age. Then the shapes are forced. Keep A x = b — this is a linear system, not a prediction."</aside>
+</section>
+
+<section>
+<h4>Is the target even reachable?</h4>
+<p><strong>Recall:</strong> \(\mathrm{col}(A)\) is every vector \(A\mathbf{x}\) the system can
+produce &mdash; everything reachable, and nothing else.</p>
+<div class="fragment">
+<p>For our \(A\), one column and one unknown:</p>
+\[A\mathbf{x} = x\begin{bmatrix}1\\1\\1\end{bmatrix} = \begin{bmatrix}x\\x\\x\end{bmatrix}\]
+<p>\(\mathrm{col}(A)\) is <strong>every vector whose three entries are equal</strong> &mdash;
+a line through the origin in \(\R^3\) along \((1,1,1)\).</p>
+</div>
+<div class="key-question fragment">Is \(\mathbf{b} = (19,21,20)\) of that form?
+It would need \(19 = 21 = 20\). <strong>It is not.</strong><br>
+So \(\mathbf{b}\notin\mathrm{col}(A)\): no \(x\) satisfies all three equations.
+<em>That</em> is what "no exact solution" means here &mdash; not a rule, just three different numbers.</div>
+<aside class="notes">"Membership in the column space is checkable by eye for this A. b fails the check, so the system is inconsistent — and that is the whole reason we are about to project."</aside>
+</section>
+
+<section>
+<h4>So compute the projection &mdash; and watch what it turns out to be</h4>
+<p>The closest reachable point is the projection of \(\mathbf{b}\) onto \(\mathrm{col}(A)\).
+That is the L03 formula, with \(A\) in place of the direction vector:</p>
+<div class="fragment">
+\[A^\top A = 1+1+1 = 3,\qquad A^\top\mathbf{b} = 19+21+20 = 60\]
+\[x^* = \frac{A^\top\mathbf{b}}{A^\top A} = \frac{60}{3} = \mathbf{20}
+\qquad\Rightarrow\qquad A x^* = \begin{bmatrix}20\\20\\20\end{bmatrix}\]
+</div>
+<div class="fragment">
+<p>Residual, and the perpendicularity check:</p>
+\[\mathbf{r} = \mathbf{b} - Ax^* = \begin{bmatrix}-1\\ 1\\ 0\end{bmatrix},
+\qquad A^\top\mathbf{r} = -1+1+0 = 0\ \checkmark\]
+</div>
+<div class="key-question fragment">\(x^* = 20\) is <strong>the average of 19, 21 and 20</strong>.
+The answer everyone's intuition reached for on the first slide of this unit
+<em>is</em> the orthogonal projection onto the column space. Now it is proved, not assumed.</div>
+<aside class="notes">"This closes the loop opened in L03. Mention that minimising S(x) = sum (x - b_i)^2 and setting the derivative to zero gives 3x = 60 as well — same answer by calculus, which is the route L04 took."</aside>
 </section>
 
 <!-- S43: The normal equation — geometric meaning -->
 <section>
-<h4>The normal equation means: residual ⊥ column space</h4>
-<div class="mathbox">
-\[X^\top(X\mathbf{w} - \mathbf{y}) = \mathbf{0}\]
-This says: the residual \(\mathbf{y} - X\mathbf{w}\) is perpendicular to every column of \(X\).
+<h4>That check you just did has a name &mdash; you already met it</h4>
+<p>You verified \(A^\top\mathbf{r} = 0\) as a sanity check. That is not a coincidence.
+Substitute \(\mathbf{r} = \mathbf{b} - A\mathbf{x}\):</p>
+\[A^\top(\mathbf{b} - A\mathbf{x}) = \mathbf{0}
+\qquad\Longleftrightarrow\qquad A^\top A\,\mathbf{x} = A^\top\mathbf{b}\]
+<div class="fragment">
+<p>In <strong>L04</strong> we derived the same equation, written in the regression names:
+\(X^\top X\mathbf{w} = X^\top\mathbf{y}\). Same object, two vocabularies:</p>
+<table style="margin:0.4em auto; border-collapse:collapse">
+<tr><td style="padding:3px 14px"><strong>solving a system</strong></td>
+    <td style="padding:3px 14px">\(A\mathbf{x} = \mathbf{b}\)</td>
+    <td style="padding:3px 14px">\(A\) = coefficients, \(\mathbf{x}\) = unknowns, \(\mathbf{b}\) = targets</td></tr>
+<tr><td style="padding:3px 14px"><strong>fitting a model</strong></td>
+    <td style="padding:3px 14px">\(X\mathbf{w} = \mathbf{y}\)</td>
+    <td style="padding:3px 14px">\(X\) = data, \(\mathbf{w}\) = weights, \(\mathbf{y}\) = observations</td></tr>
+</table>
 </div>
-<img src="../images/unit02/u2-L05-fig09-column-space-projection.png" alt="Column space projection in 3D" style="float:right; max-height:400px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
-<ul>
-<li class="fragment" style="clear:none;">The residual has <strong>no component</strong> the model could explain.</li>
-<li class="fragment">Everything the model <em>can</em> do, it <em>has</em> done.</li>
-<li class="fragment">The leftover is pure noise — perpendicular to the model's reach.</li>
-</ul>
-<aside class="notes" style="clear:both;">"This is a beautiful result. The normal equation isn't just a formula — it's a geometric statement. It says: the best model uses up all its explanatory power. Whatever's left over is noise that no linear model can reduce."</aside>
+<div class="key-question fragment">We came back to it because <em>column space</em> is what L04 was missing.
+There we could write \(A^\top\mathbf{r} = 0\) but not say what \(\mathbf{r}\) was perpendicular
+<strong>to</strong>. Now we can: to everything the system can produce.
+The residual is the part of \(\mathbf{b}\) no choice of \(\mathbf{x}\) can reach.</div>
+<aside class="notes">"Say out loud that this is a return, not a new topic, and put the two notations side by side once — students hit both in the book and in every course after this one."</aside>
 </section>
 
 <!--
@@ -935,33 +992,91 @@ If \(\mathbf{b}\) lies in the column space of \(A\), what does \(A^+\mathbf{b}\)
 
 <!-- S52: When formulas break — nearly dependent columns -->
 <section>
-<h4>The stability problem</h4>
-<p>Consider two features that are <em>almost</em> identical:</p>
-<div>
+<h4>Why "almost identical columns" is a problem &mdash; compute it</h4>
+<p>Two features that are almost the same thing:</p>
 \[X = \begin{bmatrix} 1 & 1 \\ 1 & 1.001 \end{bmatrix}\]
-The columns are 99.9% the same. What happens?
+<p class="fragment">You already know the 2&times;2 inverse:
+\(\begin{bmatrix} a & b \\ c & d\end{bmatrix}^{-1} = \dfrac{1}{ad-bc}\begin{bmatrix} d & -b \\ -c & a\end{bmatrix}\)</p>
+<div class="fragment">
+\[\det X = (1)(1.001) - (1)(1) = \mathbf{0.001}\]
+\[X^{-1} = \frac{1}{0.001}\begin{bmatrix}1.001 & -1\\ -1 & 1\end{bmatrix}
+        = \begin{bmatrix}1001 & -1000\\ -1000 & 1000\end{bmatrix}\]
 </div>
-<ul>
-<li class="fragment">\(X^\top X\) is <strong>nearly singular</strong> — almost has determinant zero.</li>
-<li class="fragment">Change one data point by 0.001 → the solution moves <strong>1000&times; as far</strong>. Concretely: \(\mathbf{x}\) goes from \((1,1)\) to \((0,2)\), a shift of 1 in each entry from a nudge of 0.001.</li>
-<li class="fragment">The formula is <em>correct</em> but <strong>unreliable</strong>.</li>
-</ul>
-<div class="key-question fragment">A correct formula can still give garbage if the inputs are nearly dependent.</div>
-<aside class="notes">"This is like weighing yourself on a scale that changes by 10 pounds every time you shift your foot slightly. The scale is correct — it's just amplifying tiny differences. The same thing happens when your features are almost identical: the formula amplifies noise instead of finding a stable answer."</aside>
+<p class="fragment"><strong>Every entry of \(X\) is about 1. Every entry of \(X^{-1}\) is about 1000.</strong>
+That \(1/\det\) out front is the entire story.</p>
+<aside class="notes">"Nothing new here — this is the 2x2 inverse from high school. The point is where the thousand comes from: it is 1/0.001. Nearly identical columns make the determinant nearly zero, and one over nearly zero is huge."</aside>
+</section>
+
+<section>
+<h4>Watch one nudge travel through</h4>
+<p>Start from the answer \(\mathbf{x} = (1,1)\), so the data is</p>
+\[\mathbf{b} = X\mathbf{x} = (1+1,\; 1+1.001) = (2,\; 2.001)\]
+<p class="fragment">Now measure the second value slightly wrong &mdash; off by \(0.001\):</p>
+<div class="fragment">
+\[\Delta\mathbf{b} = \begin{bmatrix}0\\0.001\end{bmatrix},\qquad
+\Delta\mathbf{x} = X^{-1}\Delta\mathbf{b}
+= \begin{bmatrix}1001 & -1000\\ -1000 & 1000\end{bmatrix}\begin{bmatrix}0\\0.001\end{bmatrix}
+= \begin{bmatrix}-1\\ +1\end{bmatrix}\]
+</div>
+<p class="fragment">\(\mathbf{x}\) goes from \((1,1)\) to \(\mathbf{(0,2)}\).</p>
+<div class="key-question fragment">The input moved by <strong>0.001</strong>. The answer moved by <strong>1</strong>.
+That factor of 1000 is not a coincidence &mdash; it is \(1/\det X\).</div>
+<aside class="notes">"Do this multiplication with them on the board. It is one matrix times one vector. The 1000 in the answer is the same 1000 they just computed in the inverse."</aside>
+</section>
+
+<section>
+<h4>So why do we look at \(X^\top X\)?</h4>
+<p>With real data \(X\) is <em>tall</em> &mdash; there is no \(X^{-1}\). Least squares inverts
+\(X^\top X\) instead: \(\;\mathbf{x}^* = (X^\top X)^{-1}X^\top\mathbf{b}\).</p>
+<div class="fragment">
+\[X^\top X = \begin{bmatrix}2 & 2.001\\ 2.001 & 2.002001\end{bmatrix}\]
+\[\det(X^\top X) = (2)(2.002001) - (2.001)^2 = 4.004002 - 4.004001 = \mathbf{0.000001}\]
+</div>
+<p class="fragment">That is no accident: \(\det(X^\top X) = (\det X)^2 = (0.001)^2 = 10^{-6}\).</p>
+<div class="key-question fragment"><strong>Squaring the matrix squares the smallness of the determinant.</strong>
+\(0.001 \to 10^{-6}\): the thousand becomes a million.</div>
+<p class="fragment">The formula is <strong>correct</strong>. It is <strong>unreliable</strong> &mdash; and now you can see exactly where the unreliability enters.</p>
+<aside class="notes">"This answers the question a sharp student asks: why are we suddenly looking at X-transpose-X? Because that is the matrix least squares actually has to invert, and it carries the square of the problem."</aside>
 </section>
 
 <!-- S53: Real-world example of instability -->
 <section>
-<h4>Real-world instability</h4>
-<img src="../images/unit02/u2-L06-fig11-multicollinearity.png" alt="Multicollinearity: correlated features cause instability" style="float:right; max-height:350px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
-<p>Imagine predicting house prices using:</p>
-<ul>
-<li>Feature 1: temperature in °C</li>
-<li>Feature 2: temperature in °F</li>
-</ul>
-<p class="fragment">These are linearly related: \(F = 1.8C + 32\). The columns of \(X\) are almost proportional.</p>
-<div class="applied fragment" style="clear:both;">Result: the normal equation produces weights like \(w_1 = +500, w_2 = -499\). The individual weights are <strong>meaningless</strong> — only their combination matters. Tiny noise → wildly different \(w_1, w_2\) values.</div>
-<aside class="notes">"This is called multicollinearity in statistics. It doesn't mean the prediction is bad — it means the individual weights can't be trusted. The model can't tell which feature is doing the work because they carry almost the same information."</aside>
+<h4>Real data does this to you: &deg;C and &deg;F</h4>
+<p>Predict something from temperature, and you record it twice &mdash; once in Celsius, once in Fahrenheit:</p>
+\[X = \begin{bmatrix} 1 & 12 & 53.6\\ 1 & 18 & 64.4\\ 1 & 25 & 77.0\\ 1 & 31 & 87.8\end{bmatrix}
+\qquad \mathbf{y} = \begin{bmatrix}2.1\\2.6\\3.4\\3.9\end{bmatrix}\]
+<p class="fragment">Because \(F = 1.8\,C + 32\), the third column is built from the other two:</p>
+<div class="fragment">
+\[\text{col}_3 = 32\cdot\text{col}_1 + 1.8\cdot\text{col}_2\]
+<p>Check the first row: \(32(1) + 1.8(12) = 32 + 21.6 = 53.6\). ✓ &nbsp; It holds for every row.</p>
+</div>
+<p class="fragment"><strong>The third feature carries no new information.</strong>
+\(\det(X^\top X) \approx 10^{-11}\) &mdash; singular for all practical purposes.</p>
+<aside class="notes">"Nobody sets out to add a useless column. You add temperature, someone else adds it in the other unit, and now your matrix is singular and nothing warns you."</aside>
+</section>
+
+<section>
+<h4>What that costs you &mdash; run it and see</h4>
+<p>Solve the normal equation as written:</p>
+\[\mathbf{w} = (0.913,\; 0.097,\; 0.000)\]
+<p class="fragment">Now change <em>one</em> Fahrenheit reading by <strong>0.1 of a degree</strong> &mdash;
+less than the width of a thermometer mark &mdash; and solve again:</p>
+<div class="fragment">
+\[\mathbf{w} = (-22.106,\; -1.189,\; +0.717)\]
+<p>The Celsius coefficient went from \(+0.097\) to \(-1.189\). It <strong>changed sign</strong>.</p>
+</div>
+<div class="fragment">
+<p>But look at what the two models actually <em>predict</em>:</p>
+\[\begin{array}{lcccc}
+\text{before} & 2.08 & 2.66 & 3.34 & 3.92\\
+\text{after}  & 2.10 & 2.63 & 3.33 & 3.94\\
+\hline
+\mathbf{y}    & 2.1 & 2.6 & 3.4 & 3.9
+\end{array}\]
+</div>
+<div class="key-question fragment">Both fit the data equally well. <strong>The predictions are pinned down; the individual
+weights are not.</strong> Never read a coefficient from a model whose columns are nearly dependent.</div>
+<aside class="notes">"This is the punchline of the whole lecture. The model is fine. The number you wanted to interpret is not."</aside>
 </section>
 
 <!--
@@ -971,45 +1086,72 @@ DALL-E prompt for fig-2-10-redundant-features:
 
 <!-- S54: The condition number -->
 <section>
-<h4>Condition number: how fragile is the system?</h4>
-<div class="mathbox">
-The <strong>condition number</strong> \(\kappa(A)\) measures how much small changes in data get amplified in the solution.
-<ul style="margin-top:0.5em;">
-<li>\(\kappa \approx 1\): stable — small changes in data → small changes in solution.</li>
-<li>\(\kappa \gg 1\): unstable — small changes in data → <strong>huge</strong> changes in solution.</li>
-</ul>
+<h4><span style="opacity:.6;font-size:.8em">EXPLORE &mdash; not examinable</span><br>This problem has a name</h4>
+<p>What we measured with \(\det\) has a standard measure called the
+<strong>condition number</strong> \(\kappa(A)\): how much a small change in the data
+can be amplified in the answer.</p>
+<div class="fragment">
+<p>MML defines it in <strong>&sect;7.1, p.230</strong>:</p>
+\[\kappa(A) = \frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}\]
+<p>&mdash; a ratio of <em>singular values</em>, which we meet in <strong>L07&ndash;L08</strong>.
+So the definition is genuinely ahead of us today.</p>
 </div>
-<ul>
-<li class="fragment">Our \(X = \begin{bmatrix}1&1\\1&1.001\end{bmatrix}\) has \(\kappa \approx 4000\).</li>
-<li class="fragment">An error of 0.001 in the data could cause an error of \(0.001 \times 4000 = 4\) in the solution.</li>
-</ul>
-<div class="applied fragment">In Python: <code>np.linalg.cond(A)</code> tells you if you should worry. Condition number &gt; 1000? Be cautious.</div>
-<aside class="notes">"Think of the condition number as a sensitivity dial. Low condition number means the formula is trustworthy. High condition number means proceed with caution — the answer might change a lot if you measure slightly differently."</aside>
+<p class="fragment">Everything we needed this lecture, we got from \(\det\) and the \(2\times2\) inverse.
+The name is here so you recognise it when it returns in <strong>Week 8</strong>, where MML puts it.</p>
+<aside class="notes">"Say plainly: this is a real concept, it is in your book, and its definition needs machinery we do not have yet. We are not skipping it, we are sequencing it. In Python np.linalg.cond(A) computes it, and after L08 you will know what it is computing."</aside>
 </section>
 
 <!-- S55: What to do about instability -->
 <section>
-<h4>Three fixes for instability</h4>
+<h4>Three fixes &mdash; and what each one actually changes</h4>
+<p>The disease is always the same: \(\det(X^\top X)\) sits too close to zero,
+so \((X^\top X)^{-1}\) has enormous entries. Each fix attacks that directly.</p>
 <ol>
-<li class="fragment"><strong>Remove redundant features</strong> — if two columns are nearly identical, drop one.
-<div class="small-note">Check with <code>np.corrcoef()</code> — correlation near ±1 means redundancy.</div></li>
-<li class="fragment"><strong>Use better algorithms</strong> — QR decomposition instead of forming \(X^\top X\).
-<div class="small-note">This is what <code>np.linalg.lstsq</code> does internally — more numerically stable.</div></li>
-<li class="fragment"><strong>Add regularization</strong> — penalize large weights to keep them stable.
-<div class="small-note">Coming in Unit 5: Ridge and Lasso regression.</div></li>
+<li class="fragment"><strong>Drop one of the dependent columns.</strong> Delete &deg;F and keep &deg;C.
+You lose nothing &mdash; the column carried no information &mdash; and the determinant is no longer near zero.</li>
+<li class="fragment"><strong>Ridge: solve \((X^\top X + \lambda I)\mathbf{w} = X^\top\mathbf{y}\).</strong>
+Adding \(\lambda\) down the diagonal pushes the determinant away from zero.</li>
+<li class="fragment"><strong>Never form \(X^\top X\) at all</strong> (QR or SVD, what
+<code>np.linalg.lstsq</code> uses). If you do not square the matrix, you do not square the problem.</li>
 </ol>
-<div class="key-question fragment">The normal equation is the <em>starting point</em>, not the final tool. Real AI uses smarter methods — but they all solve the same projection problem.</div>
-<aside class="notes">"You won't need to implement QR decomposition by hand. But you should know it exists, and you should always check the condition number before trusting the normal equation. In practice, sklearn handles this for you — but understanding why it matters makes you a better data scientist."</aside>
+<aside class="notes">"Three fixes, one target. Ask the class which one they would reach for with the temperature data — dropping the column is obviously right there, and that is the point: the fix depends on why the columns are dependent."</aside>
 </section>
 
-<!-- S56: Quick check — stability -->
 <section>
-<h4>Quick check</h4>
+<h4>Why ridge works &mdash; watch the determinant</h4>
+<p>Our \(X^\top X = \begin{bmatrix}2 & 2.001\\ 2.001 & 2.002001\end{bmatrix}\), with \(\det = 10^{-6}\).
+Add \(\lambda\) down the diagonal and recompute:</p>
+<table style="margin:0.5em auto; border-collapse:collapse; font-size:0.95em">
+<tr><th style="padding:4px 20px">\(\lambda\)</th><th style="padding:4px 20px">\(\det(X^\top X+\lambda I)\)</th><th style="padding:4px 20px">size of the inverse</th></tr>
+<tr><td style="text-align:center">0</td><td style="text-align:center">\(10^{-6}\)</td><td style="text-align:center">4,000,000</td></tr>
+<tr class="fragment"><td style="text-align:center">0.001</td><td style="text-align:center">0.004</td><td style="text-align:center">1,000</td></tr>
+<tr class="fragment"><td style="text-align:center">0.01</td><td style="text-align:center">0.040</td><td style="text-align:center">100</td></tr>
+<tr class="fragment"><td style="text-align:center">0.1</td><td style="text-align:center">0.410</td><td style="text-align:center">10</td></tr>
+</table>
+<div class="key-question fragment"><strong>Ten times more \(\lambda\), ten times smaller inverse.</strong>
+That is the entire mechanism &mdash; and the cost is that you are no longer solving the original problem.
+Choosing \(\lambda\) is the trade, and it comes back in <strong>L19</strong>.</div>
+<aside class="notes">"Do the lambda = 0.001 row with them. The diagonal goes from 2 and 2.002001 to 2.001 and 2.003001, and the determinant jumps four-thousand-fold. Nothing subtle is happening — it is the 2x2 determinant they already know."</aside>
+</section>
+
+<section>
+<h4>Quick check &mdash; and its proof</h4>
 <div class="quickcheck">
-If two columns of \(X\) are <em>exactly</em> identical (not just close), what happens to \(X^\top X\)?
+Two columns of \(X\) are <strong>exactly</strong> identical &mdash; the same feature entered twice.
+What happens to \(X^\top X\), and why?
 </div>
-<p class="fragment"><strong>It becomes singular</strong> — determinant is zero, no inverse exists. The normal equation has no unique solution.</p>
-<div class="applied fragment">This is the extreme case of instability. Nearly identical = unstable. Exactly identical = formula doesn't work at all. The pseudoinverse still gives <em>a</em> solution (minimum norm), but the weights are not interpretable.</div>
+<div class="fragment">
+<p><strong>It is singular.</strong> Here is the whole argument, in two lines.</p>
+<p>If columns \(i\) and \(j\) are equal, take \(\mathbf{v}\) with \(+1\) in slot \(i\), \(-1\) in slot \(j\),
+zeros elsewhere. Then \(X\mathbf{v}\) is (column \(i\)) minus (column \(j\)) \(= \mathbf{0}\).</p>
+\[X^\top X\mathbf{v} = X^\top(X\mathbf{v}) = X^\top\mathbf{0} = \mathbf{0}\]
+<p>So a <em>non-zero</em> \(\mathbf{v}\) is killed by \(X^\top X\). A matrix with something non-zero
+in its null space cannot be inverted. \(\blacksquare\)</p>
+</div>
+<p class="fragment">Nearly identical columns are the same argument with \(\approx\) in place of \(=\):
+\(X\mathbf{v}\) is not zero but is tiny, so \(\det\) is not zero but is tiny &mdash;
+which is exactly the case we spent this lecture computing.</p>
+<aside class="notes">"This is the cleanest proof in the lecture and it takes one minute. Ask them to produce v for a concrete 3x2 matrix before showing it."</aside>
 </section>
 
 <!-- S57: L06 takeaways -->
