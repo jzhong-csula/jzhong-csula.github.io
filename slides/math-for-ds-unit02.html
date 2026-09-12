@@ -1085,42 +1085,48 @@ If \(\mathbf{b}\) lies in the column space of \(A\), what does \(A^+\mathbf{b}\)
 <!-- S52: When formulas break — nearly dependent columns -->
 <section>
 <h4>Worry 2: it exists &mdash; can we trust it?</h4>
-<p style="color:#666;font-size:0.92em">The pseudoinverse settled <em>existence</em>. Now back to the two systems we opened with, and the question they left hanging.</p>
-<p>Take the <strong>second</strong> of the two systems you just saw and write it as a matrix.
-Its two columns are almost the same thing:</p>
-\[\begin{cases} x + y = 2\\[2pt] x + 1.001\,y = 1.998\end{cases}
-\qquad\Longleftrightarrow\qquad
-X = \begin{bmatrix} 1 & 1 \\ 1 & 1.001 \end{bmatrix},\;
-\mathbf{b} = \begin{bmatrix}2\\1.998\end{bmatrix}\]
-<p class="fragment">You already know the 2&times;2 inverse:
-\(\begin{bmatrix} a & b \\ c & d\end{bmatrix}^{-1} = \dfrac{1}{ad-bc}\begin{bmatrix} d & -b \\ -c & a\end{bmatrix}\)</p>
+<p style="color:#666;font-size:0.92em">The pseudoinverse settled <em>existence</em>.
+Now back to the two systems we opened with.</p>
+<p>Write them as matrices. <strong>Same right-hand side both times</strong> &mdash;
+only one coefficient differs:</p>
+\[A_1 = \begin{bmatrix} 1 & 1 \\ 1 & \mathbf{0.999} \end{bmatrix},\qquad
+  A_2 = \begin{bmatrix} 1 & 1 \\ 1 & \mathbf{1.001} \end{bmatrix},\qquad
+  \mathbf{b} = \begin{bmatrix}2\\1.998\end{bmatrix}\]
+<p class="fragment">You already know the \(2\times2\) inverse:
+\(\begin{bmatrix} a & b \\ c & d\end{bmatrix}^{-1}
+= \dfrac{1}{ad-bc}\begin{bmatrix} d & -b \\ -c & a\end{bmatrix}\).
+Everything depends on that \(ad-bc\), so compute it first:</p>
 <div class="fragment">
-\[\det X = (1)(1.001) - (1)(1) = \mathbf{0.001}\]
-\[X^{-1} = \frac{1}{0.001}\begin{bmatrix}1.001 & -1\\ -1 & 1\end{bmatrix}
-        = \begin{bmatrix}1001 & -1000\\ -1000 & 1000\end{bmatrix}\]
+\[\det A_1 = 0.999 - 1 = \mathbf{-0.001},
+  \qquad \det A_2 = 1.001 - 1 = \mathbf{+0.001}\]
 </div>
-<p class="fragment"><strong>Every entry of \(X\) is about 1. Every entry of \(X^{-1}\) is about 1000.</strong>
-That \(1/\det\) out front is the entire story.</p>
-<aside class="notes">"Nothing new here — this is the 2x2 inverse from high school. The point is where the thousand comes from: it is 1/0.001. Nearly identical columns make the determinant nearly zero, and one over nearly zero is huge."</aside>
+<div class="key-question fragment">The coefficient moved by \(0.002\) &mdash; and the determinant
+<strong>crossed zero</strong>. So \(1/\det\) went from \(-1000\) to \(+1000\).
+Whatever the inverse looks like, it is about to be a thousand times the size of the matrix itself.</div>
+<aside class="notes">"Do not rush past the sign. The determinant did not just get smaller, it went from negative to positive, which means somewhere between 0.999 and 1.001 there is a matrix with no inverse at all. The two systems in the opening sit on either side of that cliff."</aside>
 </section>
 
 <section>
-<h4>Watch one nudge travel through</h4>
-<p><strong>Same system, same answer as the opening slide:</strong>
-\(\mathbf{b} = (2,\,1.998)\) gives \(\mathbf{x} = X^{-1}\mathbf{b} = (4,\,-2)\).</p>
-<p class="fragment">Now measure the second value slightly wrong &mdash; off by \(0.001\):</p>
+<h4>Watch the nudge travel through</h4>
+<p>Build both inverses with the formula. The \(1/\det\) out front is \(\mp 1000\):</p>
+\[A_1^{-1} = \frac{1}{-0.001}\begin{bmatrix}0.999 & -1\\ -1 & 1\end{bmatrix}
+ = \begin{bmatrix}-999 & 1000\\ 1000 & -1000\end{bmatrix},
+\qquad
+A_2^{-1} = \frac{1}{+0.001}\begin{bmatrix}1.001 & -1\\ -1 & 1\end{bmatrix}
+ = \begin{bmatrix}1001 & -1000\\ -1000 & 1000\end{bmatrix}\]
+<p class="fragment"><strong>Every entry of \(A_1\) and \(A_2\) is about 1.
+Every entry of their inverses is about 1000</strong>, and the two have opposite signs.</p>
 <div class="fragment">
-\[\Delta\mathbf{b} = \begin{bmatrix}0\\0.001\end{bmatrix},\qquad
-\Delta\mathbf{x} = X^{-1}\Delta\mathbf{b}
-= \begin{bmatrix}1001 & -1000\\ -1000 & 1000\end{bmatrix}\begin{bmatrix}0\\0.001\end{bmatrix}
-= \begin{bmatrix}-1\\ +1\end{bmatrix}\]
+<p>Now multiply each by the <em>same</em> \(\mathbf{b} = (2,\,1.998)\):</p>
+\[A_1^{-1}\mathbf{b} = \begin{bmatrix}-1998+1998\\ 2000-1998\end{bmatrix} = \begin{bmatrix}0\\2\end{bmatrix},
+\qquad
+A_2^{-1}\mathbf{b} = \begin{bmatrix}2002-1998\\ -2000+1998\end{bmatrix} = \begin{bmatrix}4\\-2\end{bmatrix}\]
 </div>
-<p class="fragment">\(\mathbf{x}\) goes from \((4,-2)\) to \(\mathbf{(3,-1)}\).
-Check it: \(3 + 1.001(-1) = 1.999\), which is the nudged second value. \(\checkmark\)</p>
-<div class="key-question fragment">The input moved by <strong>0.001</strong>. The answer moved by <strong>1</strong>.
-That factor of 1000 is not a coincidence &mdash; it is \(1/\det X\), the same \(1000\)
-you just computed inside \(X^{-1}\).</div>
-<aside class="notes">"Do this multiplication with them on the board — one matrix times one vector. Stress that this is the same system from the opening slide; we are not starting over, we are explaining the thing they already saw happen. Earlier the coefficient moved; here the data moves. Either way 1/det is what multiplies the damage."</aside>
+<div class="key-question fragment">Those are the two answers from the opening slide, and now you can see
+where they came from. <strong>The coefficient moved by \(0.002\); \(1/\det\) swung from
+\(-1000\) to \(+1000\); the answer moved by \(4\).</strong> Nothing was computed incorrectly
+&mdash; the amplification is built into the formula.</div>
+<aside class="notes">"This closes the loop the lecture opened with. They saw the two answers on slide one and were told nothing was solved incorrectly. Here is the mechanism: same b, same arithmetic, and a determinant that nearly vanished between the two matrices."</aside>
 </section>
 
 <section>
