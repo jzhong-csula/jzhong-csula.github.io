@@ -813,13 +813,20 @@ The <strong>rank</strong> of \(A\) = dimension of its column space = number of i
 <aside class="notes">"Rank is like the degrees of freedom of your model. A rank-1 model can only scale one pattern. A rank-2 model can mix two patterns. Ideally you have as many independent patterns as you need to explain the data — but not more."</aside>
 </section>
 
-<!-- S41: Quick check — column space -->
+<!-- S41: Quick check — column space and rank together -->
 <section>
-<h4>Quick check</h4>
+<h4>Quick check: two buttons, one direction</h4>
 <div class="quickcheck">
-If every row of \(A\) has last entry zero, what must be true about \(\mathbf{b}\) for \(A\mathbf{x} = \mathbf{b}\) to be solvable?
+<p>Back to the vending machine: each column is one button. Button B gives exactly <strong>twice</strong> what Button A gives. &nbsp;\(A=\begin{bmatrix}1&2\\2&4\\3&6\end{bmatrix}\)</p>
+<p><strong>1.</strong> What is the rank of \(A\)? &nbsp; <strong>2.</strong> Can you get \(\mathbf{b}=(3,6,9)\)? &nbsp; <strong>3.</strong> Can you get \(\mathbf{b}=(3,6,8)\)?</p>
 </div>
-<p class="fragment"><strong>The last entry of \(\mathbf{b}\) must be zero</strong> — because \(A\mathbf{x}\) can never produce anything else in that position.</p>
+<ul>
+<li class="fragment"><strong>Rank 1.</strong> Column 2 \(=2\times\) column 1, so there is only one independent column. \(\mathrm{col}(A)\) is the line through \((1,2,3)\).</li>
+<li class="fragment"><strong>\((3,6,9)\): yes &mdash; in infinitely many ways.</strong> \(\mathbf{x}=(3,0)\), \((1,1)\), \((-1,2)\) all give \((3,6,9)\). Pressing B once is the same as pressing A twice.</li>
+<li class="fragment"><strong>\((3,6,8)\): no.</strong> Everything \(A\) produces is a multiple of \((1,2,3)\), and the only multiple starting \(3,6\) is \((3,6,9)\).</li>
+</ul>
+<div class="key-question fragment">A second button that adds no new direction adds <strong>no new targets</strong> &mdash; it only turns each exact answer into infinitely many.</div>
+<aside class="notes">"This replaces a question that repeated the previous example. It ties the last three slides together: column space decides reachable or not, rank counts the directions, and a dependent column is exactly the 'infinitely many' outcome from the three-outcomes slide." Keep the L06 thread in mind: two columns that are almost multiples is where the formula becomes unstable.</aside>
 </section>
 
 <!-- S42: Overdetermined revisited -->
