@@ -308,7 +308,7 @@ DALL-E prompt for fig-2-04-pythagorean-projection:
 <!-- S15: Proof — any other point is farther -->
 <section>
 <h4>Proof: any other point on the line is farther</h4>
-<img src="../images/unit02/u2-L03-fig11-proof-triangle.png" alt="Right triangle: x-q is the hypotenuse, r and (lambda-mu)b are the legs" style="float:right; max-height:340px; max-width:46%; margin:0 0 0.4em 1em; border-radius:6px;">
+<img src="../images/unit02/u2-L03-fig13-proof-triangle.png" alt="Right triangle: x-q is the hypotenuse, r and (lambda-mu)b are the legs" style="float:right; max-height:340px; max-width:46%; margin:0 0 0.4em 1em; border-radius:6px;">
 
 <p>Let \(\mathbf{p} = \lambda \mathbf{b}\) be the projection and \(\mathbf{q} = \mu \mathbf{b}\) be any <em>other</em> point on the line (\(\mu \neq \lambda\)).</p>
 <div>
@@ -807,7 +807,7 @@ The <strong>rank</strong> of \(A\) = dimension of its column space = number of i
 <ul>
 <li class="fragment">Rank 1: the model can only produce multiples of one direction.</li>
 <li class="fragment">Rank 2: the model spans a plane.</li>
-<li class="fragment">Rank = number of columns: the model is as flexible as possible (full rank).</li>
+<li class="fragment">Rank = number of <strong>independent</strong> columns.</li>
 </ul>
 <div class="applied fragment">More independent features = higher rank = more flexible model. But too much flexibility leads to <strong>overfitting</strong> — a topic for Unit 5.</div>
 <aside class="notes">"Rank is like the degrees of freedom of your model. A rank-1 model can only scale one pattern. A rank-2 model can mix two patterns. Ideally you have as many independent patterns as you need to explain the data — but not more."</aside>
@@ -1015,7 +1015,7 @@ DALL-E prompt for fig-2-09-autocorrect-fail:
 "Clean, modern phone screen mockup on white background showing a text message conversation. The last message has a funny autocorrect mistake where a small typo changed the meaning completely. Think: 'I love cooking my family and my pets' vs 'I love cooking, my family, and my pets'. Clean, realistic phone UI, not cartoon. University-appropriate humor."
 -->
 
-<!-- S47: The pseudoinverse — a best-effort inverse -->
+<!-- S47: Pseudoinverse motivation and definition -->
 <section>
 <h4>Worry 1: does the formula even exist?</h4>
 <p>We can only invert <strong>square</strong> matrices. But data matrices are usually tall (more rows than columns):</p>
@@ -1023,54 +1023,80 @@ DALL-E prompt for fig-2-09-autocorrect-fail:
 \[X = \begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix} \quad \text{(3 data points, 1 parameter)}\]
 \(X\) is 3×1 — no inverse exists. But we still want to "undo" \(X\) to find the best weights.
 </div>
-<div class="key-question fragment">The <strong>pseudoinverse</strong> \(A^+\) acts like an inverse for non-square matrices. It gives the best-fit solution.</div>
-<aside class="notes">"Regular inverses only exist for square matrices. But most data matrices aren't square — you have more data points than parameters. The pseudoinverse is a 'best-effort' inverse that handles this case. For our purposes, you can think of it as the formula that the computer uses internally when you call a regression function."</aside>
+<div class="mathbox fragment" style="margin-top:0.5em;">
+For a matrix \(A\) with linearly independent columns, define
+\[A^+ = (A^\top A)^{-1}A^\top,\qquad \mathbf{x}^*=A^+\mathbf{b}.\]
+</div>
+<p class="fragment" style="font-size:0.82em;color:#555;">MML §2.3.4, pp. 34–35,
+eq. (2.59). The independent-columns condition is what makes \(A^\top A\) invertible.</p>
+<aside class="notes">"Motivation first: a tall data matrix has no ordinary inverse. Now the definition. Read it from right to left: transpose the target, then solve with A-transpose-A. MML states both the independent-columns condition and the numerical warning on these pages."</aside>
 </section>
 
-<!-- S48: Pseudoinverse example -->
+<!-- S48: Why the definition deserves the name -->
 <section>
-<h4>Example: pseudoinverse in action</h4>
-<p>Data: \(x = (1, 2, 3)\), \(y = (1, 2, 2.5)\). Model: \(\hat{y} = ax\).</p>
-<div>
-\[X = \begin{bmatrix}1\\2\\3\end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix}1\\2\\2.5\end{bmatrix}\]
-\[X^\top X = 1+4+9 = 14\]
-\[X^\top \mathbf{y} = 1+4+7.5 = 12.5\]
-\[a^* = \frac{12.5}{14} \approx 0.893\]
-</div>
-<p class="fragment">Best-fit line: \(\hat{y} = 0.893x\). The pseudoinverse produced this: \(X^+ = \frac{X^\top}{X^\top X}\).</p>
-<aside class="notes">"For a single-column matrix, the pseudoinverse is just X^T divided by X^T X. For larger matrices, computers use more sophisticated methods (like SVD), but the result is the same: the least-squares solution."</aside>
+<h4>Why call \(A^+\) an inverse?</h4>
+<p><strong>First check:</strong> if \(A\) is square and invertible, the new
+formula gives the old inverse:</p>
+\[
+A^+=(A^\top A)^{-1}A^\top
+=A^{-1}(A^\top)^{-1}A^\top
+=A^{-1}.
+\]
+<p class="fragment"><strong>One identity drives everything else:</strong></p>
+\[
+(A^\top A)A^+
+=(A^\top A)(A^\top A)^{-1}A^\top
+=A^\top.
+\]
+<div class="key-question fragment">So \(A^+\) really extends the inverse we
+already know; it is not just a new label for the normal-equation answer.</div>
+<aside class="notes">"The first line checks the name against a case we trust. The second line is the engine for the two claims on the next slide. Nothing is being asserted from analogy; both facts drop out of the definition."</aside>
 </section>
 
-<!-- S49: Pseudoinverse — formal definition -->
+<!-- S49: Pseudoinverse properties from the identity -->
 <section>
-<h4>The pseudoinverse: key properties</h4>
-<div class="mathbox">
-The pseudoinverse \(A^+\) gives:
-\[\mathbf{x}^* = A^+\mathbf{b}\]
-<ul style="margin-top:0.5em;">
-<li>If \(A\mathbf{x} = \mathbf{b}\) has a solution → \(A^+\mathbf{b}\) finds it.</li>
-<li>If no exact solution → \(A^+\mathbf{b}\) gives the <strong>least-squares</strong> fit.</li>
-<li>If multiple solutions → \(A^+\mathbf{b}\) picks the one with <strong>smallest norm</strong>.</li>
-</ul>
-</div>
-<div class="applied fragment">When \(A\) is square and invertible: \(A^+ = A^{-1}\). The pseudoinverse is a <strong>generalization</strong> of the regular inverse.</div>
-<aside class="notes">"The pseudoinverse handles every case: exact solutions, overdetermined systems, underdetermined systems. It's the Swiss Army knife of linear algebra. In Python, numpy.linalg.pinv computes it for you."</aside>
+<h4>What does \(A^+\mathbf{b}\) return?</h4>
+<p><strong>Exact case.</strong> If \(\mathbf{b}=A\mathbf{x}_0\), then</p>
+\[
+A^+\mathbf{b}=(A^\top A)^{-1}A^\top A\mathbf{x}_0
+=\mathbf{x}_0.
+\]
+<p class="fragment"><strong>No exact solution.</strong> Let
+\(\mathbf{x}^*=A^+\mathbf{b}\). The identity from the last slide gives</p>
+\[
+A^\top A\mathbf{x}^*=A^\top\mathbf{b}
+\quad\Longrightarrow\quad
+A^\top(\mathbf{b}-A\mathbf{x}^*)=\mathbf{0}.
+\]
+<div class="applied fragment">So the residual is perpendicular to every column
+of \(A\): \(\mathbf{x}^*\) is exactly the least-squares solution from L03–L04.</div>
+<aside class="notes">"State, then prove. In the exact case the A-transpose-A cancels. In the inexact case the same identity lands on the normal equation, so the residual is perpendicular to the column space. That is why this formula returns the closest reachable output."</aside>
 </section>
 
-<!-- S50: Multiple solutions — which one to pick? -->
+<!-- S50: Build the pseudoinverse, then use it -->
 <section>
-<h4>When many solutions exist: pick the simplest</h4>
-<p>Sometimes a system has infinitely many solutions:</p>
-<div>
-\[A = \begin{bmatrix}1 & 0\\1 & 0\\1 & 0\end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix}2\\2\\2\end{bmatrix}\]
-Any \(\mathbf{x} = (2, t)^\top\) works for any \(t\). Which one to pick?
-</div>
-<ul>
-<li class="fragment">The pseudoinverse picks \(t = 0\): \(\mathbf{x}^* = (2, 0)^\top\).</li>
-<li class="fragment">This has the <strong>smallest length</strong> — the simplest solution.</li>
-</ul>
-<div class="key-question fragment">Prefer simplicity when accuracy is tied. This is a preview of <strong>regularization</strong> (Unit 5).</div>
-<aside class="notes">"When many solutions give the same error, pick the simplest one. 'Simplest' means smallest parameter values — don't use a complicated model when a simple one works equally well. This idea will come back as regularization in Unit 5, where we'll deliberately penalize complexity."</aside>
+<h4>Example: build \(X^+\), then multiply</h4>
+<p>Return to the <strong>same three apartments from L04</strong>:</p>
+\[
+X=\begin{bmatrix}6&1\\8&2\\10&3\end{bmatrix},\qquad
+\mathbf{y}=\begin{bmatrix}3\\2\\4\end{bmatrix}.
+\]
+<p class="fragment">L04 already found
+\((X^\top X)^{-1}=\frac1{96}\begin{bmatrix}14&-52\\-52&200\end{bmatrix}\).
+Now actually form the pseudoinverse:</p>
+\[
+X^+=(X^\top X)^{-1}X^\top
+=\frac1{96}\begin{bmatrix}32&8&-16\\-112&-16&80\end{bmatrix}.
+\]
+<p class="fragment">Then use it:</p>
+\[
+\mathbf{w}^*=X^+\mathbf{y}
+=\frac1{96}\begin{bmatrix}48\\-48\end{bmatrix}
+=\boxed{\begin{bmatrix}0.5\\-0.5\end{bmatrix}}.
+\]
+<div class="key-question fragment">Same data, same answer as L04 — but now the
+pseudoinverse was constructed <em>before</em> it was used.</div>
+<aside class="notes">"This is not the normal equation with a pseudoinverse label pasted on afterward. We build X-plus as a two-by-three matrix and then multiply it by y. The result must match L04 because the proof on the previous slide says it solves the same least-squares problem."</aside>
 </section>
 
 <!-- S51: Quick check — pseudoinverse -->
@@ -1079,7 +1105,8 @@ Any \(\mathbf{x} = (2, t)^\top\) works for any \(t\). Which one to pick?
 <div class="quickcheck">
 If \(\mathbf{b}\) lies in the column space of \(A\), what does \(A^+\mathbf{b}\) give?
 </div>
-<p class="fragment"><strong>An exact solution</strong> — no approximation needed. The pseudoinverse reduces to the regular inverse (or finds one of the exact solutions, the one with minimum norm).</p>
+<p class="fragment"><strong>The exact solution</strong> — no approximation needed.
+With the independent columns assumed here, that solution is unique.</p>
 </section>
 
 <!-- S52: When formulas break — nearly dependent columns -->
@@ -1251,7 +1278,7 @@ What happens to \(X^\top X\), and why?
 zeros elsewhere. Then \(X\mathbf{v}\) is (column \(i\)) minus (column \(j\)) \(= \mathbf{0}\).</p>
 \[X^\top X\mathbf{v} = X^\top(X\mathbf{v}) = X^\top\mathbf{0} = \mathbf{0}\]
 <p>So a <em>non-zero</em> \(\mathbf{v}\) is killed by \(X^\top X\). A matrix with something non-zero
-in its null space cannot be inverted. \(\blacksquare\)</p>
+in its null space cannot be inverted.</p>
 </div>
 <p class="fragment">Nearly identical columns are the same argument with \(\approx\) in place of \(=\):
 \(X\mathbf{v}\) is not zero but is tiny, so \(\det\) is not zero but is tiny &mdash;
