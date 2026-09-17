@@ -1034,7 +1034,7 @@ DALL-E prompt for fig-2-09-autocorrect-fail:
 For a matrix \(A\) with linearly independent columns, define
 \[A^+ = (A^\top A)^{-1}A^\top,\qquad \mathbf{x}^*=A^+\mathbf{b}.\]
 </div>
-<p class="fragment" style="font-size:0.82em;color:#555;">MML §2.3.4, pp. 34–35,
+<p class="fragment">MML defines it in <strong>§2.3.4, pp. 34–35</strong>,
 eq. (2.59). The independent-columns condition is what makes \(A^\top A\) invertible.</p>
 <aside class="notes">"Motivation first: a tall data matrix has no ordinary inverse. Now the definition. Read it from right to left: transpose the target, then solve with A-transpose-A. MML states both the independent-columns condition and the numerical warning on these pages."</aside>
 </section>
@@ -1049,12 +1049,14 @@ A^+=(A^\top A)^{-1}A^\top
 =A^{-1}(A^\top)^{-1}A^\top
 =A^{-1}.
 \]
-<p class="fragment"><strong>One identity drives everything else:</strong></p>
+<div class="fragment">
+<p><strong>One identity drives everything else:</strong></p>
 \[
 (A^\top A)A^+
 =(A^\top A)(A^\top A)^{-1}A^\top
 =A^\top.
 \]
+</div>
 <div class="key-question fragment">So \(A^+\) really extends the inverse we
 already know; it is not just a new label for the normal-equation answer.</div>
 <aside class="notes">"The first line checks the name against a case we trust. The second line is the engine for the two claims on the next slide. Nothing is being asserted from analogy; both facts drop out of the definition."</aside>
@@ -1068,13 +1070,15 @@ already know; it is not just a new label for the normal-equation answer.</div>
 A^+\mathbf{b}=(A^\top A)^{-1}A^\top A\mathbf{x}_0
 =\mathbf{x}_0.
 \]
-<p class="fragment"><strong>No exact solution.</strong> Let
+<div class="fragment">
+<p><strong>No exact solution.</strong> Let
 \(\mathbf{x}^*=A^+\mathbf{b}\). The identity from the last slide gives</p>
 \[
 A^\top A\mathbf{x}^*=A^\top\mathbf{b}
 \quad\Longrightarrow\quad
 A^\top(\mathbf{b}-A\mathbf{x}^*)=\mathbf{0}.
 \]
+</div>
 <div class="applied fragment">So the residual is perpendicular to every column
 of \(A\): \(\mathbf{x}^*\) is exactly the least-squares solution from L03–L04.</div>
 <aside class="notes">"State, then prove. In the exact case the A-transpose-A cancels. In the inexact case the same identity lands on the normal equation, so the residual is perpendicular to the column space. That is why this formula returns the closest reachable output."</aside>
@@ -1088,19 +1092,23 @@ of \(A\): \(\mathbf{x}^*\) is exactly the least-squares solution from L03–L04.
 X=\begin{bmatrix}6&1\\8&2\\10&3\end{bmatrix},\qquad
 \mathbf{y}=\begin{bmatrix}3\\2\\4\end{bmatrix}.
 \]
-<p class="fragment">L04 already found
+<div class="fragment">
+<p>L04 already found
 \((X^\top X)^{-1}=\frac1{96}\begin{bmatrix}14&-52\\-52&200\end{bmatrix}\).
 Now actually form the pseudoinverse:</p>
 \[
 X^+=(X^\top X)^{-1}X^\top
 =\frac1{96}\begin{bmatrix}32&8&-16\\-112&-16&80\end{bmatrix}.
 \]
-<p class="fragment">Then use it:</p>
+</div>
+<div class="fragment">
+<p>Then use it:</p>
 \[
 \mathbf{w}^*=X^+\mathbf{y}
 =\frac1{96}\begin{bmatrix}48\\-48\end{bmatrix}
 =\boxed{\begin{bmatrix}0.5\\-0.5\end{bmatrix}}.
 \]
+</div>
 <div class="key-question fragment">Same data, same answer as L04 — but now the
 pseudoinverse was constructed <em>before</em> it was used.</div>
 <aside class="notes">"This is not the normal equation with a pseudoinverse label pasted on afterward. We build X-plus as a two-by-three matrix and then multiply it by y. The result must match L04 because the proof on the previous slide says it solves the same least-squares problem."</aside>
@@ -1119,8 +1127,8 @@ With the independent columns assumed here, that solution is unique.</p>
 <!-- S52: When formulas break — nearly dependent columns -->
 <section>
 <h4>Worry 2: it exists &mdash; can we trust it?</h4>
-<p style="color:#666;font-size:0.92em">The pseudoinverse settled <em>existence</em>.
-Now back to the two systems we opened with.</p>
+<p>The pseudoinverse settled <em>existence</em>. Now back to the two systems
+we opened with.</p>
 <p>Write them as matrices. <strong>Same right-hand side both times</strong> &mdash;
 only one coefficient differs:</p>
 \[A_1 = \begin{bmatrix} 1 & 1 \\ 1 & \mathbf{0.999} \end{bmatrix},\qquad
@@ -1190,19 +1198,21 @@ where they came from. <strong>The coefficient moved by \(0.002\); \(1/\det\) swu
 <p>Check the first row: \(32(1) + 1.8(12) = 32 + 21.6 = 53.6\). ✓ &nbsp; It holds for every row.</p>
 </div>
 <p class="fragment"><strong>The third feature carries no new information.</strong>
-\(\det(X^\top X) \approx 10^{-11}\) &mdash; singular for all practical purposes.</p>
+So \(X^\top X\) is <strong>exactly singular</strong>: \(\det(X^\top X) = 0\), and the normal equation has no unique answer.
+A computer usually prints a tiny number such as \(10^{-11}\) instead of \(0\) &mdash; that is rounding, not a real value.</p>
 <aside class="notes">"Nobody sets out to add a useless column. You add temperature, someone else adds it in the other unit, and now your matrix is singular and nothing warns you."</aside>
 </section>
 
 <section>
 <h4>What that costs you &mdash; run it and see</h4>
-<p>Solve the normal equation as written:</p>
-\[\mathbf{w} = (0.913,\; 0.097,\; 0.000)\]
-<p class="fragment">Now change <em>one</em> Fahrenheit reading by <strong>0.1 of a degree</strong> &mdash;
-less than the width of a thermometer mark &mdash; and solve again:</p>
+<p>With both columns there is no unique answer to report. Drop &deg;F and fit the sensible model, &deg;C only:</p>
+\[\mathbf{w} = (0.91,\; 0.10)\]
+<p class="fragment">Now keep &deg;F, but record <em>one</em> reading <strong>0.1 of a degree</strong> differently
+(53.7 instead of 53.6) &mdash; less than the width of a thermometer mark. The columns are no longer
+<em>exactly</em> dependent, so the normal equation has an answer:</p>
 <div class="fragment">
-\[\mathbf{w} = (-22.106,\; -1.189,\; +0.717)\]
-<p>The Celsius coefficient went from \(+0.097\) to \(-1.189\). It <strong>changed sign</strong>.</p>
+\[\mathbf{w} = (-22.11,\; -1.19,\; +0.72)\]
+<p>The Celsius coefficient went from \(+0.10\) to \(-1.19\). It <strong>changed sign</strong>.</p>
 </div>
 <div class="fragment">
 <p>But look at what the two models actually <em>predict</em>:</p>
@@ -1215,7 +1225,7 @@ less than the width of a thermometer mark &mdash; and solve again:</p>
 </div>
 <div class="key-question fragment">Both fit the data equally well. <strong>The predictions are pinned down; the individual
 weights are not.</strong> Never read a coefficient from a model whose columns are nearly dependent.</div>
-<aside class="notes">"This is the punchline of the whole lecture. The model is fine. The number you wanted to interpret is not."</aside>
+<aside class="notes">"This is the punchline of the whole lecture. The model is fine. The number you wanted to interpret is not." Two decimals on purpose: with columns this close to dependent the third decimal comes out differently on different computers, which is the same lesson again. The raw 53.6 data is exactly singular, so do not solve it live expecting a number &mdash; np.linalg.solve may raise LinAlgError or print noise.</aside>
 </section>
 
 <!--
