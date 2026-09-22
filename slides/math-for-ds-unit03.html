@@ -368,36 +368,13 @@ Both start with \(\lambda^2\) and have the same two roots, so they are the same 
 </section>
 
 <!-- S16: Quick check -->
-<section>
-<h4>Quick check</h4>
-<div class="quickcheck">
-<p>\(A=\begin{bmatrix}5&4\\4&5\end{bmatrix}\). Find both eigenvalues <strong>without</strong> expanding the determinant.</p>
-<p class="fragment">\(\lambda_1+\lambda_2=10\) and \(\lambda_1\lambda_2=25-16=9\). Two numbers with sum 10 and product 9: \(\;\lambda=9\) and \(\lambda=1\).</p>
-<p>Which of \((1,1)^\top\) and \((1,-1)^\top\) goes with \(\lambda=9\)?</p>
-<p class="fragment">\(A(1,1)^\top=(9,9)^\top=9(1,1)^\top\). So \((1,1)^\top\) goes with 9, and \(A(1,-1)^\top=(1,-1)^\top\) goes with 1.</p>
-</div>
-<p>Same shape as \(S\), different numbers &mdash; not a new dataset. Homework and quiz questions change the numbers the same way.</p>
-<aside class="notes">Same shape as S, different numbers — this is the quiz pattern. "Always check the eigenvector by multiplying. It takes five seconds and catches every sign error."</aside>
-</section>
 
 <!-- S17: Orthogonal — accident? -->
-<section>
-<h4>Is it an accident that the two eigenvectors are orthogonal?</h4>
-<p><strong>Why we care:</strong> we want the two eigenvector directions of \(S\) &mdash; \((1,1)^\top\), the total, and \((1,-1)^\top\), the difference &mdash; as a <em>new coordinate system</em> for the data. Coordinate axes have to be orthogonal, or a point&rsquo;s squared length no longer splits into a sum.</p>
-<p><strong>Orthogonal</strong> (MML Def. 3.7, p.77) is the book&rsquo;s word for <em>perpendicular</em>: \(\mathbf{x}\perp\mathbf{y}\) when \(\mathbf{x}^\top\mathbf{y}=0\); <strong>orthonormal</strong> if both also have length 1.</p>
-<p>For \(S\): \(\;(1,1)^\top\cdot(1,-1)^\top=1-1=0\). Now try a matrix that is <strong>not</strong> built from data &mdash; a counterexample, your book&rsquo;s own worked example (MML Example 4.5, pp.107&ndash;108): \(N=\begin{bmatrix}4&2\\1&3\end{bmatrix},\qquad \operatorname{tr}N=7,\quad \det N=10\quad\Longrightarrow\quad \lambda=5,\ 2.\)</p>
-<ul>
-<li class="fragment">\(N-5I=\begin{bmatrix}-1&2\\1&-2\end{bmatrix}\Rightarrow \mathbf{v}_1=(2,1)^\top\). &nbsp; Check \(N(2,1)^\top=(10,5)^\top=5(2,1)^\top\) ✓</li>
-<li class="fragment">\(N-2I=\begin{bmatrix}2&2\\1&1\end{bmatrix}\Rightarrow \mathbf{v}_2=(1,-1)^\top\). &nbsp; Check \(N(1,-1)^\top=(2,-2)^\top=2(1,-1)^\top\) ✓</li>
-<li class="fragment">\((2,1)^\top\cdot(1,-1)^\top=2-1=1\neq0\). <strong>Not orthogonal.</strong></li>
-</ul>
-<div class="key-question fragment">What does \(S\) have that \(N\) does not? \(\;S^\top=S\), but \(N^\top\neq N\). \(S\) is <strong>symmetric</strong>.</div>
-<aside class="notes">"N is here only to break the pattern. It is not a second example of anything; it shows the orthogonality needs a reason. Symmetry is the reason, and the next two slides prove it."</aside>
-</section>
 
 <!-- S18: Theorem + proof (1 of 2) -->
 <section>
 <h4>Symmetric matrices have orthogonal eigenvectors (1 of 2)</h4>
+<p><strong>Why we care:</strong> we want \((1,1)^\top\) and \((1,-1)^\top\) as new coordinate axes, and axes have to be <strong>orthogonal</strong> (MML Def. 3.7, p.77: \(\mathbf{x}\perp\mathbf{y}\) when \(\mathbf{x}^\top\mathbf{y}=0\); <strong>orthonormal</strong> if both also have length 1), or a point&rsquo;s squared length no longer splits into a sum. For \(S\): \((1,1)^\top\cdot(1,-1)^\top=0\) ✓ &mdash; <strong>but that is not automatic.</strong> The counterexample \(N=\begin{bmatrix}4&2\\1&3\end{bmatrix}\) (MML Example 4.5, pp.107&ndash;108) has eigenvectors \((2,1)^\top\) with \(\lambda=5\) and \((1,-1)^\top\) with \(\lambda=2\), and \((2,1)^\top\cdot(1,-1)^\top=1\neq0\). What does \(S\) have that \(N\) does not? \(\;S^\top=S\).</p>
 <div class="mathbox">
 <strong>Theorem.</strong> Let \(A=A^\top\). If \(A\mathbf{v}_1=\lambda_1\mathbf{v}_1\) and \(A\mathbf{v}_2=\lambda_2\mathbf{v}_2\) with \(\lambda_1\neq\lambda_2\), then \(\mathbf{v}_1^\top\mathbf{v}_2=0\).
 </div>
@@ -424,7 +401,7 @@ Both start with \(\lambda^2\) and have the same two roots, so they are the same 
 <p>Way 1: \(\lambda_2\,\mathbf{v}_1^\top\mathbf{v}_2=2\cdot\big((1,1)^\top\cdot(1,-1)^\top\big)=2\cdot0=0\).<br>Way 2: \(\lambda_1\,\mathbf{v}_1^\top\mathbf{v}_2=8\cdot0=0\).<br>Same number, as the proof says it must be.</p>
 </div>
 <div>
-<p><strong>On \(N=\begin{bmatrix}4&2\\1&3\end{bmatrix}\)</strong>, the counterexample from two slides back (not symmetric), with eigenvectors \(\mathbf{v}_1=(2,1)^\top\), \(\mathbf{v}_2=(1,-1)^\top\):</p>
+<p><strong>On \(N=\begin{bmatrix}4&2\\1&3\end{bmatrix}\)</strong>, the counterexample from the previous slide (not symmetric), with eigenvectors \(\mathbf{v}_1=(2,1)^\top\), \(\mathbf{v}_2=(1,-1)^\top\):</p>
 <p>Way 1: \(\mathbf{v}_1^\top N\mathbf{v}_2=(2,1)^\top\cdot(2,-2)^\top=2\).<br>Way 2: \(\mathbf{v}_2^\top N\,\mathbf{v}_1=(1,-1)^\top\cdot(10,5)^\top=5\).<br>Different numbers: Way 2 breaks, since \(N^\top\neq N\).</p>
 </div>
 </div>
