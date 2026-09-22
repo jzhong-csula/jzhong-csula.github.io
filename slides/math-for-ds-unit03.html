@@ -334,23 +334,22 @@ A\mathbf{v}-\lambda I\mathbf{v}=\mathbf{0}
 <!-- S14: Eigenvectors of S -->
 <section>
 <h4>Worked example: the eigenvectors of \(S\)</h4>
+<p>Our covariance matrix \(S=\begin{bmatrix}5&3\\3&5\end{bmatrix}\), with eigenvalues \(8\) and \(2\) from the previous slide.</p>
 <div class="twocol">
 <div>
-<p><strong>\(\lambda=8\):</strong></p>
-\[S-8I=\begin{bmatrix}-3&3\\3&-3\end{bmatrix}\]
+<p><strong>\(\lambda=8\):</strong> \(\;S-8I=\begin{bmatrix}-3&3\\3&-3\end{bmatrix}\)</p>
 <p class="fragment">Row 1: \(-3v_1+3v_2=0\), so \(v_2=v_1\). Row 2 says the same thing &mdash; it must, since \(\det=0\).</p>
 <p class="fragment">\(\mathbf{v}_1=(1,1)^\top\), or any nonzero multiple of it.</p>
 </div>
 <div>
-<p><strong>\(\lambda=2\):</strong></p>
-\[S-2I=\begin{bmatrix}3&3\\3&3\end{bmatrix}\]
+<p><strong>\(\lambda=2\):</strong> \(\;S-2I=\begin{bmatrix}3&3\\3&3\end{bmatrix}\)</p>
 <p class="fragment">\(3v_1+3v_2=0\), so \(v_2=-v_1\).</p>
 <p class="fragment">\(\mathbf{v}_2=(1,-1)^\top\), or any nonzero multiple of it.</p>
 </div>
 </div>
-<p class="fragment"><strong>Check:</strong> \(S(1,1)^\top=(8,8)^\top\) ✓ &nbsp; \(S(1,-1)^\top=(2,-2)^\top\) ✓</p>
+<p class="fragment"><strong>Check:</strong> \(\begin{bmatrix}5&3\\3&5\end{bmatrix}\begin{bmatrix}1\\1\end{bmatrix}=\begin{bmatrix}8\\8\end{bmatrix}=8\begin{bmatrix}1\\1\end{bmatrix}\) ✓ &nbsp;&nbsp; \(\begin{bmatrix}5&3\\3&5\end{bmatrix}\begin{bmatrix}1\\-1\end{bmatrix}=\begin{bmatrix}2\\-2\end{bmatrix}=2\begin{bmatrix}1\\-1\end{bmatrix}\) ✓</p>
 <div class="key-question fragment">The method: solve \(\det(A-\lambda I)=0\) for \(\lambda\); for each \(\lambda\), solve \((A-\lambda I)\mathbf{v}=\mathbf{0}\) for \(\mathbf{v}\).</div>
-<p class="fragment"><strong>Read them back as features.</strong> \(\mathbf{v}_1=(1,1)^\top\) adds the two quizzes &mdash; the <strong>total</strong>, a student's overall performance &mdash; carrying variance \(8\). \(\mathbf{v}_2=(1,-1)^\top\) subtracts them &mdash; the <strong>difference</strong>, which quiz was better &mdash; carrying variance \(2\). The arithmetic just handed us the two combinations we spotted by eye &mdash; and it would have handed them to us with 10,000 columns too.</p>
+<p class="fragment"><strong>Read them back as features:</strong> \(\mathbf{v}_1\) adds the quizzes (the <strong>total</strong>, variance \(8\)); \(\mathbf{v}_2\) subtracts them (the <strong>difference</strong>, variance \(2\)). The arithmetic found the two combinations we spotted by eye, and would with 10,000 columns too.</p>
 </section>
 
 <!-- S15: Trace and determinant -->
@@ -537,7 +536,7 @@ MML proves this for any size: Thm. 4.16 (p.112) and Thm. 4.17 (p.113).
 \[\text{maximize}\quad \mathbf{u}^\top S\,\mathbf{u}\qquad\text{subject to}\quad \norm{\mathbf{u}}=1.\]
 <p style="font-size:0.85em;">(MML eq. (10.10), p.322.)</p>
 <p class="fragment"><strong>Why the constraint?</strong> Take \(\mathbf{u}=(2,2)^\top\), twice as long as \((1,1)^\top\):
-\[(2,2)^\top\cdot S(2,2)^\top=(2,2)^\top\cdot(16,16)^\top=64=4\times16.\]</p>
+\[(2,2)^\top\cdot\begin{bmatrix}5&3\\3&5\end{bmatrix}\begin{bmatrix}2\\2\end{bmatrix}=(2,2)^\top\cdot(16,16)^\top=64=4\times16.\]</p>
 <ul>
 <li class="fragment">Doubling \(\mathbf{u}\) quadruples the answer. Without \(\norm{\mathbf{u}}=1\), there is no largest value &mdash; just make \(\mathbf{u}\) longer.</li>
 <li class="fragment">We are choosing a <strong>direction</strong>, not a length. Length 1 is how we say that.</li>
