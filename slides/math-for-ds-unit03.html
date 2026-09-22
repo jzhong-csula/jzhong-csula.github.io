@@ -247,16 +247,16 @@ So far we have only used it inside \(\mathbf{u}^\top S\mathbf{u}\). Now just <st
 <!-- S13b: what v^T S v computes, in words -->
 <section>
 <h4>And what is \(\mathbf{u}^\top S\mathbf{u}\)? Read it out loud</h4>
-<p><strong>Theorem 1 already told us what that expression means:</strong> for a unit direction, \(\mathbf{u}^\top S\mathbf{u}\) is the <strong>variance along \(\mathbf{u}\)</strong> &mdash; project the four students onto \(\mathbf{u}\) and see how far apart they land.</p>
+<p><strong>Theorem 1:</strong> for a unit direction, \(\mathbf{u}^\top S\mathbf{u}\) is the <strong>variance along \(\mathbf{u}\)</strong>.</p>
 <p class="fragment">Now take a direction \(S\) does <em>not</em> turn, say \(S\mathbf{u}=\lambda\mathbf{u}\) with \(\norm{\mathbf{u}}=1\), and put it into that same expression:</p>
 <div class="mathbox fragment">
 \[\underbrace{\mathbf{u}^\top S\,\mathbf{u}}_{\text{the variance along }\mathbf{u}}=\mathbf{u}^\top(\lambda\mathbf{u})=\lambda\,\underbrace{\mathbf{u}^\top\mathbf{u}}_{=\,1}=\lambda\]
 </div>
 <ul>
-<li class="fragment">In words, and mind the scope: <strong>when \(S\) sends a unit direction back to its own line, the factor it stretches that line by equals the variance along that direction</strong> &mdash; equal, not merely close. For a direction \(S\) turns there is no such factor; \(\mathbf{u}^\top S\mathbf{u}\) is still the variance, by Theorem 1.</li>
-<li class="fragment">Our two directions: \(S\) stretches the <strong>total</strong> direction by \(8\), and the variance along the total is \(8\). It stretches the <strong>difference</strong> direction by \(2\), and the variance along the difference is \(2\).</li>
+<li class="fragment"><strong>Which of these numbers are eigenvalues?</strong> For <strong>every</strong> unit \(\mathbf{u}\), \(\mathbf{u}^\top S\mathbf{u}\) is the variance along \(\mathbf{u}\) (Theorem 1) &mdash; no eigenvector needed. <strong>Most of those variances are not eigenvalues:</strong> in our own table \(\mathbf{u}=(3,4)^\top/5\) gives \(7.88\), and \(S\) turns that direction. <strong>But when \(\mathbf{u}\) is a unit eigenvector</strong>, the line is not turned and the computation above gives \(\mathbf{u}^\top S\mathbf{u}=\lambda\): <strong>the eigenvalue is the variance along its own eigenvector.</strong></li>
+<li class="fragment">Our two: the variance along the <strong>total</strong> is \(8\) and along the <strong>difference</strong> is \(2\) &mdash; the two factors \(S\) stretches by. They are also the <strong>largest and the smallest</strong> variance over <em>all</em> unit directions &mdash; a theorem, not a feature of our table. <strong>L08 proves it.</strong></li>
 </ul>
-<div class="key-question fragment">So \(S\) is not just bookkeeping: the directions it leaves on their own line are combinations of the two original columns &mdash; the total and the difference &mdash; and the factor on each is exactly how much the students differ along it.</div>
+<div class="key-question fragment">So \(S\) is not bookkeeping: the directions it leaves on their own line are the <strong>total</strong> and the <strong>difference</strong>, and the factor on each is the variance along it.</div>
 <aside class="notes">"Say the sentence slowly: v-transpose-S-v is the variance along v. That is Theorem 1, nothing new." "Then the substitution is one line and the conclusion is the slogan of the unit: stretch factor = variance." "Still not proved: that 8 beats every other direction. Only that it is the variance along this particular one."</aside>
 </section>
 
