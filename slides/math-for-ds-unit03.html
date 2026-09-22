@@ -355,16 +355,15 @@ A\mathbf{v}-\lambda I\mathbf{v}=\mathbf{0}
 <!-- S15: Trace and determinant -->
 <section>
 <h4>Two checks you can do in your head</h4>
-<p>For any \(A=\begin{bmatrix}a&b\\c&d\end{bmatrix}\):
-\[\det(A-\lambda I)=(a-\lambda)(d-\lambda)-bc=\lambda^2-(a+d)\,\lambda+(ad-bc).\]</p>
+<p>For any \(A=\begin{bmatrix}a&b\\c&d\end{bmatrix}\): \(\;\det(A-\lambda I)=(a-\lambda)(d-\lambda)-bc=\lambda^2-(a+d)\,\lambda+(ad-bc).\)</p>
 <p class="fragment">If its roots are \(\lambda_1,\lambda_2\), the same polynomial factors as
 \[(\lambda-\lambda_1)(\lambda-\lambda_2)=\lambda^2-(\lambda_1+\lambda_2)\,\lambda+\lambda_1\lambda_2.\]
 Both start with \(\lambda^2\) and have the same two roots, so they are the same polynomial. Match the coefficients:</p>
 <div class="mathbox fragment">
 \[\lambda_1+\lambda_2=a+d=\operatorname{tr}(A),\qquad \lambda_1\lambda_2=ad-bc=\det(A).\]
-MML proves this for any size: Thm. 4.16 (p.112) and Thm. 4.17 (p.113).
+\(\operatorname{tr}(A)\), the <strong>trace</strong>, is the sum of the diagonal entries (MML Def. 4.4, p.103); both identities hold for any size (Thm. 4.16&ndash;4.17).
 </div>
-<p class="fragment">Our \(S\): \(\;8+2=10=5+5\) ✓ &nbsp;&nbsp; \(8\cdot2=16=25-9\) ✓</p>
+<p class="fragment">Our \(S=\begin{bmatrix}5&3\\3&5\end{bmatrix}\), eigenvalues \(8,2\): \(\;\operatorname{tr}S=5+5=10=8+2\) ✓ &nbsp;&nbsp; \(\det S=25-9=16=8\cdot2\) ✓</p>
 <div class="key-question fragment">One consequence to keep: \(\det A=0\) exactly when some eigenvalue is \(0\). L08 uses this on L06's matrix.</div>
 </section>
 
@@ -422,12 +421,11 @@ MML proves this for any size: Thm. 4.16 (p.112) and Thm. 4.17 (p.113).
 <div class="twocol fragment">
 <div>
 <p><strong>On \(S=\begin{bmatrix}5&3\\3&5\end{bmatrix}\)</strong>, our four students' covariance matrix (symmetric), with eigenvectors \(\mathbf{v}_1=(1,1)^\top\), \(\mathbf{v}_2=(1,-1)^\top\):</p>
-<p>Way 1: \(2\cdot0=0\). Way 2: \(8\cdot0=0\). They agree because the dot product is \(0\).</p>
+<p>Way 1: \(\lambda_2\,\mathbf{v}_1^\top\mathbf{v}_2=2\cdot\big((1,1)^\top\cdot(1,-1)^\top\big)=2\cdot0=0\).<br>Way 2: \(\lambda_1\,\mathbf{v}_1^\top\mathbf{v}_2=8\cdot0=0\).<br>Same number, as the proof says it must be.</p>
 </div>
 <div>
 <p><strong>On \(N=\begin{bmatrix}4&2\\1&3\end{bmatrix}\)</strong>, the counterexample from two slides back (not symmetric), with eigenvectors \(\mathbf{v}_1=(2,1)^\top\), \(\mathbf{v}_2=(1,-1)^\top\):</p>
-<p>\(\mathbf{v}_1^\top N\mathbf{v}_2=(2,1)^\top\cdot(2,-2)^\top=2\), but \(\mathbf{v}_2^\top N\,\mathbf{v}_1=(1,-1)^\top\cdot(10,5)^\top=5\).</p>
-<p>Way 2 breaks at the step \(N^\top=N\).</p>
+<p>Way 1: \(\mathbf{v}_1^\top N\mathbf{v}_2=(2,1)^\top\cdot(2,-2)^\top=2\).<br>Way 2: \(\mathbf{v}_2^\top N\,\mathbf{v}_1=(1,-1)^\top\cdot(10,5)^\top=5\).<br>Different numbers: Way 2 breaks, since \(N^\top\neq N\).</p>
 </div>
 </div>
 </section>
