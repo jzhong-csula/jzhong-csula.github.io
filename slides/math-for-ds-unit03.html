@@ -373,41 +373,54 @@ Both start with \(\lambda^2\) and have the same two roots, so they are the same 
 
 <!-- S18: Theorem + proof (1 of 2) -->
 <section>
-<h4>Symmetric matrices have orthogonal eigenvectors (1 of 2)</h4>
-<p><strong>Why we care:</strong> we want \((1,1)^\top\) and \((1,-1)^\top\) as new coordinate axes, and axes have to be <strong>orthogonal</strong> (MML Def. 3.7, p.77: \(\mathbf{x}\perp\mathbf{y}\) when \(\mathbf{x}^\top\mathbf{y}=0\); <strong>orthonormal</strong> if both also have length 1), or a point&rsquo;s squared length no longer splits into a sum. For \(S\): \((1,1)^\top\cdot(1,-1)^\top=0\) ✓ &mdash; <strong>but that is not automatic.</strong> The counterexample \(N=\begin{bmatrix}4&2\\1&3\end{bmatrix}\) (MML Example 4.5, pp.107&ndash;108) has eigenvectors \((2,1)^\top\) with \(\lambda=5\) and \((1,-1)^\top\) with \(\lambda=2\), and \((2,1)^\top\cdot(1,-1)^\top=1\neq0\). What does \(S\) have that \(N\) does not? \(\;S^\top=S\).</p>
+<h4>First, why we want the axes orthogonal</h4>
+<p>We are about to use \(\mathbf{v}_1=(1,1)^\top\) and \(\mathbf{v}_2=(1,-1)^\top\) as <strong>new coordinate axes</strong> for the data. For that to work they must be <strong>orthogonal</strong>.</p>
+<div class="mathbox">
+<strong>Definition</strong> (MML Def. 3.7, p.77). \(\mathbf{x}\perp\mathbf{y}\) when \(\mathbf{x}^\top\mathbf{y}=0\). If in addition both have length 1, they are <strong>orthonormal</strong>.
+</div>
+<p class="fragment"><strong>What goes wrong if they are not.</strong> Write a student as \(z_1\mathbf{v}_1+z_2\mathbf{v}_2\). When the two axes are perpendicular, the squared distance from the centre splits cleanly, \(\;\|\mathbf{x}\|^2=z_1^2+z_2^2\), so &ldquo;how much of the spread does axis 1 account for?&rdquo; has an answer. When they lean on each other, the two axes partly measure the <em>same</em> thing, the split has a leftover cross term, and that question stops having an answer.</p>
+<p class="fragment"><strong>Our \(S\) passes:</strong> \(\;\mathbf{v}_1^\top\mathbf{v}_2=(1)(1)+(1)(-1)=0\) ✓</p>
+<aside class="notes">"Do not let them think orthogonality is a technicality. It is the thing that makes 'this direction explains 80% of the variance' a meaningful sentence at all."</aside>
+</section>
+
+<section>
+<h4>But it is not automatic &mdash; a matrix whose eigenvectors are not orthogonal</h4>
+<p>Take \(N=\begin{bmatrix}4&2\\1&3\end{bmatrix}\) (MML Example 4.5, pp.107&ndash;108). Its eigenvectors are</p>
+\[\mathbf{n}_1=(2,1)^\top\ \text{with}\ \lambda=5,\qquad \mathbf{n}_2=(1,-1)^\top\ \text{with}\ \lambda=2 .\]
+<p class="fragment">Check them against each other:
+\[\mathbf{n}_1^\top\mathbf{n}_2=(2)(1)+(1)(-1)=1\neq0 .\]
+<strong>Not orthogonal.</strong> So \(S\) was not lucky in some harmless way &mdash; having orthogonal eigenvectors is a real property that \(N\) simply does not have.</p>
+<div class="key-question fragment">What does \(S\) have that \(N\) does not? \(\;S^\top=S\), and \(N^\top\neq N\).</div>
+<aside class="notes">"Write both matrices on the board side by side and let them find the difference themselves before you say it."</aside>
+</section>
+
+<section>
+<h4>Symmetric matrices have orthogonal eigenvectors</h4>
 <div class="mathbox">
 <strong>Theorem.</strong> Let \(A=A^\top\). If \(A\mathbf{v}_1=\lambda_1\mathbf{v}_1\) and \(A\mathbf{v}_2=\lambda_2\mathbf{v}_2\) with \(\lambda_1\neq\lambda_2\), then \(\mathbf{v}_1^\top\mathbf{v}_2=0\).
 </div>
-<p class="fragment"><strong>Idea:</strong> compute the single number \(\mathbf{v}_1^\top A\,\mathbf{v}_2\) in two different ways.</p>
+<p><strong>Idea:</strong> compute the single number \(\mathbf{v}_1^\top A\,\mathbf{v}_2\) in two different ways.</p>
 <p class="fragment"><strong>Way 1</strong> &mdash; use what \(A\) does to \(\mathbf{v}_2\):
-\[\mathbf{v}_1^\top(A\mathbf{v}_2)=\mathbf{v}_1^\top(\lambda_2\mathbf{v}_2)=\lambda_2\,\mathbf{v}_1^\top\mathbf{v}_2.\]</p>
+\[\mathbf{v}_1^\top(A\mathbf{v}_2)=\mathbf{v}_1^\top(\lambda_2\mathbf{v}_2)=\lambda_2\,\mathbf{v}_1^\top\mathbf{v}_2 .\]</p>
 <p class="fragment"><strong>Way 2</strong> &mdash; a \(1\times1\) number equals its own transpose, and \((PQR)^\top=R^\top Q^\top P^\top\):
 \[\mathbf{v}_1^\top A\,\mathbf{v}_2=\big(\mathbf{v}_1^\top A\,\mathbf{v}_2\big)^\top=\mathbf{v}_2^\top A^\top\mathbf{v}_1
-\;\overset{\color{#d97706}{A^\top=A}}{=}\;\mathbf{v}_2^\top A\,\mathbf{v}_1=\lambda_1\,\mathbf{v}_2^\top\mathbf{v}_1=\lambda_1\,\mathbf{v}_1^\top\mathbf{v}_2.\]</p>
-<aside class="notes">"Point at the orange A-transpose = A. That is the only place symmetry enters the proof. Everything else works for any matrix."</aside>
+\;\overset{\color{#d97706}{A^\top=A}}{=}\;\mathbf{v}_2^\top A\,\mathbf{v}_1=\lambda_1\,\mathbf{v}_2^\top\mathbf{v}_1=\lambda_1\,\mathbf{v}_1^\top\mathbf{v}_2 .\]</p>
+<p class="fragment">Same number both ways, so \(\;(\lambda_1-\lambda_2)\,\mathbf{v}_1^\top\mathbf{v}_2=0\). We assumed \(\lambda_1\neq\lambda_2\), so we may divide by \(\lambda_1-\lambda_2\):
+\[\mathbf{v}_1^\top\mathbf{v}_2=0 .\]</p>
+<aside class="notes">"Point at the orange A-transpose = A. That is the only place symmetry enters. Everything else works for any matrix &mdash; which is exactly why the next slide can show you where N breaks."</aside>
 </section>
 
-<!-- S19: proof (2 of 2) -->
 <section>
-<h4>Symmetric matrices have orthogonal eigenvectors (2 of 2)</h4>
-<p>The two ways computed the same number, so
-\[\lambda_2\,\mathbf{v}_1^\top\mathbf{v}_2=\lambda_1\,\mathbf{v}_1^\top\mathbf{v}_2
-\quad\Longrightarrow\quad
-(\lambda_1-\lambda_2)\,\mathbf{v}_1^\top\mathbf{v}_2=0.\]</p>
-<p class="fragment">\(\lambda_1\neq\lambda_2\), so we may divide by \(\lambda_1-\lambda_2\): \(\;\mathbf{v}_1^\top\mathbf{v}_2=0.\)</p>
-<div class="twocol fragment">
-<div>
-<p><strong>On \(S=\begin{bmatrix}5&3\\3&5\end{bmatrix}\)</strong>, our four students' covariance matrix (symmetric), with eigenvectors \(\mathbf{v}_1=(1,1)^\top\), \(\mathbf{v}_2=(1,-1)^\top\):</p>
-<p>Way 1: \(\lambda_2\,\mathbf{v}_1^\top\mathbf{v}_2=2\cdot\big((1,1)^\top\cdot(1,-1)^\top\big)=2\cdot0=0\).<br>Way 2: \(\lambda_1\,\mathbf{v}_1^\top\mathbf{v}_2=8\cdot0=0\).<br>Same number, as the proof says it must be.</p>
-</div>
-<div>
-<p><strong>On \(N=\begin{bmatrix}4&2\\1&3\end{bmatrix}\)</strong>, the counterexample from the previous slide (not symmetric), with eigenvectors \(\mathbf{v}_1=(2,1)^\top\), \(\mathbf{v}_2=(1,-1)^\top\):</p>
-<p>Way 1: \(\mathbf{v}_1^\top N\mathbf{v}_2=(2,1)^\top\cdot(2,-2)^\top=2\).<br>Way 2: \(\mathbf{v}_2^\top N\,\mathbf{v}_1=(1,-1)^\top\cdot(10,5)^\top=5\).<br>Different numbers: Way 2 breaks, since \(N^\top\neq N\).</p>
-</div>
-</div>
+<h4>Where the proof breaks for \(N\)</h4>
+<p>The proof used symmetry in exactly one place, so on \(N\) exactly one step should fail. Compute the same number \(\mathbf{n}_1^\top N\,\mathbf{n}_2\) both ways, with \(\mathbf{n}_1=(2,1)^\top\), \(\mathbf{n}_2=(1,-1)^\top\):</p>
+<table style="width:auto; margin:0.4em auto; font-size:0.95em;">
+<tr><th></th><th>what it computes</th><th>value</th></tr>
+<tr><td><strong>Way 1</strong></td><td>\(\mathbf{n}_1^\top(N\mathbf{n}_2)=(2,1)^\top\cdot(2,-2)^\top\)</td><td>\(2\)</td></tr>
+<tr><td><strong>Way 2</strong></td><td>\(\mathbf{n}_2^\top(N\mathbf{n}_1)=(1,-1)^\top\cdot(10,5)^\top\)</td><td>\(5\)</td></tr>
+</table>
+<p class="fragment">Two different numbers. Way 2 was the step that replaced \(N^\top\) by \(N\), and that replacement is false here. With no shared value, there is nothing to conclude, and indeed \(\mathbf{n}_1^\top\mathbf{n}_2=1\neq0\).</p>
+<p class="fragment"><strong>So symmetry is not decoration in the theorem &mdash; it is the whole proof.</strong></p>
 </section>
-
-
 
 <!-- S21: Spectral theorem -->
 <section>
@@ -578,18 +591,34 @@ with weights \(c_1^2,c_2^2\ge0\) that add to \(1\) by step 1 &mdash; so this is 
 <section>
 <h4>Principal component and scores</h4>
 <div class="mathbox">
-<strong>Definition.</strong> The <strong>first principal component</strong> is \(\mathbf{v}_1\), the unit eigenvector of \(S\) with the largest eigenvalue. The <strong>score</strong> of data point \(\mathbf{x}_i\) is its projection onto it: \(\;z_i=\mathbf{v}_1^\top\mathbf{x}_i\) (MML eq. (10.8)).
+<strong>Definition.</strong> The <strong>first principal component</strong> is \(\mathbf{v}_1\), the unit eigenvector of \(S\) with the largest eigenvalue. The <strong>score</strong> of data point \(\mathbf{x}_i\) is its projection onto it: \(\;z_i=\mathbf{v}_1^\top\mathbf{x}_i\) (MML eq. (10.8)). Its <strong>second coordinate</strong>, along the other eigenvector, is \(\;w_i=\mathbf{v}_2^\top\mathbf{x}_i\). Together they describe \(\mathbf{x}_i\) completely: \(\;\mathbf{x}_i=z_i\mathbf{v}_1+w_i\mathbf{v}_2\).
 </div>
-<p class="fragment">Our data, \(\mathbf{v}_1=(1,1)^\top/\sqrt2\). For A: \(\;z_A=\mathbf{v}_1^\top\mathbf{x}_A=\frac{1\cdot3+1\cdot1}{\sqrt2}=\frac{4}{\sqrt2}=2\sqrt2\); the other three the same way:</p>
+<p class="fragment">Our data, with \(\mathbf{v}_1=\frac{1}{\sqrt2}(1,1)^\top\) and \(\mathbf{v}_2=\frac{1}{\sqrt2}(1,-1)^\top\). For A:
+\[z_A=\mathbf{v}_1^\top\mathbf{x}_A=\frac{1\cdot3+1\cdot1}{\sqrt2}=\frac{4}{\sqrt2}=2\sqrt2,
+\qquad w_A=\mathbf{v}_2^\top\mathbf{x}_A=\frac{1\cdot3-1\cdot1}{\sqrt2}=\frac{2}{\sqrt2}=\sqrt2 .\]</p>
 <table class="fragment" style="width:auto; margin:0.2em auto;">
 <tr><th></th><th>A \((3,1)\)</th><th>B \((1,3)\)</th><th>C \((-1,-3)\)</th><th>D \((-3,-1)\)</th></tr>
-<tr><td>score \(z_i\)</td><td>\(2\sqrt2\)</td><td>\(2\sqrt2\)</td><td>\(-2\sqrt2\)</td><td>\(-2\sqrt2\)</td></tr>
+<tr><td>score \(z_i=\mathbf{v}_1^\top\mathbf{x}_i\)</td><td>\(2\sqrt2\)</td><td>\(2\sqrt2\)</td><td>\(-2\sqrt2\)</td><td>\(-2\sqrt2\)</td></tr>
+<tr><td>second coordinate \(w_i=\mathbf{v}_2^\top\mathbf{x}_i\)</td><td>\(\sqrt2\)</td><td>\(-\sqrt2\)</td><td>\(\sqrt2\)</td><td>\(-\sqrt2\)</td></tr>
 </table>
-<ul>
-<li class="fragment">\(z=\frac{\text{quiz 1}+\text{quiz 2}}{\sqrt2}\) &mdash; the <em>overall</em> combination from the start of L07, one number per student.</li>
-<li class="fragment"><strong>PCA changes coordinates.</strong> Instead of (quiz 1, quiz 2), describe a student by \((\mathbf{v}_1^\top\mathbf{x}_i,\ \mathbf{v}_2^\top\mathbf{x}_i)^\top\): the total on one axis, the difference on the other. Compressing = <strong>keep the first coordinate, drop the second</strong>, because its variance \(2\) is the smaller. (\(\mathbf{v}_1\) and \(-\mathbf{v}_1\) are the same direction, so software may flip every score's sign.)</li>
-<li class="fragment">A and B get the <strong>same</strong> score. Which quiz each did better on is gone. How much information is that?</li>
+</section>
 
+<section>
+<h4>The eigenvalue <em>is</em> the variance of the scores</h4>
+<p><strong>You have already computed the \(z_i\) row.</strong> \(z=\frac{\text{quiz 1}+\text{quiz 2}}{\sqrt2}\) is L07&rsquo;s total, quiz 1 + quiz 2, divided by \(\sqrt2\) so that the direction has length 1. L07 already did exactly that: \(2\sqrt2,\,2\sqrt2,\,-2\sqrt2,\,-2\sqrt2\) is the \(\frac{1}{\sqrt2}(1,1)^\top\) row of the table &ldquo;five directions, five variances&rdquo;, written there as \(\frac{4}{\sqrt2},\frac{4}{\sqrt2},-\frac{4}{\sqrt2},-\frac{4}{\sqrt2}\).</p>
+<p class="fragment">Their mean is \(0\), so their empirical variance (MML Def. 6.9) is
+\[\frac{(2\sqrt2)^2+(2\sqrt2)^2+(-2\sqrt2)^2+(-2\sqrt2)^2}{4}=\frac{8+8+8+8}{4}=8=\lambda_1 .\]
+The same computation on the \(w_i\) row gives \(\frac{2+2+2+2}{4}=2=\lambda_2\).</p>
+<div class="key-question fragment">So <strong>&ldquo;the largest eigenvalue of \(S\)&rdquo;</strong> and <strong>&ldquo;the direction the data is most spread along&rdquo;</strong> are not two facts that happen to agree. They are <strong>one quantity with two names</strong> &mdash; and \(\lambda_1=8\) is a number you found by hand in L07, before anyone said the word <em>eigenvalue</em>.</div>
+<aside class="notes">"Slow down here. Put the L07 variance table back on the screen next to this if you can. Everything since then has been machinery for computing a number they already knew how to get by hand — the machinery is what makes it possible with 500 columns instead of 2."</aside>
+</section>
+
+<section>
+<h4>PCA as a change of coordinates</h4>
+<ul>
+<li><strong>PCA changes coordinates.</strong> Instead of (quiz 1, quiz 2), describe a student by \((z_i,\ w_i)^\top\): the total on one axis, the difference on the other. Compressing = <strong>keep the first coordinate, drop the second</strong>, because its variance \(2\) is the smaller.</li>
+<li class="fragment"><strong>A caution about signs.</strong> \(\mathbf{v}_1\) and \(-\mathbf{v}_1\) point <em>opposite</em> ways, but they span the <strong>same line</strong> and both are unit eigenvectors for \(\lambda_1\). PCA pins down the line, not the arrow, so software may hand you either and every score's sign flips with it. The variance is \(8\) either way, so nothing PCA uses changes.</li>
+<li class="fragment">A and B get the <strong>same</strong> score \(2\sqrt2\), though one did better on quiz 1 and the other on quiz 2. Which quiz each was better at lives entirely in \(w_i\) &mdash; and that is what we are about to throw away. <strong>How much information is that?</strong></li>
 </ul>
 <div class="applied fragment">Recommendation systems do this with thousands of columns: each listener becomes a few scores along the top components &mdash; a "taste" profile.</div>
 </section>
@@ -598,7 +627,7 @@ with weights \(c_1^2,c_2^2\ge0\) that add to \(1\) by step 1 &mdash; so this is 
 <section>
 <h4>Go back to two numbers: what is left?</h4>
 <img class="fig-right" src="../images/unit03/u3-L08-fig06-pca-reconstruction.png" alt="Points projected onto the first principal direction">
-<p>We kept \(z_i\) and threw away \(w_i\). Rebuilding from what is left means setting the second coordinate to zero: \(\;\tilde{\mathbf{x}}_i=z_i\mathbf{v}_1+0\cdot\mathbf{v}_2=z_i\mathbf{v}_1\) &mdash; the point of the line through \(\mathbf{v}_1\) closest to \(\mathbf{x}_i\) in squared Euclidean distance, L03's projection (MML eq. (10.16), p.322).</p>
+<p>We kept the score \(z_i\) and threw away the second coordinate \(w_i=\mathbf{v}_2^\top\mathbf{x}_i\) (the \(\pm\sqrt2\) row of the previous table). Rebuilding from what is left means setting that second coordinate to zero: \(\;\tilde{\mathbf{x}}_i=z_i\mathbf{v}_1+0\cdot\mathbf{v}_2=z_i\mathbf{v}_1\) &mdash; the point of the line through \(\mathbf{v}_1\) closest to \(\mathbf{x}_i\) in squared Euclidean distance, L03's projection (MML eq. (10.16), p.322).</p>
 <ul>
 <li class="fragment">A: \(\;2\sqrt2\cdot\frac{(1,1)^\top}{\sqrt2}=(2,2)^\top\). B: \((2,2)^\top\). C, D: \((-2,-2)^\top\).</li>
 <li class="fragment">What is thrown away, \(\mathbf{x}_i-\tilde{\mathbf{x}}_i\):
@@ -617,9 +646,15 @@ with weights \(c_1^2,c_2^2\ge0\) that add to \(1\) by step 1 &mdash; so this is 
 In general, with \(d\) features and the top \(k\) kept, it is \(\lambda_{k+1}+\dots+\lambda_d\); we prove and use \(d=2,\ k=1\).
 </div>
 <p class="fragment"><strong>Why.</strong> Split each point, \(\mathbf{x}_i=z_i\mathbf{v}_1+w_i\mathbf{v}_2\). We keep \(z_i\mathbf{v}_1\), so the loss is \(w_i\mathbf{v}_2\), of squared length \(w_i^2\) &mdash; and the average of \(w_i^2\) is the variance along \(\mathbf{v}_2\), which Theorem 1 says is \(\lambda_2\). <strong>HW04</strong> writes it out. Our data: every leftover is \(\pm(1,-1)^\top\), squared length 2, average \(2=\lambda_2\) ✓</p>
-<p class="fragment"><strong>Nothing disappears &mdash; it splits.</strong> <em>Per point:</em> \(z_i\mathbf{v}_1\perp w_i\mathbf{v}_2\), so \(\norm{\mathbf{x}_i}^2=z_i^2+w_i^2\) &mdash; Pythagoras, true of every point of every dataset.</p>
-<p class="fragment"><em>Averaged over the data:</em> \(\;\frac1n\sum_i\norm{\mathbf{x}_i}^2=\lambda_1+\lambda_2=\operatorname{tr}S=5+5=10\) ✓ &mdash; <strong>this</strong> is where the eigenvalues enter. Our dataset is symmetric enough that every point shows \(z_i^2=8,\ w_i^2=2\) as well &mdash; special to it, not a rule.</p>
-<div class="key-question fragment">L03's picture again: <strong>kept + lost = total</strong>, because the two parts are orthogonal (MML §10.3, p.325).</div>
+</section>
+
+<section>
+<h4>Kept + dropped = total</h4>
+<p><strong>For each point.</strong> The kept part \(z_i\mathbf{v}_1\) and the dropped part \(w_i\mathbf{v}_2\) are perpendicular, so by Pythagoras \(\;\norm{\mathbf{x}_i}^2=z_i^2+w_i^2\). Student A: \(\;9+1=10\) and \(\;(2\sqrt2)^2+(\sqrt2)^2=8+2=10\) ✓</p>
+<p class="fragment"><strong>Averaged over the four students.</strong> The average of \(z_i^2\) is \(\lambda_1\) and the average of \(w_i^2\) is \(\lambda_2\), so
+\[\tfrac1n\textstyle\sum_i\norm{\mathbf{x}_i}^2=\lambda_1+\lambda_2=8+2=10=\operatorname{tr}S .\]
+The eigenvalues are these averages: \(\lambda_1\) is the squared length the kept axis carries on average, \(\lambda_2\) what the dropped axis carries.</p>
+<p class="fragment">⚠️ <strong>Do not read this off a single point.</strong> Here <em>every</em> student happens to have \(z_i^2=8\) and \(w_i^2=2\), because the four points sit symmetrically around the centre. In real data \(z_i^2\) differs from point to point; <strong>only its average</strong> equals \(\lambda_1\).</p>
 </section>
 
 
@@ -627,7 +662,7 @@ In general, with \(d\) features and the top \(k\) kept, it is \(\lambda_{k+1}+\d
 <!-- S41: Explained variance -->
 <section>
 <h4>How many components to keep?</h4>
-<p>Put the last two slides together. The total variance is \(\lambda_1+\lambda_2=10\); keeping the first coordinate keeps \(\lambda_1=8\) and drops \(\lambda_2=2\). So the fraction kept is not a new formula &mdash; it is what we already computed:
+<p>Every number this needs is already on the previous two slides: keeping the first coordinate keeps \(\lambda_1=8\), drops \(\lambda_2=2\), and the total is \(\lambda_1+\lambda_2=10\). The one new step is to <strong>divide</strong>, which gives the <strong>fraction of the variance kept</strong>:
 \[\frac{\text{kept}}{\text{total}}=\frac{\lambda_1}{\lambda_1+\lambda_2}=\frac{8}{10}=80\%.\]</p>
 <p class="fragment">The <strong>second</strong> principal component is the direction orthogonal to \(\mathbf{v}_1\) with the greatest remaining variance, which for a symmetric \(S\) is the eigenvector of the second-largest eigenvalue &mdash; and so on down the list.</p>
 <p class="fragment">With \(d\) features and the top \(k\) components kept:
@@ -637,50 +672,69 @@ The denominator needs no eigenvalues at all &mdash; just add the diagonal of \(S
 <li class="fragment">How high the fraction must be depends on the application, not on any rule; 90% and 95% are common illustrative thresholds, nothing more.</li>
 
 </ul>
-<aside class="notes">"80% is the name for what we called 'spread kept'. In most software it is called the explained variance ratio." "Give them MML Example 10.2, p.324, out loud: images of the handwritten digit 8 have 784 pixels each, and only a handful of the eigenvalues of their S are large. A few components carry almost all the spread — that is why this scales."</aside>
+<aside class="notes">"This is the first time the 80% appears — the three numbers are old, the ratio is new. In most software it is called the explained variance ratio." "Give them MML Example 10.2, p.324, out loud: images of the handwritten digit 8 have 784 pixels each, and only a handful of the eigenvalues of their S are large. A few components carry almost all the spread — that is why this scales."</aside>
 </section>
 
 <!-- S42: Quick check -->
 <section>
 <h4>Quick check</h4>
 <div class="quickcheck">
-<p>Same four students, but quiz 2 is an exact <strong>copy</strong> of quiz 1: raw scores \(10,8,6,4\) on both. Centred, the points are \((3,3)^\top,\ (1,1)^\top,\ (-1,-1)^\top,\ (-3,-3)^\top\). Find \(S\), its eigenvalues, the fraction kept and the loss.</p>
-<p class="fragment">\(X^\top X=\begin{bmatrix}20&20\\20&20\end{bmatrix},\qquad S=\frac14X^\top X=\begin{bmatrix}5&5\\5&5\end{bmatrix}\)</p>
-<p class="fragment">\(\operatorname{tr}S=10,\ \det S=25-25=0\;\Rightarrow\;\lambda_1=10,\ \lambda_2=0.\) Fraction kept \(10/10=100\%\); average squared loss \(\lambda_2=0\).</p>
-<p class="fragment">Every point is on the line \(y=x\): one number per student loses nothing.</p>
+<p>Four students whose quiz 2 is an exact <strong>copy</strong> of quiz 1 (raw scores \(10,8,6,4\) on both, mean \(7\)). Centred, one row per student, columns quiz 1 and quiz 2:</p>
+\[X=\begin{bmatrix}3&3\\1&1\\-1&-1\\-3&-3\end{bmatrix}\]
+<p>Find \(S\), its eigenvalues, the fraction of variance the first component keeps, and the average squared loss.</p>
+<p class="fragment">\(S=\frac14X^\top X=\frac14\begin{bmatrix}20&20\\20&20\end{bmatrix}=\begin{bmatrix}5&5\\5&5\end{bmatrix}\);&nbsp; \(\operatorname{tr}S=10,\ \det S=0\ \Rightarrow\ \lambda_1=10,\ \lambda_2=0\).</p>
+<p class="fragment">Fraction kept \(10/10=100\%\); average squared loss \(\lambda_2=0\). Every point lies on the line \(y=x\), so one number per student loses nothing. A zero eigenvalue is a direction with <strong>no variance</strong> &mdash; one column repeating another, which is exactly L06&rsquo;s problem.</p>
 </div>
-<div class="key-question fragment">A zero eigenvalue means a direction with <strong>no variance</strong> &mdash; a column that repeats the others. That is L06's problem. Back to L06's matrix.</div>
 </section>
 
 <!-- S43: Back to L06 -->
 <section>
-<h4>Back to L06: where did \(10^{-6}\) come from?</h4>
-\[X^\top X=\begin{bmatrix}2&2.001\\2.001&2.002001\end{bmatrix}\qquad\text{is symmetric, so everything in Unit 3 applies.}\]
-<p class="fragment">Call its eigenvalues \(\mu_1\ge\mu_2\) &mdash; the letter \(\lambda\) is already the ridge knob from L06. By L07:
-\[\mu_1+\mu_2=\operatorname{tr}=4.002001,\qquad \mu_1\mu_2=\det=10^{-6}.\]
-So \(\mu_1\approx4.002\) and \(\mu_2=10^{-6}/\mu_1\approx2.5\times10^{-7}\). <strong>A tiny determinant was one tiny eigenvalue.</strong></p>
-<p class="fragment"><strong>Which direction?</strong> Try \(\mathbf{u}=(1,-1)^\top/\sqrt2\): "column 1 minus column 2".
-\[\mathbf{u}^\top X^\top X\,\mathbf{u}=\tfrac12\,(1,-1)^\top\cdot\begin{bmatrix}2-2.001\\2.001-2.002001\end{bmatrix}=\tfrac12\big(-0.001+0.001001\big)=5\times10^{-7}.\]</p>
-<p class="fragment">Theorem 2’s bound holds for <em>any</em> symmetric matrix, so \(\mu_2\le5\times10^{-7}\). Mind the scaling: this \(X^\top X\) is not divided by \(n\), so \(\mathbf{u}^\top X^\top X\mathbf{u}\) is the <strong>sum</strong> of the squared projections &mdash; \(n\) times the variance, not the variance itself.</p>
-<p class="fragment">So \((1,1)^\top\) and \((1,1.001)^\top\) are near-copies: we have found an <strong>almost-redundant direction</strong>, very close to column 1 minus column 2. (Exactly which one needs the eigenvector, not just this bound.)</p>
+<h4>Back to L06: why was the determinant only \(10^{-6}\)?</h4>
+<p>In L06 the matrix had two columns that are almost the same, \((1,1)^\top\) and \((1,1.001)^\top\):
+\[X=\begin{bmatrix}1&1\\1&1.001\end{bmatrix},\qquad X^\top X=\begin{bmatrix}2&2.001\\2.001&2.002001\end{bmatrix},\qquad \det(X^\top X)=10^{-6}.\]
+L06 showed <em>that</em> this made the inverse enormous; eigenvalues say <strong>why</strong>.</p>
+<p class="fragment">\(X^\top X\) is symmetric, so it has two real eigenvalues. Call them \(\mu_1\ge\mu_2\) &mdash; the letter \(\lambda\) is already L06&rsquo;s ridge knob. L07&rsquo;s two checks give
+\[\mu_1+\mu_2=\operatorname{tr}(X^\top X)=4.002001,\qquad \mu_1\,\mu_2=\det(X^\top X)=10^{-6}.\]</p>
+<p class="fragment">They <strong>add up to about 4</strong> but <strong>multiply to one millionth</strong>. If both were near 2, the product would be near 4. The only way is for one to carry almost all of the 4 and the other to be almost zero: \(\;\mu_1\approx4.002\) and \(\;\mu_2=10^{-6}/\mu_1\approx2.5\times10^{-7}\).</p>
+<div class="key-question fragment">So the tiny determinant is not spread over both eigenvalues: <strong>all of it comes from one eigenvalue that is almost zero.</strong> Which direction does it belong to?</div>
+</section>
+
+<section>
+<h4>The almost-zero eigenvalue is &ldquo;column 1 minus column 2&rdquo;</h4>
+<p>Try the direction that subtracts the two columns:
+\[X\begin{bmatrix}1\\-1\end{bmatrix}=\begin{bmatrix}1-1\\1-1.001\end{bmatrix}=\begin{bmatrix}0\\-0.001\end{bmatrix}.\]
+Almost the zero vector. The two columns nearly cancel, <strong>because they are near-copies of each other</strong>.</p>
+<p class="fragment">Now connect it to the eigenvalue. Make the direction unit length, \(\mathbf{u}=\frac{1}{\sqrt2}(1,-1)^\top\). Then
+\[\mathbf{u}^\top(X^\top X)\,\mathbf{u}=(X\mathbf{u})^\top(X\mathbf{u})=\norm{X\mathbf{u}}^2=\frac{(0.001)^2}{2}=5\times10^{-7}.\]</p>
+<p class="fragment">Theorem 2 holds for <em>any</em> symmetric \(2\times2\) matrix, and \(X^\top X\) is one: its smallest eigenvalue is at most \(\mathbf{u}^\top(X^\top X)\mathbf{u}\) for every unit \(\mathbf{u}\). So \(\;\mu_2\le5\times10^{-7}\), consistent with \(\mu_2\approx2.5\times10^{-7}\): the almost-zero eigenvalue lives right next to &ldquo;column 1 minus column 2&rdquo;.</p>
+<div class="key-question fragment">An almost-zero eigenvalue of \(X^\top X\) means <strong>a direction in which \(X\) is almost zero</strong> &mdash; two columns that almost repeat each other. That is L06&rsquo;s redundant-feature problem, now with a name. Next: what ridge does to it.</div>
 </section>
 
 <!-- S44: Why ridge works -->
 <section>
-<h4>Why ridge works &mdash; the whole story</h4>
-<p>If \(X^\top X\mathbf{v}=\mu\mathbf{v}\), then
+<h4>Why ridge works: it lifts the eigenvalue that was almost zero</h4>
+<p>L06&rsquo;s ridge replaced \(X^\top X\) by \(X^\top X+\lambda I\), and the inverse shrank from millions to tens. Here is the reason, in two steps.</p>
+<p class="fragment"><strong>Step 1 &mdash; every eigenvalue moves up by \(\lambda\).</strong> If \(X^\top X\mathbf{v}=\mu\mathbf{v}\), then
 \[(X^\top X+\lambda I)\mathbf{v}=\mu\mathbf{v}+\lambda\mathbf{v}=(\mu+\lambda)\,\mathbf{v}.\]
-Same eigenvectors; <strong>every eigenvalue moves up by \(\lambda\)</strong>.</p>
-<p class="fragment">And for an invertible \(M\) with \(M\mathbf{v}=\mu\mathbf{v}\): multiply both sides by \(\frac1\mu M^{-1}\) to get \(M^{-1}\mathbf{v}=\frac1\mu\mathbf{v}\). <strong>The inverse stretches by \(1/\mu\)</strong> &mdash; hugely, along the tiny-\(\mu\) direction.</p>
-<table class="fragment" style="width:auto; margin:0.3em auto;">
-<tr><th>\(\lambda\)</th><th>\(\mu_2+\lambda\)</th><th>\(1/(\mu_2+\lambda)\)</th><th>L06's "size of the inverse"</th></tr>
-<tr><td>0</td><td>\(2.5\times10^{-7}\)</td><td>\(\approx 4{,}000{,}000\)</td><td>4,000,000</td></tr>
-<tr><td>0.001</td><td>\(0.00100025\)</td><td>\(\approx 1{,}000\)</td><td>1,000</td></tr>
-<tr><td>0.01</td><td>\(0.01000025\)</td><td>\(\approx 100\)</td><td>100</td></tr>
-<tr><td>0.1</td><td>\(0.10000025\)</td><td>\(\approx 10\)</td><td>10</td></tr>
+Same eigenvectors; each eigenvalue becomes \(\mu+\lambda\).</p>
+<p class="fragment"><strong>Step 2 &mdash; the inverse stretches each eigenvector by \(1/\text{eigenvalue}\).</strong> If \(M\mathbf{v}=\mu\mathbf{v}\) and \(M\) is invertible, multiply both sides by \(\frac1\mu M^{-1}\):
+\[M^{-1}\mathbf{v}=\tfrac1\mu\,\mathbf{v}.\]</p>
+<p class="fragment"><strong>Now our matrix, before ridge.</strong> Along &ldquo;column 1 minus column 2&rdquo; the eigenvalue is \(\mu_2\approx0.00000025\), so the inverse stretches that direction by \(1/\mu_2\approx4{,}000{,}000\). Along the other eigenvector \(\mu_1\approx4.002\), so the stretch there is only \(1/4.002\approx0.25\). <strong>The blow-up L06 saw is entirely the first of these.</strong></p>
+</section>
+
+<section>
+<h4>What each \(\lambda\) does, in numbers</h4>
+<table style="width:auto; margin:0.2em auto; font-size:0.92em;">
+<tr><th rowspan="2">\(\lambda\)</th><th colspan="2">the bad direction (column 1 &minus; column 2)</th><th colspan="2">the good direction</th></tr>
+<tr><th>eigenvalue \(\mu_2+\lambda\)</th><th>inverse stretches by</th><th>eigenvalue \(\mu_1+\lambda\)</th><th>inverse stretches by</th></tr>
+<tr><td>0</td><td>\(0.00000025\)</td><td>\(\approx4{,}000{,}000\)</td><td>\(4.002\)</td><td>\(0.2499\)</td></tr>
+<tr><td>0.001</td><td>\(0.00100025\)</td><td>\(\approx1{,}000\)</td><td>\(4.003\)</td><td>\(0.2498\)</td></tr>
+<tr><td>0.01</td><td>\(0.01000025\)</td><td>\(\approx100\)</td><td>\(4.012\)</td><td>\(0.2493\)</td></tr>
+<tr><td>0.1</td><td>\(0.10000025\)</td><td>\(\approx10\)</td><td>\(4.102\)</td><td>\(0.2438\)</td></tr>
 </table>
-<div class="key-question fragment">L06’s column is \(\frac{\operatorname{tr}}{\det}=\frac1{\mu_1+\lambda}+\frac1{\mu_2+\lambda}\), which is <strong>dominated by</strong> \(1/(\mu_2+\lambda)\) because \(\mu_2\) is so small. Ridge barely moves the good direction (\(\mu_1\): \(4.002\to4.102\) at \(\lambda=0.1\)) and lifts the bad one off zero.</div>
-<aside class="notes">"L06 computed its column as trace divided by determinant, which equals 1/mu1 + 1/mu2. Since 1/mu1 is about 0.25, that is 1/mu2 plus a quarter — the same number to the precision on the slide (100.25 vs 99.998 at lambda = 0.01)." EXPLORE, say aloud only if asked: L06's condition number, for the symmetric matrix XᵀX, is mu1/mu2 ≈ 1.6 × 10^7. MML §7.1 (p.230) writes it with singular values; for XᵀX those are exactly mu1 and mu2.</aside>
+<p class="fragment"><strong>Read down the columns.</strong> On the bad direction, the stretch falls from four million to ten. On the good direction it hardly moves: \(0.2499\to0.2438\). The bad-direction column is the same four numbers L06 printed as &ldquo;size of the inverse&rdquo; &mdash; \(4{,}000{,}000,\ 1{,}000,\ 100,\ 10\).</p>
+<div class="key-question fragment">Ridge repairs the <strong>one</strong> direction that was broken and barely touches the one that was fine. How big to make \(\lambda\) is a trade-off &mdash; too small leaves the blow-up, too large starts distorting the good direction too &mdash; and, as L06 said, it comes back in L19.</div>
+<aside class="notes">EXPLORE, say aloud only if asked: the condition number of the symmetric matrix XᵀX is mu1/mu2 ≈ 4.002 / 2.5×10⁻⁷ ≈ 1.6 × 10⁷. MML §7.1 (p.230) writes it with singular values; for XᵀX those are exactly mu1 and mu2.</aside>
 </section>
 
 <!-- S45: Limits -->
