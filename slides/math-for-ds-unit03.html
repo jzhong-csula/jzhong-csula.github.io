@@ -52,7 +52,7 @@
 </ul>
 <div class="key-question fragment">So: can we find <strong>better axes</strong> for the same data &mdash; automatically, when there is nothing to look at &mdash; and how much do we lose if we keep only the best of them?</div>
 <p class="fragment"><strong>L07:</strong> find the axes. &nbsp;<strong>L08:</strong> rank them, keep the strong ones, count the cost. We come back to that \(10^{-6}\) at the end of L08.</p>
-<aside class="notes">"One opening, not three. The redundancy story and the L06 story are the same story: features that move together mean the coordinates you were handed are not the natural ones." "Leave the L06 matrix on the side of the board for two lectures. Closing that loop is the last slide of L08."</aside>
+<aside class="notes">"One opening, not three. The redundancy story and the L06 story are the same story: features that move together mean the coordinates you were handed are not the natural ones." "Leave the L06 matrix on the side of the board for two lectures. Closing that loop is L08's 'Back to L06' slides."</aside>
 </section>
 
 <!-- S02: What this unit should answer -->
@@ -63,11 +63,11 @@
 <tr><td>What does it even mean to describe the same data with different features?</td><td>a direction <em>is</em> a new feature; projection gives its values</td><td>L07</td></tr>
 <tr><td>What makes one new feature better than another?</td><td>the variance along it, from one formula</td><td>L07</td></tr>
 <tr><td>Can the data hand us its own axes, with no guessing?</td><td>one equation that the good axes satisfy</td><td>L07</td></tr>
-<tr><td>Why do those axes form a coordinate system at all?</td><td>the one property every data matrix has</td><td>L07</td></tr>
+<tr><td>Why are those axes always perpendicular to each other?</td><td>the one property every matrix \(X^\top X\) has: it is symmetric</td><td>L07</td></tr>
 <tr><td>Which axes should we keep &mdash; and is that provably the best choice?</td><td>a maximization we can solve exactly</td><td>L08</td></tr>
 <tr><td>What does dropping the rest cost, and why was L06's matrix nearly singular?</td><td>an exact accounting, in those same numbers</td><td>L08</td></tr>
 </table>
-<p class="fragment"><strong>One example runs through the whole unit:</strong> four students and their scores on two quizzes. Every number in L07 and L08 comes from those eight scores.</p>
+<p class="fragment"><strong>One example runs through the whole unit:</strong> four students and their scores on two quizzes. Almost every number in L07 and L08 comes from those eight scores; the few that do not are marked on their slide as a counterexample, a quick check, or L06&rsquo;s matrix.</p>
 </section>
 
 
@@ -88,7 +88,7 @@
 <p class="fragment">\(A=(3,1)^\top,\quad B=(1,3)^\top,\quad C=(-1,-3)^\top,\quad D=(-3,-1)^\top\)</p>
 <div class="fragment" style="clear:both;"><strong>Two questions any instructor would ask about these four:</strong> &nbsp;(1) who did best <em>overall</em>? &nbsp;(2) who did relatively better on <em>quiz 1</em> than on quiz 2?</div>
 <div class="key-question fragment">Neither column answers either question. \(\text{quiz 1}+\text{quiz 2}\) answers the first &mdash; A and B tie at \(4\), C and D at \(-4\). \(\text{quiz 1}-\text{quiz 2}\) answers the second &mdash; A and C give \(+2\), B and D give \(-2\). <strong>The questions we care about are about combinations of the columns, not the columns.</strong></div>
-<aside class="notes">"Ask the two questions out loud and let them answer from the table. They will add and subtract without being told to — that is the whole point. The features we were handed are not the features the questions are about." "If a student notices that all four points are the same distance from the origin — |3|+|1| = 4 for every one of them, and every one is √10 away — say yes, that is an accident of a four-point set, and it is exactly why length is not the thing to look at. What separates them is the SIGNED total, and what separates within a pair is the difference." "Why subtract the average: centring changes the raw average of squares — L08 computes exactly how much, 54 versus 5 — and what it buys is that the number measures variation among the students instead of distance from the origin."</aside>
+<aside class="notes">"Ask the two questions out loud and let them answer from the table. They will add and subtract without being told to — that is the whole point. The features we were handed are not the features the questions are about." "If a student notices that all four points are the same distance from the origin — |3|+|1| = 4 for every one of them, and every one is √10 away — say yes, that is an accident of a four-point set, and it is exactly why length is not the thing to look at. What separates them is the SIGNED total, and what separates within a pair is the difference." "Why subtract the average: centring changes the raw average of squares, and what it buys is that the number measures variation among the students instead of distance from the origin."</aside>
 </section>
 
 <!-- S04b: the two combinations the data is organised around -->
@@ -193,7 +193,7 @@
 </table>
 <p class="fragment"><strong>How to read the table.</strong> A large variance means the four projected values are <em>spread out</em> along that direction &mdash; that feature captures a large share of how the students differ. A small one means they land nearly on top of each other.</p>
 <p class="fragment"><strong>Careful with the word "separate".</strong> A large variance is not a promise that every student is distinguishable: along the total, A and B both give \(\frac{4}{\sqrt2}\) and C and D both give \(-\frac{4}{\sqrt2}\), while along quiz 1 alone the four values \(3,1,-1,-3\) are all different. Variance measures how far the data <em>spreads</em>, not how many individuals you can tell apart.</p>
-<aside class="notes">"This slide exists so that a student reading the deck at home, with no lecture attached, can decode every number on it. Do not skip it in class either — read one row out loud in full: direction, what feature it computes, the four projected values, the spread." "Then the honest gap: four directions is not all directions. That is the next slide."</aside>
+<aside class="notes">"This slide exists so that a student reading the deck at home, with no lecture attached, can decode every number on it. Do not skip it in class either — read one row out loud in full: direction, what feature it computes, the four projected values, the spread." "Then the honest gap: five directions is not all directions. That is the next slide."</aside>
 </section>
 
 
@@ -240,8 +240,8 @@ So far we have only used it inside \(\mathbf{u}^\top S\mathbf{u}\). Now just <st
 <li class="fragment">\(S\begin{bmatrix}1\\1\end{bmatrix}=\begin{bmatrix}8\\8\end{bmatrix}=8\begin{bmatrix}1\\1\end{bmatrix}\) &mdash; same line, \(8\) times longer.</li>
 <li class="fragment">\(S\begin{bmatrix}1\\-1\end{bmatrix}=\begin{bmatrix}2\\-2\end{bmatrix}=2\begin{bmatrix}1\\-1\end{bmatrix}\) &mdash; same line, \(2\) times longer.</li>
 </ul>
-<div class="key-question fragment" style="clear:both;"><strong>"Turned" means exactly this:</strong> \(S(1,0)^\top=(5,3)^\top\) points somewhere else, so the output is part total and part difference &mdash; the input direction did not survive. For \((1,1)^\top\) and \((1,-1)^\top\) the output is the <em>same</em> direction, only longer. Almost every direction is turned. For <em>this</em> \(S\) exactly two <strong>lines</strong> survive &mdash; the line through \((1,1)^\top\) and the line through \((1,-1)^\top\), the two the data was built around. (Every nonzero multiple of \((1,1)^\top\) survives too; it is the same line, not a new direction.)</div>
-<aside class="notes">"Write S on the board and leave it there for the rest of the lecture." "Do the first multiplication entry by entry so nobody is guessing what the notation means, then the other two." "The picture: the unit circle goes to an ellipse. Every arrow moves except the two along the ellipse's axes."</aside>
+<div class="key-question fragment" style="clear:both;"><strong>"Turned" means exactly this:</strong> \(S(1,0)^\top=(5,3)^\top\) is not a multiple of \((1,0)^\top\): it points in a different direction, so the input direction did not survive. For \((1,1)^\top\) and \((1,-1)^\top\) the output is the <em>same</em> direction, only longer. Almost every direction is turned. For <em>this</em> \(S\) exactly two <strong>lines</strong> survive &mdash; the line through \((1,1)^\top\) and the line through \((1,-1)^\top\), the two the data was built around. (Any nonzero multiple of \((1,1)^\top\) stays on that line too &mdash; including \(-(1,1)^\top\), which points the opposite way. What survives is a <strong>line</strong>, not an arrow.)</div>
+<aside class="notes">"Write S on the board and leave it there for the rest of the lecture." "Do the first multiplication entry by entry so nobody is guessing what the notation means, then the other two." "The picture: the unit circle goes to an ellipse. Every arrow moves except those lying along the ellipse's two axes."</aside>
 </section>
 
 <!-- S13b: what v^T S v computes, in words -->
@@ -253,11 +253,11 @@ So far we have only used it inside \(\mathbf{u}^\top S\mathbf{u}\). Now just <st
 \[\underbrace{\mathbf{u}^\top S\,\mathbf{u}}_{\text{the variance along }\mathbf{u}}=\mathbf{u}^\top(\lambda\mathbf{u})=\lambda\,\underbrace{\mathbf{u}^\top\mathbf{u}}_{=\,1}=\lambda\]
 </div>
 <ul>
-<li class="fragment"><strong>Which of these numbers are eigenvalues?</strong> For <strong>every</strong> unit \(\mathbf{u}\), \(\mathbf{u}^\top S\mathbf{u}\) is the variance along \(\mathbf{u}\) (Theorem 1) &mdash; no eigenvector needed. <strong>Most of those variances are not eigenvalues:</strong> in our own table \(\mathbf{u}=(3,4)^\top/5\) gives \(7.88\), and \(S\) turns that direction. <strong>But when \(\mathbf{u}\) is a unit eigenvector</strong>, the line is not turned and the computation above gives \(\mathbf{u}^\top S\mathbf{u}=\lambda\): <strong>the eigenvalue is the variance along its own eigenvector.</strong></li>
+<li class="fragment"><strong>Which variances are stretch factors?</strong> For every unit \(\mathbf{u}\), \(\mathbf{u}^\top S\mathbf{u}\) is the variance along \(\mathbf{u}\) (Theorem 1). Most are not stretch factors: \(\mathbf{u}=(3,4)^\top/5\) gives \(7.88\), and \(S\) turns that direction. Only when \(S\) does not turn \(\mathbf{u}\) does the computation above apply: <strong>the stretch factor is the variance along its own direction.</strong></li>
 <li class="fragment">Our two: the variance along the <strong>total</strong> is \(8\) and along the <strong>difference</strong> is \(2\) &mdash; the two factors \(S\) stretches by. They are also the <strong>largest and the smallest</strong> variance over <em>all</em> unit directions &mdash; a theorem, not a feature of our table. <strong>L08 proves it.</strong></li>
 </ul>
 <div class="key-question fragment">So \(S\) is not bookkeeping: the directions it leaves on their own line are the <strong>total</strong> and the <strong>difference</strong>, and the factor on each is the variance along it.</div>
-<aside class="notes">"Say the sentence slowly: v-transpose-S-v is the variance along v. That is Theorem 1, nothing new." "Then the substitution is one line and the conclusion is the slogan of the unit: stretch factor = variance." "Still not proved: that 8 beats every other direction. Only that it is the variance along this particular one."</aside>
+<aside class="notes">"Say the sentence slowly: u-transpose-S-u is the variance along u. That is Theorem 1, nothing new." "Then the substitution is one line and the conclusion is the slogan of the unit: stretch factor = variance." "Still not proved: that 8 beats every other direction. Only that it is the variance along this particular one."</aside>
 </section>
 
 <!-- S14b: what the pair (v, lambda) means, before the definition -->
@@ -270,8 +270,8 @@ So far we have only used it inside \(\mathbf{u}^\top S\mathbf{u}\). Now just <st
 <tr class="fragment"><td>the number \(\lambda\)</td><td>the factor \(S\) stretches that line by</td><td>the <strong>variance along it</strong>: how far apart the four students land on that feature</td></tr>
 </table>
 <div class="twocol fragment">
-<div><p>\(\mathbf{u}=(1,1)^\top\), \(\lambda=8\): the <strong>total</strong>. The students spread out most along it &mdash; it has the largest variance.</p></div>
-<div><p>\(\mathbf{u}=(1,-1)^\top\), \(\lambda=2\): the <strong>difference</strong>. They differ little along it &mdash; it carries less.</p></div>
+<div><p>\(\mathbf{u}=\frac{1}{\sqrt2}(1,1)^\top\), \(\lambda=8\): the <strong>total</strong>. The students spread out most along it &mdash; the largest variance of any direction in our table.</p></div>
+<div><p>\(\mathbf{u}=\frac{1}{\sqrt2}(1,-1)^\top\), \(\lambda=2\): the <strong>difference</strong>. They differ little along it &mdash; variance \(2\), against \(8\) for the total.</p></div>
 </div>
 <div class="key-question fragment">So the two always arrive <strong>as a pair</strong>: a direction, and the amount of variance sitting on it. Every square matrix can be asked for such pairs, not just ours &mdash; so the pair gets a name.</div>
 <aside class="notes">"Do not let the definition arrive before this slide. Ask the class what lambda is, in words, about students — the answer is 'how much they differ along that combination', and they can read it off the table they built." "Then the direction: it is not an arbitrary arrow, it is a feature — total or difference." "Only after both are said in data language does the vocabulary slide make sense."</aside>
@@ -287,8 +287,8 @@ So far we have only used it inside \(\mathbf{u}^\top S\mathbf{u}\). Now just <st
 <ul>
 <li class="fragment">For our \(S\): \(\lambda=8\) with \(\mathbf{v}=(1,1)^\top\), and \(\lambda=2\) with \(\mathbf{v}=(1,-1)^\top\).</li>
 <li class="fragment"><strong>Why nonzero?</strong> \(A\mathbf{0}=\lambda\mathbf{0}\) for <em>every</em> \(\lambda\), so allowing \(\mathbf{0}\) would make every number an eigenvalue.</li>
-<li class="fragment"><strong>An eigenvector names a direction, so there are never just two of them.</strong> If \(A\mathbf{v}=\lambda\mathbf{v}\) then \(A(c\mathbf{v})=c\,A\mathbf{v}=\lambda(c\mathbf{v})\) for every \(c\neq0\) (MML eq. (4.26)): every nonzero multiple is again an eigenvector with the <em>same</em> eigenvalue, so \((2,2)^\top\), \((-1,-1)^\top\) and \(\tfrac{1}{\sqrt2}(1,1)^\top\) are all eigenvectors of \(S\). What our \(S\) has is exactly <strong>two eigen-lines</strong>, and we pick one unit vector on each.</li>
-<li class="fragment"><strong>"Eigen" is German for <em>own</em>, <em>intrinsic</em>.</strong> An eigenvector lives in the same space as the data, so it <em>is</em> a combination of the recorded columns &mdash; a new feature, exactly as before. What makes it the matrix's <em>own</em> is which combination gets singled out: multiply by \(S\) and this one stays on its line while every other direction turns. A different matrix singles out different combinations; \(S\) is built from our data, so the ones it singles out are the data's own.</li>
+<li class="fragment"><strong>An eigenvector is never unique: every nonzero multiple is another one.</strong> If \(A\mathbf{v}=\lambda\mathbf{v}\) then \(A(c\mathbf{v})=c\,A\mathbf{v}=\lambda(c\mathbf{v})\) for every \(c\neq0\) (MML eq. (4.26)): every nonzero multiple is again an eigenvector with the <em>same</em> eigenvalue, so \((2,2)^\top\), \((-1,-1)^\top\) and \(\tfrac{1}{\sqrt2}(1,1)^\top\) are all eigenvectors of \(S\). What our \(S\) has is exactly <strong>two eigen-lines</strong>, and we pick one unit vector on each.</li>
+<li class="fragment"><strong>"Eigen" is German for <em>own</em>.</strong> The weights \(\mathbf{v}\) define a new feature \(X\mathbf{v}\), a combination of the recorded columns, exactly as before. What makes it \(S\)&rsquo;s <em>own</em> is that \(S\) singles it out: it stays on its line while every other direction turns. \(S\) is built from our data, so the directions it singles out are the data's own.</li>
 <li class="fragment"><strong>For a covariance matrix, then:</strong> the eigenvector says <em>where</em> the variance lies &mdash; which feature combination &mdash; and the eigenvalue says <em>how much</em> lies there.</li>
 </ul>
 
@@ -298,7 +298,7 @@ So far we have only used it inside \(\mathbf{u}^\top S\mathbf{u}\). Now just <st
 <!-- S11: How to find them (1 of 2) -->
 <section>
 <h4>Finding eigenvalues without guessing</h4>
-<p>We found \((1,1)^\top\) by looking at a picture. For a matrix we have never seen, we need a procedure.</p>
+<p>We found \((1,1)^\top\) by staring at the four students&rsquo; scores at the start of L07, and then checked it by computing \(S(1,1)^\top=8(1,1)^\top\). For a matrix we have never seen, staring will not work. We need a procedure.</p>
 \[A\mathbf{v}=\lambda\mathbf{v}
 \quad\Longleftrightarrow\quad
 A\mathbf{v}-\lambda I\mathbf{v}=\mathbf{0}
@@ -315,7 +315,7 @@ A\mathbf{v}-\lambda I\mathbf{v}=\mathbf{0}
 <div class="mathbox fragment">
 \(\lambda\) is an eigenvalue of \(A\) \(\iff\) \(\det(A-\lambda I)=0\). &nbsp;\(\det(A-\lambda I)\) is the <strong>characteristic polynomial</strong> (MML Def. 4.5, p.104; Thm. 4.8, p.106).
 </div>
-<aside class="notes">"We have turned a question about vectors into a question about one number: hunting for eigenvalues is now solving det(A − lambda I) = 0." Both directions are on this slide — the first bullet uses L06's inverse, the second uses L05's dependent columns; HW04 builds the witness vector explicitly for a 2x2. Next slide runs the recipe on our own S.</aside>
+<aside class="notes">"We have turned a question about vectors into a question about one number: hunting for eigenvalues is now solving det(A − lambda I) = 0." Both directions are on this slide — the bullet 'If det M ≠ 0' uses L06's inverse, the bullet 'If det M = 0' uses L05's dependent columns; HW04 builds the witness vector explicitly for a 2x2. Next slide runs the recipe on our own S.</aside>
 </section>
 
 
@@ -328,7 +328,7 @@ A\mathbf{v}-\lambda I\mathbf{v}=\mathbf{0}
 <p class="fragment">Set it to zero:
 \[(5-\lambda)^2=9\quad\Longrightarrow\quad 5-\lambda=\pm3\quad\Longrightarrow\quad \lambda=2\ \text{ or }\ \lambda=8.\]</p>
 <p class="fragment">Or expand and factor: \(\;\lambda^2-10\lambda+16=(\lambda-8)(\lambda-2)\). Same two roots.</p>
-<div class="key-question fragment">The \(8\) and \(2\) we saw in the picture are now <strong>computed</strong>, not guessed.</div>
+<div class="key-question fragment">Before, we found \(8\) and \(2\) by trying particular directions and checking them. Now they come out of a <strong>procedure</strong> that needs no guessing.</div>
 </section>
 
 <!-- S14: Eigenvectors of S -->
@@ -349,7 +349,7 @@ A\mathbf{v}-\lambda I\mathbf{v}=\mathbf{0}
 </div>
 <p class="fragment"><strong>Check:</strong> \(\begin{bmatrix}5&3\\3&5\end{bmatrix}\begin{bmatrix}1\\1\end{bmatrix}=\begin{bmatrix}8\\8\end{bmatrix}=8\begin{bmatrix}1\\1\end{bmatrix}\) ✓ &nbsp;&nbsp; \(\begin{bmatrix}5&3\\3&5\end{bmatrix}\begin{bmatrix}1\\-1\end{bmatrix}=\begin{bmatrix}2\\-2\end{bmatrix}=2\begin{bmatrix}1\\-1\end{bmatrix}\) ✓</p>
 <div class="key-question fragment">The method: solve \(\det(A-\lambda I)=0\) for \(\lambda\); for each \(\lambda\), solve \((A-\lambda I)\mathbf{v}=\mathbf{0}\) for \(\mathbf{v}\).</div>
-<p class="fragment"><strong>Read them back as features:</strong> \(\mathbf{v}_1\) adds the quizzes (the <strong>total</strong>, variance \(8\)); \(\mathbf{v}_2\) subtracts them (the <strong>difference</strong>, variance \(2\)). The arithmetic found the two combinations we spotted by eye, and would with 10,000 columns too.</p>
+<p class="fragment"><strong>Read them back as features:</strong> \(\mathbf{v}_1\) adds the quizzes (the <strong>total</strong>, variance \(8\)); \(\mathbf{v}_2\) subtracts them (the <strong>difference</strong>, variance \(2\)). The procedure found the same two combinations we had spotted by staring at the scores.</p>
 </section>
 
 <!-- S15: Trace and determinant -->
@@ -364,7 +364,7 @@ Both start with \(\lambda^2\) and have the same two roots, so they are the same 
 \(\operatorname{tr}(A)\), the <strong>trace</strong>, is the sum of the diagonal entries (MML Def. 4.4, p.103); both identities hold for any size (Thm. 4.16&ndash;4.17).
 </div>
 <p class="fragment">Our \(S=\begin{bmatrix}5&3\\3&5\end{bmatrix}\), eigenvalues \(8,2\): \(\;\operatorname{tr}S=5+5=10=8+2\) ✓ &nbsp;&nbsp; \(\det S=25-9=16=8\cdot2\) ✓</p>
-<div class="key-question fragment">One consequence to keep: \(\det A=0\) exactly when some eigenvalue is \(0\). L08 uses this on L06's matrix.</div>
+<div class="key-question fragment">One consequence to keep: \(\det A=0\) exactly when some eigenvalue is \(0\).</div>
 </section>
 
 <!-- S16: Quick check -->
@@ -374,12 +374,12 @@ Both start with \(\lambda^2\) and have the same two roots, so they are the same 
 <!-- S18: Theorem + proof (1 of 2) -->
 <section>
 <h4>First, why we want the axes orthogonal</h4>
-<p>We are about to use \(\mathbf{v}_1=(1,1)^\top\) and \(\mathbf{v}_2=(1,-1)^\top\) as <strong>new coordinate axes</strong> for the data. For that to work they must be <strong>orthogonal</strong>.</p>
+<p>We are about to use the total and the difference directions, \(\mathbf{v}_1=\frac{1}{\sqrt2}(1,1)^\top\) and \(\mathbf{v}_2=\frac{1}{\sqrt2}(1,-1)^\top\), as <strong>new coordinate axes</strong> for the data. Any two directions that do not lie on one line would already give coordinates. What we want in addition is for them to be <strong>orthogonal</strong>.</p>
 <div class="mathbox">
 <strong>Definition</strong> (MML Def. 3.7, p.77). \(\mathbf{x}\perp\mathbf{y}\) when \(\mathbf{x}^\top\mathbf{y}=0\). If in addition both have length 1, they are <strong>orthonormal</strong>.
 </div>
-<p class="fragment"><strong>What goes wrong if they are not.</strong> Write a student as \(z_1\mathbf{v}_1+z_2\mathbf{v}_2\). When the two axes are perpendicular, the squared distance from the centre splits cleanly, \(\;\|\mathbf{x}\|^2=z_1^2+z_2^2\), so &ldquo;how much of the spread does axis 1 account for?&rdquo; has an answer. When they lean on each other, the two axes partly measure the <em>same</em> thing, the split has a leftover cross term, and that question stops having an answer.</p>
-<p class="fragment"><strong>Our \(S\) passes:</strong> \(\;\mathbf{v}_1^\top\mathbf{v}_2=(1)(1)+(1)(-1)=0\) ✓</p>
+<p class="fragment"><strong>What orthogonality buys.</strong> Write a student as \(\mathbf{x}=z_1\mathbf{v}_1+z_2\mathbf{v}_2\). When \(\mathbf{v}_1,\mathbf{v}_2\) are orthonormal &mdash; perpendicular <em>and</em> of length 1 &mdash; the squared distance from the centre splits cleanly, \(\;\|\mathbf{x}\|^2=z_1^2+z_2^2\), so &ldquo;how much of the spread does axis 1 account for?&rdquo; has an answer. When they lean on each other, the two axes partly measure the <em>same</em> thing, the split has a leftover cross term, and that question stops having an answer.</p>
+<p class="fragment"><strong>Our \(S\) passes:</strong> \(\;\mathbf{v}_1^\top\mathbf{v}_2=\tfrac12\big((1)(1)+(1)(-1)\big)=0\) ✓, and each has length 1.</p>
 <aside class="notes">"Do not let them think orthogonality is a technicality. It is the thing that makes 'this direction explains 80% of the variance' a meaningful sentence at all."</aside>
 </section>
 
@@ -429,17 +429,17 @@ Both start with \(\lambda^2\) and have the same two roots, so they are the same 
 <strong>Spectral theorem</strong> (MML Thm. 4.15, p.111). If \(A\) is symmetric (\(n\times n\)), all its eigenvalues are real, and there are \(n\) eigenvectors of length 1 that are pairwise orthogonal.
 </div>
 <ul>
-<li class="fragment"><strong>What we proved:</strong> eigenvectors belonging to two <em>distinct</em> eigenvalues are orthogonal. <strong>What the theorem adds:</strong> that \(n\) orthogonal unit eigenvectors can always be chosen, repeated eigenvalues included. Realness for \(n=2\): the discriminant of \(\lambda^2-(a+d)\lambda+(ad-b^2)\) is \((a-d)^2+4b^2\ge0\) &mdash; <strong>HW04</strong>. The rest we use, not prove. <span class="tier-u">[UNDERSTAND]</span></li>
+<li class="fragment"><strong>What we proved:</strong> eigenvectors belonging to two <em>distinct</em> eigenvalues are orthogonal. <strong>What the theorem adds:</strong> that \(n\) orthogonal unit eigenvectors can always be chosen, repeated eigenvalues included. Realness for \(n=2\): a symmetric \(\begin{bmatrix}a&b\\b&d\end{bmatrix}\) has characteristic polynomial \(\lambda^2-(a+d)\lambda+(ad-b^2)\), whose discriminant is \((a-d)^2+4b^2\ge0\) &mdash; <strong>HW04</strong>. The rest we use, not prove. <span class="tier-u">[UNDERSTAND]</span></li>
 <li class="fragment">For our covariance matrix \(S=\begin{bmatrix}5&3\\3&5\end{bmatrix}\): \(\;\mathbf{v}_1=\frac{1}{\sqrt2}(1,1)^\top,\quad \mathbf{v}_2=\frac{1}{\sqrt2}(1,-1)^\top\). Length 1, orthogonal.</li>
 <li class="fragment"><strong>Why data always qualifies</strong> (MML Thm. 4.14, p.111): \(\;(X^\top X)^\top=X^\top(X^\top)^\top=X^\top X\). <strong>Every matrix of the form \(X^\top X\) is symmetric</strong>, whatever the data &mdash; and \(S\) is one of those, up to the \(\frac1n\) and the centring.</li>
 </ul>
-<div class="key-question fragment">So for any dataset, the directions its matrix leaves alone are orthogonal. What does that buy us?</div>
+<div class="key-question fragment">So for any dataset, its covariance matrix \(S\) has eigenvectors that can be <strong>chosen</strong> orthogonal to one another. What does that buy us?</div>
 </section>
 
 <!-- S22: Eigenbasis -->
 <section>
 <h4>Same data, new coordinates</h4>
-<p>\(\mathbf{v}_1=\frac1{\sqrt2}(1,1)^\top\) and \(\mathbf{v}_2=\frac1{\sqrt2}(1,-1)^\top\) are orthonormal, so they form a <strong>coordinate system</strong>:</p>
+<p>\(\mathbf{v}_1=\frac1{\sqrt2}(1,1)^\top\) and \(\mathbf{v}_2=\frac1{\sqrt2}(1,-1)^\top\) form a <strong>coordinate system</strong>, and because they are orthonormal the coordinates are simply dot products:</p>
 \[\mathbf{x}=z_1\mathbf{v}_1+z_2\mathbf{v}_2,\qquad z_1=\mathbf{v}_1^\top\mathbf{x},\quad z_2=\mathbf{v}_2^\top\mathbf{x}\]
 <p class="fragment"><strong>Why those are the coefficients:</strong> dot the first equation with \(\mathbf{v}_1\). The \(z_2\) term dies because \(\mathbf{v}_2^\top\mathbf{v}_1=0\), and \(\mathbf{v}_1^\top\mathbf{v}_1=1\), leaving \(\mathbf{v}_1^\top\mathbf{x}=z_1\). Same for \(z_2\). No new machinery &mdash; it is L03's projection twice.</p>
 <div class="twocol fragment">
@@ -451,8 +451,8 @@ Both start with \(\lambda^2\) and have the same two roots, so they are the same 
 <div>
 <table style="width:auto;">
 <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
-<tr><td>overall \(z_1\)</td><td>\(2\sqrt2\)</td><td>\(2\sqrt2\)</td><td>\(-2\sqrt2\)</td><td>\(-2\sqrt2\)</td></tr>
-<tr><td>imbalance \(z_2\)</td><td>\(\sqrt2\)</td><td>\(-\sqrt2\)</td><td>\(\sqrt2\)</td><td>\(-\sqrt2\)</td></tr>
+<tr><td>total \(z_1\)</td><td>\(2\sqrt2\)</td><td>\(2\sqrt2\)</td><td>\(-2\sqrt2\)</td><td>\(-2\sqrt2\)</td></tr>
+<tr><td>difference \(z_2\)</td><td>\(\sqrt2\)</td><td>\(-\sqrt2\)</td><td>\(\sqrt2\)</td><td>\(-\sqrt2\)</td></tr>
 </table>
 </div>
 </div>
@@ -535,7 +535,7 @@ Both start with \(\lambda^2\) and have the same two roots, so they are the same 
 <section>
 <h4>The largest variance is the largest eigenvalue</h4>
 <div class="mathbox">
-<strong>Theorem 2.</strong> Let \(S\) be a symmetric \(2\times2\) matrix with eigenvalues \(\lambda_1\ge\lambda_2\), and <em>choose</em> a pair of orthogonal unit eigenvectors \(\mathbf{v}_1,\mathbf{v}_2\) &mdash; L07's spectral theorem says such a pair exists. Then for <em>every</em> unit vector \(\mathbf{u}\),
+<strong>Theorem 2.</strong> Let \(S\) be a symmetric \(2\times2\) matrix with eigenvalues \(\lambda_1\ge\lambda_2\), and <em>choose</em> orthogonal unit eigenvectors \(\mathbf{v}_1,\mathbf{v}_2\) with \(S\mathbf{v}_1=\lambda_1\mathbf{v}_1\) and \(S\mathbf{v}_2=\lambda_2\mathbf{v}_2\) &mdash; L07's spectral theorem says such a pair exists. Then for <em>every</em> unit vector \(\mathbf{u}\),
 \[\lambda_2\;\le\;\mathbf{u}^\top S\,\mathbf{u}\;\le\;\lambda_1 .\]
 Moreover, if \(\lambda_1>\lambda_2\) the upper bound is attained exactly at \(\mathbf{u}=\pm\mathbf{v}_1\) and the lower bound exactly at \(\mathbf{u}=\pm\mathbf{v}_2\); if \(\lambda_1=\lambda_2\) then \(\mathbf{u}^\top S\mathbf{u}\) takes the same value for every unit \(\mathbf{u}\).
 </div>
@@ -582,16 +582,16 @@ with weights \(c_1^2,c_2^2\ge0\) that add to \(1\) by step 1 &mdash; so this is 
 <ul>
 <li class="fragment">It treats "maximize \(\mathbf{u}^\top S\mathbf{u}\) with \(\norm{\mathbf{u}}=1\)" as a <strong>constrained optimization</strong> problem and uses <strong>Lagrange multipliers</strong>.</li>
 <li class="fragment">Setting the derivatives to zero gives \(S\mathbf{u}=\lambda\mathbf{u}\) directly &mdash; the eigenvector equation falls out of calculus.</li>
-<li class="fragment">That route needs partial derivatives (Unit 4, L11&ndash;L12) and constraints (L17&ndash;L18). Our route needed only L07.</li>
+<li class="fragment">That route needs partial derivatives (Unit 4, starting in L09) and constrained optimization (Unit 5). Our route needed only L07.</li>
 </ul>
-<div class="key-question fragment">Two different proofs, one answer. When you reach L18, reopen p.322 &mdash; it will read easily.</div>
+<div class="key-question fragment">Two different proofs, one answer. When you reach Lagrange multipliers in Unit 5, reopen p.322 &mdash; it will read easily.</div>
 </section>
 
 <!-- S37: Principal component and scores -->
 <section>
 <h4>Principal component and scores</h4>
 <div class="mathbox">
-<strong>Definition.</strong> The <strong>first principal component</strong> is \(\mathbf{v}_1\), the unit eigenvector of \(S\) with the largest eigenvalue. The <strong>score</strong> of data point \(\mathbf{x}_i\) is its projection onto it: \(\;z_i=\mathbf{v}_1^\top\mathbf{x}_i\) (MML eq. (10.8)). Its <strong>second coordinate</strong>, along the other eigenvector, is \(\;w_i=\mathbf{v}_2^\top\mathbf{x}_i\). Together they describe \(\mathbf{x}_i\) completely: \(\;\mathbf{x}_i=z_i\mathbf{v}_1+w_i\mathbf{v}_2\).
+<strong>Definition.</strong> The <strong>first principal component</strong> is \(\mathbf{v}_1\), the unit eigenvector of \(S\) with the largest eigenvalue. The <strong>score</strong> of data point \(\mathbf{x}_i\) is its projection onto it: \(\;z_i=\mathbf{v}_1^\top\mathbf{x}_i\) (MML eq. (10.8)). The <strong>second coordinate</strong> of \(\mathbf{x}_i\) in the new axes, along the other eigenvector, is \(\;w_i=\mathbf{v}_2^\top\mathbf{x}_i\) &mdash; the \(z_2\) of &ldquo;Same data, new coordinates&rdquo;, renamed so that one letter means one thing. Together they describe \(\mathbf{x}_i\) completely: \(\;\mathbf{x}_i=z_i\mathbf{v}_1+w_i\mathbf{v}_2\).
 </div>
 <p class="fragment">Our data, with \(\mathbf{v}_1=\frac{1}{\sqrt2}(1,1)^\top\) and \(\mathbf{v}_2=\frac{1}{\sqrt2}(1,-1)^\top\). For A:
 \[z_A=\mathbf{v}_1^\top\mathbf{x}_A=\frac{1\cdot3+1\cdot1}{\sqrt2}=\frac{4}{\sqrt2}=2\sqrt2,
@@ -609,7 +609,7 @@ with weights \(c_1^2,c_2^2\ge0\) that add to \(1\) by step 1 &mdash; so this is 
 <p class="fragment">Their mean is \(0\), so their empirical variance (MML Def. 6.9) is
 \[\frac{(2\sqrt2)^2+(2\sqrt2)^2+(-2\sqrt2)^2+(-2\sqrt2)^2}{4}=\frac{8+8+8+8}{4}=8=\lambda_1 .\]
 The same computation on the \(w_i\) row gives \(\frac{2+2+2+2}{4}=2=\lambda_2\).</p>
-<div class="key-question fragment">So <strong>&ldquo;the largest eigenvalue of \(S\)&rdquo;</strong> and <strong>&ldquo;the direction the data is most spread along&rdquo;</strong> are not two facts that happen to agree. They are <strong>one quantity with two names</strong> &mdash; and \(\lambda_1=8\) is a number you found by hand in L07, before anyone said the word <em>eigenvalue</em>.</div>
+<div class="key-question fragment">So \(\lambda_1=8\), the largest eigenvalue of \(S\), <strong>is</strong> the largest variance of the data over all unit directions, and \(\mathbf{v}_1\) is the direction where it sits. That is not two facts that happen to agree; it is one fact in two languages &mdash; and \(8\) is a number you found by hand in L07, before anyone said the word <em>eigenvalue</em>.</div>
 <aside class="notes">"Slow down here. Put the L07 variance table back on the screen next to this if you can. Everything since then has been machinery for computing a number they already knew how to get by hand — the machinery is what makes it possible with 500 columns instead of 2."</aside>
 </section>
 
@@ -627,14 +627,14 @@ The same computation on the \(w_i\) row gives \(\frac{2+2+2+2}{4}=2=\lambda_2\).
 <section>
 <h4>Go back to two numbers: what is left?</h4>
 <img class="fig-right" src="../images/unit03/u3-L08-fig06-pca-reconstruction.png" alt="Points projected onto the first principal direction">
-<p>We kept the score \(z_i\) and threw away the second coordinate \(w_i=\mathbf{v}_2^\top\mathbf{x}_i\) (the \(\pm\sqrt2\) row of the previous table). Rebuilding from what is left means setting that second coordinate to zero: \(\;\tilde{\mathbf{x}}_i=z_i\mathbf{v}_1+0\cdot\mathbf{v}_2=z_i\mathbf{v}_1\) &mdash; the point of the line through \(\mathbf{v}_1\) closest to \(\mathbf{x}_i\) in squared Euclidean distance, L03's projection (MML eq. (10.16), p.322).</p>
+<p>We kept the score \(z_i\) and threw away the second coordinate \(w_i=\mathbf{v}_2^\top\mathbf{x}_i\) (the \(w_i\) row of the table on &ldquo;Principal component and scores&rdquo;). Rebuilding from what is left means setting that second coordinate to zero: \(\;\tilde{\mathbf{x}}_i=z_i\mathbf{v}_1+0\cdot\mathbf{v}_2=z_i\mathbf{v}_1\) &mdash; the point of the line through \(\mathbf{v}_1\) closest to \(\mathbf{x}_i\) in squared Euclidean distance, L03's projection (MML eq. (10.16), p.322).</p>
 <ul>
 <li class="fragment">A: \(\;2\sqrt2\cdot\frac{(1,1)^\top}{\sqrt2}=(2,2)^\top\). B: \((2,2)^\top\). C, D: \((-2,-2)^\top\).</li>
 <li class="fragment">What is thrown away, \(\mathbf{x}_i-\tilde{\mathbf{x}}_i\):
 <br/>A: \((3,1)^\top-(2,2)^\top=(1,-1)^\top\), &nbsp;B: \((-1,1)^\top\), &nbsp;C: \((1,-1)^\top\), &nbsp;D: \((-1,1)^\top\).</li>
 <li class="fragment">Each leftover is orthogonal to \(\mathbf{v}_1\): \((1,-1)^\top\cdot(1,1)^\top=0\). \(\tilde{\mathbf{x}}_i\) is the <strong>closest point</strong> on the line &mdash; exactly L03's projection.</li>
 </ul>
-<div class="key-question fragment" style="clear:both;">Every leftover has squared length \(1^2+(-1)^2=2\). The average loss is \(2\) &mdash; the <strong>second eigenvalue</strong>. Coincidence again?</div>
+<div class="key-question fragment" style="clear:both;">Every leftover has squared length \(1^2+(-1)^2=2\). The average of those squared lengths is \(2\) &mdash; the <strong>second eigenvalue</strong>. Coincidence again?</div>
 </section>
 
 <!-- S39: Theorem 3 -->
@@ -645,7 +645,7 @@ The same computation on the \(w_i\) row gives \(\frac{2+2+2+2}{4}=2=\lambda_2\).
 \[\frac1n\sum_i\norm{\mathbf{x}_i-\tilde{\mathbf{x}}_i}^2=\lambda_2.\]
 In general, with \(d\) features and the top \(k\) kept, it is \(\lambda_{k+1}+\dots+\lambda_d\); we prove and use \(d=2,\ k=1\).
 </div>
-<p class="fragment"><strong>Why.</strong> Split each point, \(\mathbf{x}_i=z_i\mathbf{v}_1+w_i\mathbf{v}_2\). We keep \(z_i\mathbf{v}_1\), so the loss is \(w_i\mathbf{v}_2\), of squared length \(w_i^2\) &mdash; and the average of \(w_i^2\) is the variance along \(\mathbf{v}_2\), which Theorem 1 says is \(\lambda_2\). <strong>HW04</strong> writes it out. Our data: every leftover is \(\pm(1,-1)^\top\), squared length 2, average \(2=\lambda_2\) ✓</p>
+<p class="fragment"><strong>Why.</strong> Split each point, \(\mathbf{x}_i=z_i\mathbf{v}_1+w_i\mathbf{v}_2\). We keep \(z_i\mathbf{v}_1\), so the loss is \(w_i\mathbf{v}_2\), of squared length \(w_i^2\) &mdash; and the average of \(w_i^2\) is the variance along \(\mathbf{v}_2\) (Theorem 1), and for an eigenvector that variance is its eigenvalue, \(\lambda_2\) (the one-line substitution on &ldquo;And what is \(\mathbf{u}^\top S\mathbf{u}\)?&rdquo;). <strong>HW04</strong> writes it out. Our data: every leftover is \(\pm(1,-1)^\top\), squared length 2, average \(2=\lambda_2\) ✓</p>
 </section>
 
 <section>
@@ -654,7 +654,7 @@ In general, with \(d\) features and the top \(k\) kept, it is \(\lambda_{k+1}+\d
 <p class="fragment"><strong>Averaged over the four students.</strong> The average of \(z_i^2\) is \(\lambda_1\) and the average of \(w_i^2\) is \(\lambda_2\), so
 \[\tfrac1n\textstyle\sum_i\norm{\mathbf{x}_i}^2=\lambda_1+\lambda_2=8+2=10=\operatorname{tr}S .\]
 The eigenvalues are these averages: \(\lambda_1\) is the squared length the kept axis carries on average, \(\lambda_2\) what the dropped axis carries.</p>
-<p class="fragment">⚠️ <strong>Do not read this off a single point.</strong> Here <em>every</em> student happens to have \(z_i^2=8\) and \(w_i^2=2\), because the four points sit symmetrically around the centre. In real data \(z_i^2\) differs from point to point; <strong>only its average</strong> equals \(\lambda_1\).</p>
+<p class="fragment">⚠️ <strong>Do not read this off a single point.</strong> Here <em>every</em> student happens to have \(z_i^2=8\) and \(w_i^2=2\) &mdash; an accident of this particular dataset. In real data \(z_i^2\) differs from point to point; <strong>only its average</strong> equals \(\lambda_1\).</p>
 </section>
 
 
@@ -672,7 +672,7 @@ The denominator needs no eigenvalues at all &mdash; just add the diagonal of \(S
 <li class="fragment">How high the fraction must be depends on the application, not on any rule; 90% and 95% are common illustrative thresholds, nothing more.</li>
 
 </ul>
-<aside class="notes">"This is the first time the 80% appears — the three numbers are old, the ratio is new. In most software it is called the explained variance ratio." "Give them MML Example 10.2, p.324, out loud: images of the handwritten digit 8 have 784 pixels each, and only a handful of the eigenvalues of their S are large. A few components carry almost all the spread — that is why this scales."</aside>
+<aside class="notes">"This is the first time the 80% appears — the three numbers are old, the ratio is new. In most software it is called the explained variance ratio." "Give them MML Example 10.2, p.324, out loud: images of the handwritten digit 8 have hundreds of pixels each, and only a handful of the eigenvalues of their S are large. A few components carry almost all the spread — that is why this scales."</aside>
 </section>
 
 <!-- S42: Quick check -->
@@ -683,7 +683,7 @@ The denominator needs no eigenvalues at all &mdash; just add the diagonal of \(S
 \[X=\begin{bmatrix}3&3\\1&1\\-1&-1\\-3&-3\end{bmatrix}\]
 <p>Find \(S\), its eigenvalues, the fraction of variance the first component keeps, and the average squared loss.</p>
 <p class="fragment">\(S=\frac14X^\top X=\frac14\begin{bmatrix}20&20\\20&20\end{bmatrix}=\begin{bmatrix}5&5\\5&5\end{bmatrix}\);&nbsp; \(\operatorname{tr}S=10,\ \det S=0\ \Rightarrow\ \lambda_1=10,\ \lambda_2=0\).</p>
-<p class="fragment">Fraction kept \(10/10=100\%\); average squared loss \(\lambda_2=0\). Every point lies on the line \(y=x\), so one number per student loses nothing. A zero eigenvalue is a direction with <strong>no variance</strong> &mdash; one column repeating another, which is exactly L06&rsquo;s problem.</p>
+<p class="fragment">Fraction kept \(10/10=100\%\); average squared loss \(\lambda_2=0\). Every point lies on the line \(y=x\), so one number per student loses nothing. A zero eigenvalue means its eigenvector is a direction with <strong>no variance</strong> &mdash; one column repeating another, which is exactly L06&rsquo;s problem.</p>
 </div>
 </section>
 
@@ -700,14 +700,13 @@ L06 showed <em>that</em> this made the inverse enormous; eigenvalues say <strong
 </section>
 
 <section>
-<h4>The almost-zero eigenvalue is &ldquo;column 1 minus column 2&rdquo;</h4>
-<p>Try the direction that subtracts the two columns:
-\[X\begin{bmatrix}1\\-1\end{bmatrix}=\begin{bmatrix}1-1\\1-1.001\end{bmatrix}=\begin{bmatrix}0\\-0.001\end{bmatrix}.\]
-Almost the zero vector. The two columns nearly cancel, <strong>because they are near-copies of each other</strong>.</p>
-<p class="fragment">Now connect it to the eigenvalue. Make the direction unit length, \(\mathbf{u}=\frac{1}{\sqrt2}(1,-1)^\top\). Then
-\[\mathbf{u}^\top(X^\top X)\,\mathbf{u}=(X\mathbf{u})^\top(X\mathbf{u})=\norm{X\mathbf{u}}^2=\frac{(0.001)^2}{2}=5\times10^{-7}.\]</p>
-<p class="fragment">Theorem 2 holds for <em>any</em> symmetric \(2\times2\) matrix, and \(X^\top X\) is one: its smallest eigenvalue is at most \(\mathbf{u}^\top(X^\top X)\mathbf{u}\) for every unit \(\mathbf{u}\). So \(\;\mu_2\le5\times10^{-7}\), consistent with \(\mu_2\approx2.5\times10^{-7}\): the almost-zero eigenvalue lives right next to &ldquo;column 1 minus column 2&rdquo;.</p>
-<div class="key-question fragment">An almost-zero eigenvalue of \(X^\top X\) means <strong>a direction in which \(X\) is almost zero</strong> &mdash; two columns that almost repeat each other. That is L06&rsquo;s redundant-feature problem, now with a name. Next: what ridge does to it.</div>
+<h4>Which direction has the almost-zero eigenvalue?</h4>
+<p>First a hint: subtract the two columns, \(\;X(1,-1)^\top=(1-1,\ 1-1.001)^\top=(0,\,-0.001)^\top\). Almost the zero vector &mdash; the two columns nearly cancel, <strong>because they are near-copies of each other</strong>.</p>
+<p class="fragment">Now find the eigenvector properly, with L07&rsquo;s method: solve \((X^\top X-\mu_2 I)\,\mathbf{v}=\mathbf{0}\). Its first row is
+\[(2-\mu_2)\,v_1+2.001\,v_2=0\quad\Longrightarrow\quad v_2=-\frac{2-\mu_2}{2.001}\,v_1\approx-0.9995\,v_1 .\]
+So the eigenvector is \(\;\mathbf{v}_2\approx(1,\,-0.9995)^\top\) &mdash; <strong>almost exactly</strong> &ldquo;column 1 minus column 2&rdquo;.</p>
+<p class="fragment">⚠️ Almost, not exactly. \((1,-1)^\top\) itself is <em>not</em> an eigenvector: \(X^\top X(1,-1)^\top=(-0.001,\,-0.001001)^\top\), which points nearly along \((1,1)^\top\).</p>
+<div class="key-question fragment">So the eigenvector of the almost-zero eigenvalue is <strong>a combination of columns that \(X\) sends almost to zero</strong> &mdash; two near-copy columns. That is L06&rsquo;s redundant-feature problem, now with a name.</div>
 </section>
 
 <!-- S44: Why ridge works -->
@@ -719,21 +718,21 @@ Almost the zero vector. The two columns nearly cancel, <strong>because they are 
 Same eigenvectors; each eigenvalue becomes \(\mu+\lambda\).</p>
 <p class="fragment"><strong>Step 2 &mdash; the inverse stretches each eigenvector by \(1/\text{eigenvalue}\).</strong> If \(M\mathbf{v}=\mu\mathbf{v}\) and \(M\) is invertible, multiply both sides by \(\frac1\mu M^{-1}\):
 \[M^{-1}\mathbf{v}=\tfrac1\mu\,\mathbf{v}.\]</p>
-<p class="fragment"><strong>Now our matrix, before ridge.</strong> Along &ldquo;column 1 minus column 2&rdquo; the eigenvalue is \(\mu_2\approx0.00000025\), so the inverse stretches that direction by \(1/\mu_2\approx4{,}000{,}000\). Along the other eigenvector \(\mu_1\approx4.002\), so the stretch there is only \(1/4.002\approx0.25\). <strong>The blow-up L06 saw is entirely the first of these.</strong></p>
+<p class="fragment"><strong>Now our matrix, before ridge.</strong> Along its eigenvector \(\mathbf{v}_2\) &mdash; almost exactly column 1 minus column 2 &mdash; the eigenvalue is \(\mu_2\approx0.00000025\), so the inverse stretches \(\mathbf{v}_2\) by \(1/\mu_2\approx4{,}000{,}000\). Along the other eigenvector \(\mu_1\approx4.002\), so the stretch there is only \(1/4.002\approx0.25\). <strong>The blow-up L06 saw is entirely the first of these.</strong></p>
 </section>
 
 <section>
 <h4>What each \(\lambda\) does, in numbers</h4>
 <table style="width:auto; margin:0.2em auto; font-size:0.92em;">
-<tr><th rowspan="2">\(\lambda\)</th><th colspan="2">the bad direction (column 1 &minus; column 2)</th><th colspan="2">the good direction</th></tr>
+<tr><th rowspan="2">\(\lambda\)</th><th colspan="2">the bad eigenvector \(\mathbf{v}_2\) (&asymp; column 1 &minus; column 2)</th><th colspan="2">the good eigenvector \(\mathbf{v}_1\)</th></tr>
 <tr><th>eigenvalue \(\mu_2+\lambda\)</th><th>inverse stretches by</th><th>eigenvalue \(\mu_1+\lambda\)</th><th>inverse stretches by</th></tr>
 <tr><td>0</td><td>\(0.00000025\)</td><td>\(\approx4{,}000{,}000\)</td><td>\(4.002\)</td><td>\(0.2499\)</td></tr>
 <tr><td>0.001</td><td>\(0.00100025\)</td><td>\(\approx1{,}000\)</td><td>\(4.003\)</td><td>\(0.2498\)</td></tr>
 <tr><td>0.01</td><td>\(0.01000025\)</td><td>\(\approx100\)</td><td>\(4.012\)</td><td>\(0.2493\)</td></tr>
 <tr><td>0.1</td><td>\(0.10000025\)</td><td>\(\approx10\)</td><td>\(4.102\)</td><td>\(0.2438\)</td></tr>
 </table>
-<p class="fragment"><strong>Read down the columns.</strong> On the bad direction, the stretch falls from four million to ten. On the good direction it hardly moves: \(0.2499\to0.2438\). The bad-direction column is the same four numbers L06 printed as &ldquo;size of the inverse&rdquo; &mdash; \(4{,}000{,}000,\ 1{,}000,\ 100,\ 10\).</p>
-<div class="key-question fragment">Ridge repairs the <strong>one</strong> direction that was broken and barely touches the one that was fine. How big to make \(\lambda\) is a trade-off &mdash; too small leaves the blow-up, too large starts distorting the good direction too &mdash; and, as L06 said, it comes back in L19.</div>
+<p class="fragment"><strong>Read down the columns.</strong> Along \(\mathbf{v}_2\), the stretch falls from four million to ten. Along \(\mathbf{v}_1\) it hardly moves: \(0.2499\to0.2438\). The bad-direction column is the same four numbers L06 printed as &ldquo;size of the inverse&rdquo; &mdash; \(4{,}000{,}000,\ 1{,}000,\ 100,\ 10\).</p>
+<div class="key-question fragment">Ridge repairs the <strong>one</strong> direction that was broken and barely touches the one that was fine. How big to make \(\lambda\) is a trade-off &mdash; too small leaves the blow-up, too large starts distorting the good direction too &mdash; and it comes back in Unit 5.</div>
 <aside class="notes">EXPLORE, say aloud only if asked: the condition number of the symmetric matrix XᵀX is mu1/mu2 ≈ 4.002 / 2.5×10⁻⁷ ≈ 1.6 × 10⁷. MML §7.1 (p.230) writes it with singular values; for XᵀX those are exactly mu1 and mu2.</aside>
 </section>
 
@@ -743,9 +742,9 @@ Same eigenvectors; each eigenvalue becomes \(\mu+\lambda\).</p>
 <ul>
 <li class="fragment"><strong>It follows the units.</strong> (A caution, not a new dataset:) record quiz 1 out of 100 instead of 10, so every quiz-1 number is \(10\times\) bigger:
 \[S=\begin{bmatrix}500&30\\30&5\end{bmatrix},\qquad \mathbf{v}_1\approx(0.998,\ 0.060)^\top.\]
-The "best direction" is now just the quiz-1 axis &mdash; because its numbers are bigger, not because the students changed. <strong>What to do:</strong> when the units are arbitrary, putting every feature on the same scale first (standardizing) is one common remedy &mdash; but sometimes one feature genuinely does vary more, and that is worth keeping. Same question as °C and °F in L06.</li>
+The "best direction" is now almost exactly the quiz-1 axis (about \(3.5^\circ\) off it) &mdash; because its numbers are bigger, not because the students changed. <strong>What to do:</strong> when the units are arbitrary, putting every feature on the same scale first (standardizing) is one common remedy &mdash; but sometimes one feature genuinely does vary more, and that is worth keeping. Same question as °C and °F in L06.</li>
 <li class="fragment"><strong>It only finds straight directions.</strong> Data that curves around (a ring, a spiral) needs nonlinear methods.</li>
-<li class="fragment"><strong>It never looks at \(\mathbf{y}\).</strong> PCA compresses \(X\); it does not predict anything. A low-variance direction can still be the one that matters for the prediction.</li>
+<li class="fragment"><strong>It never looks at what you want to predict</strong> &mdash; L04&rsquo;s target \(\mathbf{y}\). PCA compresses \(X\) alone; it does not predict anything. A low-variance direction can still be the one that matters for the prediction.</li>
 </ul>
 <aside class="notes">"Scaled S: 10 times each quiz-1 number multiplies S11 by 100 and S12 by 10. Check 500 = 5 x 100 and 30 = 3 x 10 on the board." Eigenvector computed numerically; say 'approximately'.</aside>
 </section>
@@ -782,7 +781,7 @@ The "best direction" is now just the quiz-1 axis &mdash; because its numbers are
 <ul>
 <li>Find eigenvalues of \(3\times3\) or larger matrices by hand</li>
 <li>Prove the spectral theorem for \(n\ge3\)</li>
-<li>Use Lagrange multipliers (that is L17&ndash;L18)</li>
+<li>Use Lagrange multipliers (that is Unit 5)</li>
 <li>Know singular values or the SVD</li>
 </ul>
 </div>
@@ -794,13 +793,13 @@ The "best direction" is now just the quiz-1 axis &mdash; because its numbers are
 <h4>Unit 3 summary</h4>
 <p>One line, from the first slide to the last:</p>
 <div class="mathbox">
-the features you were handed &nbsp;→&nbsp; a direction is a new feature &nbsp;→&nbsp; judge it by the variance along it, \(\mathbf{u}^\top S\mathbf{u}\) &nbsp;→&nbsp; the directions \(S\) does not turn are its <strong>eigenvectors</strong>, and the variance on each is its <strong>eigenvalue</strong> &nbsp;→&nbsp; they are orthogonal, so they are a coordinate system &nbsp;→&nbsp; rank the axes, keep the strong ones: <strong>PCA</strong>
+the features you were handed &nbsp;→&nbsp; a direction is a new feature &nbsp;→&nbsp; judge it by the variance along it, \(\mathbf{u}^\top S\mathbf{u}\) &nbsp;→&nbsp; the directions \(S\) does not turn are its <strong>eigenvectors</strong>, and the variance on each is its <strong>eigenvalue</strong> &nbsp;→&nbsp; they can be chosen orthonormal, so they make a coordinate system in which squared lengths split cleanly &nbsp;→&nbsp; rank the axes, keep the strong ones: <strong>PCA</strong>
 </div>
 <ul>
 <li class="fragment">Nothing about the data changed anywhere in that line. We changed the <em>description</em>, then dropped the part of the description that carried least.</li>
-<li class="fragment"><strong>And L06 is finished:</strong> a nearly singular \(X^\top X\) is one nearly-zero eigenvalue &mdash; an axis along which the data barely varies at all &mdash; and ridge lifts every eigenvalue by \(\lambda\).</li>
+<li class="fragment"><strong>And L06 is finished:</strong> a nearly singular \(X^\top X\) has one nearly-zero eigenvalue, whose eigenvector is a combination of columns that \(X\) sends almost to zero &mdash; two columns that almost repeat &mdash; and ridge lifts every eigenvalue by \(\lambda\).</li>
 </ul>
-<div class="key-question fragment">Everything in this unit was algebra. Your textbook proved Theorem 2 with calculus instead. <strong>Unit 4</strong> builds that calculus &mdash; derivatives and gradients &mdash; and with it the third lens on regression: set the derivative to zero.</div>
+<div class="key-question fragment">Everything in this unit was algebra. Your textbook proved Theorem 2 with calculus instead. <strong>Unit 4</strong> starts building that calculus &mdash; derivatives and gradients, and with them the third lens on regression: set the derivative to zero. Unit 5 finishes the textbook&rsquo;s proof with constrained optimization.</div>
 </section>
 
 </div>
