@@ -313,6 +313,49 @@ the ordinary derivative of \(w_0\mapsto g(w_0,w_1)\) with \(w_1\) held fixed; si
 </section>
 
 <section>
+<h4>The same two partial derivatives, one student at a time</h4>
+<p>Rule \(\hat y=w_0+w_1t\); student \(i\)&rsquo;s residual \(r_i=y_i-w_0-w_1t_i\); \(\;\mathrm{SSE}=r_1^2+r_2^2+r_3^2=(1-w_0)^2+(3-w_0-w_1)^2+(2-w_0-2w_1)^2\). Expanded into a polynomial first, it gave \(\partial\,\mathrm{SSE}/\partial w_0=6w_0+6w_1-12\) and \(\partial\,\mathrm{SSE}/\partial w_1=6w_0+10w_1-14\).</p>
+<p class="fragment"><strong>Now do not expand.</strong> Differentiate each square with the Calculus 1 chain rule:</p>
+<div class="fragment">\[\frac{\partial\,(r_i^2)}{\partial w_j}=2r_i\cdot\frac{\partial r_i}{\partial w_j},\qquad\text{where}\quad\frac{\partial r_i}{\partial w_0}=-1,\quad\frac{\partial r_i}{\partial w_1}=-t_i .\]</div>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>student</th><th>residual \(r_i\)</th><th>\(\partial(r_i^2)/\partial w_0\)</th><th>\(\partial(r_i^2)/\partial w_1\)</th></tr>
+<tr><td>1 (\(t=0\))</td><td>\(r_1=1-w_0\)</td><td>\(-2\cdot1\cdot r_1\)</td><td>\(-2\cdot0\cdot r_1\)</td></tr>
+<tr><td>2 (\(t=1\))</td><td>\(r_2=3-w_0-w_1\)</td><td>\(-2\cdot1\cdot r_2\)</td><td>\(-2\cdot1\cdot r_2\)</td></tr>
+<tr><td>3 (\(t=2\))</td><td>\(r_3=2-w_0-2w_1\)</td><td>\(-2\cdot1\cdot r_3\)</td><td>\(-2\cdot2\cdot r_3\)</td></tr>
+<tr><td><strong>sum</strong></td><td></td><td>\(-2\,(r_1+r_2+r_3)\)</td><td>\(-2\,(0\,r_1+1\,r_2+2\,r_3)\)</td></tr>
+</table>
+<p class="fragment">The numbers multiplying \(r_1,r_2,r_3\) in each sum are a column of \(X=\left[\begin{smallmatrix}1&0\\1&1\\1&2\end{smallmatrix}\right]\): the ones \((1,1,1)^\top\) for \(w_0\), the hours \((0,1,2)^\top\) for \(w_1\).</p>
+<aside class="notes">"Same move as the age example in the recall: f'(x) = -2(19-x) - 2(21-x) - 2(20-x), one term per friend, no expanding." "The only new thing is which factor comes out of the inner derivative: -1 for w0, -t_i for w1. Read the last row of the table as two dot products before the next slide names them."</aside>
+</section>
+
+<section>
+<h4>Each partial derivative of SSE is \(-2\times(\text{a column of }X)^\top\mathbf r\)</h4>
+<p>Data \(\mathbf y=(1,3,2)^\top\); \(X\) has columns \(\mathbf 1=(1,1,1)^\top\) and \(\mathbf t=(0,1,2)^\top\); residual \(\mathbf r=\mathbf y-X\mathbf w=(1-w_0,\;3-w_0-w_1,\;2-w_0-2w_1)^\top\). Differentiating each \(r_i^2\) with the chain rule and adding over the three students:</p>
+\[\frac{\partial\,\mathrm{SSE}}{\partial w_0}=-2\,(r_1+r_2+r_3)=-2\,\mathbf 1^\top\mathbf r,\qquad \frac{\partial\,\mathrm{SSE}}{\partial w_1}=-2\,(0\,r_1+1\,r_2+2\,r_3)=-2\,\mathbf t^\top\mathbf r .\]
+<ul>
+<li class="fragment"><strong>Expand back, \(w_0\):</strong> \(-2\big[(1-w_0)+(3-w_0-w_1)+(2-w_0-2w_1)\big]=-2\,(6-3w_0-3w_1)=6w_0+6w_1-12\) ✓</li>
+<li class="fragment"><strong>Expand back, \(w_1\):</strong> \(-2\big[0+(3-w_0-w_1)+2(2-w_0-2w_1)\big]=-2\,(7-3w_0-5w_1)=6w_0+10w_1-14\) ✓<br>Both agree with the partial derivatives of the expanded polynomial \(3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\).</li>
+<li class="fragment"><strong>At one point, \(\mathbf w=(0,1)^\top\)</strong> (the rule \(\hat y=t\)). Polynomial: \(6\cdot0+6\cdot1-12=-6\) and \(6\cdot0+10\cdot1-14=-4\).</li>
+<li class="fragment">Dot products: predictions \(0,1,2\), so \(\mathbf r=(1,2,0)^\top\); \(\mathbf 1^\top\mathbf r=1+2+0=3\) and \(\mathbf t^\top\mathbf r=0\cdot1+1\cdot2+2\cdot0=2\); so \(-2\cdot3=-6\) and \(-2\cdot2=-4\) ✓</li>
+</ul>
+<aside class="notes">"(0,1) is the rule y-hat = t from the start of the lecture: residuals 1, 2, 0, error 5." "Two routes to the same two numbers: the polynomial and the dot products."</aside>
+</section>
+
+<section>
+<h4>One partial derivative per column of \(X\): the one-parameter shape again</h4>
+<p>Data \(\mathbf y=(1,3,2)^\top\), hours \(\mathbf t=(0,1,2)^\top\), ones \(\mathbf 1=(1,1,1)^\top\). With one parameter, \(\mathrm{SSE}(w)=\sum_i(y_i-wt_i)^2=5w^2-14w+14\) had \(\mathrm{SSE}'(w)=10w-14=-2\,\mathbf t^\top\mathbf r\), with \(\mathbf r=\mathbf y-w\mathbf t\). With two, each partial derivative is \(-2\times\)(a column of \(X\))\(^\top\mathbf r\).</p>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th></th><th>one parameter, \(\hat y=wt\)</th><th>two parameters, \(\hat y=w_0+w_1t\)</th></tr>
+<tr><td>columns that multiply a parameter</td><td>\(\mathbf t\)</td><td>\(\mathbf 1\) (for \(w_0\)), \(\;\mathbf t\) (for \(w_1\))</td></tr>
+<tr><td>residual</td><td>\(\mathbf r=\mathbf y-w\mathbf t\)</td><td>\(\mathbf r=\mathbf y-w_0\mathbf 1-w_1\mathbf t=\mathbf y-X\mathbf w\)</td></tr>
+<tr><td>derivatives of \(\mathrm{SSE}\)</td><td>\(\mathrm{SSE}'(w)=-2\,\mathbf t^\top\mathbf r\)</td><td>\(\dfrac{\partial\,\mathrm{SSE}}{\partial w_0}=-2\,\mathbf 1^\top\mathbf r,\;\;\dfrac{\partial\,\mathrm{SSE}}{\partial w_1}=-2\,\mathbf t^\top\mathbf r\)</td></tr>
+<tr><td>set to zero</td><td>\(\mathbf t^\top\mathbf r=0\)</td><td>\(\mathbf 1^\top\mathbf r=0\) and \(\mathbf t^\top\mathbf r=0\)</td></tr>
+</table>
+<div class="key-question fragment">The same shape as with one parameter: <span style="color:rgb(30,90,160)"><strong>one partial derivative per column of \(X\), each equal to \(-2\times(\text{that column})^\top\mathbf r\)</strong></span>. One parameter meant one column, \(\mathbf t\), and one derivative. L11 puts the two partial derivatives into one row; L12 proves the shape for any number of columns.</div>
+<aside class="notes">"Do not say 'gradient' yet; L11 defines it. Say: one slope per column, each built the same way." "The last row of the table is L10's whole story in one line: the residual is orthogonal to every column."</aside>
+</section>
+
+<section>
 <h4>The two partial derivatives of SSE at one point: \((w_0,w_1)^\top=(0,0)^\top\)</h4>
 <p>Error \(\mathrm{SSE}(w_0,w_1)=(1-w_0)^2+(3-w_0-w_1)^2+(2-w_0-2w_1)^2\) \(=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\); partial derivatives \(\frac{\partial\,\mathrm{SSE}}{\partial w_0}=6w_0+6w_1-12\), \(\;\frac{\partial\,\mathrm{SSE}}{\partial w_1}=6w_0+10w_1-14\).</p>
 <ul>
@@ -400,6 +443,7 @@ Both partial derivatives are zero at exactly one point, the <strong>flat point</
 <h4>L09 takeaways</h4>
 <ul>
 <li><strong>Partial derivative:</strong> differentiate in one parameter with the others held fixed (MML Def. 5.5, p.146). For SSE, go one term at a time. <span class="tier-m">[MASTER]</span></li>
+<li>Each partial derivative of SSE is \(-2\times\)(its column of \(X\))\(^\top\mathbf r\): \(\partial\,\mathrm{SSE}/\partial w_0=-2\,\mathbf 1^\top\mathbf r\), \(\partial\,\mathrm{SSE}/\partial w_1=-2\,\mathbf t^\top\mathbf r\) &mdash; the one-parameter \(\mathrm{SSE}'(w)=-2\,\mathbf t^\top\mathbf r\), once per column. <span class="tier-m">[MASTER]</span></li>
 <li>At a lowest point <strong>every</strong> partial derivative is zero &mdash; proved by freezing the other parameter and using the one-variable fact. <span class="tier-m">[MASTER]</span></li>
 <li>For \(\hat y=w_0+w_1t\) the two equations \(\partial\,\mathrm{SSE}/\partial w_0=0\), \(\partial\,\mathrm{SSE}/\partial w_1=0\) <strong>are</strong> \(X^\top X\mathbf w=X^\top\mathbf y\): here the flat point is \(\left(\tfrac32,\tfrac12\right)^\top\) with \(\mathrm{SSE}=\tfrac32\), against \(\tfrac{21}{5}\) for one parameter. <span class="tier-m">[MASTER]</span></li>
 <li>SSE and L04's MSE differ by the factor \(n\): same best parameters, same flat points, different error values. <span class="tier-m">[MASTER]</span></li>
@@ -816,6 +860,19 @@ since \(\norm{X\mathbf d}^2\), a squared length, is never negative. So \(\mathbf
 </section>
 
 <section>
+<h4>The gradient of SSE as one row: \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\)</h4>
+<p>Data \(\mathbf y=(1,3,2)^\top\); \(X\) has columns \(\mathbf 1=(1,1,1)^\top\) and \(\mathbf t=(0,1,2)^\top\); residual \(\mathbf r=\mathbf y-X\mathbf w\). In L09 each partial derivative of \(\mathrm{SSE}\) came out as \(-2\times\)(its column of \(X\))\(^\top\mathbf r\):</p>
+\[\frac{\partial\,\mathrm{SSE}}{\partial w_0}=-2\,\mathbf 1^\top\mathbf r=6w_0+6w_1-12,\qquad\frac{\partial\,\mathrm{SSE}}{\partial w_1}=-2\,\mathbf t^\top\mathbf r=6w_0+10w_1-14 .\]
+<ul>
+<li class="fragment"><strong>Put them in a row</strong> (the gradient, MML (5.40)): \(\;\nabla\mathrm{SSE}=\begin{bmatrix}-2\,\mathbf 1^\top\mathbf r&-2\,\mathbf t^\top\mathbf r\end{bmatrix}=-2\begin{bmatrix}\mathbf 1^\top\mathbf r&\mathbf t^\top\mathbf r\end{bmatrix}\).</li>
+<li class="fragment"><strong>That row is \(\mathbf r^\top X\):</strong> a row times a matrix is the row times each column, \(\mathbf r^\top X=\begin{bmatrix}\mathbf r^\top\mathbf 1&\mathbf r^\top\mathbf t\end{bmatrix}\), and \(\mathbf r^\top\mathbf 1=\mathbf 1^\top\mathbf r\), \(\mathbf r^\top\mathbf t=\mathbf t^\top\mathbf r\) (the order of a dot product does not matter). Shapes: \((1\times3)(3\times2)=1\times2\). <strong>So \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\).</strong></li>
+</ul>
+<div class="quickcheck fragment"><strong>Check at \(\mathbf w=(\tfrac12,2)^\top\).</strong> Predictions \((\tfrac12,\;\tfrac12+2,\;\tfrac12+4)=(\tfrac12,\tfrac52,\tfrac92)\), so \(\mathbf r=(\tfrac12,\tfrac12,-\tfrac52)^\top\); \(\mathbf 1^\top\mathbf r=\tfrac12+\tfrac12-\tfrac52=-\tfrac32\), \(\;\mathbf t^\top\mathbf r=0+\tfrac12-5=-\tfrac92\); \(-2\,\mathbf r^\top X=\begin{bmatrix}3&9\end{bmatrix}\). Polynomial: \(3+12-12=3\), \(\;3+20-14=9\) ✓</div>
+<p class="fragment">Here the row was built from L09&rsquo;s two partial derivatives, one at a time. <strong>L12 proves \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\) for any number of features.</strong></p>
+<aside class="notes">"Nothing new is computed: the two entries are L09's -2 1^T r and -2 t^T r. The only new step is reading the row [1^T r, t^T r] as the product r^T X." "The check point (1/2, 2) is the black dot of the next slide's figure. Polynomial terms: 6(1/2) + 6(2) - 12 and 6(1/2) + 10(2) - 14."</aside>
+</section>
+
+<section>
 <h4>The gradient at three points, and the red arrows</h4>
 <img src="../images/unit04/u4-L11-fig09-contours-gradient.png" alt="Contours of the error with arrows pointing in the direction of fastest increase, perpendicular to the contours" style="float:right; max-height:330px; max-width:40%; margin:0 0 0.5em 1em; border-radius:6px;">
 <p>From \(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\): \(\;\nabla\mathrm{SSE}=\begin{bmatrix}6w_0+6w_1-12&6w_0+10w_1-14\end{bmatrix}\), evaluated entry by entry:</p>
@@ -897,7 +954,7 @@ since \(\norm{X\mathbf d}^2\), a squared length, is never negative. So \(\mathbf
 <ul>
 <li><strong>Contour</strong> at level \(c\): all \(\mathbf w\) with \(\mathrm{SSE}(\mathbf w)=c\) (MML &sect;7.1, p.228). Level \(14\) passes through \((0,0)^\top\), \((4,0)^\top\), \((3,1)^\top\). <span class="tier-m">[MASTER]</span></li>
 <li><strong>Directional derivative:</strong> \(D_{\mathbf u}g=\phi'(0)\) with \(\phi(h)=g(\mathbf w+h\mathbf u)\); for differentiable \(g\), \(D_{\mathbf u}g=\nabla g\,\mathbf u\), one row times one column. At \((0,0)^\top\) along \(\tfrac1{\sqrt2}(1,1)^\top\): \(-13\sqrt2\). <span class="tier-m">[MASTER]</span></li>
-<li><strong>Gradient:</strong> the row of partial derivatives (MML (5.40)). The gradient is not just a list: \(\nabla g\,\mathbf u\) gives the slope in <em>every</em> direction \(\mathbf u\). \(\nabla\mathrm{SSE}(0,0)=\begin{bmatrix}-12&-14\end{bmatrix}\). <span class="tier-m">[MASTER]</span></li>
+<li><strong>Gradient:</strong> the row of partial derivatives (MML (5.40)). The gradient is not just a list: \(\nabla g\,\mathbf u\) gives the slope in <em>every</em> direction \(\mathbf u\). For SSE, from L09&rsquo;s two partial derivatives: \(\nabla\mathrm{SSE}=-2\begin{bmatrix}\mathbf 1^\top\mathbf r&\mathbf t^\top\mathbf r\end{bmatrix}=-2\,\mathbf r^\top X\); at \((0,0)^\top\), \(\begin{bmatrix}-12&-14\end{bmatrix}\). <span class="tier-m">[MASTER]</span></li>
 <li>If \(\nabla g\neq\mathbf 0\): steepest ascent along \((\nabla g)^\top\), steepest descent along \(-(\nabla g)^\top\), zero in the directions tangent to a contour. <span class="tier-m">[MASTER]</span></li>
 <li>From the all-zero model the fastest way down is \((0.651,0.759)^\top\): raise the baseline \(w_0\) and, a little faster, the per-hour \(w_1\). It does not point at \(\mathbf w^\ast\), so training repeats the step: gradient descent (MML (7.6), p.228). <span class="tier-u">[UNDERSTAND]</span></li>
 <li>Gradient = row, direction = column: <strong>one transpose apart</strong>, always written out. <span class="tier-m">[MASTER]</span></li>
@@ -924,8 +981,8 @@ since \(\norm{X\mathbf d}^2\), a squared length, is never negative. So \(\mathbf
 <li class="fragment">Row \(\mathbf r^\top\) times the second column of \(X\): \(\;1\cdot0+3\cdot1+2\cdot2=0+3+4=7\).</li>
 <li class="fragment">So \(\mathbf r^\top X=\begin{bmatrix}6&7\end{bmatrix}\) and \(-2\,\mathbf r^\top X=\begin{bmatrix}-2\cdot6&-2\cdot7\end{bmatrix}=\begin{bmatrix}-12&-14\end{bmatrix}\). <strong>The same row as the polynomial&rsquo;s gradient.</strong></li>
 </ul>
-<div class="key-question fragment">Luck at one point, or is \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\) true at <strong>every</strong> \(\mathbf w\), for <strong>every</strong> dataset and <strong>any number</strong> of parameters? This lecture proves that it holds everywhere.</div>
-<aside class="notes">"Let them compute -2 r^T X by hand before the reveal. The point of the slide is the coincidence; the rest of the lecture removes the coincidence."</aside>
+<div class="key-question fragment">L11 assembled \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\) from L09&rsquo;s two partial derivatives, written out one at a time. Is it true for <strong>every</strong> dataset and <strong>any number</strong> of parameters, without writing out \(d\) partial derivatives? This lecture proves it, with two rules that differentiate with respect to the whole vector \(\mathbf w\).</div>
+<aside class="notes">"Let them compute -2 r^T X by hand before the reveal. This is L11's row again, now from matrices only; the rest of the lecture proves it for any number of features."</aside>
 </section>
 
 <!-- L12-02 -->
@@ -1002,6 +1059,7 @@ since \(\norm{X\mathbf d}^2\), a squared length, is never negative. So \(\mathbf
 <section>
 <h4>Two shapes to differentiate</h4>
 <p><strong>Overall goal:</strong> prove \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\) for any number of features.</p>
+<p><strong>What &ldquo;differentiate with respect to the vector \(\mathbf w\)&rdquo; means</strong> (L11, MML (5.40), p.146): \(\;\dfrac{\partial f}{\partial\mathbf w}=\nabla f=\begin{bmatrix}\dfrac{\partial f}{\partial w_0}&\cdots&\dfrac{\partial f}{\partial w_{d-1}}\end{bmatrix}\), the <strong>row</strong> of partial derivatives (MML also writes \(df/d\mathbf w\)). So every rule below is proved <strong>component by component</strong>: one partial derivative at a time, the other parameters held fixed.</p>
 <p class="fragment">In \(\;\mathrm{SSE}(\mathbf w)=\mathbf w^\top X^\top X\mathbf w-2\,\mathbf w^\top X^\top\mathbf y+\mathbf y^\top\mathbf y\;\) the middle term is a number, so it equals its transpose: \(\mathbf w^\top X^\top\mathbf y=(X^\top\mathbf y)^\top\mathbf w\). With \(\mathbf b=X^\top\mathbf y\), \(A=X^\top X\): \(\;\mathrm{SSE}(\mathbf w)=\mathbf w^\top A\mathbf w-2\,\mathbf b^\top\mathbf w+\mathbf y^\top\mathbf y\) &mdash; two shapes to differentiate, \(\mathbf b^\top\mathbf w\) and \(\mathbf w^\top A\mathbf w\).</p>
 <ul>
 <li class="fragment">\(\mathbf b^\top\mathbf w\) is <strong>linear</strong> in \(\mathbf w\): every term has one parameter. Rule 1 differentiates it.</li>
@@ -1076,7 +1134,7 @@ Rule 1: \(\partial(\mathbf b^\top\mathbf w)/\partial\mathbf w=\mathbf b^\top\). 
 \end{aligned}\]
 <ul>
 <li class="fragment"><strong>Shapes.</strong> \(\mathbf w^\top X^\top X\): \((1\times d)(d\times d)=1\times d\). \(\;\mathbf y^\top X\) and \(\mathbf r^\top X\): \((1\times n)(n\times d)=1\times d\). Every line is a row of \(d\) numbers, as a gradient must be (MML (5.40)). Ours: \((1\times3)(3\times2)=1\times2\).</li>
-<li class="fragment"><strong>Entry by entry:</strong> \(\partial\,\mathrm{SSE}/\partial w_j=-2\times(\text{the column of }X\text{ that multiplies }w_j)^\top\mathbf r\). Ours, columns \(\mathbf 1=(1,1,1)^\top\) and \(\mathbf t=(0,1,2)^\top\): \(\;\partial\,\mathrm{SSE}/\partial w_0=-2\,\mathbf 1^\top\mathbf r=-2(r_1+r_2+r_3)\) and \(\;\partial\,\mathrm{SSE}/\partial w_1=-2\,\mathbf t^\top\mathbf r=-2(0\cdot r_1+1\cdot r_2+2\cdot r_3)\).</li>
+<li class="fragment"><strong>Entry by entry:</strong> \(\partial\,\mathrm{SSE}/\partial w_j=-2\times(\text{the column of }X\text{ that multiplies }w_j)^\top\mathbf r\), the shape L09 found one column at a time. Ours, columns \(\mathbf 1=(1,1,1)^\top\) and \(\mathbf t=(0,1,2)^\top\): \(\;\partial\,\mathrm{SSE}/\partial w_0=-2\,\mathbf 1^\top\mathbf r=-2(r_1+r_2+r_3)\) and \(\;\partial\,\mathrm{SSE}/\partial w_1=-2\,\mathbf t^\top\mathbf r=-2(0\cdot r_1+1\cdot r_2+2\cdot r_3)\).</li>
 <li class="fragment">MML (5.108): \(\frac{\partial}{\partial\mathbf s}(\mathbf x-A\mathbf s)^\top W(\mathbf x-A\mathbf s)=-2(\mathbf x-A\mathbf s)^\top WA\) for symmetric \(W\). With \(W=I\) and the book&rsquo;s \(\mathbf x,A,\mathbf s\) read as our \(\mathbf y,X,\mathbf w\), it says \(\nabla\mathrm{SSE}=-2(\mathbf y-X\mathbf w)^\top X\).</li>
 </ul>
 <aside class="notes">"The book's A in (5.108) is our X, not our X^T X. Say this out loud if anyone opens p.158."</aside>
@@ -1095,6 +1153,19 @@ Rule 1: \(\partial(\mathbf b^\top\mathbf w)/\partial\mathbf w=\mathbf b^\top\). 
 <li class="fragment">⚠️ Not &ldquo;increasing a parameter decreases the residual&rdquo;, which is false. From \((0,0)^\top\) raise \(w_1\) to \(0.1\): predictions \(0.1\,t_i\), with \(\mathbf t=(0,1,2)^\top\), are \((0,\,0.1,\,0.2)^\top\); residuals from \(\mathbf y=(1,3,2)^\top\) are \((1,\,2.9,\,1.8)^\top\). \(r_1\) <strong>did not move</strong>: student 1 has \(t_1=0\).</li>
 <li class="fragment">Per student, \(\frac{d}{d\hat y_i}(y_i-\hat y_i)^2=2r_i\cdot(-1)=-2r_i\) (Calculus 1 chain rule). The factor \(\partial r_i/\partial\hat y_i=-1\) reappears in L13 as one link of the chain.</li>
 </ul>
+</section>
+
+<!-- L12-11b -->
+<section>
+<h4>\(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\) contains L09&rsquo;s answers: the cases \(d=1\) and \(d=2\)</h4>
+<p>The general result: \(X\) is \(n\times d\), one column per parameter; \(\mathbf r=\mathbf y-X\mathbf w\); \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\) is a \(1\times d\) row whose entry \(j\) is \(\partial\,\mathrm{SSE}/\partial w_j=-2\,(\text{column }j\text{ of }X)^\top\mathbf r\).</p>
+<ul>
+<li class="fragment"><strong>\(d=1\): only the hours column</strong>, rule \(\hat y=wt\). Then \(X=\mathbf t\) (\(n\times1\)), \(\mathbf w=w\) (one number), \(\mathbf r=\mathbf y-w\mathbf t\), and \(\;\nabla\mathrm{SSE}=-2\,\mathbf r^\top\mathbf t=-2\,\mathbf t^\top\mathbf r\), a \(1\times1\) row: a single number. That is L09&rsquo;s one-parameter derivative \(\mathrm{SSE}'(w)=-2\,\mathbf t^\top\mathbf r\), whose zero gave \(w^\ast=\dfrac{\mathbf t^\top\mathbf y}{\mathbf t^\top\mathbf t}=\tfrac75\).</li>
+<li class="fragment"><strong>Check \(d=1\) at \(w=1\)</strong>, with \(\mathbf t=(0,1,2)^\top\), \(\mathbf y=(1,3,2)^\top\): \(\mathbf r=(1-0,\;3-1,\;2-2)^\top=(1,2,0)^\top\), so \(-2\,\mathbf t^\top\mathbf r=-2\,(0+2+0)=-4\). L09&rsquo;s polynomial \(\mathrm{SSE}(w)=5w^2-14w+14\) has \(\mathrm{SSE}'(w)=10w-14\), and \(\mathrm{SSE}'(1)=-4\) ✓</li>
+<li class="fragment"><strong>\(d=2\): columns \(\mathbf 1=(1,1,1)^\top\) and \(\mathbf t=(0,1,2)^\top\)</strong>, rule \(\hat y=w_0+w_1t\). Then \(-2\,\mathbf r^\top X=\begin{bmatrix}-2\,\mathbf 1^\top\mathbf r&-2\,\mathbf t^\top\mathbf r\end{bmatrix}=\begin{bmatrix}6w_0+6w_1-12&6w_0+10w_1-14\end{bmatrix}\): L09&rsquo;s two partial derivatives, side by side.</li>
+</ul>
+<div class="key-question fragment">The matrix formula does not replace the earlier answers; it <strong>contains</strong> them. <span style="color:rgb(30,90,160)"><strong>The Calculus 1 derivative is the gradient with one parameter</strong></span>: a \(1\times1\) row is a single number.</div>
+<aside class="notes">"Ask before revealing: what does -2 r^T X become if X has only the hours column? Let them say -2 t^T r." "This is the answer to 'is the one-parameter slide a special trick?' No: it is d = 1 of this line."</aside>
 </section>
 
 <!-- L12-12 -->
@@ -1153,12 +1224,74 @@ Rule 1: \(\partial(\mathbf b^\top\mathbf w)/\partial\mathbf w=\mathbf b^\top\). 
 <div class="key-question fragment"><strong>Geometry</strong> (the residual is orthogonal to the columns) and <strong>calculus</strong> (the error stops changing) give the same equation \(X^\top X\mathbf w=X^\top\mathbf y\). <strong>Two routes, one equation</strong> &mdash; the milestone of Unit 4.</div>
 </section>
 
+<!-- L12-14b -->
+<section>
+<h4>One parameter and a vector of parameters, side by side</h4>
+<p>Differentiating with respect to a vector \(\mathbf w\in\R^d\) means taking the <strong>row</strong> of partial derivatives, \(\partial f/\partial\mathbf w=\begin{bmatrix}\partial f/\partial w_0&\cdots&\partial f/\partial w_{d-1}\end{bmatrix}\) (MML (5.40), p.146). With \(d=1\) that row is one number: the Calculus 1 derivative.</p>
+<table style="width:auto; margin:0.3em auto; font-size:0.85em;">
+<tr><th></th><th>one parameter \(w\) (Calculus 1)</th><th>vector \(\mathbf w\in\R^d\) (this unit)</th></tr>
+<tr class="fragment"><td>linear</td><td>\((bw)'=b\)</td><td>\(\partial(\mathbf b^\top\mathbf w)/\partial\mathbf w=\mathbf b^\top\) &nbsp;(Rule 1, MML (5.105))</td></tr>
+<tr class="fragment"><td>quadratic</td><td>\((aw^2)'=2aw\)</td><td>\(\partial(\mathbf w^\top A\mathbf w)/\partial\mathbf w=2\,\mathbf w^\top A\), \(A\) symmetric (Rule 2);<br>any square \(B\): \(\mathbf w^\top(B+B^\top)\) (MML (5.107))</td></tr>
+<tr class="fragment"><td>squared error</td><td>\(\frac{d}{dw}\sum_i(y_i-wt_i)^2=-2\,\mathbf t^\top\mathbf r\), &nbsp;\(\mathbf r=\mathbf y-w\mathbf t\)</td><td>\(\nabla\norm{\mathbf y-X\mathbf w}^2=-2\,\mathbf r^\top X\), &nbsp;\(\mathbf r=\mathbf y-X\mathbf w\)</td></tr>
+<tr class="fragment"><td>derivative \(=0\)</td><td>\((\mathbf t^\top\mathbf t)\,w=\mathbf t^\top\mathbf y\)</td><td>\(X^\top X\,\mathbf w=X^\top\mathbf y\)</td></tr>
+</table>
+<ul>
+<li class="fragment"><strong>Put \(d=1\) in the right column and you get the left column:</strong> \(\mathbf b^\top\mathbf w=bw\); \(\;\mathbf w^\top A\mathbf w=aw^2\) for \(A=[a]\); \(\;X=\mathbf t\).</li>
+<li class="fragment">Every rule on the right was proved <strong>component by component</strong>: one partial derivative at a time, each a Calculus 1 derivative with the other parameters held fixed.</li>
+<li class="fragment">⚠️ The vector answers are <strong>rows</strong>: \(\mathbf b^\top\), not \(\mathbf b\); \(2\,\mathbf w^\top A\), not \(2A\mathbf w\). Their transposes are the columns you walk along.</li>
+</ul>
+<aside class="notes">"This table is what they should be able to reproduce from memory, and what HW and the quiz will ask them to use." "Read each row left to right: the Calculus 1 rule, then the same rule one dimension up."</aside>
+</section>
+
+<!-- L12-14c -->
+<section>
+<h4>Worked example on Unit 3&rsquo;s data: differentiate \(\mathbf u^\top S\mathbf u\) with respect to \(\mathbf u\)</h4>
+<p><strong>Unit 3&rsquo;s data, not this unit&rsquo;s:</strong> four students A&ndash;D, scores on two quizzes, centred. Unit 3 (L07) built their covariance matrix \(S=\left[\begin{smallmatrix}5&3\\3&5\end{smallmatrix}\right]\) and proved (Theorem 1): for a unit direction \(\mathbf u\), \(\mathbf u^\top S\mathbf u\) is the <strong>variance along \(\mathbf u\)</strong>.</p>
+<p class="fragment"><strong>Why differentiate it.</strong> Unit 3 asked which unit \(\mathbf u\) makes \(\mathbf u^\top S\mathbf u\) largest and answered with algebra (Theorem 2: \(8\), along \(\tfrac1{\sqrt2}(1,1)^\top\)). The textbook&rsquo;s calculus route first needs \(\partial(\mathbf u^\top S\mathbf u)/\partial\mathbf u\): the variable is \(\mathbf u=(u_0,u_1)^\top\), \(S\) is fixed.</p>
+<ul>
+<li class="fragment"><strong>By Rule 2</strong>, \(\partial(\mathbf w^\top A\mathbf w)/\partial\mathbf w=2\,\mathbf w^\top A\) for symmetric \(A\), with \(\mathbf u\) in place of \(\mathbf w\) and the symmetric \(S\) in place of \(A\):
+\[\frac{\partial(\mathbf u^\top S\mathbf u)}{\partial\mathbf u}=2\,\mathbf u^\top S=2\begin{bmatrix}u_0&u_1\end{bmatrix}\begin{bmatrix}5&3\\3&5\end{bmatrix}=2\begin{bmatrix}5u_0+3u_1&3u_0+5u_1\end{bmatrix}=\begin{bmatrix}10u_0+6u_1&6u_0+10u_1\end{bmatrix}.\]</li>
+<li class="fragment"><strong>Component by component.</strong> Multiply out: \(\mathbf u^\top S\mathbf u=u_0(5u_0+3u_1)+u_1(3u_0+5u_1)=5u_0^2+6u_0u_1+5u_1^2\). One partial derivative at a time, the other entry held fixed:
+\[\frac{\partial(\mathbf u^\top S\mathbf u)}{\partial u_0}=10u_0+6u_1,\qquad\frac{\partial(\mathbf u^\top S\mathbf u)}{\partial u_1}=6u_0+10u_1:\quad\text{the same row ✓}\]</li>
+</ul>
+<aside class="notes">"Say it twice: this S is Unit 3's covariance matrix of the four quiz students, not anything from the hours-and-points data." "Rule 2 with the letters changed. Students should do the component check themselves; it is the same 6u0u1 cross term as the 6w0w1 of SSE."</aside>
+</section>
+
+<!-- L12-14d -->
+<section>
+<h4>The row \(2\,\mathbf u^\top S\) at two directions, both ways</h4>
+<p><strong>Unit 3&rsquo;s data:</strong> \(S=\begin{bmatrix}5&3\\3&5\end{bmatrix}\); \(\;\mathbf u^\top S\mathbf u=5u_0^2+6u_0u_1+5u_1^2\), the variance along \(\mathbf u\) when \(\norm{\mathbf u}=1\); \(\;\partial(\mathbf u^\top S\mathbf u)/\partial\mathbf u=2\,\mathbf u^\top S=\begin{bmatrix}10u_0+6u_1&6u_0+10u_1\end{bmatrix}\).</p>
+<table style="width:auto; margin:0.3em auto; font-size:0.85em;">
+<tr><th>\(\mathbf u\)</th><th>\(\mathbf u^\top S\mathbf u\)</th><th>\(2\,\mathbf u^\top S\) (Rule 2)</th><th>component by component</th></tr>
+<tr class="fragment"><td>\((1,0)^\top\)</td><td>\(5\)</td><td>\(2\begin{bmatrix}5&3\end{bmatrix}=\begin{bmatrix}10&6\end{bmatrix}\)</td><td>\(\begin{bmatrix}10\cdot1+6\cdot0&6\cdot1+10\cdot0\end{bmatrix}=\begin{bmatrix}10&6\end{bmatrix}\)</td></tr>
+<tr class="fragment"><td>\(\tfrac1{\sqrt2}(1,1)^\top\)</td><td>\(\tfrac{5+6+5}{2}=8\)</td><td>\(\tfrac{2}{\sqrt2}\begin{bmatrix}8&8\end{bmatrix}=\begin{bmatrix}8\sqrt2&8\sqrt2\end{bmatrix}\)</td><td>\(\begin{bmatrix}\tfrac{10+6}{\sqrt2}&\tfrac{6+10}{\sqrt2}\end{bmatrix}=\begin{bmatrix}8\sqrt2&8\sqrt2\end{bmatrix}\)</td></tr>
+</table>
+<ul>
+<li class="fragment"><strong>What the row means</strong> (L11: \(D_{\mathbf v}f=\nabla f\,\mathbf v\)). The row times a unit direction \(\mathbf v\) is how fast \(\mathbf u^\top S\mathbf u\) changes as \(\mathbf u\) starts to move along \(\mathbf v\).</li>
+<li class="fragment"><strong>At \((1,0)^\top\)</strong> the unit circle runs in the direction \(\mathbf v=(0,1)^\top\): slope \(\begin{bmatrix}10&6\end{bmatrix}(0,1)^\top=6&gt;0\). Turning \(\mathbf u\) that way raises the variance &mdash; as Unit 3 found: \(5\) along \((1,0)^\top\), \(8\) along \(\tfrac1{\sqrt2}(1,1)^\top\).</li>
+</ul>
+<aside class="notes">"First-order only: the slope 6 says the variance starts to rise as u turns off (1,0); Unit 3's numbers say where it ends up (8)." "Say again: S is Unit 3's covariance matrix, not this unit's data."</aside>
+</section>
+
+<!-- L12-14e -->
+<section>
+<h4>At the direction of largest variance, the row points straight out of the circle</h4>
+<p><strong>Unit 3&rsquo;s data:</strong> \(S=\begin{bmatrix}5&3\\3&5\end{bmatrix}\); \(\;\partial(\mathbf u^\top S\mathbf u)/\partial\mathbf u=2\,\mathbf u^\top S=\begin{bmatrix}10u_0+6u_1&6u_0+10u_1\end{bmatrix}\); at \(\mathbf u=\tfrac1{\sqrt2}(1,1)^\top\) this row is \(\begin{bmatrix}8\sqrt2&8\sqrt2\end{bmatrix}\), and \(\mathbf u^\top S\mathbf u=8\), the largest variance (Unit 3, Theorem 2).</p>
+<ul>
+<li class="fragment"><strong>Along the circle.</strong> At \(\tfrac1{\sqrt2}(1,1)^\top\) the unit circle runs in the direction \(\mathbf v=\tfrac1{\sqrt2}(1,-1)^\top\): slope \(8\sqrt2\cdot\tfrac1{\sqrt2}+8\sqrt2\cdot\big(-\tfrac1{\sqrt2}\big)=8-8=0\). Turning \(\mathbf u\) along the circle does not change the variance, to first order.</li>
+<li class="fragment"><strong>Out of the circle.</strong> \(\begin{bmatrix}8\sqrt2&8\sqrt2\end{bmatrix}=16\cdot\begin{bmatrix}\tfrac1{\sqrt2}&\tfrac1{\sqrt2}\end{bmatrix}=16\,\mathbf u^\top\): the row points along \(\mathbf u\) itself, straight out of the circle. Compare \((1,0)^\top\), where the row \(\begin{bmatrix}10&6\end{bmatrix}\) is not a multiple of \(\mathbf u^\top=\begin{bmatrix}1&0\end{bmatrix}\).</li>
+<li class="fragment">⚠️ \(\mathbf u^\top S\mathbf u\) is the variance along \(\mathbf u\) only when \(\norm{\mathbf u}=1\); the gradient also lets \(\mathbf u\) change length. So Unit 5 maximises \(\mathbf u^\top S\mathbf u\) <strong>subject to \(\norm{\mathbf u}=1\)</strong> (MML (10.10), p.322), and the gradient it needs is exactly this \(2\,\mathbf u^\top S\).</li>
+</ul>
+<aside class="notes">"Plant the Unit 5 idea without naming Lagrange: at the best direction the row points along u itself, so the only first-order way to raise u^T S u is to make u longer, which the constraint forbids." "16 = 2 x 8: twice the largest eigenvalue."</aside>
+</section>
+
 <!-- L12-15 -->
 <section>
 <h4>L12 takeaways</h4>
 <ul>
 <li>\(\mathrm{SSE}(\mathbf w)=\mathbf w^\top X^\top X\mathbf w-2\mathbf w^\top X^\top\mathbf y+\mathbf y^\top\mathbf y\): from four products, where \(\mathbf y^\top X\mathbf w=\mathbf w^\top X^\top\mathbf y\) because a \(1\times1\) number equals its transpose. <span class="tier-m">[MASTER]</span></li>
 <li>\(\dfrac{\partial(\mathbf b^\top\mathbf w)}{\partial\mathbf w}=\mathbf b^\top\) and, for symmetric \(A\), \(\dfrac{\partial(\mathbf w^\top A\mathbf w)}{\partial\mathbf w}=2\mathbf w^\top A\) &mdash; Rule 1 proved entry by entry, Rule 2 for two parameters. <span class="tier-m">[MASTER]</span></li>
+<li><strong>Differentiate with respect to a vector:</strong> the row of partial derivatives (MML (5.40)), proved component by component; \(d=1\) gives Calculus 1. E.g. \(\partial(\mathbf u^\top S\mathbf u)/\partial\mathbf u=2\,\mathbf u^\top S\). <span class="tier-m">[MASTER]</span></li>
 <li>\(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\), a \(1\times d\) row; checked at \((0,0)^\top\), \((1,0)^\top\) and \(\mathbf w^\ast\). The minus sign is \(\partial r_i/\partial\hat y_i=-1\). <span class="tier-m">[MASTER]</span></li>
 <li>For training, the fastest way down is \(-(\nabla\mathrm{SSE})^\top=2X^\top\mathbf r\), for any number of features. At \((0,0)^\top\): \(\mathbf r=(1,3,2)^\top\), \(2X^\top\mathbf r=2\,(6,7)^\top=(12,14)^\top\), L11&rsquo;s steepest-descent direction, with no polynomial expanded. <span class="tier-m">[MASTER]</span></li>
 <li>Setting \(\nabla\mathrm{SSE}\) to \(\mathbf 0^\top\) gives \(X^\top X\mathbf w=X^\top\mathbf y\) for any number of features: Unit 2&rsquo;s normal equation, reached by calculus. <span class="tier-m">[MASTER]</span></li>
