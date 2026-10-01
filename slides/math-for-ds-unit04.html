@@ -171,7 +171,7 @@
 </section>
 
 <section>
-<h4>One parameter: the lowest point, and L03's projection fraction</h4>
+<h4>One parameter: the lowest point</h4>
 <img src="../images/unit04/u4-L09-fig05-fit-through-origin.png" alt="The fitted line 7/5 t through the origin misses the student who studied 0 hours by 1" style="float:right; max-height:250px; max-width:38%; margin:0 0 0.5em 1em; border-radius:6px;">
 <p>Data \(\mathbf t=(0,1,2)^\top\) hours, \(\mathbf y=(1,3,2)^\top\) points; rule \(\hat y=wt\); error \(\mathrm{SSE}(w)=(1-0\cdot w)^2+(3-w)^2+(2-2w)^2=5w^2-14w+14\).</p>
 <ul>
@@ -179,10 +179,23 @@
 <li class="fragment"><strong>Flat point:</strong> \(10w-14=0\) gives \(w=\frac{14}{10}=\frac75\).</li>
 <li class="fragment"><strong>Lowest, not just flat:</strong> the \(w^2\) coefficient \(5\) is positive, so the parabola opens upward and its flat point is its lowest point. Only now does it earn the name \(w^\ast=\frac75\).</li>
 <li class="fragment"><strong>Error there:</strong> residuals \(1\), \(3-\frac75=\frac85\), \(2-\frac{14}5=-\frac45\); squares \(\frac{25}{25},\frac{64}{25},\frac{16}{25}\); \(\mathrm{SSE}(w^\ast)=\frac{105}{25}=\frac{21}{5}=4.2\).</li>
-<li class="fragment"><strong>In vectors:</strong> \(\mathbf t^\top\mathbf y=0\cdot1+1\cdot3+2\cdot2=7\) and \(\mathbf t^\top\mathbf t=0^2+1^2+2^2=5\). With the residual \(\mathbf r=\mathbf y-w\mathbf t\): \(10w-14=-2(7-5w)=-2\,\mathbf t^\top(\mathbf y-w\mathbf t)=-2\,\mathbf t^\top\mathbf r\), so \(w^\ast=\frac{\mathbf t^\top\mathbf y}{\mathbf t^\top\mathbf t}=\frac75\).</li>
 </ul>
-<p class="fragment"><strong>Exactly L03's projection formula</strong> \(\lambda=\frac{\mathbf b^\top\mathbf x}{\mathbf b^\top\mathbf b}\), with \(\mathbf t\) playing the role of the direction and \(\mathbf y\) the vector being projected.</p>
-<aside class="notes">"The closure of this unit, first time: calculus (set the derivative to zero) lands on the geometry of L03 (projection onto t)." Point at the figure: the best line through the origin still misses student 1 by exactly 1 — no w can fix that, since every w predicts 0 at 0 hours.</aside>
+<div class="key-question fragment">Is \(w^\ast=\frac75\) related to anything we have seen before &mdash; or just a number that came out of this data?</div>
+<aside class="notes">Point at the figure: the best line through the origin still misses student 1 by exactly 1 — no w can fix that, since every w predicts 0 at 0 hours.</aside>
+</section>
+
+<section>
+<h4>Why \(w^\ast\) is L03&rsquo;s projection fraction &mdash; for any data, not by luck</h4>
+<p>Any data: hours \(\mathbf t=(t_1,\dots,t_n)^\top\), points \(\mathbf y=(y_1,\dots,y_n)^\top\); rule \(\hat y=wt\); error \(\mathrm{SSE}(w)=\sum_{i=1}^n(y_i-wt_i)^2\).</p>
+<ul>
+<li class="fragment"><strong>Expand one term:</strong> \((y_i-wt_i)^2=y_i^2-2w\,t_iy_i+w^2t_i^2\).</li>
+<li class="fragment"><strong>Add over the \(n\) students:</strong> \(\mathrm{SSE}(w)=\big(\sum t_i^2\big)w^2-2\big(\sum t_iy_i\big)w+\sum y_i^2=(\mathbf t^\top\mathbf t)\,w^2-2\,(\mathbf t^\top\mathbf y)\,w+\mathbf y^\top\mathbf y\).</li>
+<li class="fragment"><strong>Our data:</strong> \(\mathbf t^\top\mathbf t=0^2+1^2+2^2=5\), \(\mathbf t^\top\mathbf y=0\cdot1+1\cdot3+2\cdot2=7\), \(\mathbf y^\top\mathbf y=1+9+4=14\): that is why \(\mathrm{SSE}(w)=5w^2-14w+14\). The three coefficients <strong>are</strong> these dot products.</li>
+<li class="fragment"><strong>Derivative:</strong> \(\mathrm{SSE}'(w)=2(\mathbf t^\top\mathbf t)\,w-2\,\mathbf t^\top\mathbf y=-2\,\mathbf t^\top(\mathbf y-w\mathbf t)=-2\,\mathbf t^\top\mathbf r\), with residual \(\mathbf r=\mathbf y-w\mathbf t\).</li>
+<li class="fragment"><strong>Set it to zero</strong> (with \(\mathbf t\neq\mathbf 0\)): \(w^\ast=\dfrac{\mathbf t^\top\mathbf y}{\mathbf t^\top\mathbf t}\), for <em>every</em> dataset. Ours: \(\frac75\).</li>
+</ul>
+<p class="fragment"><strong>This is L03&rsquo;s projection formula</strong> \(\lambda=\dfrac{\mathbf b^\top\mathbf x}{\mathbf b^\top\mathbf b}\), with \(\mathbf b=\mathbf t\) (the direction) and \(\mathbf x=\mathbf y\) (the vector projected). And \(\mathbf t^\top\mathbf r=0\) is L03&rsquo;s picture: at the best \(w\), the residual is perpendicular to \(\mathbf t\).</p>
+<aside class="notes">"Calculus (set the derivative to zero) lands on the geometry of L03 (projection onto t) — as an identity, for any data. Do not let them think 7/5 = 7/5 is the argument: the argument is that the coefficients of SSE are the dot products."</aside>
 </section>
 
 <section>
