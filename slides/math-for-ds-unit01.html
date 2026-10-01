@@ -961,7 +961,19 @@ Reveal.initialize({
   height: 700,
   margin: 0.04,
   mathjax3: {
+    // TeX-only build: the default tex-mml-chtml also has MathML input, which re-typesets
+    // the assistive MathML on every slide change -- the DOM grew 5x in 20 flips and the
+    // chalkboard lagged worse and worse through a lecture (2026-09-30).
+    mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
     tex: {
+      // Only \( \) and \[ \] delimit math. The Reveal MathJax3 plugin also
+      // treats $...$ as inline math by default, which silently ate every
+      // currency amount on the slides -- "$3000, $2000, $5000" rendered as
+      // math "3000," plus a stray "$5000", and a $ inside \text{} broke the
+      // formula outright with "math not terminated". No deck uses $ for math.
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true,
       macros: {
         R: "\\mathbb{R}",
         norm: ["\\left\\|#1\\right\\|", 1],
