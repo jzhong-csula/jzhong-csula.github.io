@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Mathematical Foundations for Data Science and AI</title>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+<link rel="stylesheet" href="../dist/theme/serif.css"/>
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+<link rel="stylesheet" href="../css/math-for-ds.css?v=4"/>
+<!-- MathJax macros configured in Reveal.initialize mathjax3 config below -->
+<style>
+.reveal ul { margin-top: 0.3em; }
+.reveal li { margin-bottom: 0.2em; }
+.reveal td, .reveal th { padding: 0.25em 0.5em; }
+.reveal .tier-m { color:#2563eb; font-size:0.85em; }
+.reveal .tier-u { color:#d97706; font-size:0.85em; }
+.reveal .tier-e { color:#6b7280; font-size:0.85em; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     UNIT 4 — DERIVATIVES TELL MODELS HOW TO IMPROVE
+     Structure: lectures/week05/UNIT04_DESIGN.md v3.1 (D-018). If a slide does
+     not fit that structure, change the design file first, then the slide.
+
+     L09 recalls the Unit 2 opening example (not a new dataset):
+        guesses b = (19, 21, 20)^T, everyone predicted the same x
+        f(x) = sum (b_i - x)^2 = 3x^2 - 120x + 1202 = 3(x - 20)^2 + 2
+        f'(x) = 6x - 120,  f(17) = 29, f'(17) = -18, f(17.1) = 27.23
+     L10-L14: ONE dataset, t = (0,1,2)^T hours, y = (1,3,2)^T points.
+     Numbers verified with sympy, 2026-09-22.
+     ═══════════════════════════════════════════════════════════════ -->
+
+<!-- U4-00: Title -->
+<section>
+<h1 style="font-size:1.6em;">Mathematical Foundations for Data Science and AI</h1>
+<h2 style="font-size:1.0em;">Unit 4 — Derivatives Tell Models How to Improve</h2>
+<p><br/>Jie Zhong<br/>Department of Mathematics<br/>California State University, Los Angeles</p>
+</section>
+
+<!-- U4-01: Unit map -->
+<section>
+<h4>What this unit is for: a <span style="color:rgb(30,90,160)">better model</span></h4>
+<img src="../images/unit04/u4-U4-fig00-two-models.png" alt="The three students' points with two lines: y-hat = t (residuals 1, 2, 0, MSE 5/3) and y-hat = 1 + t (residuals 0, 1, -1, MSE 2/3)" style="float:right; max-height:520px; max-width:36%; margin:0 0 0.5em 1em; border-radius:6px;">
+<ul>
+<li><strong>A model is a rule that predicts.</strong> Unit 2 (L04) predicted a student&rsquo;s quiz points \(y\) from the hours studied \(t\) with a line: \(\hat y=w_0+w_1t\).</li>
+<li class="fragment">The rule is fixed once we choose the two numbers \(w_0,w_1\). They are the model&rsquo;s <strong>parameters</strong>, \(\mathbf w=(w_0,w_1)^\top\). <strong>Choosing the parameters is choosing the model.</strong></li>
+<li class="fragment">How good is a model? L04&rsquo;s <strong>mean squared error</strong>: \(\mathrm{MSE}=\frac1n\sum_{i=1}^n(y_i-\hat y_i)^2\), the average squared residual. <strong>Better model = smaller error.</strong></li>
+<li class="fragment">Three students: \(\mathbf t=(0,1,2)^\top\) hours, \(\mathbf y=(1,3,2)^\top\) points. With \(\mathbf w=(0,1)^\top\) the rule \(\hat y=t\) has \(\mathrm{MSE}=\frac53\); with \(\mathbf w=(1,1)^\top\) the rule \(\hat y=1+t\) has \(\mathrm{MSE}=\frac23\).</li>
+<li class="fragment">Changing \(w_0\) from \(0\) to \(1\) lowered the error from \(\frac53\) to \(\frac23\): <strong>a better model is better parameters.</strong> Changing the parameters so that the error goes down is <strong>training</strong> the model.</li>
+</ul>
+<div class="key-question fragment">The question of this unit: <span style="color:rgb(30,90,160)"><strong>if I change the parameters a little, how does the error change &mdash; does it go down, and which change lowers it fastest?</strong></span></div>
+<aside class="notes">"Start from the model they know from L04, not from the word 'parameter'. A line is two numbers; pick the numbers, you have picked the line." "Ask: I just got from 5/3 to 2/3 by guessing. Can we do better than guessing? Which way should I change w0 and w1, and by how much? That is the whole unit."</aside>
+</section>
+
+<section>
+<h4>Unit map: one question, six lectures</h4>
+<p>The question: <span style="color:rgb(30,90,160)"><strong>if I change the parameters a little, how does the error change?</strong></span></p>
+<table style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>lecture</th><th>what this lecture asks</th><th>the answer to the question is called</th></tr>
+<tr><td>L09</td><td>two parameters: change one at a time (after two slides of recall)</td><td>partial derivatives</td></tr>
+<tr><td>L10</td><td>where no change lowers the error: is that point really the lowest?</td><td>Pythagoras, and independent columns</td></tr>
+<tr><td>L11</td><td>change the parameters in <em>any</em> direction: which direction lowers the error fastest?</td><td>gradient</td></tr>
+<tr><td>L12</td><td>any number of features, in one line</td><td>\(\nabla\mathrm{SSE}=-2\mathbf r^\top X\)</td></tr>
+<tr><td>L13</td><td>the change passes through several stages</td><td>chain rule</td></tr>
+<tr><td>L14</td><td>a stage in the middle is a whole vector</td><td>Jacobian</td></tr>
+</table>
+<p class="fragment">It also keeps a promise from the end of Unit 3: Theorem 2 (the largest variance is the largest eigenvalue) was proved there with algebra; the textbook proves it with calculus. Unit 4 builds that calculus, and Unit 5 finishes the textbook&rsquo;s proof.</p>
+<aside class="notes">"One question for six lectures. Everything in this unit is an answer to it." "Unit 3's last slide promised this calculus: Theorem 2 was proved with algebra; the textbook uses derivatives plus a constraint. After this unit they have the derivatives; Unit 5's constrained optimization supplies the rest."</aside>
+</section>
+
+<!-- U4-02: What the unit should deliver -->
+<!-- ═══════════════════════════ L09 ═══════════════════════════ -->
+
+<section>
+<h2 style="font-size:1.3em;">L09 — From One Slope to Many</h2>
+<p>Reading: MML &sect;5.2, pp.146&ndash;148 (Definition 5.5, partial derivatives, p.146). &sect;5.1 pp.141&ndash;145 is recall.</p>
+<p><em>You have had Calculus 1 and 2. The first slides are recall, stated in the language of error; the lecture itself is about a model with more than one parameter.</em></p>
+</section>
+
+<section>
+<h4>Recall, in the language of error</h4>
+<p><strong>Three facts from Calculus 1</strong>, which is all we need from it. <span class="tier-m">[MASTER]</span></p>
+<ul>
+<li>\(f'(x)=\lim_{h\to0}\dfrac{f(x+h)-f(x)}{h}\) is the <strong>change in error per unit change in the parameter</strong> (MML Def. 5.2, p.141).</li>
+<li><strong>First-order prediction:</strong> \(f(x+\Delta x)-f(x)\approx f'(x)\,\Delta x\) for small \(\Delta x\). <strong>The derivative does not just report a slope; it predicts what a small parameter change does to the error.</strong></li>
+<li>At an interior lowest point \(f'(x)=0\) &mdash; <em>necessary, not sufficient</em>. Two functions with \(f'(0)=0\) where \(0\) is <strong>not</strong> the lowest point: \(f(x)=-x^2\), a hill, <strong>highest</strong> at \(0\); and \(f(x)=x^3\), which keeps rising through \(0\).</li>
+</ul>
+<aside class="notes">"Three facts, nothing more from Calculus 1. The third one we will use as a tool later today: it is the whole proof of the theorem about partial derivatives." Point at the counterexamples: flat is necessary for lowest, not enough.</aside>
+</section>
+
+<section>
+<h4>The first-order prediction with numbers: error and slope at \(x=17\)</h4>
+<img src="../images/unit04/u4-L09-fig03a-tangent-downhill.png" alt="The error curve f(x) with its tangent line at x = 17: slope -18, so a step to the right lowers the error; a slope triangle shows run 1, drop 18" style="float:right; max-height:290px; max-width:40%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Unit 2's first example: three friends guess your age, \(19\), \(21\), \(20\). Our single answer is \(x\); each guess minus \(x\) is one residual, and the error adds the three squared residuals:</p>
+\[f(x)=(19-x)^2+(21-x)^2+(20-x)^2 .\]
+<ul>
+<li class="fragment"><strong>Error at \(x=17\).</strong> Residuals \(19-17=2\), \(21-17=4\), \(20-17=3\). Squares \(4,\ 16,\ 9\). Sum: \(f(17)=4+16+9=29.\)</li>
+<li class="fragment"><strong>Derivative.</strong> \(f'(x)=-2(19-x)-2(21-x)-2(20-x)=-120+6x\).</li>
+<li class="fragment"><strong>Slope at \(17\).</strong> \(f'(17)=-120+6\cdot17=-120+102=-18\).</li>
+<li class="fragment"><strong>Predict the error after a step \(\Delta x=0.1\)</strong>, to \(x=17.1\):
+\(\;f(17.1)\approx f(17)+f'(17)\,\Delta x=29+(-18)(0.1)=29-1.8=\mathbf{27.2}\).</li>
+</ul>
+<aside class="notes">"Every number on this slide is one line of arithmetic. Do the residuals out loud: 2, 4, 3." "Students saw f'(x) = -120 + 6x in Unit 2; here it is only recalled." "Minus 18 means: near 17, each small step up in x lowers the error by about 18 per unit of step."</aside>
+</section>
+
+<section>
+<h4>Check the prediction: the actual error at \(x=17.1\)</h4>
+<img src="../images/unit04/u4-L09-fig03-first-order.png" alt="Near x = 17 the curve f and the straight-line prediction 29 - 18 dx almost coincide; at 17.1 the prediction is 27.2 and the actual value is 27.23" style="float:right; max-height:260px; max-width:40%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>The error: \(f(x)=(19-x)^2+(21-x)^2+(20-x)^2\).<br>The prediction: \(f(17.1)\approx f(17)+f'(17)(0.1)=29+(-18)(0.1)=27.2\).</p>
+<ul>
+<li class="fragment"><strong>Actual value.</strong> Put \(x=17.1\) into \(f\):
+\[\begin{aligned}f(17.1)&=(19-17.1)^2+(21-17.1)^2+(20-17.1)^2\\&=1.9^2+3.9^2+2.9^2\\&=3.61+15.21+8.41=\mathbf{27.23}.\end{aligned}\]</li>
+<li class="fragment"><strong>The gap.</strong> \(27.23-27.2=0.03\). Close, <em>not</em> equal: the prediction follows the tangent line, and the curve bends away from it.</li>
+</ul>
+<aside class="notes">"If asked why a quarter: exactly, f(x+Δx) = f(x) + f'(x)Δx + 3(Δx)², one (Δx)² per friend. HW05 Problem 1 has students prove the same kind of identity."</aside>
+</section>
+
+<section>
+<h4>The data and the question for the whole unit</h4>
+<img src="../images/unit04/u4-L09-fig04b-data.png" alt="The three students as points: student 1 at (t, y) = (0, 1), student 2 at (1, 3), student 3 at (2, 2)" style="float:right; max-height:400px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Three students (Quiz 1, Problem 4): hours studied, points scored.</p>
+<table style="margin:0.3em 0;">
+<tr><th>student</th><th>hours studied \(t\)</th><th>points scored \(y\)</th></tr>
+<tr><td>1</td><td>\(0\)</td><td>\(1\)</td></tr>
+<tr><td>2</td><td>\(1\)</td><td>\(3\)</td></tr>
+<tr><td>3</td><td>\(2\)</td><td>\(2\)</td></tr>
+</table>
+<ul>
+<li class="fragment"><strong>Notation:</strong> \(\mathbf t=(0,1,2)^\top\) is the hours column, \(\mathbf y=(1,3,2)^\top\) the points column, \(\hat{\mathbf y}\) the three predictions.</li>
+</ul>
+<div class="key-question fragment">The task: <span style="color:rgb(30,90,160)"><strong>predict a student&rsquo;s score from the hours they studied</strong></span> &mdash; how many points does one more hour buy? <span style="color:rgb(30,90,160)"><strong>Which rule fits these three students best</strong></span>, and what does &ldquo;best&rdquo; mean?</div>
+<aside class="notes">"Task before tools. Read the blue sentence first; everything in this unit is in service of answering it." "Point at the table while naming each symbol: t is this column, y is that one."</aside>
+</section>
+
+<section>
+<h4>Score one rule: residuals and the sum of squared errors</h4>
+<img src="../images/unit04/u4-L09-fig05a-data-residuals.png" alt="The three students as points (0,1), (1,3), (2,2); the candidate line y-hat = t; residuals 1, 2, 0 drawn as vertical red segments; SSE = 5" style="float:right; max-height:380px; max-width:48%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Data: \(\mathbf t=(0,1,2)^\top\) hours, \(\mathbf y=(1,3,2)^\top\) points. Try the rule \(\hat y=t\).</p>
+<ul>
+<li class="fragment"><strong>Predictions:</strong> \(\hat y=0,\,1,\,2\).</li>
+<li class="fragment"><strong>Residuals</strong> \(r=y-\hat y\) (data minus prediction): \(1-0=1\), \(3-1=2\), \(2-2=0\).</li>
+<li class="fragment"><strong>Squared and added:</strong> \(1^2+2^2+0^2=5\) &mdash; three times L04&rsquo;s \(\mathrm{MSE}=\tfrac53\).</li>
+</ul>
+<div class="mathbox fragment"><strong>Definition</strong> (MML &sect;9.2.1, p.294, eq. (9.10b) without its constant factor). The <strong>sum of squared errors</strong> is \(\mathrm{SSE}=r_1^2+r_2^2+r_3^2=\norm{\mathbf r}^2\). &ldquo;Best&rdquo; = smallest \(\mathrm{SSE}\). <span class="tier-m">[MASTER]</span></div>
+<ul>
+<li class="fragment"><strong>Rules to try:</strong> first \(\hat y=wt\) (\(w\) = points per hour; it predicts \(0\) at \(0\) hours). But student 1 scored \(1\) after \(0\) hours, so later \(\hat y=w_0+w_1t\): baseline \(w_0\), plus \(w_1\) points per hour.</li>
+</ul>
+<aside class="notes">"Let them compute the three residuals before revealing." "Why SSE and not L04's MSE comes up again once SSE(w) has a formula."</aside>
+</section>
+
+<section>
+<h4>One parameter: the error \(\mathrm{SSE}(w)\), one student at a time</h4>
+<img src="../images/unit04/u4-L09-fig06a-lines-and-parabola.png" alt="Top: the lines y-hat = t, (7/5)t, (5/2)t through the three data points. Bottom: the parabola SSE(w) = 5w^2 - 14w + 14 with the same three w marked: SSE 5, 21/5, 41/4" style="float:right; max-height:440px; max-width:36%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Rule \(\hat y=wt\). Each student gives one residual and one square:</p>
+<ul>
+<li class="fragment"><strong>Student 1</strong> (\(t=0,\ y=1\)): prediction \(w\cdot0=0\), residual \(1-0=1\), square \(1\).</li>
+<li class="fragment"><strong>Student 2</strong> (\(t=1,\ y=3\)): prediction \(w\), residual \(3-w\), square \((3-w)^2=9-6w+w^2\).</li>
+<li class="fragment"><strong>Student 3</strong> (\(t=2,\ y=2\)): prediction \(2w\), residual \(2-2w\), square \((2-2w)^2=4-8w+4w^2\).</li>
+<li class="fragment"><strong>Collect like terms.</strong> \(w^2\): \(1+4=5\). &nbsp;\(w\): \(-6-8=-14\). &nbsp;Constants: \(1+9+4=14\).</li>
+</ul>
+<div class="fragment">
+\[\mathrm{SSE}(w)=1+(3-w)^2+(2-2w)^2=5w^2-14w+14 .\]
+</div>
+<p class="fragment">Check at \(w=1\): directly \(1+2^2+0^2=5\); from the formula \(5-14+14=5\) ✓. In the figure, each choice of \(w\) is one line \(\hat y=wt\) (top) and one point on the curve \(\mathrm{SSE}(w)=5w^2-14w+14\) (bottom); the lowest point, at \(w=\tfrac75\), is derived on the next slide.</p>
+<aside class="notes">"Three residuals, three squares, then collect. The constant 14 is 1² + 3² + 2²: the error of predicting 0 for everybody."</aside>
+</section>
+
+<section>
+<h4>One parameter: the lowest point, and L03's projection fraction</h4>
+<img src="../images/unit04/u4-L09-fig05-fit-through-origin.png" alt="The fitted line 7/5 t through the origin misses the student who studied 0 hours by 1" style="float:right; max-height:250px; max-width:38%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Data \(\mathbf t=(0,1,2)^\top\) hours, \(\mathbf y=(1,3,2)^\top\) points; rule \(\hat y=wt\); error \(\mathrm{SSE}(w)=(1-0\cdot w)^2+(3-w)^2+(2-2w)^2=5w^2-14w+14\).</p>
+<ul>
+<li class="fragment"><strong>Derivative, term by term:</strong> \(\frac{d}{dw}5w^2=10w\), \(\frac{d}{dw}(-14w)=-14\), \(\frac{d}{dw}14=0\). So \(\mathrm{SSE}'(w)=10w-14\).</li>
+<li class="fragment"><strong>Flat point:</strong> \(10w-14=0\) gives \(w=\frac{14}{10}=\frac75\).</li>
+<li class="fragment"><strong>Lowest, not just flat:</strong> the \(w^2\) coefficient \(5\) is positive, so the parabola opens upward and its flat point is its lowest point. Only now does it earn the name \(w^\ast=\frac75\).</li>
+<li class="fragment"><strong>Error there:</strong> residuals \(1\), \(3-\frac75=\frac85\), \(2-\frac{14}5=-\frac45\); squares \(\frac{25}{25},\frac{64}{25},\frac{16}{25}\); \(\mathrm{SSE}(w^\ast)=\frac{105}{25}=\frac{21}{5}=4.2\).</li>
+<li class="fragment"><strong>In vectors:</strong> \(\mathbf t^\top\mathbf y=0\cdot1+1\cdot3+2\cdot2=7\) and \(\mathbf t^\top\mathbf t=0^2+1^2+2^2=5\). With the residual \(\mathbf r=\mathbf y-w\mathbf t\): \(10w-14=-2(7-5w)=-2\,\mathbf t^\top(\mathbf y-w\mathbf t)=-2\,\mathbf t^\top\mathbf r\), so \(w^\ast=\frac{\mathbf t^\top\mathbf y}{\mathbf t^\top\mathbf t}=\frac75\).</li>
+</ul>
+<p class="fragment"><strong>Exactly L03's projection formula</strong> \(\lambda=\frac{\mathbf b^\top\mathbf x}{\mathbf b^\top\mathbf b}\), with \(\mathbf t\) playing the role of the direction and \(\mathbf y\) the vector being projected.</p>
+<aside class="notes">"The closure of this unit, first time: calculus (set the derivative to zero) lands on the geometry of L03 (projection onto t)." Point at the figure: the best line through the origin still misses student 1 by exactly 1 — no w can fix that, since every w predicts 0 at 0 hours.</aside>
+</section>
+
+<section>
+<h4>Why SSE, and not L04's MSE?</h4>
+<p>L04 measured a fit by the <strong>mean squared error</strong> \(\mathrm{MSE}=\frac1n\sum_{i=1}^n(y_i-\hat y_i)^2\). Here \(n=3\) students, so \(\mathrm{MSE}=\mathrm{SSE}/3\). Our one-parameter error: \(\mathrm{SSE}(w)=(1-0\cdot w)^2+(3-w)^2+(2-2w)^2=5w^2-14w+14\).</p>
+<ul>
+<li class="fragment"><strong>Same best parameter.</strong> Dividing by the positive number \(3\) keeps every comparison: \(\mathrm{SSE}(a)\le\mathrm{SSE}(b)\) exactly when \(\mathrm{SSE}(a)/3\le\mathrm{SSE}(b)/3\).</li>
+<li class="fragment"><strong>Same flat point.</strong> \(\mathrm{MSE}(w)=\frac53w^2-\frac{14}3w+\frac{14}3\), so \(\mathrm{MSE}'(w)=\frac{10}3w-\frac{14}3=\frac{10w-14}{3}\): the \(\mathrm{SSE}\) derivative \(\mathrm{SSE}'(w)=10w-14\) times \(\frac13\), zero at the same \(w=\frac75\).</li>
+<li class="fragment"><strong>Different value.</strong> At \(w^\ast=\frac75\): \(\mathrm{SSE}=\frac{21}5\) and \(\mathrm{MSE}=\frac{21}5\div3=\frac{7}{5}\). (That this error value equals \(w^\ast\) is a coincidence.)</li>
+<li class="fragment"><strong>Why this unit uses SSE: fewer fractions.</strong> \(5w^2-14w+14\) has whole-number coefficients; the MSE version has thirds everywhere. With two parameters the difference grows.</li>
+</ul>
+<div class="key-question fragment">Every &ldquo;best&rdquo; answer in this unit is the same for SSE and MSE. Only the size of the error, and the arithmetic, change.</div>
+<aside class="notes">"Students computed MSE in L04, HW02 and on the Quiz 1 key. Say this out loud so nobody thinks we changed the problem: SSE and MSE differ by the factor n, so they have the same winner." "The 7/5 coincidence will be noticed — name it before someone asks."</aside>
+</section>
+
+<section>
+<h4>Two parameters, and the error becomes a surface</h4>
+<img src="../images/unit04/u4-L10-fig08-error-surface.png" alt="The error surface over w0 and w1, a bowl whose flat point is at (3/2, 1/2)" style="float:right; max-height:300px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Same three students, rule \(\hat y=w_0+w_1t\): a baseline \(w_0\) plus \(w_1\) points per hour.</p>
+<ul>
+<li class="fragment"><strong>Student 1</strong> (\(t=0,\ y=1\)): prediction \(w_0\), residual \(1-w_0\).</li>
+<li class="fragment"><strong>Student 2</strong> (\(t=1,\ y=3\)): prediction \(w_0+w_1\), residual \(3-w_0-w_1\).</li>
+<li class="fragment"><strong>Student 3</strong> (\(t=2,\ y=2\)): prediction \(w_0+2w_1\), residual \(2-w_0-2w_1\).</li>
+</ul>
+<div class="fragment">
+\[\mathrm{SSE}(w_0,w_1)=(1-w_0)^2+(3-w_0-w_1)^2+(2-w_0-2w_1)^2 .\]
+</div>
+<p class="fragment">In matrix form the same rule is \(\hat{\mathbf y}=X\mathbf w\) with \(X=\begin{bmatrix}1&0\\1&1\\1&2\end{bmatrix}\), \(\mathbf w=(w_0,w_1)^\top\) &mdash; the same \(X\) as Quiz 1&rsquo;s Problem 4, one row per student, a column of ones for the intercept.</p>
+<p class="fragment">The parameter is now a <strong>point in a plane</strong>, and the error is a surface above it (the figure).</p>
+<aside class="notes">"Same three students, one more number to choose. Each student's prediction is w0 plus w1 times that student's hours." "Point at the figure: every point of the floor is a choice of (w0, w1); the height is the error of that choice."</aside>
+</section>
+
+<section>
+<h4>Expand the three squares, one at a time</h4>
+<p>The error for \(\hat y=w_0+w_1t\): \(\mathrm{SSE}(w_0,w_1)=(1-w_0)^2+(3-w_0-w_1)^2+(2-w_0-2w_1)^2\). Each square has the shape \((a-b-c)^2\), and</p>
+\[(a-b-c)^2=a^2+b^2+c^2-2ab-2ac+2bc .\]
+<ul>
+<li class="fragment"><strong>\((1-w_0)^2\)</strong> (\(a=1,\ b=w_0\), no \(c\)): \(\;1+w_0^2-2w_0\).</li>
+<li class="fragment"><strong>\((3-w_0-w_1)^2\)</strong> (\(a=3,\ b=w_0,\ c=w_1\)):<br>
+\(9+w_0^2+w_1^2-2\cdot3\cdot w_0-2\cdot3\cdot w_1+2\cdot w_0\cdot w_1=9+w_0^2+w_1^2-6w_0-6w_1+2w_0w_1\).</li>
+<li class="fragment"><strong>\((2-w_0-2w_1)^2\)</strong> (\(a=2,\ b=w_0,\ c=2w_1\)):<br>
+\(4+w_0^2+(2w_1)^2-2\cdot2\cdot w_0-2\cdot2\cdot2w_1+2\cdot w_0\cdot2w_1=4+w_0^2+4w_1^2-4w_0-8w_1+4w_0w_1\).</li>
+<li class="fragment"><strong>Check at \((0,0)^\top\):</strong> each residual is just the score, and the three constant terms \(1,\ 9,\ 4\) are \(1^2,\ 3^2,\ 2^2\) ✓.</li>
+</ul>
+<aside class="notes">"Write the identity for (a−b−c)² on the board once; the rest is plugging in. The only trap is the third square: c is 2w1, so c² is 4w1², not 2w1²."</aside>
+</section>
+
+<section>
+<h4>Collect: where \(3,\ 6,\ 5,\ -12,\ -14,\ 14\) come from</h4>
+<p>\(\mathrm{SSE}(w_0,w_1)\) is the sum of the three squares in the first column; each column adds up to one coefficient.</p>
+<table style="margin:0.3em auto;">
+<tr><th>square</th><th>\(w_0^2\)</th><th>\(w_0w_1\)</th><th>\(w_1^2\)</th><th>\(w_0\)</th><th>\(w_1\)</th><th>constant</th></tr>
+<tr><td>\((1-w_0)^2\)</td><td>\(1\)</td><td>\(0\)</td><td>\(0\)</td><td>\(-2\)</td><td>\(0\)</td><td>\(1\)</td></tr>
+<tr><td>\((3-w_0-w_1)^2\)</td><td>\(1\)</td><td>\(2\)</td><td>\(1\)</td><td>\(-6\)</td><td>\(-6\)</td><td>\(9\)</td></tr>
+<tr><td>\((2-w_0-2w_1)^2\)</td><td>\(1\)</td><td>\(4\)</td><td>\(4\)</td><td>\(-4\)</td><td>\(-8\)</td><td>\(4\)</td></tr>
+<tr class="fragment"><td><strong>sum</strong></td><td>\(\mathbf 3\)</td><td>\(\mathbf 6\)</td><td>\(\mathbf 5\)</td><td>\(\mathbf{-12}\)</td><td>\(\mathbf{-14}\)</td><td>\(\mathbf{14}\)</td></tr>
+</table>
+<div class="fragment">
+\[\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14 .\]
+</div>
+<p class="fragment"><strong>Check at \((1,1)^\top\):</strong> directly \((1-1)^2+(3-1-1)^2+(2-1-2)^2=0+1+1=2\); from the formula \(3+6+5-12-14+14=2\) ✓.</p>
+<p class="fragment">As MSE (divide by \(3\)): \(w_0^2+2w_0w_1+\frac53w_1^2-4w_0-\frac{14}3w_1+\frac{14}3\) &mdash; thirds again, which is why we use SSE.</p>
+<div class="key-question fragment"><strong>Training</strong> (changing the parameters so that the error goes down) is now a walk on the error surface: from \((0,0)^\top\), error \(14\), to \((1,1)^\top\), error \(2\), is one step downhill. But &ldquo;change the parameters a little&rdquo; now has more than one meaning: <strong>which way is down, and how steep?</strong></div>
+<aside class="notes">"Read one column out loud: the w0w1 column is 0 + 2 + 4 = 6." "Always check an expansion at a point you can do in your head."</aside>
+</section>
+
+<section>
+<h4>Freeze one parameter: a slice of the error surface, and its slope</h4>
+<img src="../images/unit04/u4-L09-fig08a-partial-slice-3d.png" alt="The error surface cut by the vertical plane w1 = 0; the cut is the curve SSE(w0, 0) = 3w0^2 - 12w0 + 14, with its tangent at w0 = 0 of slope -12" style="float:right; max-height:380px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>The error we are working with: \(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1\) \(+5w_1^2-12w_0-14w_1+14\).</p>
+<ul>
+<li class="fragment"><strong>Hold \(w_1\) fixed at \(0\).</strong> The points with \(w_1=0\) form a vertical plane (pink). The plane cuts the error surface along a curve (red).</li>
+<li class="fragment"><strong>On the red curve only \(w_0\) moves.</strong> Put \(w_1=0\) into the error; every term with \(w_1\) vanishes: \(\mathrm{SSE}(w_0,0)=3w_0^2-12w_0+14\).</li>
+<li class="fragment"><strong>Its slope</strong> is the ordinary Calculus 1 derivative \(\frac{d}{dw_0}\big(3w_0^2-12w_0+14\big)=6w_0-12\).</li>
+<li class="fragment"><strong>At \(w_0=0\):</strong> height \(\mathrm{SSE}(0,0)=14\) (the dot), slope \(6\cdot0-12=-12\) (the dashed tangent).</li>
+<li class="fragment"><strong>Hold \(w_0\) fixed at \(0\) instead:</strong> the plane \(w_0=0\) cuts the curve \(\mathrm{SSE}(0,w_1)=5w_1^2-14w_1+14\), with slope \(10w_1-14\), which is \(-14\) at \(w_1=0\).</li>
+</ul>
+<div class="key-question fragment">Two slopes at \((0,0)^\top\): \(-12\) along \(w_0\), \(-14\) along \(w_1\). Each is an ordinary derivative taken with the <strong>other parameter frozen</strong> &mdash; a kind of derivative that gets its own name.</div>
+<aside class="notes">"This is the picture behind the definition: freeze w1, and the surface becomes an ordinary curve; its Calculus 1 slope is the partial derivative." The classic textbook figure (a surface cut by the vertical plane y = b), redrawn with our error. Point at the pink plane first, then the red cut, then the dashed tangent.</aside>
+</section>
+
+<section>
+<h4>Change one parameter, hold the other still</h4>
+<p>The error we are working with: \(\mathrm{SSE}(w_0,w_1)=(1-w_0)^2+(3-w_0-w_1)^2+(2-w_0-2w_1)^2\) \(=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\).</p>
+<div class="mathbox">
+<strong>Definition</strong> (MML Def. 5.5, p.146). The <strong>partial derivative</strong> of \(g(w_0,w_1)\) with respect to \(w_0\) is
+\[\frac{\partial g}{\partial w_0}=\lim_{h\to0}\frac{g(w_0+h,\;w_1)-g(w_0,\;w_1)}{h},\]
+the ordinary derivative of \(w_0\mapsto g(w_0,w_1)\) with \(w_1\) held fixed; similarly for \(w_1\). <span class="tier-m">[MASTER]</span>
+</div>
+<ul>
+<li class="fragment">The two slices at \((0,0)^\top\): \(\frac{\partial\,\mathrm{SSE}}{\partial w_0}(0,0)=-12\) (freeze \(w_1=0\)), \(\frac{\partial\,\mathrm{SSE}}{\partial w_1}(0,0)=-14\) (freeze \(w_0=0\)): slopes of the error surface along the axes. <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Nothing new to compute with: <strong>treat the other parameter as a constant</strong> and use the rules from Calculus 1.</li>
+<li class="fragment"><strong>Example: the term \(6w_0w_1\) with respect to \(w_0\).</strong> With \(w_1\) held fixed, \(6w_0w_1=(6w_1)\cdot w_0\) is a constant times \(w_0\). Its derivative is \(6w_1\).</li>
+<li class="fragment"><strong>The same term with respect to \(w_1\).</strong> Now \(w_0\) is held fixed: \(6w_0w_1=(6w_0)\cdot w_1\), derivative \(6w_0\).</li>
+<li class="fragment"><strong>A term without \(w_0\)</strong>, like \(5w_1^2\), is a constant when \(w_1\) is held fixed: its \(w_0\) partial derivative is \(0\).</li>
+</ul>
+<aside class="notes">"The definition is the Calculus 1 limit with one coordinate moving and the other nailed down. That is all a partial derivative is." "The mixed term is the only place students slip: they differentiate both factors. Hold one still."</aside>
+</section>
+
+<section>
+<h4>The two partial derivatives of SSE, one term at a time</h4>
+<p>The error we are working with: \(\mathrm{SSE}(w_0,w_1)=(1-w_0)^2+(3-w_0-w_1)^2+(2-w_0-2w_1)^2\) \(=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\).</p>
+<table style="margin:0.3em auto;">
+<tr><th>term of \(\mathrm{SSE}\)</th><th>\(\partial/\partial w_0\) (\(w_1\) held fixed)</th><th>\(\partial/\partial w_1\) (\(w_0\) held fixed)</th></tr>
+<tr><td>\(3w_0^2\)</td><td>\(6w_0\)</td><td>\(0\)</td></tr>
+<tr><td>\(6w_0w_1\)</td><td>\(6w_1\)</td><td>\(6w_0\)</td></tr>
+<tr><td>\(5w_1^2\)</td><td>\(0\)</td><td>\(10w_1\)</td></tr>
+<tr><td>\(-12w_0\)</td><td>\(-12\)</td><td>\(0\)</td></tr>
+<tr><td>\(-14w_1\)</td><td>\(0\)</td><td>\(-14\)</td></tr>
+<tr><td>\(14\)</td><td>\(0\)</td><td>\(0\)</td></tr>
+<tr class="fragment"><td><strong>sum</strong></td><td>\(\frac{\partial\,\mathrm{SSE}}{\partial w_0}=6w_0+6w_1-12\)</td><td>\(\frac{\partial\,\mathrm{SSE}}{\partial w_1}=6w_0+10w_1-14\)</td></tr>
+</table>
+<div class="quickcheck fragment">As slopes: move \(w_0\) alone and the error changes at the rate \(6w_0+6w_1-12\). <strong>&ldquo;But \(w_1\) is held fixed &mdash; why is \(w_1\) in it?&rdquo;</strong> Fixed is not absent: the rate depends on <em>where</em> \(w_1\) is frozen: \(-12\) at \((0,0)^\top\), \(\;6\cdot0+6\cdot1-12=-6\) at \((0,1)^\top\).</div>
+<aside class="notes">"Go down the table one row at a time. Every entry is a Calculus 1 derivative of a single term." "Each partial derivative is still a function of both parameters: the slope in the w0 direction depends on where you stand."</aside>
+</section>
+
+<section>
+<h4>The two partial derivatives of SSE at one point: \((w_0,w_1)^\top=(0,0)^\top\)</h4>
+<p>Error \(\mathrm{SSE}(w_0,w_1)=(1-w_0)^2+(3-w_0-w_1)^2+(2-w_0-2w_1)^2\) \(=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\); partial derivatives \(\frac{\partial\,\mathrm{SSE}}{\partial w_0}=6w_0+6w_1-12\), \(\;\frac{\partial\,\mathrm{SSE}}{\partial w_1}=6w_0+10w_1-14\).</p>
+<ul>
+<li class="fragment"><strong>Error there:</strong> \(\mathrm{SSE}(0,0)=14\), the constant term (every prediction is \(0\), so the residuals are the scores \(1,3,2\)).</li>
+<li class="fragment">\(\dfrac{\partial\,\mathrm{SSE}}{\partial w_0}(0,0)=6\cdot0+6\cdot0-12=-12\). &nbsp; \(\dfrac{\partial\,\mathrm{SSE}}{\partial w_1}(0,0)=6\cdot0+10\cdot0-14=-14\).</li>
+<li class="fragment"><strong>What the signs say:</strong> both negative. Raising \(w_0\) a little with \(w_1\) held at \(0\) lowers the error; so does raising \(w_1\) a little with \(w_0\) held at \(0\). So \((0,0)^\top\) is not flat, and not lowest.</li>
+<li class="fragment"><strong>First-order prediction, one parameter at a time, step \(0.1\):</strong></li>
+</ul>
+<table class="fragment" style="margin:0.3em auto;">
+<tr><th>step</th><th>prediction</th><th>actual \(\mathrm{SSE}\) (expanded formula)</th><th>gap</th></tr>
+<tr><td>\(w_0:\ 0\to0.1\)</td><td>\(14+(-12)(0.1)=12.8\)</td><td>\(3(0.1)^2-12(0.1)+14=12.83\)</td><td>\(0.03\)</td></tr>
+<tr><td>\(w_1:\ 0\to0.1\)</td><td>\(14+(-14)(0.1)=12.6\)</td><td>\(5(0.1)^2-14(0.1)+14=12.65\)</td><td>\(0.05\)</td></tr>
+</table>
+<div class="key-question fragment">A nonzero partial derivative is a way down: step against its sign. So at a <strong>lowest</strong> point no axis can go down, and <strong>both partial derivatives must be \(0\)</strong>. True at every lowest point?</div>
+<aside class="notes">"Same first-order prediction as the recall slides — now one slope per parameter." "Careful wording: it is the error that goes down, not 'the residuals'. Student 1's residual 1 − w0 shrinks, but the claim on the slide is about the total error."</aside>
+</section>
+
+<section>
+<h4>Why every partial derivative of SSE is zero at a lowest point</h4>
+<div class="mathbox">
+<strong>Theorem.</strong> Let \(\mathrm{SSE}\) be differentiable. If it is smallest at an <strong>interior</strong> point \((w_0^\ast,w_1^\ast)^\top\) &mdash; no boundary, and here the parameters range over all of \(\R^2\) &mdash; then both partial derivatives are zero there. <span class="tier-m">[MASTER]</span>
+</div>
+<p>Our error: \(\mathrm{SSE}(w_0,w_1)=(1-w_0)^2+(3-w_0-w_1)^2+(2-w_0-2w_1)^2\) \(=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\). &nbsp;<strong>Proof.</strong></p>
+<ul>
+<li class="fragment"><strong>Step 1: freeze \(w_1=w_1^\ast\).</strong> Define the one-variable function \(u(w_0)=\mathrm{SSE}(w_0,w_1^\ast)\). For our SSE: \(u(w_0)=3w_0^2+(6w_1^\ast-12)\,w_0+(5w_1^{\ast2}-14w_1^\ast+14)\).</li>
+<li class="fragment"><strong>Step 2: \(u\) is smallest at \(w_0^\ast\).</strong> \(\mathrm{SSE}(w_0^\ast,w_1^\ast)\le\mathrm{SSE}(w_0,w_1)\) for every pair \((w_0,w_1)^\top\), so also for the pairs \((w_0,w_1^\ast)^\top\). That says \(u(w_0^\ast)\le u(w_0)\) for every \(w_0\).</li>
+<li class="fragment"><strong>Step 3: use the Calculus 1 fact.</strong> \(w_0\) ranges over all of \(\R\), so \(w_0^\ast\) is interior. Calculus 1: at an interior lowest point of a differentiable one-variable function the derivative is \(0\). So \(u'(w_0^\ast)=0\).</li>
+<li class="fragment"><strong>Step 4: \(u'\) is the partial derivative.</strong> \(u'\) differentiates in \(w_0\) with \(w_1\) held at \(w_1^\ast\) &mdash; Def. 5.5. So \(\frac{\partial\,\mathrm{SSE}}{\partial w_0}(w_0^\ast,w_1^\ast)=0\). Ours: \(u'(w_0)=6w_0+6w_1^\ast-12\), which is \(\frac{\partial\,\mathrm{SSE}}{\partial w_0}=6w_0+6w_1-12\) at \(w_1=w_1^\ast\).</li>
+<li class="fragment"><strong>Step 5: the other one.</strong> Freeze \(w_0=w_0^\ast\) instead: \(v(w_1)=\mathrm{SSE}(w_0^\ast,w_1)\), and Steps 2&ndash;4 give \(\frac{\partial\,\mathrm{SSE}}{\partial w_1}(w_0^\ast,w_1^\ast)=0\). Ours: \(v'(w_1)=6w_0^\ast+10w_1-14\), which is \(\frac{\partial\,\mathrm{SSE}}{\partial w_1}=6w_0+10w_1-14\) at \(w_0=w_0^\ast\).</li>
+</ul>
+<aside class="notes">"Each step is one line. The whole proof is: restrict to a line, and a lowest point on the surface is still a lowest point on the line." "Two equations, two unknowns — and each one came from a single-variable fact they already had." "Do not call anything w* yet on the board after this slide: the theorem goes from 'lowest' to 'flat', not back."</aside>
+</section>
+
+<section>
+<h4>Solve \(\partial\,\mathrm{SSE}/\partial w_0=0\) and \(\partial\,\mathrm{SSE}/\partial w_1=0\)</h4>
+<img src="../images/unit04/u4-L09-fig08c-zero-lines.png" alt="In the (w0, w1) plane, the line 6w0 + 6w1 = 12 and the line 6w0 + 10w1 = 14 cross at the flat point (3/2, 1/2)" style="float:right; max-height:260px; max-width:34%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>From \(\mathrm{SSE}(w_0,w_1)=(1-w_0)^2+(3-w_0-w_1)^2+(2-w_0-2w_1)^2\) \(=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\), set both partial derivatives to zero:</p>
+\[\frac{\partial\,\mathrm{SSE}}{\partial w_0}=6w_0+6w_1-12=0,\qquad\frac{\partial\,\mathrm{SSE}}{\partial w_1}=6w_0+10w_1-14=0 .\]
+<ul>
+<li class="fragment"><strong>Move the constants to the right.</strong> \((1)\;\;6w_0+6w_1=12\) and \((2)\;\;6w_0+10w_1=14\).</li>
+
+<li class="fragment"><strong>Subtract (1) from (2).</strong> \(6w_0-6w_0=0\), \(\;10w_1-6w_1=4w_1\), \(\;14-12=2\). So \(4w_1=2\) and \(w_1=\tfrac12\).</li>
+<li class="fragment"><strong>Put \(w_1=\tfrac12\) into (1).</strong> \(6w_0+6\cdot\tfrac12=12\), so \(6w_0+3=12\), \(6w_0=9\), \(w_0=\tfrac96=\tfrac32\).</li>
+<li class="fragment"><strong>Check in (2).</strong> \(6\cdot\tfrac32+10\cdot\tfrac12=9+5=14\) ✓.</li>
+</ul>
+<div class="mathbox fragment">
+Both partial derivatives are zero at exactly one point, the <strong>flat point</strong> \(\mathbf w_{\text{flat}}=\left(\tfrac32,\tfrac12\right)^\top\). MML calls such a point a <em>stationary point</em> (Ch. 7, p.225).
+</div>
+<p class="fragment">⚠️ <strong>Not yet called \(\mathbf w^\ast\).</strong> All we know is that both partial derivatives vanish here &mdash; and flat need not be lowest: \(f(x)=-x^2\) is flat at \(0\) and <strong>highest</strong> there; \(f(x)=x^3\) is flat at \(0\) and keeps rising through it.</p>
+<aside class="notes">"Elimination, exactly as on the Quiz 1 key. The theorem says: if there is a lowest point, it must be this one. It does not yet say there is one." "Why exactly one: subtracting left a single equation for w1, so there was no choice at any step."</aside>
+</section>
+
+<section>
+<h4>What the flat point predicts, and its error</h4>
+<img src="../images/unit04/u4-L09-fig07a-flat-fit-residuals.png" alt="The flat-point line 3/2 + t/2 with residuals -1/2, 1, -1/2 as red vertical segments, and the one-parameter line (7/5)t dashed for comparison" style="float:right; max-height:290px; max-width:40%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>The flat point \(\mathbf w_{\text{flat}}=\left(\tfrac32,\tfrac12\right)^\top\) (both partial derivatives zero) gives the rule \(\hat y=\tfrac32+\tfrac12t\): a baseline of \(\tfrac32\) points, plus \(\tfrac12\) point per hour. \(\mathrm{SSE}\) is the sum of the \(r^2\) column.</p>
+<table style="margin:0.3em 0;">
+<tr><th>\(t\)</th><th>\(y\)</th><th>\(\hat y=\tfrac32+\tfrac12t\)</th><th>\(r=y-\hat y\)</th><th>\(r^2\)</th></tr>
+<tr><td>\(0\)</td><td>\(1\)</td><td>\(\tfrac32\)</td><td>\(-\tfrac12\)</td><td>\(\tfrac14\)</td></tr>
+<tr><td>\(1\)</td><td>\(3\)</td><td>\(\tfrac32+\tfrac12=2\)</td><td>\(1\)</td><td>\(1\)</td></tr>
+<tr><td>\(2\)</td><td>\(2\)</td><td>\(\tfrac32+1=\tfrac52\)</td><td>\(-\tfrac12\)</td><td>\(\tfrac14\)</td></tr>
+</table>
+<ul>
+<li class="fragment">\(\mathbf r_{\text{flat}}=\left(-\tfrac12,1,-\tfrac12\right)^\top\) and \(\mathrm{SSE}(\mathbf w_{\text{flat}})=\tfrac14+1+\tfrac14=\tfrac32\). As MSE: \(\tfrac32\div3=\tfrac12\).</li>
+<li class="fragment">Check with the expanded formula \(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\) at \(\left(\tfrac32,\tfrac12\right)^\top\): \(\tfrac{27}4+\tfrac92+\tfrac54-18-7+14=\tfrac{50}4-11=\tfrac32\) ✓.</li>
+<li class="fragment">The best one-parameter rule \(\hat y=\tfrac75t\) had \(\mathrm{SSE}=\tfrac{21}{5}=4.2\); two parameters give \(\tfrac32=1.5\). That drop is what the baseline \(w_0\) bought.</li>
+</ul>
+<aside class="notes">"The six terms of the check, in order: 3·(9/4), 6·(3/4), 5·(1/4), −12·(3/2), −14·(1/2), 14." "Student 1 is no longer missed by 1: the baseline lets the line start above 0." Still flat point, not w*: L10 proves it is the lowest.</aside>
+</section>
+
+<section>
+<h4>Setting both partial derivatives of SSE to zero gives Unit 2's normal equation</h4>
+<p>\(\frac{\partial\,\mathrm{SSE}}{\partial w_0}=6w_0+6w_1-12=0\) and \(\frac{\partial\,\mathrm{SSE}}{\partial w_1}=6w_0+10w_1-14=0\), divided by \(2\), as one matrix equation:</p>
+\[3w_0+3w_1=6,\quad 3w_0+5w_1=7\qquad\Longleftrightarrow\qquad\begin{bmatrix}3&3\\3&5\end{bmatrix}\begin{bmatrix}w_0\\w_1\end{bmatrix}=\begin{bmatrix}6\\7\end{bmatrix}.\]
+<ul>
+<li class="fragment"><strong>\(X^\top X\), entry by entry.</strong> The columns of \(X\) are the ones \((1,1,1)^\top\) and the hours \(\mathbf t=(0,1,2)^\top\). Entry \((i,j)\) is column \(i\) dotted with column \(j\). Ones with ones: \(1+1+1=3\) (the number of students). Ones with hours: \(0+1+2=3\). Hours with hours: \(0^2+1^2+2^2=5\).</li>
+<li class="fragment"><strong>\(X^\top\mathbf y\), entry by entry</strong>, with \(\mathbf y=(1,3,2)^\top\). Ones with scores: \(1+3+2=6\). Hours with scores: \(0\cdot1+1\cdot3+2\cdot2=7\).</li>
+<li class="fragment">So \(X^\top X=\begin{bmatrix}3&3\\3&5\end{bmatrix}\) and \(X^\top\mathbf y=(6,7)^\top\) &mdash; the same numbers as in the matrix equation at the top of this slide.</li>
+</ul>
+<div class="key-question fragment">So &ldquo;set both partial derivatives to zero&rdquo; <strong>is</strong> \(X^\top X\mathbf w=X^\top\mathbf y\) &mdash; L04's normal equation, reached by calculus instead of geometry. Its solution \(\left(\tfrac32,\tfrac12\right)^\top\) is your answer to Quiz 1, Problem 4(b).</div>
+<aside class="notes">"Same entries as the Quiz 1 key: 3 students, sum of hours 3, sum of squared hours 5, sum of scores 6, sum of hours times scores 7." "Why the 2: each partial derivative is 2 times a row of X^T X w − X^T y. L12 shows where that 2 comes from in matrix form."</aside>
+</section>
+
+<section>
+<h4>L09 takeaways</h4>
+<ul>
+<li><strong>Partial derivative:</strong> differentiate in one parameter with the others held fixed (MML Def. 5.5, p.146). For SSE, go one term at a time. <span class="tier-m">[MASTER]</span></li>
+<li>At a lowest point <strong>every</strong> partial derivative is zero &mdash; proved by freezing the other parameter and using the one-variable fact. <span class="tier-m">[MASTER]</span></li>
+<li>For \(\hat y=w_0+w_1t\) the two equations \(\partial\,\mathrm{SSE}/\partial w_0=0\), \(\partial\,\mathrm{SSE}/\partial w_1=0\) <strong>are</strong> \(X^\top X\mathbf w=X^\top\mathbf y\): here the flat point is \(\left(\tfrac32,\tfrac12\right)^\top\) with \(\mathrm{SSE}=\tfrac32\), against \(\tfrac{21}{5}\) for one parameter. <span class="tier-m">[MASTER]</span></li>
+<li>SSE and L04's MSE differ by the factor \(n\): same best parameters, same flat points, different error values. <span class="tier-m">[MASTER]</span></li>
+<li>Recall carried in: the derivative as change per unit change, and the first-order prediction \(f(x+\Delta x)\approx f(x)+f'(x)\,\Delta x\) (age example: predicted \(27.2\), actual \(27.23\)). <span class="tier-m">[MASTER]</span></li>
+</ul>
+<div class="key-question fragment">We have a <strong>flat point</strong>. Flat is not the same as lowest &mdash; and with two parameters there are far more ways to be flat. <strong>L10 settles it.</strong></div>
+</section>
+
+<section>
+<h2 style="font-size:1.3em;">L10 — Why the Flat Point Is the Lowest</h2>
+<p>L09 found the flat point \(\mathbf w_{\text{flat}}=\left(\tfrac32,\tfrac12\right)^\top\), where both partial derivatives of the error \(\mathrm{SSE}\) are zero. L10 proves that no other \(\mathbf w\) has a smaller error.</p>
+<p>Reading: MML &sect;3.8, pp.81&ndash;90 (orthogonal projections) as background; the argument itself is Unit 2&rsquo;s Pythagoras.</p>
+<p>Definitions used today: orthogonal vectors (MML Def. 3.7, p.77), linear independence (MML Def. 2.12, p.40), rank (MML &sect;2.6.2, p.47).</p>
+</section>
+
+<section>
+<h4>Where L09 left us: a flat point, not yet a lowest point</h4>
+<p>Model \(\hat y=w_0+w_1t\) (\(t\) = hours, \(y\) = points), so \(\hat{\mathbf y}=X\mathbf w\); \(\;\mathrm{SSE}=(1-w_0)^2+(3-w_0-w_1)^2+(2-w_0-2w_1)^2\), expanded:</p>
+\[\mathbf t=\begin{bmatrix}0\\1\\2\end{bmatrix},\quad \mathbf y=\begin{bmatrix}1\\3\\2\end{bmatrix},\quad X=\begin{bmatrix}1&0\\1&1\\1&2\end{bmatrix},\quad \mathbf w=\begin{bmatrix}w_0\\w_1\end{bmatrix},\]
+\[\mathrm{SSE}(\mathbf w)=\norm{\mathbf y-X\mathbf w}^2=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14 .\]
+<ul>
+<li class="fragment">L09: \(\partial\,\mathrm{SSE}/\partial w_0=6w_0+6w_1-12\) and \(\partial\,\mathrm{SSE}/\partial w_1=6w_0+10w_1-14\) both vanish at \(\mathbf w_{\text{flat}}=\left(\tfrac32,\tfrac12\right)^\top\): \(9+3-12=0\), \(9+5-14=0\).</li>
+<li class="fragment">Predictions \(X\mathbf w_{\text{flat}}\): \(\;\tfrac32+0\cdot\tfrac12=\tfrac32,\;\; \tfrac32+1\cdot\tfrac12=2,\;\; \tfrac32+2\cdot\tfrac12=\tfrac52\). Residuals \(\mathbf r_{\text{flat}}=\mathbf y-X\mathbf w_{\text{flat}}\): \(\;1-\tfrac32=-\tfrac12,\;\; 3-2=1,\;\; 2-\tfrac52=-\tfrac12\).</li>
+<li class="fragment">Error: \(\mathrm{SSE}(\mathbf w_{\text{flat}})=\norm{\mathbf r_{\text{flat}}}^2=\left(-\tfrac12\right)^2+1^2+\left(-\tfrac12\right)^2=\tfrac14+1+\tfrac14=\tfrac32\).</li>
+<li class="fragment">But \(x^3\) is flat at \(0\) and not lowest. <strong>Flat is about one point; lowest compares with every point.</strong></li>
+</ul>
+<p class="fragment"><strong>To show:</strong> \(\mathbf w_{\text{flat}}\) is a <strong>global minimum</strong> (MML Ch. 7 introduction, p.225): \(\mathrm{SSE}(\mathbf w)\ge\tfrac32\) for <em>every</em> \(\mathbf w\in\R^2\). <span class="tier-m">[MASTER]</span></p>
+<aside class="notes">"Every number on this slide is L09's, recomputed so the page stands alone. Stress the last line: global means compared with every w in the plane, not just nearby ones."</aside>
+</section>
+
+<section>
+<h4>Before the theorem: one \(\mathbf w\), one right triangle</h4>
+<img src="../images/unit04/u4-L10-fig08d-pythagoras.png" alt="The least-squares right triangle drawn to scale: y above the plane of predictions; the leg r_flat (squared length 3/2) is perpendicular to the plane; the leg Xd from X w_flat to X w for w = (2,-1) lies in the plane (squared length 15/2); the hypotenuse y - Xw has squared length 9 = 3/2 + 15/2" style="float:right; max-height:270px; max-width:56%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Data \(\mathbf y=(1,3,2)^\top\); flat point \(\mathbf w_{\text{flat}}=\left(\tfrac32,\tfrac12\right)^\top\); its residual \(\mathbf r_{\text{flat}}=\mathbf y-X\mathbf w_{\text{flat}}=\left(-\tfrac12,1,-\tfrac12\right)^\top\).</p>
+<ul>
+<li class="fragment"><strong>The blue plane</strong> holds every prediction vector \(X\mathbf w=w_0\mathbf 1+w_1\mathbf t\), with columns \(\mathbf 1=(1,1,1)^\top\), \(\mathbf t=(0,1,2)^\top\). \(\mathbf y\) is not in it: no line fits all three students exactly.</li>
+<li class="fragment"><strong>Red leg:</strong> \(\mathbf r_{\text{flat}}\), from \(X\mathbf w_{\text{flat}}\) up to \(\mathbf y\). Squared length \(\tfrac14+1+\tfrac14=\tfrac32\). It looks perpendicular to the plane; a proof will have to show that it is.</li>
+<li class="fragment"><strong>Blue leg:</strong> take another \(\mathbf w\), here \((2,-1)^\top\). The change in predictions \(X\mathbf d=X\mathbf w-X\mathbf w_{\text{flat}}=\left(\tfrac12,-1,-\tfrac52\right)^\top\) lies in the plane. Squared length \(\tfrac14+1+\tfrac{25}{4}=\tfrac{15}{2}\).</li>
+<li class="fragment"><strong>Hypotenuse:</strong> \(\mathbf y-X\mathbf w=(-1,2,2)^\top\), squared length \(1+4+4=9=\mathrm{SSE}(2,-1)\). Pythagoras: \(9=\tfrac32+\tfrac{15}{2}\).</li>
+</ul>
+<div class="key-question fragment">If <strong>every</strong> \(\mathbf w\) gives such a right triangle, then \(\mathrm{SSE}(\mathbf w)=\tfrac32+\) a square \(\ge\tfrac32\), and the flat point is the lowest. Does it?</div>
+<aside class="notes">The classic least-squares picture (y, its projection onto the column space, the residual at a right angle), drawn to scale with our numbers: the drawing is exact, not a sketch. Show it before the theorem: one w, computed, so the theorem has something to generalise and the four proof steps have something to point at. Do not call the flat point w* yet: that name is earned at the end of Step 4.</aside>
+</section>
+
+<section>
+<h4>Theorem: the flat point is a global minimum &mdash; and the plan of its proof</h4>
+\[\mathrm{SSE}(\mathbf w)=\norm{\mathbf y-X\mathbf w}^2,\quad \mathbf y=\begin{bmatrix}1\\3\\2\end{bmatrix},\quad X=\begin{bmatrix}1&0\\1&1\\1&2\end{bmatrix},\quad \mathbf w_{\text{flat}}=\begin{bmatrix}\tfrac32\\[2pt]\tfrac12\end{bmatrix},\quad \mathbf r_{\text{flat}}=\mathbf y-X\mathbf w_{\text{flat}}=\begin{bmatrix}-\tfrac12\\1\\-\tfrac12\end{bmatrix}\]
+<div class="mathbox">
+<strong>Theorem (Pythagoras for least squares).</strong> For every \(\mathbf w\in\R^2\),
+\[\mathrm{SSE}(\mathbf w)=\mathrm{SSE}(\mathbf w_{\text{flat}})+\norm{X(\mathbf w-\mathbf w_{\text{flat}})}^2 .\]
+In particular \(\mathrm{SSE}(\mathbf w)\ge\mathrm{SSE}(\mathbf w_{\text{flat}})=\norm{\mathbf r_{\text{flat}}}^2=\tfrac14+1+\tfrac14=\tfrac32\): the flat point is a global minimum. <span class="tier-m">[MASTER]</span>
+</div>
+<p class="fragment">The proof has four steps, one per slide, each checked at \(\mathbf w=(2,-1)^\top\):</p>
+<ol>
+<li class="fragment"><strong>Split.</strong> Write \(\mathbf w=\mathbf w_{\text{flat}}+\mathbf d\); then the residual of \(\mathbf w\) is \(\mathbf r_{\text{flat}}-X\mathbf d\).</li>
+<li class="fragment"><strong>Read the flat condition geometrically.</strong> \(\partial\,\mathrm{SSE}/\partial w_0=\partial\,\mathrm{SSE}/\partial w_1=0\) \(\iff X^\top\mathbf r_{\text{flat}}=\mathbf 0\).</li>
+<li class="fragment"><strong>Orthogonality.</strong> From \(X^\top\mathbf r_{\text{flat}}=\mathbf 0\): \(\mathbf r_{\text{flat}}\) is orthogonal to \(X\mathbf d\), whatever \(\mathbf d\) is.</li>
+<li class="fragment"><strong>Pythagoras.</strong> Expand \(\norm{\mathbf r_{\text{flat}}-X\mathbf d}^2\); the cross term is zero.</li>
+</ol>
+<aside class="notes">"State the theorem first so they know where each step is heading. Point at the second line of the box: the extra term is a squared length, so it can never be negative."</aside>
+</section>
+
+<section>
+<h4>Step 1: split any \(\mathbf w\) into the flat point plus a step</h4>
+<p><strong>Notation.</strong> The residual of \(\mathbf w\) is \(\mathbf y-X\mathbf w\), and \(\mathrm{SSE}(\mathbf w)=\norm{\mathbf y-X\mathbf w}^2\). The flat point is \(\mathbf w_{\text{flat}}=\left(\tfrac32,\tfrac12\right)^\top\), its residual \(\mathbf r_{\text{flat}}=\mathbf y-X\mathbf w_{\text{flat}}\).</p>
+<p>Take any \(\mathbf w\). Call the step from the flat point to it \(\;\mathbf d=\mathbf w-\mathbf w_{\text{flat}}\), so \(\;\mathbf w=\mathbf w_{\text{flat}}+\mathbf d\).</p>
+<ul>
+<li class="fragment">Residual of \(\mathbf w\): \(\;\mathbf y-X\mathbf w=\mathbf y-X(\mathbf w_{\text{flat}}+\mathbf d)\).</li>
+<li class="fragment">A matrix times a sum is the sum of the products: \(\;X(\mathbf w_{\text{flat}}+\mathbf d)=X\mathbf w_{\text{flat}}+X\mathbf d\).</li>
+<li class="fragment">So \(\;\mathbf y-X\mathbf w=\mathbf y-X\mathbf w_{\text{flat}}-X\mathbf d\).</li>
+<li class="fragment">The first two terms, \(\mathbf y-X\mathbf w_{\text{flat}}\), are \(\mathbf r_{\text{flat}}\). Therefore
+\[\mathbf y-X\mathbf w=\mathbf r_{\text{flat}}-X\mathbf d .\]</li>
+<li class="fragment">In words: <strong>the residual at any \(\mathbf w\) is the flat point&rsquo;s residual, minus the change in predictions \(X\mathbf d\) caused by the step \(\mathbf d\).</strong></li>
+</ul>
+<p class="fragment">So \(\;\mathrm{SSE}(\mathbf w)=\norm{\mathbf y-X\mathbf w}^2=\norm{\mathbf r_{\text{flat}}-X\mathbf d}^2\). The rest of the proof is about the squared length \(\norm{\mathbf r_{\text{flat}}-X\mathbf d}^2\). <span class="tier-m">[MASTER]</span></p>
+</section>
+
+<section>
+<h4>Step 1 with numbers: the split \(\mathbf y-X\mathbf w=\mathbf r_{\text{flat}}-X\mathbf d\) at \(\mathbf w=(2,-1)^\top\)</h4>
+\[\mathbf y=\begin{bmatrix}1\\3\\2\end{bmatrix},\quad X=\begin{bmatrix}1&0\\1&1\\1&2\end{bmatrix},\quad \mathbf w_{\text{flat}}=\begin{bmatrix}\tfrac32\\[2pt]\tfrac12\end{bmatrix},\quad \mathbf r_{\text{flat}}=\mathbf y-X\mathbf w_{\text{flat}}=\begin{bmatrix}-\tfrac12\\1\\-\tfrac12\end{bmatrix},\quad \mathbf w=\begin{bmatrix}2\\-1\end{bmatrix}\]
+<ul>
+<li class="fragment">The step: \(\;\mathbf d=\mathbf w-\mathbf w_{\text{flat}}=\left(2-\tfrac32,\;-1-\tfrac12\right)^\top=\left(\tfrac12,-\tfrac32\right)^\top\).</li>
+<li class="fragment">Left side \(\mathbf y-X\mathbf w\), directly. Predictions \(X\mathbf w\): \(\;2+0(-1)=2,\;\;2+1(-1)=1,\;\;2+2(-1)=0\). Residual \(\mathbf y-X\mathbf w\): \(\;1-2=-1,\;\;3-1=2,\;\;2-0=2\).</li>
+<li class="fragment">Change in predictions \(X\mathbf d\): \(\;\tfrac12+0\left(-\tfrac32\right)=\tfrac12,\;\;\tfrac12+1\left(-\tfrac32\right)=-1,\;\;\tfrac12+2\left(-\tfrac32\right)=-\tfrac52\). The table builds the right side \(\mathbf r_{\text{flat}}-X\mathbf d\):</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>student (hours \(t\))</th><th>\(\mathbf r_{\text{flat}}\)</th><th>\(X\mathbf d\)</th><th>\(\mathbf r_{\text{flat}}-X\mathbf d\)</th><th>\(\mathbf y-X\mathbf w\) (direct)</th></tr>
+<tr><td>\(t=0\)</td><td>\(-\tfrac12\)</td><td>\(\tfrac12\)</td><td>\(-\tfrac12-\tfrac12=-1\)</td><td>\(-1\) ✓</td></tr>
+<tr><td>\(t=1\)</td><td>\(1\)</td><td>\(-1\)</td><td>\(1-(-1)=2\)</td><td>\(2\) ✓</td></tr>
+<tr><td>\(t=2\)</td><td>\(-\tfrac12\)</td><td>\(-\tfrac52\)</td><td>\(-\tfrac12-\left(-\tfrac52\right)=2\)</td><td>\(2\) ✓</td></tr>
+</table>
+<p class="fragment">The direct residual and \(\mathbf r_{\text{flat}}-X\mathbf d\) are the same vector \((-1,2,2)^\top\): the split is exact.</p>
+<aside class="notes">"We keep this w = (2,-1) and this d = (1/2,-3/2) for the next slides, so every step of the proof gets checked on the same numbers."</aside>
+</section>
+
+<section>
+<h4>Step 2: \(\partial\,\mathrm{SSE}/\partial w_0=\partial\,\mathrm{SSE}/\partial w_1=0\) says \(X^\top\mathbf r_{\text{flat}}=\mathbf 0\)</h4>
+\[\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14,\qquad \mathbf y=\begin{bmatrix}1\\3\\2\end{bmatrix},\quad X=\begin{bmatrix}1&0\\1&1\\1&2\end{bmatrix}\]
+<ul>
+<li class="fragment">The two partial derivatives of \(\mathrm{SSE}\) set to zero: \(\;6w_0+6w_1-12=0\), \(\;6w_0+10w_1-14=0\). Divide by 2: \(\;3w_0+3w_1=6\), \(\;3w_0+5w_1=7\).</li>
+<li class="fragment">The halved pair is \(X^\top X\mathbf w=X^\top\mathbf y\), with solution \(\mathbf w_{\text{flat}}=\left(\tfrac32,\tfrac12\right)^\top\): entries of \(X^\top X\) are \(1+1+1=3\), \(0+1+2=3\), \(0+1+4=5\), and \(X^\top\mathbf y=(1+3+2,\;0+3+4)^\top=(6,7)^\top\).</li>
+<li class="fragment">Move everything to one side: \(\;X^\top\mathbf y-X^\top X\mathbf w_{\text{flat}}=\mathbf 0\).</li>
+<li class="fragment">Factor \(X^\top\) out on the left: \(\;X^\top(\mathbf y-X\mathbf w_{\text{flat}})=\mathbf 0\).</li>
+<li class="fragment">The bracket \(\mathbf y-X\mathbf w_{\text{flat}}\) is the flat point&rsquo;s residual \(\mathbf r_{\text{flat}}\): \(\;X^\top\mathbf r_{\text{flat}}=\mathbf 0\).</li>
+<li class="fragment">Each move can be undone: \(\;X^\top X\mathbf w_{\text{flat}}=X^\top\mathbf y\iff X^\top\mathbf r_{\text{flat}}=\mathbf 0\).</li>
+</ul>
+<p class="fragment"><strong>Calculus (both slopes of \(\mathrm{SSE}\) zero) and geometry (L04: residual \(\perp\) every column of \(X\)) give the same equation.</strong> <span class="tier-m">[MASTER]</span></p>
+</section>
+
+<section>
+<h4>\(X^\top\mathbf r_{\text{flat}}=\mathbf 0\) entry by entry: \(\mathbf r_{\text{flat}}\) is orthogonal to each column of \(X\)</h4>
+<p><strong>Notation.</strong> \(\mathbf r_{\text{flat}}=\mathbf y-X\mathbf w_{\text{flat}}=\left(1-\tfrac32,\;3-2,\;2-\tfrac52\right)^\top=\left(-\tfrac12,1,-\tfrac12\right)^\top\), from \(\mathbf y=(1,3,2)^\top\), \(\mathbf w_{\text{flat}}=\left(\tfrac32,\tfrac12\right)^\top\). The columns of \(X\) are the ones column \(\mathbf 1=(1,1,1)^\top\) and the hours column \(\mathbf t=(0,1,2)^\top\); they are the rows of \(X^\top\).</p>
+\[X^\top\mathbf r_{\text{flat}}=\begin{bmatrix}1&1&1\\0&1&2\end{bmatrix}\begin{bmatrix}-\tfrac12\\1\\-\tfrac12\end{bmatrix}
+=\begin{bmatrix}1\left(-\tfrac12\right)+1(1)+1\left(-\tfrac12\right)\\[2pt]0\left(-\tfrac12\right)+1(1)+2\left(-\tfrac12\right)\end{bmatrix}
+=\begin{bmatrix}-\tfrac12+1-\tfrac12\\[2pt]0+1-1\end{bmatrix}=\begin{bmatrix}0\\0\end{bmatrix}\]
+<ul>
+<li class="fragment">Entry 1 is \(\mathbf 1^\top\mathbf r_{\text{flat}}=0\): the three residuals add up to zero.</li>
+<li class="fragment">Entry 2 is \(\mathbf t^\top\mathbf r_{\text{flat}}=0\): each residual times that student&rsquo;s hours, added up, is zero.</li>
+<li class="fragment">An inner product of zero is exactly what <strong>orthogonal</strong> means (MML Def. 3.7, p.77). So \(\mathbf r_{\text{flat}}\perp\mathbf 1\) and \(\mathbf r_{\text{flat}}\perp\mathbf t\).</li>
+</ul>
+<p class="fragment">One sentence to remember: <strong>at the flat point, the residual is orthogonal to every column of \(X\).</strong> <span class="tier-m">[MASTER]</span></p>
+</section>
+
+<section>
+<h4>Step 3: \(\mathbf r_{\text{flat}}\) is orthogonal to \(X\mathbf d\), for every step \(\mathbf d\)</h4>
+<p><strong>Notation.</strong> Columns of \(X\): \(\mathbf 1=(1,1,1)^\top\), \(\mathbf t=(0,1,2)^\top\). \(\;\mathbf r_{\text{flat}}=\left(-\tfrac12,1,-\tfrac12\right)^\top\), and \(X^\top\mathbf r_{\text{flat}}=\mathbf 0\) (Step 2), i.e. \(\mathbf 1^\top\mathbf r_{\text{flat}}=0\) and \(\mathbf t^\top\mathbf r_{\text{flat}}=0\).</p>
+<p>\(X\mathbf d=d_0\,\mathbf 1+d_1\,\mathbf t\) is a combination of the columns of \(X\). The inner product \((X\mathbf d)^\top\mathbf r_{\text{flat}}\), in two ways:</p>
+<ul>
+<li class="fragment"><strong>Column by column:</strong> \(\;(X\mathbf d)^\top\mathbf r_{\text{flat}}=d_0\,\underbrace{\mathbf 1^\top\mathbf r_{\text{flat}}}_{0}+d_1\,\underbrace{\mathbf t^\top\mathbf r_{\text{flat}}}_{0}=0\).</li>
+<li class="fragment"><strong>In one line</strong>, using \((AB)^\top=B^\top A^\top\): \(\;(X\mathbf d)^\top\mathbf r_{\text{flat}}=\mathbf d^\top X^\top\mathbf r_{\text{flat}}=\mathbf d^\top\big(X^\top\mathbf r_{\text{flat}}\big)=\mathbf d^\top\mathbf 0=0\).</li>
+<li class="fragment">No condition on \(\mathbf d\) was used: <strong>whatever step we take, the change in predictions \(X\mathbf d\) is orthogonal to \(\mathbf r_{\text{flat}}\).</strong></li>
+</ul>
+<div class="quickcheck fragment">
+<p><strong>Check at \(\mathbf w=(2,-1)^\top\):</strong> \(\mathbf d=\left(2-\tfrac32,\,-1-\tfrac12\right)^\top=\left(\tfrac12,-\tfrac32\right)^\top\), \(X\mathbf d=\left(\tfrac12,\;\tfrac12-\tfrac32,\;\tfrac12-3\right)^\top=\left(\tfrac12,-1,-\tfrac52\right)^\top\).
+\[(X\mathbf d)^\top\mathbf r_{\text{flat}}=\tfrac12\left(-\tfrac12\right)+(-1)(1)+\left(-\tfrac52\right)\left(-\tfrac12\right)=-\tfrac14-1+\tfrac54=0\;✓\]</p>
+</div>
+<aside class="notes">"Two readings of one fact. The column-by-column version is the picture: if r is orthogonal to each column, it is orthogonal to anything built from the columns."</aside>
+</section>
+
+<section>
+<h4>Step 4: Pythagoras &mdash; the cross term vanishes</h4>
+<p><strong>Notation.</strong> \(\mathrm{SSE}(\mathbf w)=\norm{\mathbf y-X\mathbf w}^2\), \(\mathbf d=\mathbf w-\mathbf w_{\text{flat}}\). Step 1: \(\mathbf y-X\mathbf w=\mathbf r_{\text{flat}}-X\mathbf d\). Step 3: \((X\mathbf d)^\top\mathbf r_{\text{flat}}=0\).</p>
+<p>For any two vectors \(\mathbf a,\mathbf b\), multiply out \(\norm{\mathbf a-\mathbf b}^2=(\mathbf a-\mathbf b)^\top(\mathbf a-\mathbf b)\) term by term (\(\mathbf b^\top\mathbf a\) and \(\mathbf a^\top\mathbf b\) are the same number):</p>
+\[\norm{\mathbf a-\mathbf b}^2=\mathbf a^\top\mathbf a-\mathbf a^\top\mathbf b-\mathbf b^\top\mathbf a+\mathbf b^\top\mathbf b=\norm{\mathbf a}^2-2\,\mathbf a^\top\mathbf b+\norm{\mathbf b}^2 .\]
+<ul>
+<li class="fragment">Take \(\mathbf a=\mathbf r_{\text{flat}}\), \(\mathbf b=X\mathbf d\). By Step 1, \(\;\mathrm{SSE}(\mathbf w)=\norm{\mathbf r_{\text{flat}}-X\mathbf d}^2=\norm{\mathbf r_{\text{flat}}}^2-2\,\mathbf r_{\text{flat}}^\top X\mathbf d+\norm{X\mathbf d}^2\).</li>
+<li class="fragment">The cross term \(\mathbf r_{\text{flat}}^\top X\mathbf d\) is the same number as \((X\mathbf d)^\top\mathbf r_{\text{flat}}=0\) (Step 3). What is left:
+\[\mathrm{SSE}(\mathbf w)=\norm{\mathbf r_{\text{flat}}}^2+\norm{X\mathbf d}^2\;\ge\;\norm{\mathbf r_{\text{flat}}}^2=\mathrm{SSE}(\mathbf w_{\text{flat}}) ,\]
+since \(\norm{X\mathbf d}^2\), a squared length, is never negative. So \(\mathbf w_{\text{flat}}\) is a global minimum.</li>
+<li class="fragment">Same shape as L03&rsquo;s proof that the projection \(\lambda\mathbf b\) is the closest point to \(\mathbf x\) on the line through \(\mathbf b\): for any other point \(\mu\mathbf b\), \(\norm{\mathbf x-\mu\mathbf b}^2=\norm{\mathbf r}^2+(\lambda-\mu)^2\norm{\mathbf b}^2\), a fixed part plus a part that is never negative.</li>
+</ul>
+<p class="fragment"><strong>Now we have earned the names \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\) and \(\mathbf r^\ast=\mathbf y-X\mathbf w^\ast=\left(-\tfrac12,1,-\tfrac12\right)^\top\).</strong> <span class="tier-m">[MASTER]</span></p>
+<aside class="notes">"From here on the flat point is w-star. Point out that nothing in steps 1, 3, 4 used the particular entries of X; only step 2's X-transpose r = 0 did."</aside>
+</section>
+
+<section>
+<h4>Check \(\mathrm{SSE}(\mathbf w)=\tfrac32+\norm{X(\mathbf w-\mathbf w^\ast)}^2\) at \(\mathbf w=(0,0)^\top\), then at \((1,1)^\top\)</h4>
+\[\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14=\norm{\mathbf y-X\mathbf w}^2,\;\; \mathbf y=\begin{bmatrix}1\\3\\2\end{bmatrix},\;\; X=\begin{bmatrix}1&0\\1&1\\1&2\end{bmatrix}\]
+<ul>
+<li class="fragment"><strong>Polynomial:</strong> \(3\cdot0+6\cdot0\cdot0+5\cdot0-12\cdot0-14\cdot0+14=14\).</li>
+<li class="fragment"><strong>Residuals directly:</strong> \(X\mathbf 0=\mathbf 0\), so \(\mathbf y-X\mathbf 0=(1,3,2)^\top\) and \(\;1^2+3^2+2^2=1+9+4=14\).</li>
+<li class="fragment"><strong>Identity</strong>, with \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\): step \(\mathbf d=\mathbf 0-\mathbf w^\ast=\left(-\tfrac32,-\tfrac12\right)^\top\), change in predictions \(X\mathbf d=\left(-\tfrac32+0,\;-\tfrac32-\tfrac12,\;-\tfrac32-1\right)^\top=\left(-\tfrac32,-2,-\tfrac52\right)^\top\).</li>
+<li class="fragment">\(\norm{X\mathbf d}^2=\tfrac94+4+\tfrac{25}{4}=\tfrac94+\tfrac{16}{4}+\tfrac{25}{4}=\tfrac{50}{4}=\tfrac{25}{2}\), so \(\;\tfrac32+\tfrac{25}{2}=\tfrac{28}{2}=14\) ✓</li>
+</ul>
+<p class="fragment">Reading: at \((0,0)^\top\) the error is \(14\) = the unavoidable \(\tfrac32\) + \(\tfrac{25}{2}\) caused by standing \(\mathbf d\) away from \(\mathbf w^\ast\).</p>
+<div class="quickcheck fragment"><strong>Your turn, \(\mathbf w=(1,1)^\top\).</strong> Polynomial: \(3+6+5-12-14+14=2\). Identity: \(\mathbf d=\left(-\tfrac12,\tfrac12\right)^\top\), \(X\mathbf d=\left(-\tfrac12,0,\tfrac12\right)^\top\), \(\tfrac32+\tfrac14+0+\tfrac14=2\) ✓</div>
+<aside class="notes">"Three routes, one number. The polynomial and the direct residuals do not know about the theorem; the identity does. Agreement is the check." "Let them do (1,1) before revealing the box. (2,-1) was already checked on the right-triangle slide before the theorem: 9 = 3/2 + 15/2."</aside>
+</section>
+
+<section>
+<h4>What &ldquo;global&rdquo; adds over &ldquo;flat&rdquo;</h4>
+<img src="../images/unit04/u4-L10-fig08-error-surface.png" alt="The error surface over w0 and w1, a bowl whose flat point is at (3/2, 1/2)" style="float:right; max-height:260px; max-width:40%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p><strong>Notation.</strong> \(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\), lowest at \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\) with \(\mathrm{SSE}(\mathbf w^\ast)=\tfrac32\). Identity: \(\mathrm{SSE}(\mathbf w)=\tfrac32+\norm{X(\mathbf w-\mathbf w^\ast)}^2\).</p>
+<ul>
+<li class="fragment"><strong>Flat</strong> (L09): at \(\mathbf w_{\text{flat}}\), the slopes along the two axes are zero. That says nothing about points farther away.</li>
+<li class="fragment"><strong>Global minimum</strong> (today): \(\mathrm{SSE}(\mathbf w)\ge\tfrac32\) at <em>every</em> \(\mathbf w\). The height above the floor \(\tfrac32\) is \(\norm{X(\mathbf w-\mathbf w^\ast)}^2\), a squared length, never negative:</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.3em 0; font-size:0.9em;">
+<tr><th>\(\mathbf w\)</th><th>\(\mathrm{SSE}(\mathbf w)\) from the polynomial</th><th>above the floor</th></tr>
+<tr><td>\((1,1)^\top\)</td><td>\(3+6+5-12-14+14=2\)</td><td>\(2-\tfrac32=\tfrac12\)</td></tr>
+<tr><td>\((2,-1)^\top\)</td><td>\(12-12+5-24+14+14=9\)</td><td>\(9-\tfrac32=\tfrac{15}{2}\)</td></tr>
+<tr><td>\((0,0)^\top\)</td><td>\(14\)</td><td>\(14-\tfrac32=\tfrac{25}{2}\)</td></tr>
+</table>
+<ul>
+<li class="fragment">So there is <strong>no second valley</strong> anywhere: solving \(6w_0+6w_1-12=0,\ 6w_0+10w_1-14=0\) is enough, no search needed.</li>
+<li class="fragment">\(\mathrm{SSE}(\mathbf w)=\tfrac32+\norm{X(\mathbf w-\mathbf w^\ast)}^2\) is <strong>exact</strong> for every step, not a first-order approximation that holds only for small steps.</li>
+</ul>
+<aside class="notes">"Say it plainly: flat is local information, global is a promise about the whole plane. For least squares the Pythagoras identity turns one into the other. For most models (neural networks) nothing like it exists, which is why their training can get stuck."</aside>
+</section>
+
+<section>
+<h4>Is \(\mathbf w^\ast\) the <em>only</em> lowest point?</h4>
+<p><strong>Notation.</strong> \(\mathrm{SSE}(\mathbf w)=\norm{\mathbf y-X\mathbf w}^2\); \(X=[\,\mathbf 1\;\;\mathbf t\,]\) with columns \(\mathbf 1=(1,1,1)^\top\), \(\mathbf t=(0,1,2)^\top\); \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\); Pythagoras identity \(\mathrm{SSE}(\mathbf w)=\mathrm{SSE}(\mathbf w^\ast)+\norm{X(\mathbf w-\mathbf w^\ast)}^2\).</p>
+<div class="mathbox">
+<strong>Uniqueness.</strong> \(\mathbf w^\ast\) is the only \(\mathbf w\) with \(\mathrm{SSE}(\mathbf w)=\mathrm{SSE}(\mathbf w^\ast)\) exactly when the columns of \(X\) are linearly independent (MML Def. 2.12, p.40), that is, when \(\operatorname{rank}X\) equals the number of columns (MML &sect;2.6.2, p.47). <span class="tier-m">[MASTER]</span>
+</div>
+<ul>
+<li class="fragment">From \(\mathrm{SSE}(\mathbf w)=\mathrm{SSE}(\mathbf w^\ast)+\norm{X\mathbf d}^2\), with \(\mathbf d=\mathbf w-\mathbf w^\ast\): \(\;\mathrm{SSE}(\mathbf w)=\mathrm{SSE}(\mathbf w^\ast)\iff\norm{X\mathbf d}^2=0\iff X\mathbf d=\mathbf 0\).</li>
+<li class="fragment">\(X\mathbf d=d_0\,\mathbf 1+d_1\,\mathbf t\). <strong>Independent</strong> columns means: \(d_0\,\mathbf 1+d_1\,\mathbf t=\mathbf 0\) only when \(d_0=d_1=0\). So \(\mathbf d=\mathbf 0\), i.e. \(\mathbf w=\mathbf w^\ast\).</li>
+<li class="fragment">Our \(X\): \(\;X\mathbf d=(d_0,\;d_0+d_1,\;d_0+2d_1)^\top=\mathbf 0\). The first entry gives \(d_0=0\); then the second gives \(d_1=0\). So \(\operatorname{rank}X=2=\) number of columns: <strong>\(\mathbf w^\ast\) is the only best answer.</strong></li>
+<li class="fragment"><strong>Dependent</strong> columns means: some \(\mathbf d\neq\mathbf 0\) has \(X\mathbf d=\mathbf 0\). Then \(\mathbf w^\ast+\mathbf d\) has predictions \(X\mathbf w^\ast+X\mathbf d=X\mathbf w^\ast\): <strong>same predictions, same error</strong>, different \(\mathbf w\).</li>
+</ul>
+<aside class="notes">"Steps 1, 3 and 4 of the proof never used the entries of X, only X-transpose r = 0. So the identity, and this uniqueness argument, hold for any data matrix. The next slide uses that."</aside>
+</section>
+
+<section>
+<h4>Counterexample: dependent columns give many best answers</h4>
+<p><strong>Counterexample, not our course data:</strong> same students and points, but hours recorded twice, as \(t\) and as half-hour blocks \(2t\). Two weight vectors: \(\mathbf w_A=\left(\tfrac32,\tfrac12,0\right)^\top\), \(\mathbf w_B=\left(\tfrac32,0,\tfrac14\right)^\top\).</p>
+\[X_c=\begin{bmatrix}1&0&0\\1&1&2\\1&2&4\end{bmatrix},\quad \mathbf y=\begin{bmatrix}1\\3\\2\end{bmatrix},\quad \mathbf w=\begin{bmatrix}w_0\\w_1\\w_2\end{bmatrix},\quad \text{error}=\norm{\mathbf y-X_c\mathbf w}^2 .\]
+<ul>
+<li class="fragment">Dependent: column 3 \(=2\times\) column 2, i.e. \(2\cdot\text{col}_2-\text{col}_3=\mathbf 0\); so \(\operatorname{rank}X_c=2&lt;3\) columns.</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.2em auto; font-size:0.9em;">
+<tr><th>student</th><th>prediction from \(\mathbf w_A\)</th><th>prediction from \(\mathbf w_B\)</th><th>\(y\)</th><th>residual</th></tr>
+<tr><td>\(t=0\)</td><td>\(\tfrac32+0+0=\tfrac32\)</td><td>\(\tfrac32+0+0=\tfrac32\)</td><td>\(1\)</td><td>\(1-\tfrac32=-\tfrac12\)</td></tr>
+<tr><td>\(t=1\)</td><td>\(\tfrac32+\tfrac12+0=2\)</td><td>\(\tfrac32+0+2\cdot\tfrac14=2\)</td><td>\(3\)</td><td>\(3-2=1\)</td></tr>
+<tr><td>\(t=2\)</td><td>\(\tfrac32+2\cdot\tfrac12+0=\tfrac52\)</td><td>\(\tfrac32+0+4\cdot\tfrac14=\tfrac52\)</td><td>\(2\)</td><td>\(2-\tfrac52=-\tfrac12\)</td></tr>
+</table>
+<p class="fragment">\(\mathbf w_A\), \(\mathbf w_B\): same predictions, same residuals, same error \(\left(-\tfrac12\right)^2+1^2+\left(-\tfrac12\right)^2=\tfrac32\). Their difference \(\mathbf d=\left(0,-\tfrac12,\tfrac14\right)^\top\) has \(X_c\mathbf d=\left(0,\,-\tfrac12+\tfrac12,\,-1+1\right)^\top=\mathbf 0\).</p>
+<aside class="notes">"This is L06's degrees-Celsius-and-Fahrenheit problem in miniature: one column built from another. Emphasise the label: X_c is a counterexample, not the course data."</aside>
+</section>
+
+<section>
+<h4>For \(X_c\), every \(\mathbf w=\left(\tfrac32,\tfrac12-2s,s\right)^\top\) is lowest &mdash; and rank decides</h4>
+<p><strong>Counterexample</strong> (not course data): \(X_c\) has columns \((1,1,1)^\top,(0,1,2)^\top,(0,2,4)^\top\); \(\mathbf y=(1,3,2)^\top\); \(\mathbf w_A=\left(\tfrac32,\tfrac12,0\right)^\top\), \(\mathbf w_B=\left(\tfrac32,0,\tfrac14\right)^\top\).</p>
+<ul>
+<li class="fragment">Residual \(\mathbf r=\mathbf y-X_c\mathbf w_A=\left(1-\tfrac32,\,3-2,\,2-\tfrac52\right)^\top=\left(-\tfrac12,1,-\tfrac12\right)^\top\). Against the columns of \(X_c\): \(-\tfrac12+1-\tfrac12=0\), \(0+1-1=0\), \(0+2(1)+4\left(-\tfrac12\right)=0\). So \(X_c^\top\mathbf r=\mathbf 0\).</li>
+<li class="fragment">The Pythagoras proof used only \(X^\top\mathbf r=\mathbf 0\), so \(\norm{\mathbf y-X_c\mathbf w}^2=\tfrac32+\norm{X_c(\mathbf w-\mathbf w_A)}^2\ge\tfrac32\): \(\mathbf w_A\), \(\mathbf w_B\) are global minima.</li>
+<li class="fragment">Every \(\mathbf w=\left(\tfrac32,\tfrac12-2s,s\right)^\top\) is lowest: row \(i\) predicts \(\tfrac32+\left(\tfrac12-2s\right)t_i+s\cdot2t_i=\tfrac32+\tfrac12t_i\) (\(s\) cancels; \(s=0\) gives \(\mathbf w_A\), \(s=\tfrac14\) gives \(\mathbf w_B\)).</li>
+<li class="fragment"><strong>Predictions</strong> \(\left(\tfrac32,2,\tfrac52\right)^\top\) pinned down, <strong>weights</strong> not &mdash; as with &deg;C and &deg;F in L06.</li>
+</ul>
+<p class="fragment"><strong>Rule:</strong> \(\operatorname{rank}X=\) number of columns \(\Rightarrow\) one best \(\mathbf w\); \(\operatorname{rank}X&lt;\) number of columns \(\Rightarrow\) infinitely many. <span class="tier-m">[MASTER]</span></p>
+<div class="key-question fragment">Is the flat point the lowest? Yes: one lowest <strong>value</strong> (\(\tfrac32\) for our data), and rank tells when only one \(\mathbf w\) reaches it.</div>
+</section>
+
+<section>
+<h4>L10 takeaways</h4>
+<ul>
+<li>At the flat point, \(\partial\,\mathrm{SSE}/\partial w_0=\partial\,\mathrm{SSE}/\partial w_1=0\) \(\iff X^\top\mathbf r^\ast=\mathbf 0\): the residual is orthogonal to every column of \(X\). <span class="tier-m">[MASTER]</span></li>
+<li>Pythagoras: \(\mathrm{SSE}(\mathbf w)=\norm{\mathbf y-X\mathbf w}^2=\norm{\mathbf r^\ast}^2+\norm{X(\mathbf w-\mathbf w^\ast)}^2\) &mdash; exact, not approximate; the cross term \(-2\,\mathbf r^{\ast\top}X(\mathbf w-\mathbf w^\ast)\) is zero. The flat point is the <strong>global</strong> minimum. <span class="tier-m">[MASTER]</span></li>
+<li>Our data: \(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14=\tfrac32+\norm{X(\mathbf w-\mathbf w^\ast)}^2\), \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\); checked at \((0,0)^\top\): \(14\), \((2,-1)^\top\): \(9\), \((1,1)^\top\): \(2\). <span class="tier-m">[MASTER]</span></li>
+<li>The minimum is <strong>unique exactly when the columns of \(X\) are linearly independent</strong> &mdash; L05&rsquo;s rank equals the number of columns. Dependent columns give a whole family of \(\mathbf w\) with the same predictions and the same error. <span class="tier-m">[MASTER]</span></li>
+</ul>
+<div class="key-question fragment">\(\partial\,\mathrm{SSE}/\partial w_0\) and \(\partial\,\mathrm{SSE}/\partial w_1\) are slopes along the <strong>axes</strong>. Nobody changes one parameter at a time. <strong>L11: the slope in any direction.</strong></div>
+</section>
+
+<section>
+<h2 style="font-size:1.3em;">L11 — One Vector Answers Every Direction</h2>
+<p>Reading: MML &sect;5.2, pp.146&ndash;148 (eq. (5.40) and the Remark on p.147); MML &sect;7.1, p.228, first paragraph (contour lines, and the gradient orthogonal to them).</p>
+<div class="key-question">Why ask about directions, if L10 already found the lowest point \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\)? Least squares hands us <strong>linear</strong> equations, \(X^\top X\mathbf w=X^\top\mathbf y\). For many models used in AI, setting the derivatives to zero does not give a linear system we can solve by a formula; training then starts at some parameters and <strong>steps downhill, again and again</strong> (MML Ch. 7, p.226, and &sect;7.1, p.228). Our three students are a test bench: we know the bottom, so we can check where downhill leads. <span style="color:rgb(30,90,160)"><strong>From \((0,0)^\top\), error \(14\): which direction lowers the error fastest?</strong></span></div>
+<aside class="notes">"Two lectures of partial derivatives: slopes along the two axes. Today: the slope in any direction, and the single row of numbers that answers all of them at once." "The p.228 paragraph is in the optimization chapter, but it is five lines and it is exactly today's picture."</aside>
+</section>
+
+<section>
+<h4>Which other models are exactly as bad as \((0,0)^\top\)?</h4>
+<p>At \((0,0)^\top\) the error is \(14\). Before asking which way is <em>down</em>: which models are exactly as bad? Data \(\mathbf t=(0,1,2)^\top\) hours, \(\mathbf y=(1,3,2)^\top\) points, model \(\hat y=w_0+w_1t\), error</p>
+\[\mathrm{SSE}(w_0,w_1)=(1-w_0)^2+(3-w_0-w_1)^2+(2-w_0-2w_1)^2\]
+\[=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\]
+<table style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>point \(\mathbf w\)</th><th>predictions \((w_0,\;w_0+w_1,\;w_0+2w_1)\)</th><th>residuals \(\mathbf r\)</th><th>squares</th><th>\(\mathrm{SSE}\)</th></tr>
+<tr><td>\((0,0)^\top\)</td><td>\(0,\ 0,\ 0\)</td><td>\(1,\ 3,\ 2\)</td><td>\(1,\ 9,\ 4\)</td><td>\(14\)</td></tr>
+<tr class="fragment"><td>\((4,0)^\top\)</td><td>\(4,\ 4,\ 4\)</td><td>\(-3,\ -1,\ -2\)</td><td>\(9,\ 1,\ 4\)</td><td>\(14\)</td></tr>
+<tr class="fragment"><td>\((3,1)^\top\)</td><td>\(3,\ 4,\ 5\)</td><td>\(-2,\ -1,\ -3\)</td><td>\(4,\ 1,\ 9\)</td><td>\(14\)</td></tr>
+</table>
+<ul>
+<li class="fragment">Where \((4,0)^\top\) came from: stay on the line \(w_1=0\), so \(\mathrm{SSE}=3w_0^2-12w_0+14\). Setting \(3w_0^2-12w_0+14\) equal to \(14\) gives \(3w_0^2-12w_0=0\), i.e. \(3w_0(w_0-4)=0\): \(w_0=0\) or \(w_0=4\).</li>
+<li class="fragment">Three different models, the same total error: the squares \(1,4,9\) are reshuffled among the students, and \(1+4+9=14\) every time.</li>
+<li class="fragment">All the points with error \(14\) form <strong>one curve</strong> in the \((w_0,w_1)\)-plane; walking along it makes no progress.</li>
+</ul>
+<aside class="notes">"Have them do the (4,0) row themselves: predict 4 for everyone." "Point out that (3,1) is the mirror image of (0,0) through w* = (3/2,1/2) — the contour is an ellipse centred at w*. Do not prove it; L10's identity SSE = 3/2 + ||X(w - w*)||^2 is the reason if someone asks."</aside>
+</section>
+
+<section>
+<h4>Look at the error surface from above: contours</h4>
+<img src="../images/unit04/u4-L11-fig09-contours-gradient.png" alt="Contours of the error with arrows pointing in the direction of fastest increase, perpendicular to the contours" style="float:right; max-height:330px; max-width:46%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>The error \(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\) is \(14\) at \((0,0)^\top\), \((4,0)^\top\) and \((3,1)^\top\), and along a whole curve through them. Draw such a curve for several error values, and the surface becomes a hiking map seen from directly above.</p>
+<div class="mathbox">
+<strong>Definition</strong> (MML &sect;7.1, p.228, under the name <em>contour lines</em>). For a number \(c\), the <strong>contour</strong> of \(\mathrm{SSE}\) at level \(c\) is the set of all parameter points \(\mathbf w\) with \(\mathrm{SSE}(\mathbf w)=c\). <span class="tier-m">[MASTER]</span>
+</div>
+<ul>
+<li class="fragment">In the figure, each grey curve is one contour, labelled by its level: \(2,\ 4,\ 8,\ 14,\ 24,\ 40\).</li>
+<li class="fragment"><strong>Check \((3,1)^\top\) is on level \(14\)</strong>, with the polynomial: \(27+18+5-36-14+14=14\) ✓.</li>
+<li class="fragment">The levels shrink toward the blue point \(\mathbf w^\ast=(\tfrac32,\tfrac12)^\top\), where \(\mathrm{SSE}=\tfrac32\) (L10), smaller than every level drawn.</li>
+<li class="fragment"><strong>&ldquo;Can two contours cross?&rdquo;</strong> No: a crossing point would have two different errors, but \(\mathrm{SSE}\) gives each point one number.</li>
+<li class="fragment"><strong>For training:</strong> along a contour, no progress; going down means crossing toward smaller levels. (The red arrows: the gradient, later in this lecture.)</li>
+</ul>
+<aside class="notes">"Hiking-map language works: contour = same altitude. Here altitude is error." "Do not explain the arrows yet. Come back to this figure when the gradient has been computed at (1/2, 2)."</aside>
+</section>
+
+<section>
+<h4>A partial derivative only walks along an axis</h4>
+<img src="../images/unit04/u4-L11-fig09b-downhill-axes.png" alt="The error surface as a valley: standing at (0,0) with SSE 14, the walk in the w0 direction (slope -12) and the walk in the w1 direction (slope -14) go downhill on the surface; gray paths are other directions" style="float:right; max-height:340px; max-width:34%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Our error is \(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\). L09&rsquo;s two partial derivatives of \(\mathrm{SSE}\) (each one: differentiate with the other parameter held fixed):</p>
+\[\frac{\partial\,\mathrm{SSE}}{\partial w_0}=6w_0+6w_1-12,\qquad \frac{\partial\,\mathrm{SSE}}{\partial w_1}=6w_0+10w_1-14 .\]
+<ul>
+<li class="fragment">At \(\mathbf w=(0,0)^\top\): \(\partial\,\mathrm{SSE}/\partial w_0=6\cdot0+6\cdot0-12=-12\) and \(\partial\,\mathrm{SSE}/\partial w_1=6\cdot0+10\cdot0-14=-14\).</li>
+<li class="fragment">From \((0,0)^\top\), walking in the \(w_0\) direction (keep \(w_1=0\)) the error starts falling at \(12\) per unit step; in the \(w_1\) direction (keep \(w_0=0\)), at \(14\).</li>
+<li class="fragment">The \(w_0\) direction and the \(w_1\) direction are only two directions out of infinitely many. <strong>A trainer changes both parameters at once</strong>, and wants the fastest way down.</li>
+</ul>
+<div class="key-question fragment">Take a unit direction \(\mathbf u=(u_0,u_1)^\top\) and step a distance \(h\) in the direction \(\mathbf u\). How fast does the error change? And which \(\mathbf u\) changes the error fastest?</div>
+<aside class="notes">"On the contour figure: the w0 direction is straight right, the w1 direction straight up. Both lower the error from (0,0). Is some slanted direction better? Take a vote before the next slide."</aside>
+</section>
+
+<section>
+<h4>Pick a direction, and the surface becomes a curve</h4>
+<img src="../images/unit04/u4-L11-fig09c-directional-slice.png" alt="A vertical plane through (0,0) along u = (1,1)/sqrt2 cuts the error surface in the curve phi(h) = 7h^2 - 13 sqrt2 h + 14, with its tangent at h = 0; an inset shows the same curve flattened" style="float:right; max-height:260px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
+<ul>
+<li class="fragment">A <strong>direction</strong> is a column \(\mathbf u=(u_0,u_1)^\top\) with \(\norm{\mathbf u}=1\). Length \(1\) so that \(h\) is the distance walked: \(\norm{h\mathbf u}=|h|\,\norm{\mathbf u}=|h|\).</li>
+<li class="fragment">The straight line through \(\mathbf w\) in the direction \(\mathbf u\) is the set of points \(\mathbf w+h\mathbf u\), one point for each number \(h\).</li>
+<li class="fragment">Along that line the error depends on the <strong>single</strong> number \(h\): \(\;\phi(h)=\mathrm{SSE}(\mathbf w+h\mathbf u)\), and \(\phi(0)=\mathrm{SSE}(\mathbf w)\) is where we stand.</li>
+<li class="fragment">Our example: \(\mathbf w=(0,0)^\top\) and \(\mathbf u=\tfrac{1}{\sqrt2}(1,1)^\top\), on the error \(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\). Length check: \(\norm{\mathbf u}^2=\big(\tfrac1{\sqrt2}\big)^2+\big(\tfrac1{\sqrt2}\big)^2=\tfrac12+\tfrac12=1\) ✓.</li>
+<li class="fragment">Points on the line through \((0,0)^\top\) in the direction \(\tfrac{1}{\sqrt2}(1,1)^\top\): \(\mathbf w+h\mathbf u=\big(\tfrac{h}{\sqrt2},\tfrac{h}{\sqrt2}\big)^\top\), that is \(w_0=w_1=\tfrac{h}{\sqrt2}\): raise both parameters by the same amount.</li>
+</ul>
+<aside class="notes">"phi is an ordinary function of one variable. Everything from Calculus 1 applies to it. That is the whole trick of this lecture."</aside>
+</section>
+
+<section>
+<h4>Substitute into \(\mathrm{SSE}\), one term at a time</h4>
+<p>Put \(w_0=w_1=\tfrac{h}{\sqrt2}\) into \(\mathrm{SSE}=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\). Two facts used: \(\big(\tfrac{h}{\sqrt2}\big)^2=\tfrac{h^2}{2}\), and \(\tfrac{12}{\sqrt2}=\tfrac{12\sqrt2}{2}=6\sqrt2\) (multiply top and bottom by \(\sqrt2\)).</p>
+<table style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>term</th><th>after substituting</th><th>simplified</th></tr>
+<tr class="fragment"><td>\(3w_0^2\)</td><td>\(3\cdot\tfrac{h^2}{2}\)</td><td>\(\tfrac32h^2\)</td></tr>
+<tr class="fragment"><td>\(6w_0w_1\)</td><td>\(6\cdot\tfrac{h}{\sqrt2}\cdot\tfrac{h}{\sqrt2}=6\cdot\tfrac{h^2}{2}\)</td><td>\(3h^2\)</td></tr>
+<tr class="fragment"><td>\(5w_1^2\)</td><td>\(5\cdot\tfrac{h^2}{2}\)</td><td>\(\tfrac52h^2\)</td></tr>
+<tr class="fragment"><td>\(-12w_0\)</td><td>\(-12\cdot\tfrac{h}{\sqrt2}\)</td><td>\(-6\sqrt2\,h\)</td></tr>
+<tr class="fragment"><td>\(-14w_1\)</td><td>\(-14\cdot\tfrac{h}{\sqrt2}\)</td><td>\(-7\sqrt2\,h\)</td></tr>
+<tr class="fragment"><td>\(14\)</td><td>\(14\)</td><td>\(14\)</td></tr>
+</table>
+<ul>
+<li class="fragment">Collect \(h^2\): \(\tfrac32+3+\tfrac52=7\). Collect \(h\): \(-6\sqrt2-7\sqrt2=-13\sqrt2\).</li>
+</ul>
+<div class="fragment">\[\phi(h)=7h^2-13\sqrt2\,h+14 .\]</div>
+<p class="fragment">Check at \(h=0\): \(\phi(0)=14\), and directly \(\mathrm{SSE}(0,0)=(1-0)^2+(3-0)^2+(2-0)^2=1+9+4=14\) ✓.</p>
+<aside class="notes">"Slow down on the sqrt(2) arithmetic; it is where people drop a factor. 12/sqrt2 = 6 sqrt2 because 6 sqrt2 times sqrt2 is 12."</aside>
+</section>
+
+<section>
+<h4>Differentiate \(\phi(h)=7h^2-13\sqrt2\,h+14\), then set \(h=0\)</h4>
+<p>From the substitution into \(\mathrm{SSE}=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\) along \(w_0=w_1=\tfrac{h}{\sqrt2}\): \(\;\phi(h)=7h^2-13\sqrt2\,h+14\).</p>
+<ul>
+<li class="fragment">Term by term, Calculus 1: \(\tfrac{d}{dh}\big(7h^2\big)=14h\), \(\;\tfrac{d}{dh}\big(-13\sqrt2\,h\big)=-13\sqrt2\), \(\;\tfrac{d}{dh}\,14=0\).</li>
+<li class="fragment">So \(\phi'(h)=14h-13\sqrt2\), and at \(h=0\): \(\;\phi'(0)=-13\sqrt2\approx-13\times1.41421\approx-18.385\).</li>
+<li class="fragment">Meaning: starting at \((0,0)^\top\) in the direction \(\tfrac1{\sqrt2}(1,1)^\top\), the error falls at about \(18.385\) per unit distance.</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>direction from \((0,0)^\top\)</th><th>\(w_0\) axis</th><th>\(w_1\) axis</th><th>\(\tfrac1{\sqrt2}(1,1)^\top\)</th></tr>
+<tr><td>rate of change of the error</td><td>\(\partial\mathrm{SSE}/\partial w_0=6w_0+6w_1-12\);<br>at \((0,0)^\top\): \(-12\)</td><td>\(\partial\mathrm{SSE}/\partial w_1=6w_0+10w_1-14\);<br>at \((0,0)^\top\): \(-14\)</td><td>\(\phi'(0)\approx-18.385\),<br>steeper than either axis</td></tr>
+</table>
+<ul>
+<li class="fragment">Check with L09&rsquo;s first-order prediction (change \(\approx\) slope \(\times\) step), step \(h=0.1\): predicted \(\phi(0.1)\approx14+(-18.385)(0.1)=14-1.8385=12.1615\).</li>
+<li class="fragment">Actual: \(\phi(0.1)=7(0.1)^2-13\sqrt2\,(0.1)+14=0.07-1.8385+14=12.2315\). Close, not equal: the gap \(12.2315-12.1615=0.07\) is the \(7h^2\) term.</li>
+</ul>
+<p class="fragment">No new calculus was used: <strong>restrict the surface to a line, and differentiate the way you already know how.</strong></p>
+<aside class="notes">"The table is the surprise: moving both parameters at once beats either one alone. So the partial derivatives by themselves do not tell you the best direction — or do they? Hold that question for the gradient."</aside>
+</section>
+
+<section>
+<h4>Name the slope: the directional derivative</h4>
+<p>The error: \(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\).</p>
+<div class="mathbox">
+<strong>Definition</strong> (Stewart, <em>Calculus</em>, &sect;14.6; MML has no numbered definition). The <strong>directional derivative</strong> of \(g\) at \(\mathbf w\) in the unit direction \(\mathbf u\) is \(\;D_{\mathbf u}g=\phi'(0)\), where \(\phi(h)=g(\mathbf w+h\mathbf u)\). <span class="tier-m">[MASTER]</span>
+</div>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.85em;">
+<tr><th>direction \(\mathbf u\) from \((0,0)^\top\)</th><th>\(\phi(h)\): put \(w_0=hu_0,\ w_1=hu_1\) into \(\mathrm{SSE}\)</th><th>\(D_{\mathbf u}\mathrm{SSE}=\phi'(0)\)</th></tr>
+<tr><td>\((1,0)^\top\), the \(w_0\) axis</td><td>\(3h^2-12h+14\)</td><td>\(-12\), which is \(\partial\,\mathrm{SSE}/\partial w_0\)</td></tr>
+<tr><td>\((0,1)^\top\), the \(w_1\) axis</td><td>\(5h^2-14h+14\)</td><td>\(-14\), which is \(\partial\,\mathrm{SSE}/\partial w_1\)</td></tr>
+<tr><td>\(\tfrac1{\sqrt2}(1,1)^\top\)</td><td>\(7h^2-13\sqrt2\,h+14\)</td><td>\(-13\sqrt2\approx-18.385\)</td></tr>
+<tr><td>\(-\tfrac1{\sqrt2}(1,1)^\top\), the way back</td><td>\(7h^2+13\sqrt2\,h+14\)</td><td>\(+13\sqrt2\)</td></tr>
+</table>
+<ul>
+<li class="fragment">Along an axis, the directional derivative <em>is</em> the partial derivative. Turning around flips the sign.</li>
+<li class="fragment"><strong>The diagonal:</strong> \(-13\sqrt2=-\tfrac{26}{\sqrt2}=(-12)\cdot\tfrac1{\sqrt2}+(-14)\cdot\tfrac1{\sqrt2}\), each axis slope weighted by the matching entry of \(\mathbf u\).</li>
+</ul>
+<div class="key-question fragment">If &ldquo;axis slopes weighted by the entries of \(\mathbf u\)&rdquo; holds for <strong>every</strong> \(\mathbf u\), two numbers give the slope in all infinitely many directions &mdash; no more substituting.</div>
+<aside class="notes">"MML never gives this slope a numbered definition; Stewart 14.6 does, under this name. Say so, so nobody hunts for it in MML." "The diagonal row is the phi(h) computed term by term on the substitution slide. Do the weighting on the board: -26/sqrt2 split as -12/sqrt2 - 14/sqrt2."</aside>
+</section>
+
+<section>
+<h4>The slope in every direction, from the two partial derivatives</h4>
+<div class="mathbox">
+<strong>Formula.</strong> If \(g\) is differentiable at \(\mathbf w\), then for every unit direction \(\mathbf u=(u_0,u_1)^\top\), with the partial derivatives taken at \(\mathbf w\): \(\;D_{\mathbf u}g=u_0\,\partial g/\partial w_0+u_1\,\partial g/\partial w_1=\begin{bmatrix}\partial g/\partial w_0&\partial g/\partial w_1\end{bmatrix}\mathbf u\). <span class="tier-m">[MASTER]</span>
+</div>
+<p class="fragment"><strong>Proof for our \(\mathrm{SSE}\)</strong> (its terms are the first column below): \(\phi(h)=\mathrm{SSE}(w_0+hu_0,\,w_1+hu_1)=ah^2+bh+c\), so \(\phi'(0)=b\), <strong>the coefficient of \(h\)</strong>:</p>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.85em;">
+<tr><th>term</th><th>after \(w_0\to w_0+hu_0\), \(w_1\to w_1+hu_1\)</th><th>coefficient of \(h\)</th></tr>
+<tr><td>\(3w_0^2\)</td><td>\(3w_0^2+6w_0u_0\,h+3u_0^2h^2\)</td><td>\(6w_0u_0\)</td></tr>
+<tr><td>\(6w_0w_1\)</td><td>\(6w_0w_1+(6w_0u_1+6w_1u_0)\,h+6u_0u_1h^2\)</td><td>\(6w_0u_1+6w_1u_0\)</td></tr>
+<tr><td>\(5w_1^2\)</td><td>\(5w_1^2+10w_1u_1\,h+5u_1^2h^2\)</td><td>\(10w_1u_1\)</td></tr>
+<tr><td>\(-12w_0-14w_1+14\)</td><td>\((-12w_0-14w_1+14)+(-12u_0-14u_1)\,h\)</td><td>\(-12u_0-14u_1\)</td></tr>
+</table>
+<ul>
+<li class="fragment">Add the last column, grouped by \(u_0\) and \(u_1\): \(\;\phi'(0)=u_0\,(6w_0+6w_1-12)+u_1\,(6w_0+10w_1-14)\): the brackets are L09&rsquo;s \(\partial\,\mathrm{SSE}/\partial w_0\) and \(\partial\,\mathrm{SSE}/\partial w_1\). At \((0,0)^\top\) this is \(\begin{bmatrix}-12&-14\end{bmatrix}\mathbf u\), and \(\mathbf u=\tfrac1{\sqrt2}(1,1)^\top\) gives \(-13\sqrt2\) ✓.</li>
+<li class="fragment">⚠️ A general \(g\) must be <strong>differentiable</strong> (continuous partial derivatives suffice; the polynomial \(\mathrm{SSE}\) is). General proof: L14&rsquo;s matrix chain rule, stated, not proved.</li>
+</ul>
+<aside class="notes">"This is a real proof for our error, and it uses nothing but expanding brackets. The h^2 terms never matter at h = 0 — that is the whole reason the answer is linear in u."</aside>
+</section>
+
+<section>
+<h4>One row answers every direction: name it the gradient</h4>
+<div class="mathbox">
+<strong>Definition</strong> (MML eq. (5.40), p.146). For \(g(\mathbf w)\) with \(\mathbf w\in\R^d\), the <strong>gradient</strong> is the <strong>row</strong> vector of partial derivatives
+\[\nabla g=\frac{d\,g}{d\mathbf w}=\begin{bmatrix}\dfrac{\partial g}{\partial w_0}&\cdots&\dfrac{\partial g}{\partial w_{d-1}}\end{bmatrix}\in\R^{1\times d},
+\qquad\text{so}\qquad D_{\mathbf u}g=\nabla g\,\mathbf u .\]
+<span class="tier-m">[MASTER]</span>
+</div>
+<ul>
+<li class="fragment"><strong>Every</strong> directional slope at \(\mathbf w\) is the <em>same</em> row \(\nabla g\) times a different column \(\mathbf u\). Shapes: \((1\times d)(d\times1)=1\times1\), one number.</li>
+<li class="fragment"><strong>Why a row?</strong> For a function with one output the derivative is naturally one row: in L14 the gradient turns out to be the <em>Jacobian</em> of a one-output function, and the chain rule becomes a plain matrix product (MML eq. (5.40), p.146; Remark &ldquo;Gradient as a Row Vector&rdquo;, p.147).</li>
+<li class="fragment">⚠️ <strong>Mind the transpose.</strong> The gradient is a <em>row</em>; a direction to walk in is a <em>column</em>. The row \(\nabla g\) and the column \((\nabla g)^\top\) differ by a transpose, and this course writes the transpose out every time.</li>
+<li class="fragment">Our error, \(d=2\): \(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\), with \(\partial\mathrm{SSE}/\partial w_0=6w_0+6w_1-12\) and \(\partial\mathrm{SSE}/\partial w_1=6w_0+10w_1-14\), so \(\;\nabla\mathrm{SSE}=\begin{bmatrix}6w_0+6w_1-12&6w_0+10w_1-14\end{bmatrix}\).</li>
+</ul>
+<aside class="notes">"The formula slide already had this row in its box; now it has a name. Say out loud: row, 1 by 2."</aside>
+</section>
+
+<section>
+<h4>The gradient at three points, and the red arrows</h4>
+<img src="../images/unit04/u4-L11-fig09-contours-gradient.png" alt="Contours of the error with arrows pointing in the direction of fastest increase, perpendicular to the contours" style="float:right; max-height:330px; max-width:40%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>From \(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\): \(\;\nabla\mathrm{SSE}=\begin{bmatrix}6w_0+6w_1-12&6w_0+10w_1-14\end{bmatrix}\), evaluated entry by entry:</p>
+<table style="width:auto; margin:0.3em 0; font-size:0.9em;">
+<tr><th>\(\mathbf w\)</th><th>first entry</th><th>second entry</th></tr>
+<tr class="fragment"><td>\((0,0)^\top\)</td><td>\(0+0-12=-12\)</td><td>\(0+0-14=-14\)</td></tr>
+<tr class="fragment"><td>\((\tfrac12,2)^\top\)</td><td>\(3+12-12=3\)</td><td>\(3+20-14=9\)</td></tr>
+<tr class="fragment"><td>\((\tfrac32,\tfrac12)^\top\)</td><td>\(9+3-12=0\)</td><td>\(9+5-14=0\)</td></tr>
+</table>
+<ul>
+<li class="fragment">So \(\nabla\mathrm{SSE}(0,0)=\begin{bmatrix}-12&-14\end{bmatrix}\), \(\;\nabla\mathrm{SSE}(\tfrac12,2)=\begin{bmatrix}3&9\end{bmatrix}\), \(\;\nabla\mathrm{SSE}(\tfrac32,\tfrac12)=\begin{bmatrix}0&0\end{bmatrix}\).</li>
+<li class="fragment">\((\tfrac12,2)^\top\) is a black dot in the figure. The red arrow at that dot points along the column \((3,9)^\top\): \(3\) right, \(9\) up.</li>
+<li class="fragment">At \((0,0)^\top\) the red arrow points along \((-12,-14)^\top\): down and to the left.</li>
+<li class="fragment">At \(\mathbf w^\ast=(\tfrac32,\tfrac12)^\top\) both entries are \(0\): the flat point of L09, where no red arrow is drawn.</li>
+</ul>
+<aside class="notes">"Now the arrows on the first figure have numbers. Each red arrow is the transposed gradient at its black dot. The slides that follow first try it with numbers, then prove the claim printed in the figure: this is the direction of fastest increase, and it is perpendicular to the contour."</aside>
+</section>
+
+<section>
+<h4>Before any proof: walk a distance \(1\) from \((0,0)^\top\) in three directions</h4>
+<img src="../images/unit04/u4-L11-fig10b-steepest-descent.png" alt="From (0,0) on the error valley the steepest-descent path in the direction (12,14) ends lower than the w0 and w1 walks over the same ground distance 1; an inset from above shows it crossing the contour SSE = 14 at a right angle" style="float:right; max-height:300px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>The error \(\mathrm{SSE}=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\) is \(14\) at \((0,0)^\top\), where \(\nabla\mathrm{SSE}=\begin{bmatrix}-12&-14\end{bmatrix}\).</p>
+<ul>
+<li class="fragment">Walk a ground distance of \(1\) (the three arrows): along \(w_0\) to \((1,0)^\top\), \(\mathrm{SSE}=3-12+14=5\); along \(w_1\) to \((0,1)^\top\), \(\mathrm{SSE}=5-14+14=5\); along the gradient&rsquo;s entries with their signs flipped, \(-(\nabla\mathrm{SSE})^\top=(12,14)^\top\), to \(\tfrac{(12,14)^\top}{\sqrt{340}}\approx(0.651,0.759)^\top\): \(\mathrm{SSE}\approx2.68\), far lower.</li>
+<li class="fragment">&#9888;&#65039; <strong>What this comparison is and is not.</strong> Three finite steps on our data, nothing more. What the next two slides prove is about the <strong>slope at the point where we stand</strong>, not about where a step of length \(1\) lands.</li>
+<li class="fragment">Seen from above (inset): \((12,14)^\top\) crosses the contour \(\mathrm{SSE}=14\) at a right angle.</li>
+<li class="fragment">The diagonal \(\mathbf u=\tfrac1{\sqrt2}(1,1)^\top\) has slope \(\begin{bmatrix}-12&-14\end{bmatrix}\mathbf u=\tfrac{-26}{\sqrt2}=-13\sqrt2\approx-18.38\): only \(4.4^\circ\) away from \((12,14)^\top\), and slightly less steep than \(-\sqrt{340}\approx-18.44\).</li>
+</ul>
+<div class="key-question fragment">Coincidence of our numbers, or does \(-(\nabla g)^\top\) <strong>always</strong> point the fastest way down?</div>
+<aside class="notes">"This is the picture of training: from where you stand, the gradient says which way is down fastest. How far to walk is Unit 5's question." "The diagonal was a lucky guess, close to the best; the gradient gives the best without guessing."</aside>
+</section>
+
+<section>
+<h4>Which direction is steepest? One step at a time</h4>
+<p>Assume \(\nabla g\neq\mathbf 0\) at \(\mathbf w\), and let \(\theta\) be the angle between the column \((\nabla g)^\top\) and the unit direction \(\mathbf u\).</p>
+<ul>
+<li class="fragment"><strong>Step 1.</strong> \(D_{\mathbf u}g=\nabla g\,\mathbf u=\big((\nabla g)^\top\big)^\top\mathbf u\): the dot product of the two columns \((\nabla g)^\top\) and \(\mathbf u\).</li>
+<li class="fragment"><strong>Step 2.</strong> L01&rsquo;s cosine formula, \(\cos\theta=\dfrac{\mathbf x^\top\mathbf y}{\norm{\mathbf x}\,\norm{\mathbf y}}\), multiplied out: \(\;\mathbf x^\top\mathbf y=\norm{\mathbf x}\,\norm{\mathbf y}\cos\theta\). The cosine formula needs both vectors nonzero: \(\mathbf u\) has length \(1\), and that is why we assumed \(\nabla g\neq\mathbf 0\).</li>
+<li class="fragment"><strong>Step 3.</strong> Take \(\mathbf x=(\nabla g)^\top\), \(\mathbf y=\mathbf u\), and use \(\norm{\mathbf u}=1\):
+\[D_{\mathbf u}g=\norm{(\nabla g)^\top}\cos\theta .\]</li>
+<li class="fragment"><strong>Step 4.</strong> \(-1\le\cos\theta\le1\), so \(\;-\norm{(\nabla g)^\top}\le D_{\mathbf u}g\le\norm{(\nabla g)^\top}\).</li>
+<li class="fragment"><strong>Our numbers</strong> at \((0,0)^\top\): \(\nabla\mathrm{SSE}=\begin{bmatrix}6w_0+6w_1-12&6w_0+10w_1-14\end{bmatrix}\) gives \(\begin{bmatrix}-12&-14\end{bmatrix}\), so \(\norm{(\nabla\mathrm{SSE})^\top}=\sqrt{(-12)^2+(-14)^2}=\sqrt{144+196}=\sqrt{340}\approx18.439\). So every directional slope at \((0,0)^\top\) lies between \(-18.439\) and \(18.439\).</li>
+<li class="fragment">The slope along \(\tfrac1{\sqrt2}(1,1)^\top\), \(-13\sqrt2\approx-18.385\), fits: \(\cos\theta=\tfrac{-18.385}{18.439}\approx-0.997\), almost the lowest possible value.</li>
+</ul>
+<aside class="notes">"Only the angle is free: the length of the gradient is fixed by the point, the length of u is fixed at 1. So choosing a direction is choosing theta."</aside>
+</section>
+
+<section>
+<h4>Three angles, three answers</h4>
+<img src="../images/unit04/u4-L11-fig10-directional.png" alt="The directional derivative at (0,0) as the direction turns through 360 degrees from the w0 axis, largest along the transposed gradient and smallest opposite it" style="float:right; max-height:300px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>From \(D_{\mathbf u}g=\norm{(\nabla g)^\top}\cos\theta\), if \(\nabla g\neq\mathbf 0\):</p>
+<ul>
+<li class="fragment">\(\theta=0\): \(\cos\theta=1\), the largest slope \(+\norm{(\nabla g)^\top}\). \(\mathbf u\) points along \((\nabla g)^\top\): <strong>steepest ascent</strong>.</li>
+<li class="fragment">\(\theta=180^\circ\): \(\cos\theta=-1\), the smallest slope \(-\norm{(\nabla g)^\top}\). \(\mathbf u\) points along \(-(\nabla g)^\top\): <strong>steepest descent</strong> (MML &sect;7.1, p.228). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">\(\theta=90^\circ\): \(\cos\theta=0\), slope \(0\). \(\mathbf u\) is orthogonal to \((\nabla g)^\top\).</li>
+<li class="fragment">Moving tangent to the contour through \(\mathbf w\) has slope \(0\), since the error is constant along the contour. In the plane only two unit directions have slope \(0\): the two orthogonal to \((\nabla g)^\top\). So the two directions <strong>tangent to the contour</strong> are these two orthogonal directions, and <strong>the direction \((\nabla g)^\top\) is orthogonal to the contour</strong>. <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">If instead \(\nabla g=\mathbf 0\) &mdash; a flat point &mdash; then \(\nabla g\,\mathbf u=0\) for every \(\mathbf u\): every direction has slope \(0\).</li>
+<li class="fragment">The figure: at \((0,0)^\top\), \(D_{\mathbf u}\mathrm{SSE}=-12\cos\alpha-14\sin\alpha\) for \(\mathbf u=(\cos\alpha,\sin\alpha)^\top\): lowest \(-18.439=-\sqrt{340}\) near \(\alpha=49.4^\circ\), the direction \((0.651,0.759)^\top\) found by walking; highest \(+18.439\) near \(229.4^\circ\).</li>
+</ul>
+<aside class="notes">"The figure is the cosine curve, scaled by 18.44 and shifted. The zeros are at 139.4 and 319.4 degrees, 90 degrees from the extremes — those two are the tangent directions of the level-14 contour at (0,0)."</aside>
+</section>
+
+<section>
+<h4>Does the fastest way down point straight at \(\mathbf w^\ast\)?</h4>
+<img src="../images/unit04/u4-L11-fig10c-descent-misses.png" alt="Contours of SSE at 2, 4, 8, 14. From (0,0) the steepest-descent ray along (12,14) reaches its lowest point (0.843, 0.983) with SSE 249/121, about 2.06; w* = (3/2, 1/2) with SSE 3/2 lies off the ray, at the end of a dashed line from (0,0); at the ray's lowest point a new arrow points along (7,-6), at a right angle to the ray" style="float:right; max-height:250px; max-width:36%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>\(\mathrm{SSE}=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\), \(\nabla\mathrm{SSE}=\begin{bmatrix}6w_0+6w_1-12&6w_0+10w_1-14\end{bmatrix}\); at \((0,0)^\top\), \(-(\nabla\mathrm{SSE})^\top=(12,14)^\top=2\,(6,7)^\top\).</p>
+<ul>
+<li class="fragment"><strong>Walk straight along it:</strong> \(\mathbf w=s\,(6,7)^\top\), \(s\ge0\). Put \(w_0=6s\), \(w_1=7s\) into \(\mathrm{SSE}\): \(605s^2-170s+14\) (\(3\cdot36+6\cdot42+5\cdot49=605\), \(12\cdot6+14\cdot7=170\)).</li>
+<li class="fragment"><strong>Lowest on this line:</strong> \(1210s-170=0\), \(s=\tfrac{17}{121}\), at \(\left(\tfrac{102}{121},\tfrac{119}{121}\right)^\top\approx(0.843,\,0.983)^\top\), error \(\tfrac{249}{121}\approx2.06\), above \(\mathrm{SSE}(\mathbf w^\ast)=\tfrac32\).</li>
+<li class="fragment">\(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\) is not on the line: on the line \(w_1/w_0=\tfrac76\), at \(\mathbf w^\ast\) it is \(\tfrac13\). <strong>The fastest way down does not point at the bottom.</strong></li>
+<li class="fragment">At \(\left(\tfrac{102}{121},\tfrac{119}{121}\right)^\top\): \(\nabla\mathrm{SSE}=\left[-\tfrac{126}{121}\ \ \tfrac{108}{121}\right]\), so the new fastest way down is \(\tfrac{18}{121}(7,-6)^\top\), at a right angle to \((6,7)^\top\): \(6\cdot7+7\cdot(-6)=0\).</li>
+</ul>
+<div class="key-question fragment">Steepest descent is best only <em>where you stand</em>, so training repeats: step along \(-(\nabla f)^\top\), recompute, step again. That loop is <strong>gradient descent</strong>, \(\mathbf w_{i+1}=\mathbf w_i-\gamma_i\big(\nabla f(\mathbf w_i)\big)^\top\) (MML (7.6), p.228). How far to step: Unit 5.</div>
+<aside class="notes">"Ask the question before any number: does the arrow point at the bottom of the bowl? Most students say yes." "Check the right angle: (6,7) dot (7,-6) = 42 - 42 = 0." "Read the first step back as the model: from the all-zero model, raise the baseline w0 and the per-hour w1, w1 a little faster (0.759 against 0.651 per unit of step)."</aside>
+</section>
+
+<section>
+<h4>L11 takeaways</h4>
+<ul>
+<li><strong>Contour</strong> at level \(c\): all \(\mathbf w\) with \(\mathrm{SSE}(\mathbf w)=c\) (MML &sect;7.1, p.228). Level \(14\) passes through \((0,0)^\top\), \((4,0)^\top\), \((3,1)^\top\). <span class="tier-m">[MASTER]</span></li>
+<li><strong>Directional derivative:</strong> \(D_{\mathbf u}g=\phi'(0)\) with \(\phi(h)=g(\mathbf w+h\mathbf u)\); for differentiable \(g\), \(D_{\mathbf u}g=\nabla g\,\mathbf u\), one row times one column. At \((0,0)^\top\) along \(\tfrac1{\sqrt2}(1,1)^\top\): \(-13\sqrt2\). <span class="tier-m">[MASTER]</span></li>
+<li><strong>Gradient:</strong> the row of partial derivatives (MML (5.40)). The gradient is not just a list: \(\nabla g\,\mathbf u\) gives the slope in <em>every</em> direction \(\mathbf u\). \(\nabla\mathrm{SSE}(0,0)=\begin{bmatrix}-12&-14\end{bmatrix}\). <span class="tier-m">[MASTER]</span></li>
+<li>If \(\nabla g\neq\mathbf 0\): steepest ascent along \((\nabla g)^\top\), steepest descent along \(-(\nabla g)^\top\), zero in the directions tangent to a contour. <span class="tier-m">[MASTER]</span></li>
+<li>From the all-zero model the fastest way down is \((0.651,0.759)^\top\): raise the baseline \(w_0\) and, a little faster, the per-hour \(w_1\). It does not point at \(\mathbf w^\ast\), so training repeats the step: gradient descent (MML (7.6), p.228). <span class="tier-u">[UNDERSTAND]</span></li>
+<li>Gradient = row, direction = column: <strong>one transpose apart</strong>, always written out. <span class="tier-m">[MASTER]</span></li>
+</ul>
+<div class="key-question fragment">Two partial derivatives, two entries. With \(50\) parameters there would be \(50\), and we are not writing \(50\) lines. <strong>L12: \(\nabla\mathrm{SSE}\) for any number of parameters, in one matrix line.</strong></div>
+</section>
+
+<!-- L12-00 -->
+<section>
+<h2 style="font-size:1.3em;">L12 — The Matrix Form</h2>
+<p>Reading: MML &sect;5.5, p.158: equations (5.105) and (5.107) are the two rules of this lecture; (5.108) is its main result, in the book&rsquo;s letters.</p>
+<div class="key-question"><strong>Why a new form:</strong> with \(50\) parameters, the expanded \(\mathrm{SSE}\) has \(50\) squares and \(\tfrac{50\cdot49}{2}=1225\) cross terms, \(1275\) quadratic terms in all. Nobody expands that. We want \(\nabla\mathrm{SSE}\) straight from \(\mathbf y\), \(X\) and \(\mathbf w\).</div>
+</section>
+
+<!-- L12-01 -->
+<section>
+<h4>Recognise the two partial derivatives of SSE</h4>
+<p>Our data: \(\mathbf y=(1,3,2)^\top\) points, \(X=\begin{bmatrix}1&0\\1&1\\1&2\end{bmatrix}\), \(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\).</p>
+<ul>
+<li class="fragment"><strong>From the polynomial.</strong> The gradient of that \(\mathrm{SSE}\), the row of its two partial derivatives, is \(\begin{bmatrix}6w_0+6w_1-12&6w_0+10w_1-14\end{bmatrix}\). At \(\mathbf w=(0,0)^\top\):
+\(\;\begin{bmatrix}6\cdot0+6\cdot0-12&6\cdot0+10\cdot0-14\end{bmatrix}=\begin{bmatrix}-12&-14\end{bmatrix}\).</li>
+<li class="fragment"><strong>From matrices only.</strong> At \(\mathbf w=(0,0)^\top\) every prediction is \(0\): \(X\mathbf w=(0,0,0)^\top\), so the residual is \(\mathbf r=\mathbf y-X\mathbf w=(1,3,2)^\top\).</li>
+<li class="fragment">Row \(\mathbf r^\top\) times the first column of \(X\): \(\;1\cdot1+3\cdot1+2\cdot1=6\).</li>
+<li class="fragment">Row \(\mathbf r^\top\) times the second column of \(X\): \(\;1\cdot0+3\cdot1+2\cdot2=0+3+4=7\).</li>
+<li class="fragment">So \(\mathbf r^\top X=\begin{bmatrix}6&7\end{bmatrix}\) and \(-2\,\mathbf r^\top X=\begin{bmatrix}-2\cdot6&-2\cdot7\end{bmatrix}=\begin{bmatrix}-12&-14\end{bmatrix}\). <strong>The same row as the polynomial&rsquo;s gradient.</strong></li>
+</ul>
+<div class="key-question fragment">Luck at one point, or is \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\) true at <strong>every</strong> \(\mathbf w\), for <strong>every</strong> dataset and <strong>any number</strong> of parameters? This lecture proves that it holds everywhere.</div>
+<aside class="notes">"Let them compute -2 r^T X by hand before the reveal. The point of the slide is the coincidence; the rest of the lecture removes the coincidence."</aside>
+</section>
+
+<!-- L12-02 -->
+<section>
+<h4>Write the error as a product of two matrices</h4>
+<p>General sizes: \(n\) data points, \(d\) parameters. \(X\) is \(n\times d\), \(\mathbf w\) is \(d\times1\), \(\mathbf y\) is \(n\times1\). Ours: \(n=3\), \(d=2\).</p>
+<ul>
+<li class="fragment">The residual \(\mathbf r=\mathbf y-X\mathbf w\) is \(n\times1\), and a squared length is a vector dotted with itself: \(\;\mathrm{SSE}(\mathbf w)=\norm{\mathbf y-X\mathbf w}^2=(\mathbf y-X\mathbf w)^\top(\mathbf y-X\mathbf w)\).</li>
+<li class="fragment">Transpose the first factor, \(\mathbf y-X\mathbf w\). A transpose of a product reverses the order, \((X\mathbf w)^\top=\mathbf w^\top X^\top\), so \(\;(\mathbf y-X\mathbf w)^\top=\mathbf y^\top-\mathbf w^\top X^\top\).</li>
+<li class="fragment">Multiply \((\mathbf y^\top-\mathbf w^\top X^\top)(\mathbf y-X\mathbf w)\) out like \((a-b)(c-e)=ac-ae-bc+be\), <strong>keeping every product in its order</strong> (matrices do not commute):</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>Left piece \(\times\) right piece</th><th>Product</th><th>Sizes multiplied</th><th>Result</th></tr>
+<tr><td>\(\mathbf y^\top\times\mathbf y\)</td><td>\(+\,\mathbf y^\top\mathbf y\)</td><td>\((1\times n)(n\times1)\)</td><td>\(1\times1\)</td></tr>
+<tr><td>\(\mathbf y^\top\times(-X\mathbf w)\)</td><td>\(-\,\mathbf y^\top X\mathbf w\)</td><td>\((1\times n)(n\times d)(d\times1)\)</td><td>\(1\times1\)</td></tr>
+<tr><td>\((-\mathbf w^\top X^\top)\times\mathbf y\)</td><td>\(-\,\mathbf w^\top X^\top\mathbf y\)</td><td>\((1\times d)(d\times n)(n\times1)\)</td><td>\(1\times1\)</td></tr>
+<tr><td>\((-\mathbf w^\top X^\top)\times(-X\mathbf w)\)</td><td>\(+\,\mathbf w^\top X^\top X\mathbf w\)</td><td>\((1\times d)(d\times n)(n\times d)(d\times1)\)</td><td>\(1\times1\)</td></tr>
+</table>
+<p class="fragment">So \(\;\mathrm{SSE}(\mathbf w)=\mathbf y^\top\mathbf y-\mathbf y^\top X\mathbf w-\mathbf w^\top X^\top\mathbf y+\mathbf w^\top X^\top X\mathbf w\).</p>
+</section>
+
+<!-- L12-03 -->
+<section>
+<h4>\(\mathbf y^\top X\mathbf w\) and \(\mathbf w^\top X^\top\mathbf y\) are the same number</h4>
+<p>Multiplying out \((\mathbf y-X\mathbf w)^\top(\mathbf y-X\mathbf w)\) gave four products: \(\;\mathrm{SSE}(\mathbf w)=\mathbf y^\top\mathbf y-\mathbf y^\top X\mathbf w-\mathbf w^\top X^\top\mathbf y+\mathbf w^\top X^\top X\mathbf w\).</p>
+<ul>
+<li>The two middle products, \(\mathbf y^\top X\mathbf w\) and \(\mathbf w^\top X^\top\mathbf y\), are \(1\times1\): each is a single number.</li>
+<li class="fragment">A transpose of a product reverses the order, \((ABC)^\top=C^\top B^\top A^\top\), so \(\;(\mathbf y^\top X\mathbf w)^\top=\mathbf w^\top X^\top(\mathbf y^\top)^\top=\mathbf w^\top X^\top\mathbf y\).</li>
+<li class="fragment">A \(1\times1\) matrix equals its own transpose, \([c]^\top=[c]\), so \(\;\mathbf y^\top X\mathbf w=(\mathbf y^\top X\mathbf w)^\top=\mathbf w^\top X^\top\mathbf y\).</li>
+<li class="fragment"><strong>On our data</strong> (\(\mathbf y=(1,3,2)^\top\), \(X\) with rows \((1,0),(1,1),(1,2)\)): \(\mathbf y^\top X=\begin{bmatrix}1+3+2&0+3+4\end{bmatrix}=\begin{bmatrix}6&7\end{bmatrix}\) and \(X^\top\mathbf y=(6,7)^\top\), so both products are \(6w_0+7w_1\) ✓.</li>
+<li class="fragment">So the middle terms of \(\mathrm{SSE}\) combine: \(\;-\mathbf y^\top X\mathbf w-\mathbf w^\top X^\top\mathbf y=-2\,\mathbf w^\top X^\top\mathbf y\).</li>
+</ul>
+<div class="mathbox fragment">
+\[\mathrm{SSE}(\mathbf w)=\underbrace{\mathbf w^\top X^\top X\mathbf w}_{\text{quadratic in }\mathbf w}\;-\;\underbrace{2\,\mathbf w^\top X^\top\mathbf y}_{\text{linear in }\mathbf w}\;+\;\underbrace{\mathbf y^\top\mathbf y}_{\text{no }\mathbf w}\]
+<span class="tier-m">[MASTER]</span>
+</div>
+</section>
+
+<!-- L12-04 -->
+<section>
+<h4>The three matrix pieces of SSE, on our data</h4>
+<p>The pieces of \(\;\mathrm{SSE}(\mathbf w)=\mathbf w^\top X^\top X\mathbf w-2\,\mathbf w^\top X^\top\mathbf y+\mathbf y^\top\mathbf y\), with \(\mathbf y=(1,3,2)^\top\) and \(X\) with columns \(\mathbf 1=(1,1,1)^\top\) (intercept) and \(\mathbf t=(0,1,2)^\top\) (hours). Entry \((j,k)\) of \(X^\top X\) is column \(j\) dotted with column \(k\):</p>
+<table style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>Number</th><th>Arithmetic</th><th>Value</th><th>What it counts</th></tr>
+<tr class="fragment"><td>\(X^\top X\), entry \((1,1)\): \(\mathbf 1^\top\mathbf 1\)</td><td>\(1\cdot1+1\cdot1+1\cdot1\)</td><td>\(3\)</td><td>number of students \(n\)</td></tr>
+<tr class="fragment"><td>\(X^\top X\), entries \((1,2)\), \((2,1)\): \(\mathbf 1^\top\mathbf t\)</td><td>\(1\cdot0+1\cdot1+1\cdot2\)</td><td>\(3\)</td><td>total hours</td></tr>
+<tr class="fragment"><td>\(X^\top X\), entry \((2,2)\): \(\mathbf t^\top\mathbf t\)</td><td>\(0\cdot0+1\cdot1+2\cdot2\)</td><td>\(5\)</td><td>sum of squared hours</td></tr>
+<tr class="fragment"><td>\(X^\top\mathbf y\), entry 1: \(\mathbf 1^\top\mathbf y\)</td><td>\(1\cdot1+1\cdot3+1\cdot2\)</td><td>\(6\)</td><td>total points</td></tr>
+<tr class="fragment"><td>\(X^\top\mathbf y\), entry 2: \(\mathbf t^\top\mathbf y\)</td><td>\(0\cdot1+1\cdot3+2\cdot2\)</td><td>\(7\)</td><td>points weighted by hours</td></tr>
+<tr class="fragment"><td>\(\mathbf y^\top\mathbf y\)</td><td>\(1^2+3^2+2^2=1+9+4\)</td><td>\(14\)</td><td>error of the all-zero model</td></tr>
+</table>
+<p class="fragment">So \(\;X^\top X=\begin{bmatrix}3&3\\3&5\end{bmatrix},\quad X^\top\mathbf y=\begin{bmatrix}6\\7\end{bmatrix},\quad \mathbf y^\top\mathbf y=14\).</p>
+<p class="fragment">\(X^\top X\) is <strong>symmetric</strong> for every \(X\): \((X^\top X)^\top=X^\top(X^\top)^\top=X^\top X\). Entries \((j,k)\) and \((k,j)\) are the same dot product taken in either order &mdash; here both are \(\mathbf 1^\top\mathbf t=3\).</p>
+<aside class="notes">"Point out the symmetry of X^T X: the two off-diagonal 3s are the same dot product taken in either order." "The 5 and the 7 are old friends: the one-parameter fit y-hat = w t had w* = t^T y / t^T t = 7/5."</aside>
+</section>
+
+<!-- L12-05 -->
+<section>
+<h4>Check: the matrix form of SSE expands to the polynomial</h4>
+<p>Matrix form \(\;\mathrm{SSE}(\mathbf w)=\mathbf w^\top X^\top X\mathbf w-2\,\mathbf w^\top X^\top\mathbf y+\mathbf y^\top\mathbf y\), with \(X^\top X=\begin{bmatrix}3&3\\3&5\end{bmatrix}\), \(X^\top\mathbf y=(6,7)^\top\), \(\mathbf y^\top\mathbf y=14\).</p>
+<ul>
+<li><strong>Quadratic piece, step 1.</strong> Matrix times column:
+\(\;X^\top X\,\mathbf w=\begin{bmatrix}3&3\\3&5\end{bmatrix}\begin{bmatrix}w_0\\w_1\end{bmatrix}=\begin{bmatrix}3w_0+3w_1\\3w_0+5w_1\end{bmatrix}\).</li>
+<li class="fragment"><strong>Quadratic piece, step 2.</strong> Row \(\mathbf w^\top\) times the column \(X^\top X\mathbf w\) from step 1:
+\[\begin{aligned}\mathbf w^\top X^\top X\mathbf w&=w_0(3w_0+3w_1)+w_1(3w_0+5w_1)\\&=3w_0^2+3w_0w_1+3w_0w_1+5w_1^2=3w_0^2+6w_0w_1+5w_1^2 .\end{aligned}\]</li>
+<li class="fragment"><strong>Linear piece.</strong> \(\mathbf w^\top X^\top\mathbf y=\begin{bmatrix}w_0&w_1\end{bmatrix}\begin{bmatrix}6\\7\end{bmatrix}=6w_0+7w_1\), so \(\;-2\,\mathbf w^\top X^\top\mathbf y=-12w_0-14w_1\).</li>
+<li class="fragment"><strong>Constant piece.</strong> \(\mathbf y^\top\mathbf y=14\).</li>
+<li class="fragment"><strong>Add the three pieces:</strong> \(\;3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\) &mdash; exactly the polynomial L09 got by expanding \((1-w_0)^2+(3-w_0-w_1)^2+(2-w_0-2w_1)^2\) term by term ✓.</li>
+<li class="fragment">Notice where \(6w_0w_1\) came from: \(3w_0w_1+3w_0w_1\), one from each off-diagonal \(3\). The two \(3w_0w_1\) terms are equal because \(X^\top X\) is <strong>symmetric</strong>; Rule 2 will need that symmetry.</li>
+</ul>
+</section>
+
+<!-- L12-06 -->
+<section>
+<h4>Rule 1: the derivative of a linear function</h4>
+<p>In \(\;\mathrm{SSE}(\mathbf w)=\mathbf w^\top X^\top X\mathbf w-2\,\mathbf w^\top X^\top\mathbf y+\mathbf y^\top\mathbf y\;\) the middle term is a number, so it equals its transpose: \(\mathbf w^\top X^\top\mathbf y=(X^\top\mathbf y)^\top\mathbf w\). With \(\mathbf b=X^\top\mathbf y\), \(A=X^\top X\): \(\;\mathrm{SSE}(\mathbf w)=\mathbf w^\top A\mathbf w-2\,\mathbf b^\top\mathbf w+\mathbf y^\top\mathbf y\) &mdash; two shapes to differentiate, \(\mathbf b^\top\mathbf w\) and \(\mathbf w^\top A\mathbf w\).</p>
+<p class="fragment"><strong>Look first:</strong> our \(\mathbf b=(6,7)^\top\): \(\mathbf b^\top\mathbf w=6w_0+7w_1\) has partial derivatives \(6\), \(7\): the row \(\begin{bmatrix}6&7\end{bmatrix}\), \(\mathbf b\) laid flat.</p>
+<div class="mathbox fragment">
+<strong>Rule 1</strong> (MML (5.105), p.158). For a fixed column \(\mathbf b\in\R^d\): \(\;\dfrac{\partial(\mathbf b^\top\mathbf w)}{\partial\mathbf w}=\mathbf b^\top\). <span class="tier-m">[MASTER]</span>
+</div>
+<ol>
+<li class="fragment"><strong>Proof.</strong> Write out \(\mathbf b^\top\mathbf w\): \(\;\mathbf b^\top\mathbf w=b_0w_0+b_1w_1+\cdots+b_{d-1}w_{d-1}\).</li>
+<li class="fragment">Differentiate in \(w_j\), all other parameters held fixed: the term \(b_jw_j\) gives \(b_j\); every term \(b_kw_k\) with \(k\neq j\) is a constant and gives \(0\). So \(\partial(\mathbf b^\top\mathbf w)/\partial w_j=b_j\).</li>
+<li class="fragment">The gradient is the <strong>row</strong> of partial derivatives (MML (5.40)): \(\;\begin{bmatrix}b_0&b_1&\cdots&b_{d-1}\end{bmatrix}=\mathbf b^\top\).</li>
+</ol>
+<div class="quickcheck fragment">
+<p><strong>On our \(\mathbf b=(6,7)^\top\):</strong> the piece \(-2\,\mathbf b^\top\mathbf w\) contributes \(-2\begin{bmatrix}6&7\end{bmatrix}=\begin{bmatrix}-12&-14\end{bmatrix}\): the constant terms of \(\partial\,\mathrm{SSE}/\partial w_0=6w_0+6w_1-12\) and \(\partial\,\mathrm{SSE}/\partial w_1=6w_0+10w_1-14\).</p>
+</div>
+</section>
+
+<!-- L12-07 -->
+<section>
+<h4>Rule 2: the statement, and multiplying out \(\mathbf w^\top A\mathbf w\)</h4>
+<p><strong>Look first:</strong> L09&rsquo;s partial derivatives of the quadratic part of our error, \(3w_0^2+6w_0w_1+5w_1^2=\mathbf w^\top X^\top X\mathbf w\), are \(\begin{bmatrix}6w_0+6w_1&6w_0+10w_1\end{bmatrix}=2\,\mathbf w^\top X^\top X\), with \(X^\top X=\left[\begin{smallmatrix}3&3\\3&5\end{smallmatrix}\right]\) symmetric.</p>
+<div class="mathbox">
+<strong>Rule 2</strong> (MML (5.107), p.158: for <em>any</em> square \(B\) the derivative of \(\mathbf w^\top B\mathbf w\) is \(\mathbf w^\top(B+B^\top)\); here \(B\) is symmetric). For a symmetric \(d\times d\) matrix \(A\) (that is, \(A^\top=A\)): \(\;\dfrac{\partial(\mathbf w^\top A\mathbf w)}{\partial\mathbf w}=2\,\mathbf w^\top A\). <span class="tier-m">[MASTER]</span>
+</div>
+<p class="fragment"><strong>Proof for two parameters, step 1: multiply out.</strong> Take \(A=\left[\begin{smallmatrix}\alpha&\beta\\\beta&\gamma\end{smallmatrix}\right]\) (symmetric: the same \(\beta\) twice), \(\mathbf w=(w_0,w_1)^\top\).</p>
+<ul>
+<li class="fragment">Matrix times column: \(\;A\mathbf w=\begin{bmatrix}\alpha w_0+\beta w_1\\\beta w_0+\gamma w_1\end{bmatrix}\). Then row \(\mathbf w^\top\) times the column \(A\mathbf w\):
+\[\begin{aligned}\mathbf w^\top A\mathbf w&=w_0(\alpha w_0+\beta w_1)+w_1(\beta w_0+\gamma w_1)\\&=\alpha w_0^2+\beta w_0w_1+\beta w_0w_1+\gamma w_1^2=\alpha w_0^2+2\beta\,w_0w_1+\gamma w_1^2 .\end{aligned}\]</li>
+<li class="fragment">One \(\beta w_0w_1\) came from the row \(\mathbf w^\top\) on the left of \(A\), the other from the column \(\mathbf w\) on its right.</li>
+</ul>
+</section>
+
+<!-- L12-08 -->
+<section>
+<h4>Rule 2, step 2: differentiate one parameter at a time</h4>
+<p>Goal: \(\partial(\mathbf w^\top A\mathbf w)/\partial\mathbf w=2\,\mathbf w^\top A\) for \(A=\left[\begin{smallmatrix}\alpha&\beta\\\beta&\gamma\end{smallmatrix}\right]\). Step 1 gave \(\;\mathbf w^\top A\mathbf w=\alpha w_0^2+2\beta\,w_0w_1+\gamma w_1^2\). Differentiate each of its three terms, holding the other parameter fixed:</p>
+<table style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th></th><th>\(\alpha w_0^2\)</th><th>\(2\beta\,w_0w_1\)</th><th>\(\gamma w_1^2\)</th><th>Sum</th></tr>
+<tr class="fragment"><td>\(\partial/\partial w_0\)</td><td>\(2\alpha w_0\)</td><td>\(2\beta w_1\)</td><td>\(0\)</td><td>\(2\alpha w_0+2\beta w_1\)</td></tr>
+<tr class="fragment"><td>\(\partial/\partial w_1\)</td><td>\(0\)</td><td>\(2\beta w_0\)</td><td>\(2\gamma w_1\)</td><td>\(2\beta w_0+2\gamma w_1\)</td></tr>
+</table>
+<ul>
+<li class="fragment">Now compute \(2\,\mathbf w^\top A\), row times each column of \(A\):
+\(\;\mathbf w^\top A=\begin{bmatrix}w_0&w_1\end{bmatrix}\begin{bmatrix}\alpha&\beta\\\beta&\gamma\end{bmatrix}=\begin{bmatrix}\alpha w_0+\beta w_1&\beta w_0+\gamma w_1\end{bmatrix}\).</li>
+<li class="fragment">Times \(2\): \(\;2\,\mathbf w^\top A=\begin{bmatrix}2\alpha w_0+2\beta w_1&2\beta w_0+2\gamma w_1\end{bmatrix}\) &mdash; the row of the two sums in the table ✓.</li>
+<li class="fragment"><strong>Where the \(2\) comes from:</strong> \(\mathbf w\) appears on <strong>both sides</strong> of \(A\). Varying the column \(\mathbf w\) on the right gives \(\mathbf w^\top A\); varying the row \(\mathbf w^\top\) on the left gives \(\mathbf w^\top A^\top\). Symmetry makes \(A^\top=A\), so \(\mathbf w^\top A+\mathbf w^\top A^\top=2\,\mathbf w^\top A\). (For \(d\) parameters: the same computation, longer; MML (5.107).)</li>
+</ul>
+<div class="quickcheck fragment"><strong>Both rules on our error</strong> \(\mathrm{SSE}=\mathbf w^\top A\mathbf w-2\,\mathbf b^\top\mathbf w+14\), \(A=\left[\begin{smallmatrix}3&3\\3&5\end{smallmatrix}\right]\), \(\mathbf b=(6,7)^\top\): \(\;2\,\mathbf w^\top A-2\,\mathbf b^\top=\begin{bmatrix}6w_0+6w_1-12&6w_0+10w_1-14\end{bmatrix}\), L09&rsquo;s two partial derivatives ✓.</div>
+<aside class="notes">"Do not say 'each parameter appears twice'. The reason for the 2 is that w sits on both sides of A, and symmetry makes the two contributions equal. For a non-symmetric B the two contributions are w^T B and w^T B^T, which is MML (5.107)."</aside>
+</section>
+
+<!-- L12-10 -->
+<section>
+<h4>Assemble the gradient, for any number of features</h4>
+<p>Start from \(\;\mathrm{SSE}(\mathbf w)=\mathbf w^\top A\mathbf w-2\,\mathbf b^\top\mathbf w+\mathbf y^\top\mathbf y\), with \(A=X^\top X\) (symmetric) and \(\mathbf b=X^\top\mathbf y\).<br>
+Rule 1: \(\partial(\mathbf b^\top\mathbf w)/\partial\mathbf w=\mathbf b^\top\). &nbsp; Rule 2 (\(A\) symmetric): \(\partial(\mathbf w^\top A\mathbf w)/\partial\mathbf w=2\,\mathbf w^\top A\).</p>
+\[\begin{aligned}
+\nabla\mathrm{SSE}&=\frac{\partial(\mathbf w^\top A\mathbf w)}{\partial\mathbf w}-2\,\frac{\partial(\mathbf b^\top\mathbf w)}{\partial\mathbf w}+\frac{\partial(\mathbf y^\top\mathbf y)}{\partial\mathbf w}&&\text{a sum is differentiated piece by piece}\\
+&=2\,\mathbf w^\top A-2\,\mathbf b^\top+\mathbf 0^\top&&\text{Rule 2, Rule 1, and }\mathbf y^\top\mathbf y\text{ has no }\mathbf w\\
+&=2\,\mathbf w^\top X^\top X-2\,\mathbf y^\top X&&A=X^\top X,\ \ \mathbf b^\top=(X^\top\mathbf y)^\top=\mathbf y^\top X\\
+&=-2\,\big(\mathbf y^\top-\mathbf w^\top X^\top\big)X&&\text{factor out }-2\text{, and }X\text{ on the right}\\
+&=-2\,(\mathbf y-X\mathbf w)^\top X=-2\,\mathbf r^\top X&&(\mathbf y-X\mathbf w)^\top=\mathbf y^\top-\mathbf w^\top X^\top
+\end{aligned}\]
+<ul>
+<li class="fragment"><strong>Shapes.</strong> \(\mathbf w^\top X^\top X\): \((1\times d)(d\times d)=1\times d\). \(\;\mathbf y^\top X\) and \(\mathbf r^\top X\): \((1\times n)(n\times d)=1\times d\). Every line is a row of \(d\) numbers, as a gradient must be (MML (5.40)). Ours: \((1\times3)(3\times2)=1\times2\).</li>
+<li class="fragment"><strong>Entry by entry:</strong> \(\partial\,\mathrm{SSE}/\partial w_j=-2\times(\text{the column of }X\text{ that multiplies }w_j)^\top\mathbf r\). Ours, columns \(\mathbf 1=(1,1,1)^\top\) and \(\mathbf t=(0,1,2)^\top\): \(\;\partial\,\mathrm{SSE}/\partial w_0=-2\,\mathbf 1^\top\mathbf r=-2(r_1+r_2+r_3)\) and \(\;\partial\,\mathrm{SSE}/\partial w_1=-2\,\mathbf t^\top\mathbf r=-2(0\cdot r_1+1\cdot r_2+2\cdot r_3)\).</li>
+<li class="fragment">MML (5.108): \(\frac{\partial}{\partial\mathbf s}(\mathbf x-A\mathbf s)^\top W(\mathbf x-A\mathbf s)=-2(\mathbf x-A\mathbf s)^\top WA\) for symmetric \(W\). With \(W=I\) and the book&rsquo;s \(\mathbf x,A,\mathbf s\) read as our \(\mathbf y,X,\mathbf w\), it says \(\nabla\mathrm{SSE}=-2(\mathbf y-X\mathbf w)^\top X\).</li>
+</ul>
+<aside class="notes">"The book's A in (5.108) is our X, not our X^T X. Say this out loud if anyone opens p.158."</aside>
+</section>
+
+<!-- L12-11 -->
+<section>
+<h4>\(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\): SSE versus MSE, and where the minus sign comes from</h4>
+<div class="mathbox">
+\[\boxed{\;\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\;}\qquad\text{a }1\times d\text{ row, for any number of features.}\]
+<span class="tier-m">[MASTER]</span>
+</div>
+<ul>
+<li class="fragment"><strong>SSE or MSE?</strong> Most machine-learning software reports \(\mathrm{MSE}=\mathrm{SSE}/n\). Dividing a function by \(n\) divides its gradient by \(n\): \(\;\nabla\mathrm{MSE}=-\tfrac2n\,\mathbf r^\top X\), the row \(-2\,\mathbf r^\top X\) divided by \(n\). At \((0,0)^\top\), where \(\mathbf r=\mathbf y=(1,3,2)^\top\) and \(-2\,\mathbf r^\top X=\begin{bmatrix}-12&-14\end{bmatrix}\), with \(n=3\): \(\;\nabla\mathrm{MSE}=\begin{bmatrix}-12&-14\end{bmatrix}/3=\begin{bmatrix}-4&-\tfrac{14}{3}\end{bmatrix}\). MSE and SSE are flat at the same \(\mathbf w\).</li>
+<li class="fragment"><strong>The minus sign.</strong> The residual is data minus prediction, \(r_i=y_i-\hat y_i\), and the data \(y_i\) does not move. So \(\partial r_i/\partial\hat y_i=-1\): raise a prediction and its residual falls by the same amount. At \((0,0)^\top\), student 2 has \(y_2=3\); raising \(\hat y_2\) from \(0\) to \(0.1\) moves \(r_2\) from \(3-0=3\) to \(3-0.1=2.9\).</li>
+<li class="fragment">⚠️ Not &ldquo;increasing a parameter decreases the residual&rdquo;, which is false. From \((0,0)^\top\) raise \(w_1\) to \(0.1\): predictions \(0.1\,t_i\), with \(\mathbf t=(0,1,2)^\top\), are \((0,\,0.1,\,0.2)^\top\); residuals from \(\mathbf y=(1,3,2)^\top\) are \((1,\,2.9,\,1.8)^\top\). \(r_1\) <strong>did not move</strong>: student 1 has \(t_1=0\).</li>
+<li class="fragment">Per student, \(\frac{d}{d\hat y_i}(y_i-\hat y_i)^2=2r_i\cdot(-1)=-2r_i\) (Calculus 1 chain rule). The factor \(\partial r_i/\partial\hat y_i=-1\) reappears in L13 as one link of the chain.</li>
+</ul>
+</section>
+
+<!-- L12-12 -->
+<section>
+<h4>Check \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\) at \(\mathbf w^\ast\) and at \((1,0)^\top\)</h4>
+<p>\(\mathbf r=\mathbf y-X\mathbf w\), \(\mathbf y=(1,3,2)^\top\), columns of \(X\): \(\mathbf 1=(1,1,1)^\top\), \(\mathbf t=(0,1,2)^\top\). Compare with the partial derivatives \(6w_0+6w_1-12\), \(6w_0+10w_1-14\) of \(\mathrm{SSE}=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\).</p>
+<ul>
+<li class="fragment"><strong>At the lowest point</strong> \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\), predictions: \(X\mathbf w^\ast=\left(\tfrac32+0\cdot\tfrac12,\;\tfrac32+1\cdot\tfrac12,\;\tfrac32+2\cdot\tfrac12\right)^\top=\left(\tfrac32,\,2,\,\tfrac52\right)^\top\).</li>
+<li class="fragment">Residuals: \(\mathbf r^\ast=\mathbf y-X\mathbf w^\ast=\left(1-\tfrac32,\;3-2,\;2-\tfrac52\right)^\top=\left(-\tfrac12,\,1,\,-\tfrac12\right)^\top\).</li>
+<li class="fragment">\(\mathbf r^{\ast\top}\) times column \(\mathbf 1\): \(\;-\tfrac12+1-\tfrac12=0\). \(\;\mathbf r^{\ast\top}\) times column \(\mathbf t\): \(\;0\cdot(-\tfrac12)+1\cdot1+2\cdot(-\tfrac12)=0+1-1=0\).</li>
+<li class="fragment">So \(-2\,\mathbf r^{\ast\top}X=-2\begin{bmatrix}0&0\end{bmatrix}=\begin{bmatrix}0&0\end{bmatrix}\). The polynomial&rsquo;s partial derivatives agree: \(6\cdot\tfrac32+6\cdot\tfrac12-12=9+3-12=0\) and \(6\cdot\tfrac32+10\cdot\tfrac12-14=9+5-14=0\) ✓.</li>
+</ul>
+<div class="quickcheck fragment">
+<p><strong>Your turn, at \(\mathbf w=(1,0)^\top\)</strong> (\(\hat y=1\) for everyone): compute \(-2\,\mathbf r^\top X\) and compare with the polynomial.</p>
+<p class="fragment">\(X\mathbf w=(1,1,1)^\top\), \(\;\mathbf r=(1-1,\,3-1,\,2-1)^\top=(0,2,1)^\top\). \(\;\mathbf r^\top X=\begin{bmatrix}0+2+1&0\cdot0+2\cdot1+1\cdot2\end{bmatrix}=\begin{bmatrix}3&4\end{bmatrix}\), so \(-2\,\mathbf r^\top X=\begin{bmatrix}-6&-8\end{bmatrix}\). Polynomial: \(6\cdot1+6\cdot0-12=-6\), \(\;6\cdot1+10\cdot0-14=-8\) ✓.</p>
+</div>
+<aside class="notes">"(1,0) is chosen because neither the residual nor the gradient is special there: at (0,0) the residual is y itself, and at w* the gradient is zero."</aside>
+</section>
+
+<!-- L12-13 -->
+<section>
+<h4>Set \(\nabla\mathrm{SSE}\) to zero: the normal equation in one line</h4>
+\[\begin{aligned}\nabla\mathrm{SSE}=\mathbf 0^\top
+&\overset{(1)}{\iff}-2\,\mathbf r^\top X=\mathbf 0^\top
+\overset{(2)}{\iff}\mathbf r^\top X=\mathbf 0^\top
+\overset{(3)}{\iff}X^\top\mathbf r=\mathbf 0\\
+&\overset{(4)}{\iff}X^\top(\mathbf y-X\mathbf w)=\mathbf 0
+\overset{(5)}{\iff}X^\top\mathbf y-X^\top X\mathbf w=\mathbf 0
+\overset{(6)}{\iff}X^\top X\mathbf w=X^\top\mathbf y\end{aligned}\]
+<ol>
+<li class="fragment">Substitute \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\). The gradient is a row, so &ldquo;zero&rdquo; means the zero <strong>row</strong> \(\mathbf 0^\top\) (\(1\times d\)).</li>
+<li class="fragment">Multiply both sides by \(-\tfrac12\). Reversible: multiply by \(-2\) to go back.</li>
+<li class="fragment">Transpose both sides: \((\mathbf r^\top X)^\top=X^\top\mathbf r\) and \((\mathbf 0^\top)^\top=\mathbf 0\), a \(d\times1\) column. Reversible: transpose again.</li>
+<li class="fragment">Write out the residual, \(\mathbf r=\mathbf y-X\mathbf w\).</li>
+<li class="fragment">Multiply \(X^\top\) into the bracket: \(X^\top(\mathbf y-X\mathbf w)=X^\top\mathbf y-X^\top X\mathbf w\).</li>
+<li class="fragment">Add \(X^\top X\mathbf w\) to both sides.</li>
+</ol>
+<p class="fragment"><strong>Check at \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\)</strong>, with \(X^\top X=\begin{bmatrix}3&3\\3&5\end{bmatrix}\), \(X^\top\mathbf y=(6,7)^\top\): \(\;X^\top X\mathbf w^\ast=\begin{bmatrix}3\cdot\tfrac32+3\cdot\tfrac12\\3\cdot\tfrac32+5\cdot\tfrac12\end{bmatrix}=\begin{bmatrix}\tfrac92+\tfrac32\\\tfrac92+\tfrac52\end{bmatrix}=\begin{bmatrix}6\\7\end{bmatrix}=X^\top\mathbf y\) ✓.</p>
+<aside class="notes">"Every arrow is two-way, so the flat points of SSE are exactly the solutions of the normal equation, for any number of features. L10 already showed a flat point is the lowest."</aside>
+</section>
+
+<!-- L12-14 -->
+<section>
+<h4>Two routes to \(X^\top X\mathbf w=X^\top\mathbf y\)</h4>
+<ul>
+<li>The normal-equation chain passes through \(X^\top\mathbf r=\mathbf 0\) (\(\mathbf r=\mathbf y-X\mathbf w\)); entry \(j\) says (column \(j\) of \(X\))\(^\top\mathbf r=0\). <strong>The residual is orthogonal to every column of \(X\).</strong></li>
+<li class="fragment"><strong>Route 1, geometry (Unit 2, L04).</strong> The closest \(X\mathbf w\) to \(\mathbf y\) is the projection of \(\mathbf y\) onto the columns of \(X\), so \(X^\top\mathbf r=\mathbf 0\); substituting \(\mathbf r=\mathbf y-X\mathbf w\) gave \(X^\top X\mathbf w=X^\top\mathbf y\).</li>
+<li class="fragment"><strong>Route 2, calculus (this unit).</strong> Ask where the error stops changing: \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X=\mathbf 0^\top\). Dividing by \(-2\) and transposing gives \(X^\top\mathbf r=\mathbf 0\), the geometry route&rsquo;s starting point.</li>
+<li class="fragment"><strong>On our data</strong> (\(\mathbf r^\ast=\left(-\tfrac12,1,-\tfrac12\right)^\top\) at \(\mathbf w^\ast\); columns \(\mathbf 1=(1,1,1)^\top\), \(\mathbf t=(0,1,2)^\top\)):
+<ul>
+<li>\(\mathbf 1^\top\mathbf r^\ast=-\tfrac12+1-\tfrac12=0\): the residuals add to zero; the miss above the line, \(+1\), cancels the two below.</li>
+<li>\(\mathbf t^\top\mathbf r^\ast=0\cdot(-\tfrac12)+1\cdot1+2\cdot(-\tfrac12)=0\): weighted by hours, the residuals add to zero too.</li>
+</ul></li>
+<li class="fragment">The derivation of \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\) never used \(d=2\) (only our Rule 2 proof did; MML (5.107) covers every \(d\)), so the same line works for \(50\) features.</li>
+</ul>
+<div class="key-question fragment"><strong>Geometry</strong> (the residual is orthogonal to the columns) and <strong>calculus</strong> (the error stops changing) give the same equation \(X^\top X\mathbf w=X^\top\mathbf y\). <strong>Two routes, one equation</strong> &mdash; the milestone of Unit 4.</div>
+</section>
+
+<!-- L12-15 -->
+<section>
+<h4>L12 takeaways</h4>
+<ul>
+<li>\(\mathrm{SSE}(\mathbf w)=\mathbf w^\top X^\top X\mathbf w-2\mathbf w^\top X^\top\mathbf y+\mathbf y^\top\mathbf y\): from four products, where \(\mathbf y^\top X\mathbf w=\mathbf w^\top X^\top\mathbf y\) because a \(1\times1\) number equals its transpose. <span class="tier-m">[MASTER]</span></li>
+<li>\(\dfrac{\partial(\mathbf b^\top\mathbf w)}{\partial\mathbf w}=\mathbf b^\top\) and, for symmetric \(A\), \(\dfrac{\partial(\mathbf w^\top A\mathbf w)}{\partial\mathbf w}=2\mathbf w^\top A\) &mdash; Rule 1 proved entry by entry, Rule 2 for two parameters. <span class="tier-m">[MASTER]</span></li>
+<li>\(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\), a \(1\times d\) row; checked at \((0,0)^\top\), \((1,0)^\top\) and \(\mathbf w^\ast\). The minus sign is \(\partial r_i/\partial\hat y_i=-1\). <span class="tier-m">[MASTER]</span></li>
+<li>For training, the fastest way down is \(-(\nabla\mathrm{SSE})^\top=2X^\top\mathbf r\), for any number of features. At \((0,0)^\top\): \(\mathbf r=(1,3,2)^\top\), \(2X^\top\mathbf r=2\,(6,7)^\top=(12,14)^\top\), L11&rsquo;s steepest-descent direction, with no polynomial expanded. <span class="tier-m">[MASTER]</span></li>
+<li>Setting \(\nabla\mathrm{SSE}\) to \(\mathbf 0^\top\) gives \(X^\top X\mathbf w=X^\top\mathbf y\) for any number of features: Unit 2&rsquo;s normal equation, reached by calculus. <span class="tier-m">[MASTER]</span></li>
+</ul>
+<div class="key-question fragment">We now have \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\). But the model never jumps from parameters to error &mdash; it passes through predictions and residuals. Can we get \(-2\,\mathbf r^\top X\) <strong>one stage at a time</strong>? <strong>L13.</strong></div>
+</section>
+
+<!-- L13-00 -->
+<section>
+<h2 style="font-size:1.3em;">L13 — A Model Is a Chain</h2>
+<p>Reading: MML &sect;5.1.2, p.145 (eq. (5.32), the chain rule; Example 5.5, pp.145&ndash;146) and &sect;5.2.2, p.148.</p>
+</section>
+
+<!-- L13-01 -->
+<section>
+<h4>The error, computed in stages</h4>
+<p><strong>Why stages:</strong> L12 got \(\nabla\mathrm{SSE}\) by expanding \(\mathrm{SSE}\) into matrix pieces. A neural network is dozens of stages, one after another, and cannot be expanded that way. We need the derivative <em>from the stages</em>, one at a time.</p>
+<p>Split the computation of the error into stages, parameters \(\to\) predictions \(\to\) residuals \(\to\) error, with a name on every arrow. For <strong>one student</strong> \(i\), in L09&rsquo;s one-parameter model \(\hat y_i=wt_i\):</p>
+\[w\;\xrightarrow{\ \times t_i\ }\;\hat y_i\;\xrightarrow{\ y_i-\;\cdot\ }\;r_i\;\xrightarrow{\ (\cdot)^2\ }\;e_i=r_i^2\]
+<ul>
+<li class="fragment"><strong>Stage 1, prediction:</strong> \(\hat y_i=w\,t_i\) &mdash; the parameter \(w\) times student \(i\)&rsquo;s hours \(t_i\).</li>
+<li class="fragment"><strong>Stage 2, residual:</strong> \(r_i=y_i-\hat y_i\) &mdash; data minus prediction.</li>
+<li class="fragment"><strong>Stage 3, squared residual:</strong> \(e_i=r_i^2\) &mdash; student \(i\)&rsquo;s share of the error.</li>
+<li class="fragment">Our three students, as observations \((t_i,y_i)\): \((0,1)\), \((1,3)\), \((2,2)\) &mdash; so \(\mathbf t=(0,1,2)^\top\) hours, \(\mathbf y=(1,3,2)^\top\) points.</li>
+<li class="fragment"><strong>The error adds the shares:</strong> \(\mathrm{SSE}(w)=e_1+e_2+e_3=(1-0\cdot w)^2+(3-1\cdot w)^2+(2-2w)^2\)</li>
+<li class="fragment">Expanded, as in L09: \(\;1+(9-6w+w^2)+(4-8w+4w^2)=5w^2-14w+14\), so \(\dfrac{d\,\mathrm{SSE}}{dw}=10w-14\).</li>
+</ul>
+<aside class="notes">"Same three students, same one-parameter model as L09 (y-hat = w t, SSE = 5w^2 - 14w + 14). The only new thing is that we stop jumping from w straight to the error and look at every stage in between. Each arrow is one stage."</aside>
+</section>
+
+<!-- L13-02 -->
+<section>
+<h4>One derivative per stage</h4>
+<img src="../images/unit04/u4-L13-fig13a-chain-symbolic.png" alt="The chain w -> y-hat_i -> r_i -> e_i drawn top to bottom; beside each arrow what the stage computes and, in red, its derivative: t_i, -1, 2r_i" style="float:right; max-height:330px; max-width:30%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Each stage is a one-variable function. The data \(t_i\) and \(y_i\) are fixed numbers, so \(t_i\) and \(y_i\) act as constants.</p>
+<ul>
+<li class="fragment"><strong>Stage 1:</strong> \(\hat y_i=t_i\cdot w\) is a line in \(w\) with slope \(t_i\), so \(\;\dfrac{d\hat y_i}{dw}=t_i\).</li>
+<li class="fragment"><strong>Stage 2:</strong> \(r_i=y_i-\hat y_i\). The constant \(y_i\) contributes \(0\), the term \(-\hat y_i\) contributes \(-1\): \(\;\dfrac{dr_i}{d\hat y_i}=0-1=-1\).</li>
+<li class="fragment"><strong>Stage 3:</strong> \(e_i=r_i^2\). Power rule: \(\;\dfrac{de_i}{dr_i}=2r_i\).</li>
+<li class="fragment"><strong>Read stage 2&rsquo;s derivative \(-1\):</strong> raising a prediction by \(1\) lowers its residual by exactly \(1\). That \(-1\) is where the minus sign in L12&rsquo;s \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\) comes from.</li>
+</ul>
+<div class="key-question fragment">How do the three stage derivatives \(t_i\), \(-1\), \(2r_i\) combine into \(\dfrac{de_i}{dw}\), the rate at which student \(i\)&rsquo;s squared residual changes when \(w\) changes?</div>
+</section>
+
+<!-- L13-06 -->
+<section>
+<h4>Try it on one student: student 2 at \(w=1\)</h4>
+<img src="../images/unit04/u4-L13-fig13b-chain-student2.png" alt="Student 2 at w = 1: values 1 -> 1 -> 2 -> 4 down the chain, stage derivatives 1, -1, 4 in red, product -4" style="float:right; max-height:300px; max-width:26%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Chain \(w\to\hat y_2=wt_2\to r_2=y_2-\hat y_2\to e_2=r_2^2\); student 2 has \((t_2,y_2)=(1,3)\). At \(w=1\), each stage: its value, then its stage derivative there.</p>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>stage</th><th>value at \(w=1\)</th><th>stage derivative</th><th>value at \(w=1\)</th></tr>
+<tr><td>\(\hat y_2=w\,t_2\)</td><td>\(1\cdot1=1\)</td><td>\(\frac{d\hat y_2}{dw}=t_2\)</td><td>\(1\)</td></tr>
+<tr><td>\(r_2=y_2-\hat y_2\)</td><td>\(3-1=2\)</td><td>\(\frac{dr_2}{d\hat y_2}\)</td><td>\(-1\)</td></tr>
+<tr><td>\(e_2=r_2^2\)</td><td>\(2^2=4\)</td><td>\(\frac{de_2}{dr_2}=2r_2\)</td><td>\(2\cdot2=4\)</td></tr>
+</table>
+<ul>
+<li class="fragment"><strong>A guess:</strong> multiply the three stage derivatives in the last column: \(\;4\cdot(-1)\cdot1=-4\).</li>
+</ul>
+<div class="quickcheck fragment">
+<p><strong>Check directly.</strong> \(e_2(w)=(y_2-wt_2)^2=(3-w)^2=9-6w+w^2\), so \(e_2'(w)=-6+2w\), and at \(w=1\): \(-6+2=-4\) ✓.</p>
+</div>
+<div class="key-question fragment">The product of the stage derivatives is the derivative. <strong>Do rates always multiply along a chain?</strong></div>
+</section>
+
+<!-- L13-03 -->
+<section>
+<h4>The chain rule, and why it is believable</h4>
+<div class="mathbox">
+<strong>Chain rule</strong> (MML eq. (5.32), p.145). If \(v=f(w)\) and \(z=g(v)\), so that \(z=g(f(w))\), then
+\[\frac{dz}{dw}=g'(f(w))\,f'(w),\qquad\text{written also as}\qquad \frac{dz}{dw}=\frac{dz}{dv}\cdot\frac{dv}{dw},\]
+with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</span>
+</div>
+<p class="fragment"><strong>Formal proof deferred</strong> (it is in any calculus text). <strong>Here is the first-order reason</strong>, one step at a time:</p>
+<ul>
+<li class="fragment">Take a small step \(\delta\) in \(w\).</li>
+<li class="fragment">First stage \(v=f(w)\): by the first-order prediction \(f(w+\delta)-f(w)\approx f'(w)\,\delta\) (L09&rsquo;s &ldquo;Recall, in the language of error&rdquo;), \(v\) changes by about \(\Delta v\approx f'(w)\,\delta\).</li>
+<li class="fragment">Second stage \(z=g(v)\): the first-order prediction again, now for \(g\) and a step \(\Delta v\) in \(v\), gives \(\Delta z\approx g'(v)\,\Delta v\).</li>
+<li class="fragment">Substitute \(\Delta v\approx f'(w)\,\delta\) into \(\Delta z\approx g'(v)\,\Delta v\): \(\Delta z\approx g'(v)\,f'(w)\,\delta\). Change in \(z\) per unit change in \(w\): \(g'(v)\,f'(w)\). <strong>Rates multiply along the chain \(w\to v\to z\).</strong></li>
+</ul>
+<aside class="notes">"MML p.148 warns in the margin: dz/dv times dv/dw looks like fractions cancelling, but a derivative is not a fraction. The notation is a memory aid; the first-order argument is the reason."</aside>
+</section>
+
+<!-- L13-04 -->
+<section>
+<h4>The chain rule on plain numbers first (MML Example 5.5)</h4>
+<p>\(h(x)=(2x+1)^4\). Inner stage \(f(x)=2x+1\); outer stage \(g(f)=f^4\).</p>
+<ul>
+<li class="fragment">Stage derivatives: \(f'(x)=2\) and \(g'(f)=4f^3\).</li>
+<li class="fragment">At \(x=1\), the inner value is \(f(1)=2\cdot1+1=3\).</li>
+<li class="fragment">Outer rate at the inner value \(3\): \(g'(3)=4\cdot3^3=4\cdot27=108\).</li>
+<li class="fragment">Multiply: \(h'(1)=g'(3)\cdot f'(1)=108\cdot2=216\). MML&rsquo;s general answer \(8(2x+1)^3\) gives \(8\cdot27=216\) ✓.</li>
+</ul>
+<div class="quickcheck fragment">
+<p><strong>Does 216 predict anything?</strong> Step \(x\) from \(1\) to \(1.01\), so \(\delta=0.01\).</p>
+<ul>
+<li>Inner: \(2(1.01)+1=3.02\), a change of \(0.02=2\times0.01\).</li>
+<li>Outer, predicted: \(108\times0.02=2.16\), which is \(216\times0.01\).</li>
+<li>Outer, actual: \(3.02^4-3^4=83.1817-81=2.1817\). Close, not equal: the prediction \(2.16\) is only first-order.</li>
+</ul>
+</div>
+</section>
+
+<!-- L13-05 -->
+<section>
+<h4>Three stages: use the chain rule twice</h4>
+<p>Our chain \(w\to\hat y_i\to r_i\to e_i\) (\(\hat y_i=wt_i\), \(r_i=y_i-\hat y_i\), \(e_i=r_i^2\)) has three stages, with stage derivatives \(\frac{d\hat y_i}{dw}=t_i\), \(\frac{dr_i}{d\hat y_i}=-1\), \(\frac{de_i}{dr_i}=2r_i\). The chain rule (MML (5.32)) covers two stages, \(v=f(w)\) and \(z=g(v)\). Apply the chain rule twice.</p>
+<ul>
+<li class="fragment">\(e_i\) depends on \(r_i\), and \(r_i\) depends on \(w\). Chain rule once: \(\;\dfrac{de_i}{dw}=\dfrac{de_i}{dr_i}\cdot\dfrac{dr_i}{dw}\).</li>
+<li class="fragment">\(r_i\) depends on \(\hat y_i\), and \(\hat y_i\) depends on \(w\). Chain rule again: \(\;\dfrac{dr_i}{dw}=\dfrac{dr_i}{d\hat y_i}\cdot\dfrac{d\hat y_i}{dw}\).</li>
+<li class="fragment">Substitute the formula for \(\frac{dr_i}{dw}\) into the formula for \(\frac{de_i}{dw}\): \(\;\dfrac{de_i}{dw}=\dfrac{de_i}{dr_i}\cdot\dfrac{dr_i}{d\hat y_i}\cdot\dfrac{d\hat y_i}{dw}\) &mdash; one <strong>factor</strong> per stage.</li>
+<li class="fragment">Put in the three stage derivatives \(2r_i\), \(-1\), \(t_i\): \(\;\dfrac{de_i}{dw}=2r_i\cdot(-1)\cdot t_i\).</li>
+<li class="fragment">Multiply: \(\;\dfrac{de_i}{dw}=-2\,t_i\,r_i\). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">The last two factors multiplied, \(2r_i\cdot(-1)=-2r_i\), are L09&rsquo;s recall fact \(\frac{d}{dx}(c-x)^2=-2r\). The parameter adds the first factor \(t_i\).</li>
+</ul>
+</section>
+
+<!-- L13-08 -->
+<section>
+<h4>All three students at \(w=1\)</h4>
+<p>\(\mathrm{SSE}(w)=(1-0\cdot w)^2+(3-w)^2+(2-2w)^2=5w^2-14w+14\), so \(\frac{d\,\mathrm{SSE}}{dw}=10w-14\). Chain rule, per student: \(\frac{de_i}{dw}=\frac{de_i}{dr_i}\cdot\frac{dr_i}{d\hat y_i}\cdot\frac{d\hat y_i}{dw}=2r_i\cdot(-1)\cdot t_i\).</p>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>\(i\)</th><th>\((t_i,y_i)\)</th><th>\(r_i=y_i-1\cdot t_i\)</th><th>\(2r_i\)</th><th>\(-1\)</th><th>\(t_i\)</th><th>\(\frac{de_i}{dw}=2r_i\cdot(-1)\cdot t_i\)</th></tr>
+<tr><td>1</td><td>\((0,1)\)</td><td>\(1-0=1\)</td><td>\(2\)</td><td>\(-1\)</td><td>\(0\)</td><td>\(2\cdot(-1)\cdot0=0\)</td></tr>
+<tr><td>2</td><td>\((1,3)\)</td><td>\(3-1=2\)</td><td>\(4\)</td><td>\(-1\)</td><td>\(1\)</td><td>\(4\cdot(-1)\cdot1=-4\)</td></tr>
+<tr><td>3</td><td>\((2,2)\)</td><td>\(2-2=0\)</td><td>\(0\)</td><td>\(-1\)</td><td>\(2\)</td><td>\(0\cdot(-1)\cdot2=0\)</td></tr>
+</table>
+<ul>
+<li class="fragment">\(\mathrm{SSE}=e_1+e_2+e_3\); by the sum rule (MML (5.31), p.145) its derivative at \(w=1\) is \(0+(-4)+0=-4\).</li>
+<li class="fragment">Polynomial check: \(10w-14\) at \(w=1\) is \(10-14=-4\) ✓.</li>
+</ul>
+<div class="quickcheck fragment">
+<p><strong>What \(-4\) predicts:</strong> \(\mathrm{SSE}(1)=1+4+0=5\), so at \(w=1.1\), \(\mathrm{SSE}\approx5+(-4)(0.1)=4.6\). Actual: residuals \(1-0=1\), \(3-1.1=1.9\), \(2-2.2=-0.2\), so \(\mathrm{SSE}=1+3.61+0.04=4.65\).</p>
+</div>
+</section>
+
+<!-- L13-10 -->
+<section>
+<h4>Add the students up, for every \(w\)</h4>
+<p>\(\mathbf t=(0,1,2)^\top\), \(\mathbf y=(1,3,2)^\top\); \(\mathrm{SSE}(w)=(1-0\cdot w)^2+(3-w)^2+(2-2w)^2=5w^2-14w+14\), \(\frac{d\,\mathrm{SSE}}{dw}=10w-14\).</p>
+<ul>
+<li class="fragment">\(\mathrm{SSE}=e_1+e_2+e_3\), so by the sum rule \(\;\dfrac{d\,\mathrm{SSE}}{dw}=\dfrac{de_1}{dw}+\dfrac{de_2}{dw}+\dfrac{de_3}{dw}\).</li>
+<li class="fragment">Each term, by the chain rule: \(\dfrac{de_i}{dw}=2r_i\cdot(-1)\cdot t_i=-2t_ir_i\), so \(\;\dfrac{d\,\mathrm{SSE}}{dw}=-2t_1r_1-2t_2r_2-2t_3r_3\).</li>
+<li class="fragment">Factor out \(-2\): \(\;\dfrac{d\,\mathrm{SSE}}{dw}=-2\,(t_1r_1+t_2r_2+t_3r_3)\).</li>
+<li class="fragment">The bracket is the dot product of \(\mathbf t=(t_1,t_2,t_3)^\top\) and \(\mathbf r=(r_1,r_2,r_3)^\top\): \(\;\dfrac{d\,\mathrm{SSE}}{dw}=-2\,\mathbf t^\top\mathbf r\). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment"><strong>Check against \(10w-14\), for every \(w\):</strong> \(\mathbf r=\mathbf y-w\mathbf t\), so \(\mathbf t^\top\mathbf r=\mathbf t^\top\mathbf y-w\,\mathbf t^\top\mathbf t\).</li>
+<li class="fragment">\(\mathbf t^\top\mathbf y=0\cdot1+1\cdot3+2\cdot2=7\) and \(\mathbf t^\top\mathbf t=0^2+1^2+2^2=5\).</li>
+<li class="fragment">\(-2\,\mathbf t^\top\mathbf r=-2(7-5w)=-14+10w=10w-14\) ✓, without expanding \(\mathrm{SSE}\).</li>
+</ul>
+<div class="quickcheck fragment"><strong>Your turn, \(w=\tfrac75\)</strong> (L09&rsquo;s best one-parameter rule): \(\mathbf r=\mathbf y-\tfrac75\mathbf t=\left(1,\tfrac85,-\tfrac45\right)^\top\) and \(-2\,\mathbf t^\top\mathbf r=-2\left(0+\tfrac85-\tfrac85\right)=0\) ✓: students 2 and 3 pull \(w\) in opposite directions, equally hard.</div>
+</section>
+
+<!-- L13-11 -->
+<section>
+<h4>What the chain rule shows: one stage with derivative \(0\) makes \(\frac{de_i}{dw}=0\)</h4>
+<p>Call a stage <strong>flat</strong> at a point when its stage derivative there is \(0\). Our stage derivatives: \(\frac{d\hat y_i}{dw}=t_i\), \(\frac{dr_i}{d\hat y_i}=-1\), \(\frac{de_i}{dr_i}=2r_i\).</p>
+<ul>
+<li class="fragment">\(\frac{de_i}{dw}\) is the product \(\frac{de_i}{dr_i}\cdot\frac{dr_i}{d\hat y_i}\cdot\frac{d\hat y_i}{dw}\). If one of these three factors is \(0\), \(\frac{de_i}{dw}\) is \(0\), whatever the other two are.</li>
+<li class="fragment">Data \((t_i,y_i)=(0,1),(1,3),(2,2)\) at \(w=1\): \(r_i=y_i-1\cdot t_i\) gives \(\mathbf r=(1,2,0)^\top\). Two different flat stages:</li>
+<li class="fragment"><strong>Student 1, stage 1 flat:</strong> \(t_1=0\) hours, so \(\hat y_1=w\cdot0\) does not move when \(w\) moves. \(\frac{de_1}{dw}=2\cdot(-1)\cdot0=0\), even though \(r_1=1\neq0\).</li>
+<li class="fragment"><strong>Student 3, stage 3 flat:</strong> \(r_3=0\), so \(\frac{de_3}{dr_3}=2\cdot0=0\). \(\frac{de_3}{dw}=0\cdot(-1)\cdot2=0\), even though \(t_3=2\neq0\).</li>
+<li class="fragment">Either way, the student with a flat stage (student 1 or student 3) contributes \(0\) to \(\frac{d\,\mathrm{SSE}}{dw}\) at \(w=1\).</li>
+<li class="fragment">Differentiating \(\mathrm{SSE}(w)=5w^2-14w+14\) gives \(10w-14\), which at \(w=1\) is \(-4=0+(-4)+0\), but cannot say <em>which</em> student or <em>which</em> stage made each term \(0\). The chain rule, stage by stage, can.</li>
+</ul>
+<aside class="notes">"Two different reasons for a zero: student 1 is flat at the first stage (w cannot move that prediction), student 3 at the last stage (a zero residual, where the square has slope zero). The product does not care which factor is the zero."</aside>
+</section>
+
+<!-- L13-12 -->
+<section>
+<h4>A product of many factors, each of size at most \(c&lt;1\), shrinks fast</h4>
+<img src="../images/unit04/u4-L13-fig13c-vanishing.png" alt="Log-scale plot of 0.9^k and 0.5^k for k = 1 to 50: 0.9^50 is about 0.005 and 0.5^50 is about 8.9e-16" style="float:right; max-height:250px; max-width:34%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>By the chain rule, a chain of \(k\) stages has a derivative that is a product of \(k\) stage derivatives. If all \(k\) factors have size at most one fixed \(c&lt;1\) &mdash; every factor \(0.9\), say &mdash; the product is at most \(c^k\) and shrinks fast.</p>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>number of factors \(k\)</th><th>every factor \(0.5\): product \(0.5^k\)</th><th>every factor \(0.9\): product \(0.9^k\)</th></tr>
+<tr><td>\(1\)</td><td>\(0.5\)</td><td>\(0.9\)</td></tr>
+<tr><td>\(2\)</td><td>\(0.5\cdot0.5=0.25\)</td><td>\(0.9\cdot0.9=0.81\)</td></tr>
+<tr><td>\(10\)</td><td>\(\tfrac{1}{2^{10}}=\tfrac{1}{1024}\approx0.001\)</td><td>\(\approx0.349\)</td></tr>
+<tr><td>\(50\)</td><td>\(\approx8.9\times10^{-16}\)</td><td>\(\approx0.005\)</td></tr>
+</table>
+<ul>
+<li class="fragment">&#9888;&#65039; <strong>&ldquo;Each factor below \(1\)&rdquo; is not enough</strong> &mdash; factors creeping up to \(1\), such as \(1-\tfrac12,\,1-\tfrac14,\,1-\tfrac18,\dots\), give a product that stays near \(0.29\). What matters is a fixed ceiling \(c&lt;1\).</li>
+<li class="fragment">Row \(k=50\): with \(50\) factors of \(0.9\), a small step \(\delta\) at the input of a \(50\)-stage chain moves its last output by only about \(0.005\,\delta\).</li>
+<li class="fragment">So the derivative of the error with respect to a parameter at the start of a long chain can be nearly \(0\), and the update to that parameter is tiny, so it barely moves.</li>
+<li class="fragment">In deep networks, a derivative shrunk this way, as a product of many stage derivatives of size at most some \(c&lt;1\), is called the <strong>vanishing-gradient</strong> problem. <span class="tier-u">[UNDERSTAND]</span></li>
+</ul>
+<aside class="notes">"0.5^10 = 1/1024 exactly. 0.9^10 = 0.3487, 0.9^50 = 0.00515, 0.5^50 = 8.88e-16. If they ask about factors larger than 1: the product then grows instead, the exploding case; not needed here."</aside>
+</section>
+
+<!-- L13-13 -->
+<section>
+<h4>What the chain rule shows: change one stage, change one factor <span class="tier-u">[UNDERSTAND]</span></h4>
+<p>A separate example, same data \((t_i,y_i)=(0,1),(1,3),(2,2)\): swap the model for \(\hat y_i=e^{wt_i}\), so \(r_i=y_i-e^{wt_i}\), \(e_i=r_i^2\).</p>
+<ul>
+<li class="fragment"><strong>Stage 1 changes.</strong> \(\hat y_i=e^{wt_i}\) is itself a two-stage chain: inner \(u=t_iw\) with \(\frac{du}{dw}=t_i\); outer \(\hat y_i=e^{u}\) with \(\frac{d\hat y_i}{du}=e^{u}\).</li>
+<li class="fragment">So \(\;\dfrac{d\hat y_i}{dw}=e^{u}\cdot t_i=t_i\,e^{wt_i}\).</li>
+<li class="fragment"><strong>Stage 2 unchanged:</strong> \(\frac{dr_i}{d\hat y_i}=-1\). <strong>Stage 3 unchanged:</strong> \(\frac{de_i}{dr_i}=2r_i\).</li>
+<li class="fragment">New product: \(\;\dfrac{de_i}{dw}=2r_i\cdot(-1)\cdot t_ie^{wt_i}=-2\,t_i\,r_i\,e^{wt_i}\).</li>
+<li class="fragment">Against \(-2\,t_i\,r_i\) for the model \(\hat y_i=wt_i\): one extra factor \(e^{wt_i}\), coming from stage 1, the only stage that changed.</li>
+<li class="fragment">Here \(\mathrm{SSE}(w)=(1-e^{0\cdot w})^2+(3-e^{w})^2+(2-e^{2w})^2=0+(3-e^{w})^2+(2-e^{2w})^2\) is not a polynomial in \(w\), so there is no polynomial to expand. The chain rule works anyway.</li>
+<li class="fragment"><strong>In numbers, at \(w=0\):</strong> every prediction is \(e^{0}=1\), so \(\mathbf r=(0,2,1)^\top\) and \(\frac{d\,\mathrm{SSE}}{dw}=\sum_i2r_i\cdot(-1)\cdot t_ie^{0}=0-4-4=-8\).</li>
+</ul>
+</section>
+
+<!-- L13-15 -->
+<section>
+<h4>L13 takeaways</h4>
+<ul>
+<li class="fragment">A model is a chain: \(w\to\hat y_i\to r_i\to e_i\), with stage derivatives \(t_i\), \(-1\), \(2r_i\). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Chain rule (MML (5.32), p.145): stage derivatives multiply along \(w\to\hat y_i\to r_i\to e_i\), so \(\frac{de_i}{dw}=2r_i\cdot(-1)\cdot t_i=-2\,t_i\,r_i\). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Summing over students: \(\frac{d\,\mathrm{SSE}}{dw}=-2\,\mathbf t^\top\mathbf r=10w-14\), the derivative of \(\mathrm{SSE}(w)=(1-0\cdot w)^2+(3-w)^2+(2-2w)^2=5w^2-14w+14\) &mdash; checked at \(w=1\) (value \(-4\)) and at \(w=\tfrac75\) (value \(0\)). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">One stage with derivative \(0\) makes \(\frac{de_i}{dw}=0\); a product of many stage derivatives smaller than \(1\) in size is nearly \(0\) (vanishing gradients). <span class="tier-u">[UNDERSTAND]</span></li>
+<li class="fragment">Change one stage, change one factor: \(\hat y_i=e^{wt_i}\) gives \(\frac{de_i}{dw}=-2\,t_i\,r_i\,e^{wt_i}\). <span class="tier-u">[UNDERSTAND]</span></li>
+</ul>
+<div class="key-question fragment">We differentiated one student at a time. But the three predictions move <strong>together</strong>, as one vector. What is the derivative of a vector? <strong>L14.</strong></div>
+</section>
+
+<!-- ═══════════════════════════ L14 ═══════════════════════════ -->
+
+<!-- L14-00 -->
+<section>
+<h2 style="font-size:1.3em;">L14 — When a Stage Is a Vector</h2>
+<p>Reading: MML &sect;5.3, pp.149&ndash;154 (Definition 5.6, the Jacobian, p.150; Example 5.9, p.153; Example 5.11, p.154) and &sect;5.2.2, p.148 (the chain rule (5.48)).</p>
+<aside class="notes">"L13 followed one student at a time. Today the three students move together, as one vector, and the derivative of a vector is a matrix. By the end the chain rule rebuilds L12's gradient as a product of three matrices."</aside>
+</section>
+
+<!-- L14-01 -->
+<section>
+<h4>The prediction stage is a vector-valued function</h4>
+<img src="../images/unit04/u4-L14-fig14a-prediction-response.png" alt="Two panels starting from the line 3/2 + t/2: raising w0 by 1/2 moves all three predictions up by 1/2 (column (1,1,1) of X); raising w1 by 1/2 moves them by 0, 1/2, 1 (column (0,1,2) of X)" style="float:right; max-height:340px; max-width:30%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Back to two parameters, \(\mathbf w=(w_0,w_1)^\top\). L13 followed one student at a time, but the prediction stage \(\hat{\mathbf y}(\mathbf w)=X\mathbf w\) produces <strong>all students&rsquo; predictions at once</strong>: \(2\) numbers in, \(3\) out, a <strong>vector-valued function</strong> \(\R^2\to\R^3\) (MML &sect;5.3, eq. (5.54), p.149). Row by row:</p>
+\[\hat{\mathbf y}=\begin{bmatrix}1&0\\1&1\\1&2\end{bmatrix}\begin{bmatrix}w_0\\w_1\end{bmatrix}
+=\begin{bmatrix}1\cdot w_0+0\cdot w_1\\1\cdot w_0+1\cdot w_1\\1\cdot w_0+2\cdot w_1\end{bmatrix}
+=\begin{bmatrix}w_0\\w_0+w_1\\w_0+2w_1\end{bmatrix}.\]
+<ul>
+<li class="fragment">\(\hat y_1=w_0\): student 1 studied \(0\) hours, so the prediction is the intercept alone.</li>
+<li class="fragment">\(\hat y_2=w_0+w_1\) (1 hour) and \(\hat y_3=w_0+2w_1\) (2 hours).</li>
+<li class="fragment"><strong>Nudge each parameter</strong> (the figure, from \(\left(\tfrac32,\tfrac12\right)^\top\)): raising \(w_0\) by \(\tfrac12\) moves the three predictions by \(\left(\tfrac12,\tfrac12,\tfrac12\right)^\top\); raising \(w_1\) by \(\tfrac12\) moves them by \(\left(0,\tfrac12,1\right)^\top\). Per unit of nudge: \((1,1,1)^\top\) and \((0,1,2)^\top\).</li>
+</ul>
+<div class="key-question fragment">Each of \(3\) predictions responds to each of \(2\) parameters: <strong>six</strong> partial derivatives; with \(1000\) students and \(50\) parameters, \(50{,}000\). L13 had one number in and one out at every arrow. How do we arrange them so that the chain rule still works?</div>
+<aside class="notes">"Do the matrix-vector product with them, row times column, before anything else. The point of the third bullet: the six sensitivities are not all the same, and some are zero."</aside>
+</section>
+
+<!-- L14-02 -->
+<section>
+<h4>The Jacobian: every partial derivative, in one matrix</h4>
+<div class="mathbox">
+<strong>Definition</strong> (MML Def. 5.6, (5.58)&ndash;(5.59), p.150). For \(\mathbf f:\R^n\to\R^m\) with outputs \(f_1,\dots,f_m\) and inputs \(x_1,\dots,x_n\), the <strong>Jacobian</strong> \(J_{\mathbf f}\), also written \(\dfrac{d\mathbf f}{d\mathbf x}\), is the \(m\times n\) matrix
+\[J_{\mathbf f}=\begin{bmatrix}\dfrac{\partial f_1}{\partial x_1}&\cdots&\dfrac{\partial f_1}{\partial x_n}\\ \vdots&&\vdots\\ \dfrac{\partial f_m}{\partial x_1}&\cdots&\dfrac{\partial f_m}{\partial x_n}\end{bmatrix},\qquad (i,j)\text{ entry }=\frac{\partial f_i}{\partial x_j}:\]
+<strong>one row per output, one column per input</strong>. <span class="tier-m">[MASTER]</span>
+</div>
+<ul>
+<li class="fragment">Each entry is a partial derivative (L09, MML Def. 5.5): differentiate the output \(f_i\) in the input \(x_j\), with the other inputs held fixed.</li>
+<li class="fragment"><strong>Row \(i\)</strong> lists how the one output \(f_i\) responds to each input. <strong>Column \(j\)</strong> lists how every output responds to the one input \(x_j\).</li>
+<li class="fragment">The entries are functions of \(\mathbf x\). To get numbers, evaluate the Jacobian at a point.</li>
+</ul>
+<aside class="notes">"MML calls this arrangement numerator layout (Remark, p.150): the outputs label the rows, the inputs label the columns. Say the sentence 'one row per output, one column per input' twice; everything later depends on it."</aside>
+</section>
+
+<!-- L14-03 -->
+<section>
+<h4>A small example, every entry computed</h4>
+<p><strong>A separate example, not our data:</strong> \(\;\mathbf f(x_1,x_2)=\begin{bmatrix}x_1^2x_2\\3x_1+x_2^2\end{bmatrix}\), a function \(\R^2\to\R^2\), so \(J_{\mathbf f}\) is \(2\times2\).</p>
+<ul>
+<li class="fragment">\(\dfrac{\partial f_1}{\partial x_1}\): hold \(x_2\) fixed, so \(x_1^2x_2\) is \(x_2\) times \(x_1^2\), and the derivative is \(x_2\cdot2x_1=2x_1x_2\).</li>
+<li class="fragment">\(\dfrac{\partial f_1}{\partial x_2}\): hold \(x_1\) fixed, so \(x_1^2x_2\) is the constant \(x_1^2\) times \(x_2\), and the derivative is \(x_1^2\cdot1=x_1^2\).</li>
+<li class="fragment">\(\dfrac{\partial f_2}{\partial x_1}\): \(3x_1\) gives \(3\); \(x_2^2\) is held fixed, so it gives \(0\). Total \(3+0=3\).</li>
+<li class="fragment">\(\dfrac{\partial f_2}{\partial x_2}\): \(3x_1\) is held fixed, so it gives \(0\); \(x_2^2\) gives \(2x_2\). Total \(0+2x_2=2x_2\).</li>
+</ul>
+<div class="fragment">
+\[J_{\mathbf f}=\begin{bmatrix}2x_1x_2&x_1^2\\3&2x_2\end{bmatrix},\qquad
+J_{\mathbf f}(1,2)=\begin{bmatrix}2\cdot1\cdot2&1^2\\3&2\cdot2\end{bmatrix}=\begin{bmatrix}4&1\\3&4\end{bmatrix}.\]
+</div>
+<p class="fragment">The output at \((1,2)^\top\): \(\mathbf f(1,2)=\big(1^2\cdot2,\;3\cdot1+2^2\big)^\top=(2,\,7)^\top\).</p>
+<aside class="notes">"Row 1 came from f1 only, row 2 from f2 only. Column 1 came from differentiating in x1 only. Have them say which entry each bullet fills before it appears."</aside>
+</section>
+
+<!-- L14-05 -->
+<section>
+<h4>The Jacobian of the prediction stage is \(X\)</h4>
+<p>The stage: \(\hat{\mathbf y}=X\mathbf w\), where \(X\) has rows \((1,0),\,(1,1),\,(1,2)\), \(\mathbf w=(w_0,w_1)^\top\). Inputs \(w_0,w_1\) (\(n=2\)), outputs \(\hat y_1,\hat y_2,\hat y_3\) (\(m=3\)), so \(J_{\hat{\mathbf y}}\) is \(3\times2\). One row per prediction:</p>
+<ul>
+<li class="fragment">Row 1, \(\hat y_1=w_0\): \(\;\partial\hat y_1/\partial w_0=1\), and \(\partial\hat y_1/\partial w_1=0\) because \(w_1\) does not appear.</li>
+<li class="fragment">Row 2, \(\hat y_2=w_0+w_1\): \(\;\partial\hat y_2/\partial w_0=1+0=1\), \(\;\partial\hat y_2/\partial w_1=0+1=1\).</li>
+<li class="fragment">Row 3, \(\hat y_3=w_0+2w_1\): \(\;\partial\hat y_3/\partial w_0=1+0=1\), \(\;\partial\hat y_3/\partial w_1=0+2=2\).</li>
+</ul>
+<div class="fragment">
+\[J_{\hat{\mathbf y}}=\frac{d\hat{\mathbf y}}{d\mathbf w}=\begin{bmatrix}
+\partial\hat y_1/\partial w_0&\partial\hat y_1/\partial w_1\\
+\partial\hat y_2/\partial w_0&\partial\hat y_2/\partial w_1\\
+\partial\hat y_3/\partial w_0&\partial\hat y_3/\partial w_1\end{bmatrix}
+=\begin{bmatrix}1&0\\1&1\\1&2\end{bmatrix}=X .\]
+</div>
+<ul>
+<li class="fragment">No \(w_0\) or \(w_1\) is left in any entry, so \(J_{\hat{\mathbf y}}=X\) at <em>every</em> \(\mathbf w\). Any \(X\) works the same way: \(\hat y_i=\sum_j X_{ij}w_j\), so \(\partial\hat y_i/\partial w_j=X_{ij}\), the entry of \(X\) in row \(i\), column \(j\) (MML Example 5.9, p.153).</li>
+</ul>
+<div class="key-question fragment"><strong>The Jacobian of the prediction stage is \(X\) itself</strong> &mdash; the matrix students have been carrying since Week 2. Nothing new had to be built. <span class="tier-m">[MASTER]</span></div>
+<aside class="notes">"The six sensitivities of the first slide are the six entries of X. The zero in row 1 is the student who studied 0 hours: the slope parameter cannot reach that prediction."</aside>
+</section>
+
+<!-- L14-06 -->
+<section>
+<h4>The residual stage: its Jacobian is \(-I\)</h4>
+<p>The stage \(\mathbf r=\mathbf y-\hat{\mathbf y}\) (data minus prediction) takes the \(3\) predictions to the \(3\) residuals: \(\R^3\to\R^3\), so its Jacobian is \(3\times3\). The data \(\mathbf y=(1,3,2)^\top\) are fixed numbers.</p>
+<ul>
+<li class="fragment">Written out: \(\;r_1=1-\hat y_1,\quad r_2=3-\hat y_2,\quad r_3=2-\hat y_3\).</li>
+<li class="fragment"><strong>Diagonal entries:</strong> \(\partial r_i/\partial\hat y_i=0-1=-1\), the constant \(y_i\) giving \(0\). The diagonal \(-1\) is L13's \(dr_i/d\hat y_i=-1\).</li>
+<li class="fragment"><strong>Off-diagonal entries:</strong> \(r_1=1-\hat y_1\) contains no \(\hat y_2\) and no \(\hat y_3\), so \(\partial r_1/\partial\hat y_2=\partial r_1/\partial\hat y_3=0\). Likewise \(r_2\) contains only \(\hat y_2\), and \(r_3\) only \(\hat y_3\).</li>
+</ul>
+<div class="fragment">
+\[J_{\mathbf r}=\frac{d\mathbf r}{d\hat{\mathbf y}}=\begin{bmatrix}
+\partial r_1/\partial\hat y_1&\partial r_1/\partial\hat y_2&\partial r_1/\partial\hat y_3\\
+\partial r_2/\partial\hat y_1&\partial r_2/\partial\hat y_2&\partial r_2/\partial\hat y_3\\
+\partial r_3/\partial\hat y_1&\partial r_3/\partial\hat y_2&\partial r_3/\partial\hat y_3\end{bmatrix}
+=\begin{bmatrix}-1&0&0\\0&-1&0\\0&0&-1\end{bmatrix}=-I .\]
+</div>
+<ul>
+<li class="fragment">Like the prediction stage's Jacobian \(X\), the Jacobian \(-I\) is the same at every point: no \(\hat y_i\) is left in it.</li>
+<li class="fragment">The six zeros say something L13 never had to say: one student's residual does not respond to another student's prediction.</li>
+</ul>
+<aside class="notes">"The minus sign in -2 r^T X lives on the diagonal here. The zeros are why the students separate cleanly."</aside>
+</section>
+
+<!-- L14-07 -->
+<section>
+<h4>The error stage: one output, so one row</h4>
+<p>The chain so far: \(\hat{\mathbf y}=X\mathbf w\), \(\;\mathbf r=\mathbf y-\hat{\mathbf y}\) with \(\mathbf y=(1,3,2)^\top\). The last stage is the error \(\mathrm{SSE}=\mathbf r^\top\mathbf r=r_1^2+r_2^2+r_3^2\). It takes the \(3\) residuals to \(1\) number: \(\R^3\to\R\), so its Jacobian is \(1\times3\).</p>
+<ul>
+<li class="fragment">\(\dfrac{\partial\,\mathrm{SSE}}{\partial r_1}\): \(r_2^2\) and \(r_3^2\) are held fixed and give \(0\); \(r_1^2\) gives \(2r_1\). Total \(2r_1+0+0=2r_1\).</li>
+<li class="fragment">\(\dfrac{\partial\,\mathrm{SSE}}{\partial r_2}=0+2r_2+0=2r_2\), \(\qquad\dfrac{\partial\,\mathrm{SSE}}{\partial r_3}=0+0+2r_3=2r_3\).</li>
+</ul>
+<div class="fragment">
+\[J_{\mathrm{SSE}}=\frac{d\,\mathrm{SSE}}{d\mathbf r}=\begin{bmatrix}\dfrac{\partial\,\mathrm{SSE}}{\partial r_1}&\dfrac{\partial\,\mathrm{SSE}}{\partial r_2}&\dfrac{\partial\,\mathrm{SSE}}{\partial r_3}\end{bmatrix}=\begin{bmatrix}2r_1&2r_2&2r_3\end{bmatrix}=2\,\mathbf r^\top .\]
+</div>
+<ul>
+<li class="fragment">Each entry is L13's \(de_i/dr_i=2r_i\) for one student, now collected into one row.</li>
+<li class="fragment">Unlike \(X\) (prediction stage) and \(-I\) (residual stage), the Jacobian \(2\mathbf r^\top\) changes from point to point. At \(\mathbf w=(0,0)^\top\) the residual is \(\mathbf r=\mathbf y-X\mathbf 0=(1,3,2)^\top\), and there it is \(\begin{bmatrix}2\cdot1&2\cdot3&2\cdot2\end{bmatrix}=\begin{bmatrix}2&6&4\end{bmatrix}\).</li>
+</ul>
+<div class="key-question fragment">A function with <strong>one output</strong> has a Jacobian with <strong>one row</strong>. A row of partial derivatives of one output already has a name in this course.</div>
+<aside class="notes">"MML (5.81), p.154 is exactly this line: the derivative of the squared norm of a vector is two times that vector, transposed."</aside>
+</section>
+
+<!-- L14-08 -->
+<section>
+<h4>A one-row Jacobian is the gradient</h4>
+<ul>
+<li>For \(g:\R^n\to\R\) (\(m=1\)) the Jacobian is the \(1\times n\) row \(\begin{bmatrix}\partial g/\partial x_1&\cdots&\partial g/\partial x_n\end{bmatrix}\) &mdash; exactly L11's gradient \(\nabla g\) (MML (5.40), p.146). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">MML identifies the gradient with the one-row Jacobian where it defines the gradient: the row in (5.40) is called &ldquo;the gradient of \(f\) or the Jacobian&rdquo; (p.146); again after Def. 5.6 (p.150).</li>
+<li class="fragment"><strong>On our data</strong>: \(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\), with \(1\) output and \(2\) inputs. Term by term:<br/>
+\(\partial/\partial w_0\): \(\;6w_0+6w_1+0-12-0+0\); \(\quad\partial/\partial w_1\): \(\;0+6w_0+10w_1-0-14+0\). In a row:
+\[\frac{d\,\mathrm{SSE}}{d\mathbf w}=\begin{bmatrix}6w_0+6w_1-12&6w_0+10w_1-14\end{bmatrix}=\nabla\mathrm{SSE}\quad\text{(L11's gradient).}\]</li>
+<li class="fragment">Why the book writes gradients as rows (Remark &ldquo;Gradient as a Row Vector&rdquo;, p.147): the gradient then extends to vector-valued functions as a matrix, the Jacobian; and the chain rule applies with no adjustment of dimensions. <strong>So writing the gradient as a row in L11 was the book's convention arriving early, not a preference.</strong></li>
+</ul>
+<aside class="notes">"First reason: we have just seen it. Second reason: the chain rule, in the slides that follow."</aside>
+</section>
+
+<!-- L14-13 -->
+<section>
+<h4>Three Jacobians at \((0,0)^\top\): multiply them, as L13 multiplied rates?</h4>
+<p>Stages \(\hat{\mathbf y}=X\mathbf w\), \(\mathbf r=\mathbf y-\hat{\mathbf y}\), \(\mathrm{SSE}=\mathbf r^\top\mathbf r\), with \(X\) with rows \((1,0),\,(1,1),\,(1,2)\), \(\mathbf y=(1,3,2)^\top\); stage Jacobians \(X\), \(-I\), \(2\mathbf r^\top\). L13 multiplied the stage derivatives, last stage first. Try the same with the Jacobians.</p>
+<p><strong>Forward first</strong>, to get the point where each Jacobian is evaluated:</p>
+<ul>
+<li class="fragment">Predictions: \(\hat{\mathbf y}=X\mathbf w=(1\cdot0+0\cdot0,\;1\cdot0+1\cdot0,\;1\cdot0+2\cdot0)^\top=(0,0,0)^\top\).</li>
+<li class="fragment">Residuals: \(\mathbf r=\mathbf y-\hat{\mathbf y}=(1-0,\;3-0,\;2-0)^\top=(1,3,2)^\top\). Error: \(\mathrm{SSE}=\mathbf r^\top\mathbf r=1^2+3^2+2^2=1+9+4=14\).</li>
+<li class="fragment"><strong>Then multiply \((2\mathbf r^\top)(-I)X\).</strong> Error-stage factor: \(2\mathbf r^\top=\begin{bmatrix}2\cdot1&2\cdot3&2\cdot2\end{bmatrix}=\begin{bmatrix}2&6&4\end{bmatrix}\).</li>
+<li class="fragment">Times \(-I\): every sign flips, \(\begin{bmatrix}-2&-6&-4\end{bmatrix}\). Times \(X\): \(\begin{bmatrix}-2-6-4&0-6-8\end{bmatrix}=\begin{bmatrix}-12&-14\end{bmatrix}\).</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>lecture</th><th>formula used</th><th>at \((0,0)^\top\)</th><th>value</th></tr>
+<tr><td>L11</td><td>\(\begin{bmatrix}6w_0+6w_1-12&6w_0+10w_1-14\end{bmatrix}\)</td><td>\(\begin{bmatrix}6\cdot0+6\cdot0-12&6\cdot0+10\cdot0-14\end{bmatrix}\)</td><td>\(\begin{bmatrix}-12&-14\end{bmatrix}\)</td></tr>
+<tr><td>L12</td><td>\(-2\mathbf r^\top X\)</td><td>\(-2\begin{bmatrix}1+3+2&0+3+4\end{bmatrix}\)</td><td>\(\begin{bmatrix}-12&-14\end{bmatrix}\)</td></tr>
+<tr><td>L14</td><td>\((2\mathbf r^\top)(-I)X\)</td><td>\(\begin{bmatrix}2&6&4\end{bmatrix}(-I)\,X\)</td><td>\(\begin{bmatrix}-12&-14\end{bmatrix}\) ✓</td></tr>
+</table>
+<div class="key-question fragment">The product of the stage Jacobians, last stage first, is the gradient. <strong>Always?</strong></div>
+<aside class="notes">"Forward pass, then the product. The order matters: the first factor cannot be written down until r is known." "Ask for the order before multiplying: L13 wrote de/dr times dr/dy-hat times dy-hat/dw."</aside>
+</section>
+
+<!-- L14-09 -->
+<section>
+<h4>The chain rule, matrix form</h4>
+<div class="mathbox">
+<strong>Chain rule, matrix form</strong> (MML (5.48), p.148). <span class="tier-m">[MASTER]</span> Let \(\mathbf g:\R^n\to\R^k\) be differentiable at \(\mathbf w\), and \(\mathbf f:\R^k\to\R^m\) differentiable at \(\mathbf g(\mathbf w)\). Then
+\[J_{\mathbf f\circ\mathbf g}(\mathbf w)=J_{\mathbf f}\big(\mathbf g(\mathbf w)\big)\;J_{\mathbf g}(\mathbf w),\qquad\text{sizes: }(m\times n)=(m\times k)(k\times n).\]
+</div>
+<ul>
+<li class="fragment"><strong>Stated, not proved here.</strong> On our three-stage model the product \((2\mathbf r^\top)(-I)X\) gave \(\begin{bmatrix}-12&-14\end{bmatrix}\) at \((0,0)^\top\); the next slides check it at every \(\mathbf w\).</li>
+<li class="fragment">\(J_{\mathbf f}\) is evaluated at \(\mathbf g(\mathbf w)\), the point the inner stage delivers &mdash; not at \(\mathbf w\).</li>
+<li class="fragment">The \(k\) columns of \(J_{\mathbf f}\) and the \(k\) rows of \(J_{\mathbf g}\) both belong to the middle variables \(v_1,\dots,v_k\), so the product is defined. Entry \((i,j)\): \(\;\dfrac{\partial(\mathbf f\circ\mathbf g)_i}{\partial w_j}=\displaystyle\sum_{l=1}^{k}\frac{\partial f_i}{\partial v_l}\,\frac{\partial v_l}{\partial w_j}\), one product per middle variable, then add.</li>
+<li class="fragment">If \(n=k=m=1\), every Jacobian is \(1\times1\) and the rule is L13's \(\;dz/dw=(dz/dv)\cdot(dv/dw)\).</li>
+<li class="fragment">L11 used the matrix chain rule without stating it. For \(\phi(h)=g(\mathbf w+h\mathbf u)\), the inner map \(h\mapsto\mathbf w+h\mathbf u\) has Jacobian \(\mathbf u\) (\(2\times1\)) and the outer \(g\) has Jacobian \(\nabla g\) (\(1\times2\)), so \(\phi'(0)=\nabla g(\mathbf w)\,\mathbf u\).</li>
+</ul>
+<aside class="notes">"Same rule as L13, with products of numbers replaced by products of matrices. The sum in the third bullet is the row-times-column rule of matrix multiplication, nothing more. For the L11 bullet: d/dh of (w0 + h u0, w1 + h u1) is (u0, u1)^T = u, and at h = 0 the outer Jacobian is evaluated at w."</aside>
+</section>
+
+<!-- L14-10 -->
+<section>
+<h4>Prediction, residual, error: three stages as one chain</h4>
+<p>Data \(X\) with rows \((1,0),\,(1,1),\,(1,2)\), \(\mathbf y=(1,3,2)^\top\); chain rule \(J_{\mathbf f\circ\mathbf g}=J_{\mathbf f}\,J_{\mathbf g}\) (MML (5.48), p.148).</p>
+\[\mathbf w\in\R^2\;\longrightarrow\;\hat{\mathbf y}=X\mathbf w\in\R^3\;\longrightarrow\;\mathbf r=\mathbf y-\hat{\mathbf y}\in\R^3\;\longrightarrow\;\mathrm{SSE}=\mathbf r^\top\mathbf r\in\R\]
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>stage</th><th>map</th><th>Jacobian</th><th>size</th><th>changes with the point?</th></tr>
+<tr><td>prediction</td><td>\(\R^2\to\R^3\)</td><td>\(d\hat{\mathbf y}/d\mathbf w=X\)</td><td>\(3\times2\)</td><td>no</td></tr>
+<tr><td>residual</td><td>\(\R^3\to\R^3\)</td><td>\(d\mathbf r/d\hat{\mathbf y}=-I\)</td><td>\(3\times3\)</td><td>no</td></tr>
+<tr><td>error</td><td>\(\R^3\to\R\)</td><td>\(d\,\mathrm{SSE}/d\mathbf r=2\mathbf r^\top\)</td><td>\(1\times3\)</td><td>yes, through \(\mathbf r\)</td></tr>
+</table>
+<p class="fragment">Apply the chain rule twice &mdash; once to join the last two stages, once more to join the first:</p>
+<div class="fragment">
+\[\frac{d\,\mathrm{SSE}}{d\mathbf w}
+=\underbrace{\frac{d\,\mathrm{SSE}}{d\mathbf r}}_{1\times3}\;\underbrace{\frac{d\mathbf r}{d\hat{\mathbf y}}}_{3\times3}\;\underbrace{\frac{d\hat{\mathbf y}}{d\mathbf w}}_{3\times2}
+=\big(2\,\mathbf r^\top\big)\,(-I)\,X,\qquad\text{with }\mathbf r=\mathbf y-X\mathbf w .\]
+</div>
+<ul>
+<li class="fragment">Sizes match (\(3\) with \(3\), twice); the result is \(1\times2\), a gradient's shape. Left to right, \((2\mathbf r^\top)(-I)X\) needs no transpose: MML's second reason for rows (Remark, p.147).</li>
+</ul>
+<aside class="notes">"The 'evaluated at g(w)' part of the rule is the phrase 'with r = y - Xw': the first factor is evaluated at the residual the parameters actually produce."</aside>
+</section>
+
+<!-- L14-11 -->
+<section>
+<h4>Multiply \((2\mathbf r^\top)(-I)X\), one step at a time</h4>
+<p>The chain rule \(J_{\mathbf f\circ\mathbf g}=J_{\mathbf f}J_{\mathbf g}\) on the stages \(\hat{\mathbf y}=X\mathbf w\), \(\mathbf r=\mathbf y-\hat{\mathbf y}\), \(\mathrm{SSE}=\mathbf r^\top\mathbf r\) gives \(d\,\mathrm{SSE}/d\mathbf w=(2\mathbf r^\top)(-I)X\).</p>
+<p><strong>Step 1.</strong> \((2\mathbf r^\top)(-I)\): \(\;(1\times3)(3\times3)\to1\times3\). Row times each column of \(-I\):</p>
+\[\begin{bmatrix}2r_1&2r_2&2r_3\end{bmatrix}\!\begin{bmatrix}-1&0&0\\0&-1&0\\0&0&-1\end{bmatrix}
+=\begin{bmatrix}2r_1(-1)+0+0&0+2r_2(-1)+0&0+0+2r_3(-1)\end{bmatrix}=-2\,\mathbf r^\top .\]
+<p class="fragment"><strong>Step 2.</strong> \((-2\mathbf r^\top)X\): \(\;(1\times3)(3\times2)\to1\times2\), the row times each column of \(X\):</p>
+<div class="fragment">
+\[\begin{aligned}\begin{bmatrix}-2r_1&-2r_2&-2r_3\end{bmatrix}\!\begin{bmatrix}1&0\\1&1\\1&2\end{bmatrix}
+&=\begin{bmatrix}-2r_1\cdot1-2r_2\cdot1-2r_3\cdot1&\;-2r_1\cdot0-2r_2\cdot1-2r_3\cdot2\end{bmatrix}\\
+&=\begin{bmatrix}-2(r_1+r_2+r_3)&-2(r_2+2r_3)\end{bmatrix}.\end{aligned}\]
+</div>
+<ul>
+<li class="fragment">Step 2 is \(-2\,\mathbf r^\top X\): <strong>L12's \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\), rebuilt one stage at a time</strong>, without expanding \(\mathrm{SSE}\). <span class="tier-m">[MASTER]</span></li>
+</ul>
+<aside class="notes">"Step 1 only flips every sign; the zeros of -I kill every cross term. Step 2 is row times column, twice." MML does the same computation in Example 5.11, (5.81)-(5.83), p.154 (its residual is called e, its matrix Phi).</aside>
+</section>
+
+<!-- L14-12 -->
+<section>
+<h4>The row \(-2\mathbf r^\top X\), written in \(w_0\) and \(w_1\)</h4>
+<p>The product of the three Jacobians gave \(d\,\mathrm{SSE}/d\mathbf w=-2\mathbf r^\top X=\begin{bmatrix}-2(r_1+r_2+r_3)&-2(r_2+2r_3)\end{bmatrix}\). Substitute \(\mathbf r=\mathbf y-X\mathbf w\) with \(\mathbf y=(1,3,2)^\top\), \(X\) with rows \((1,0),\,(1,1),\,(1,2)\), row by row: \(\;r_1=1-w_0,\quad r_2=3-w_0-w_1,\quad r_3=2-w_0-2w_1\).</p>
+<ul>
+<li class="fragment"><strong>First entry.</strong> \(r_1+r_2+r_3=(1+3+2)-(w_0+w_0+w_0)-(0+w_1+2w_1)=6-3w_0-3w_1\).<br/>
+Times \(-2\): \(\;-12+6w_0+6w_1\).</li>
+<li class="fragment"><strong>Second entry.</strong> \(r_2+2r_3=(3-w_0-w_1)+(4-2w_0-4w_1)=7-3w_0-5w_1\).<br/>
+Times \(-2\): \(\;-14+6w_0+10w_1\).</li>
+</ul>
+<div class="fragment">
+\[\frac{d\,\mathrm{SSE}}{d\mathbf w}=\begin{bmatrix}6w_0+6w_1-12&6w_0+10w_1-14\end{bmatrix}.\]
+</div>
+<ul>
+<li class="fragment">The two entries \(6w_0+6w_1-12\) and \(6w_0+10w_1-14\) are exactly L09's partial derivatives of \(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\).</li>
+</ul>
+<div class="quickcheck fragment"><strong>Your turn, at \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\):</strong> \(\mathbf r^\ast=\left(-\tfrac12,1,-\tfrac12\right)^\top\), \(2\mathbf r^{\ast\top}=\begin{bmatrix}-1&2&-1\end{bmatrix}\); times \(-I\): \(\begin{bmatrix}1&-2&1\end{bmatrix}\); times \(X\): \(\begin{bmatrix}1-2+1&0-2+2\end{bmatrix}=\begin{bmatrix}0&0\end{bmatrix}\) ✓, L10&rsquo;s lowest point. Only \(2\mathbf r^\top\) changed; \(-I\) and \(X\) are the same at every \(\mathbf w\).</div>
+<aside class="notes">"The product of three Jacobians agrees with L09's partial derivatives for every w. This slide is the check in symbols; (0,0) was checked in numbers before the rule, and w* is the your-turn box."</aside>
+</section>
+
+<!-- L14-15 -->
+<section>
+<h4>L14 takeaways</h4>
+<ul>
+<li>A stage with several inputs and several outputs is a <strong>vector-valued function</strong>; its <strong>Jacobian</strong> holds every partial derivative, one row per output, one column per input (MML Def. 5.6, p.150). <span class="tier-m">[MASTER]</span></li>
+<li>Our three stages: prediction \(\hat{\mathbf y}=X\mathbf w\) has Jacobian \(X\); residual \(\mathbf r=\mathbf y-\hat{\mathbf y}\) has \(-I\); error \(\mathrm{SSE}=\mathbf r^\top\mathbf r\) has the one row \(2\mathbf r^\top\). <span class="tier-m">[MASTER]</span></li>
+<li>A one-row Jacobian is the gradient: that is why the gradient is a row (MML (5.40), p.146; Remark, p.147). <span class="tier-m">[MASTER]</span></li>
+<li>Chain rule, matrix form (MML (5.48), p.148): Jacobians multiply, last stage first. \((2\mathbf r^\top)(-I)X=-2\,\mathbf r^\top X\) rebuilds L12&rsquo;s gradient: \(\begin{bmatrix}-12&-14\end{bmatrix}\) at \((0,0)^\top\), \(\begin{bmatrix}0&0\end{bmatrix}\) at \(\mathbf w^\ast\). <span class="tier-m">[MASTER]</span></li>
+<li>Three routes, one row \(\begin{bmatrix}6w_0+6w_1-12&6w_0+10w_1-14\end{bmatrix}\): the expanded polynomial (L09), two matrix rules (L12), a product of three Jacobians (L14). <span class="tier-m">[MASTER]</span></li>
+</ul>
+<div class="key-question fragment">We now know <strong>which way</strong> to change the parameters: \(-(\nabla\mathrm{SSE})^\top\). Not yet <strong>how far</strong>. That is Unit 5.</div>
+</section>
+
+<!-- L14-16 -->
+<section>
+<h4>Where Unit 4 goes next</h4>
+<ul>
+<li><strong>Backpropagation</strong> applies the matrix chain rule of this lecture efficiently, propagating derivatives backward through the stages of a model. Every stage of a neural network contributes one factor, exactly as our prediction, residual and error stages did. <span class="tier-e">[EXPLORE]</span></li>
+<li class="fragment"><strong>\(\nabla f=\mathbf 0^\top\) is not the right condition when the parameters must satisfy a constraint.</strong> Unit 3's question &mdash; the largest variance <em>among unit directions</em> &mdash; is exactly that situation. Unit 3 already answered it with algebra; Unit 5&rsquo;s Lagrange multipliers give the textbook&rsquo;s other proof, and they are themselves a derivative method.</li>
+</ul>
+<p class="fragment"><strong>Unit 4 in one sentence.</strong> If I change the parameters a little, how does the error change? &rarr; one number: the derivative &rarr; one parameter fitted to data: the same derivative, and L03's projection coefficient &rarr; two parameters: one partial derivative each, and Unit 2's normal equation &rarr; any direction: \((\nabla f)^\top\), orthogonal to the contours &rarr; any number of features: \(\nabla\mathrm{SSE}=-2\mathbf r^\top X\), zero exactly at the normal equation &rarr; and the same derivative again, one stage at a time, where the middle Jacobian is \(X\).</p>
+<p class="fragment"><strong>What Unit 4 does not answer.</strong> The direction is settled &mdash; \(-(\nabla f)^\top\), a column, the gradient row transposed &mdash; but not the distance: \(\mathbf w_{\text{new}}=\mathbf w-\alpha(\nabla f)^\top\) with \(\alpha=\,?\) The first-order prediction is local, so a large \(\alpha\) can overshoot and <em>raise</em> the error. <strong>Unit 5 takes that question up.</strong></p>
+<aside class="notes">"Read the one-sentence summary aloud, one arrow at a time; each arrow is one lecture. End on the open question: we know which way to walk, not how far."</aside>
+</section>
+
+
+</div>
+</div>
+
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/math/math.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script src="../reveal.js-plugins/menu/menu.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  transition: 'none',
+  width: 1200,
+  height: 700,
+  margin: 0.04,
+  mathjax3: {
+    // TeX-only build: the default tex-mml-chtml also has MathML input, which re-typesets
+    // the assistive MathML on every slide change -- the DOM grew 5x in 20 flips and the
+    // chalkboard lagged worse and worse through a lecture (2026-09-30).
+    mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
+    tex: {
+      // Only \( \) and \[ \] delimit math -- see unit02-preview.html for why.
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true,
+      macros: {
+        R: "\\mathbb{R}",
+        norm: ["\\left\\|#1\\right\\|", 1],
+        inner: ["\\left\\langle #1,#2\\right\\rangle", 2]
+      }
+    }
+  },
+  plugins: [ RevealMath.MathJax3, RevealChalkboard, RevealMenu ],
+  chalkboard: {
+    storage: "math-for-ds",
+    toggleChalkboardButton: { left: "80px" },
+    toggleNotesButton: { left: "130px" },
+    colorButtons: 5
+  }
+});
+</script>
+</body>
+</html>
