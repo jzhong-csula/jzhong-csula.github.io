@@ -571,14 +571,15 @@ since \(\norm{X\mathbf d}^2\), a squared length, is never negative. So \(\mathbf
 <tr><td>\((0,0)^\top\)</td><td>\(14\)</td><td>\(14-\tfrac32=\tfrac{25}{2}\)</td></tr>
 </table>
 <ul>
-<li class="fragment">So there is <strong>no second valley</strong> anywhere: solving \(6w_0+6w_1-12=0,\ 6w_0+10w_1-14=0\) is enough, no search needed.</li>
+<li class="fragment">So <strong>no point has error below \(\tfrac32\)</strong>: the flat point is a global minimum, found by solving \(6w_0+6w_1-12=0,\ 6w_0+10w_1-14=0\) &mdash; no search needed.</li>
+<li class="fragment">But could another parameter vector <strong>tie</strong> the same error \(\tfrac32\)? That is a different question.</li>
 <li class="fragment">\(\mathrm{SSE}(\mathbf w)=\tfrac32+\norm{X(\mathbf w-\mathbf w^\ast)}^2\) is <strong>exact</strong> for every step, not a first-order approximation that holds only for small steps.</li>
 </ul>
 <aside class="notes">"Say it plainly: flat is local information, global is a promise about the whole plane. For least squares the Pythagoras identity turns one into the other. For most models (neural networks) nothing like it exists, which is why their training can get stuck."</aside>
 </section>
 
 <section>
-<h4>Is \(\mathbf w^\ast\) the <em>only</em> lowest point?</h4>
+<h4>Is \(\mathbf w^\ast\) the <em>only</em> global minimum?</h4>
 <p><strong>Notation.</strong> \(\mathrm{SSE}(\mathbf w)=\norm{\mathbf y-X\mathbf w}^2\); \(X=[\,\mathbf 1\;\;\mathbf t\,]\) with columns \(\mathbf 1=(1,1,1)^\top\), \(\mathbf t=(0,1,2)^\top\); \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\); Pythagoras identity \(\mathrm{SSE}(\mathbf w)=\mathrm{SSE}(\mathbf w^\ast)+\norm{X(\mathbf w-\mathbf w^\ast)}^2\).</p>
 <div class="mathbox">
 <strong>Uniqueness.</strong> \(\mathbf w^\ast\) is the only \(\mathbf w\) with \(\mathrm{SSE}(\mathbf w)=\mathrm{SSE}(\mathbf w^\ast)\) exactly when the columns of \(X\) are linearly independent (MML Def. 2.12, p.40), that is, when \(\operatorname{rank}X\) equals the number of columns (MML &sect;2.6.2, p.47). <span class="tier-m">[MASTER]</span>
@@ -822,7 +823,7 @@ since \(\norm{X\mathbf d}^2\), a squared length, is never negative. So \(\mathbf
 
 <section>
 <h4>Before any proof: walk a distance \(1\) from \((0,0)^\top\) in three directions</h4>
-<img src="../images/unit04/u4-L11-fig10b-steepest-descent.png" alt="From (0,0) on the error valley the steepest-descent path in the direction (12,14) ends lower than the w0 and w1 walks over the same ground distance 1; an inset from above shows it crossing the contour SSE = 14 at a right angle" style="float:right; max-height:300px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
+<img src="../images/unit04/u4-L11-fig10b-steepest-descent.png" alt="From (0,0) on the error valley, a unit step in the candidate direction (12,14) ends lower than unit steps along w0 and w1; an inset from above shows that direction crossing the contour SSE = 14 at a right angle" style="float:right; max-height:300px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
 <p>The error \(\mathrm{SSE}=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\) is \(14\) at \((0,0)^\top\), where \(\nabla\mathrm{SSE}=\begin{bmatrix}-12&-14\end{bmatrix}\).</p>
 <ul>
 <li class="fragment">Walk a ground distance of \(1\) (the three arrows): along \(w_0\) to \((1,0)^\top\), \(\mathrm{SSE}=3-12+14=5\); along \(w_1\) to \((0,1)^\top\), \(\mathrm{SSE}=5-14+14=5\); along the gradient&rsquo;s entries with their signs flipped, \(-(\nabla\mathrm{SSE})^\top=(12,14)^\top\), to \(\tfrac{(12,14)^\top}{\sqrt{340}}\approx(0.651,0.759)^\top\): \(\mathrm{SSE}\approx2.68\), far lower.</li>
@@ -857,7 +858,7 @@ since \(\norm{X\mathbf d}^2\), a squared length, is never negative. So \(\mathbf
 <li class="fragment">\(\theta=0\): \(\cos\theta=1\), the largest slope \(+\norm{(\nabla g)^\top}\). \(\mathbf u\) points along \((\nabla g)^\top\): <strong>steepest ascent</strong>.</li>
 <li class="fragment">\(\theta=180^\circ\): \(\cos\theta=-1\), the smallest slope \(-\norm{(\nabla g)^\top}\). \(\mathbf u\) points along \(-(\nabla g)^\top\): <strong>steepest descent</strong> (MML &sect;7.1, p.228). <span class="tier-m">[MASTER]</span></li>
 <li class="fragment">\(\theta=90^\circ\): \(\cos\theta=0\), slope \(0\). \(\mathbf u\) is orthogonal to \((\nabla g)^\top\).</li>
-<li class="fragment">Moving tangent to the contour through \(\mathbf w\) has slope \(0\), since the error is constant along the contour. In the plane only two unit directions have slope \(0\): the two orthogonal to \((\nabla g)^\top\). So the two directions <strong>tangent to the contour</strong> are these two orthogonal directions, and <strong>the direction \((\nabla g)^\top\) is orthogonal to the contour</strong>. <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">The direction tangent to the contour through \(\mathbf w\) has directional derivative \(0\): to first order, a small step that way does not change the error. (Following the curved contour itself keeps the error exactly constant.) In the plane only two unit directions have slope \(0\): the two orthogonal to \((\nabla g)^\top\). So the two directions <strong>tangent to the contour</strong> are these two orthogonal directions, and <strong>the direction \((\nabla g)^\top\) is orthogonal to the contour</strong>. <span class="tier-m">[MASTER]</span></li>
 <li class="fragment">If instead \(\nabla g=\mathbf 0\) &mdash; a flat point &mdash; then \(\nabla g\,\mathbf u=0\) for every \(\mathbf u\): every direction has slope \(0\).</li>
 <li class="fragment">The figure: at \((0,0)^\top\), \(D_{\mathbf u}\mathrm{SSE}=-12\cos\alpha-14\sin\alpha\) for \(\mathbf u=(\cos\alpha,\sin\alpha)^\top\): lowest \(-18.439=-\sqrt{340}\) near \(\alpha=49.4^\circ\), the direction \((0.651,0.759)^\top\) found by walking; highest \(+18.439\) near \(229.4^\circ\).</li>
 </ul>
@@ -986,8 +987,19 @@ since \(\norm{X\mathbf d}^2\), a squared length, is never negative. So \(\mathbf
 
 <!-- L12-06 -->
 <section>
+<h4>Two shapes to differentiate</h4>
+<p><strong>Overall goal:</strong> prove \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\) for any number of features.</p>
+<p class="fragment">In \(\;\mathrm{SSE}(\mathbf w)=\mathbf w^\top X^\top X\mathbf w-2\,\mathbf w^\top X^\top\mathbf y+\mathbf y^\top\mathbf y\;\) the middle term is a number, so it equals its transpose: \(\mathbf w^\top X^\top\mathbf y=(X^\top\mathbf y)^\top\mathbf w\). With \(\mathbf b=X^\top\mathbf y\), \(A=X^\top X\): \(\;\mathrm{SSE}(\mathbf w)=\mathbf w^\top A\mathbf w-2\,\mathbf b^\top\mathbf w+\mathbf y^\top\mathbf y\) &mdash; two shapes to differentiate, \(\mathbf b^\top\mathbf w\) and \(\mathbf w^\top A\mathbf w\).</p>
+<ul>
+<li class="fragment">\(\mathbf b^\top\mathbf w\) is <strong>linear</strong> in \(\mathbf w\): every term has one parameter. Rule 1 differentiates it.</li>
+<li class="fragment">\(\mathbf w^\top A\mathbf w\) is <strong>quadratic</strong>: every term has two parameters (or one, squared). Rule 2 differentiates it.</li>
+<li class="fragment">\(\mathbf y^\top\mathbf y\) has no \(\mathbf w\) in it, so its derivative is \(0\).</li>
+</ul>
+</section>
+
+<section>
 <h4>Rule 1: the derivative of a linear function</h4>
-<p>In \(\;\mathrm{SSE}(\mathbf w)=\mathbf w^\top X^\top X\mathbf w-2\,\mathbf w^\top X^\top\mathbf y+\mathbf y^\top\mathbf y\;\) the middle term is a number, so it equals its transpose: \(\mathbf w^\top X^\top\mathbf y=(X^\top\mathbf y)^\top\mathbf w\). With \(\mathbf b=X^\top\mathbf y\), \(A=X^\top X\): \(\;\mathrm{SSE}(\mathbf w)=\mathbf w^\top A\mathbf w-2\,\mathbf b^\top\mathbf w+\mathbf y^\top\mathbf y\) &mdash; two shapes to differentiate, \(\mathbf b^\top\mathbf w\) and \(\mathbf w^\top A\mathbf w\).</p>
+<p><strong>Overall goal:</strong> prove \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\) for any number of features.</p>
 <p class="fragment"><strong>Look first:</strong> our \(\mathbf b=(6,7)^\top\): \(\mathbf b^\top\mathbf w=6w_0+7w_1\) has partial derivatives \(6\), \(7\): the row \(\begin{bmatrix}6&7\end{bmatrix}\), \(\mathbf b\) laid flat.</p>
 <div class="mathbox fragment">
 <strong>Rule 1</strong> (MML (5.105), p.158). For a fixed column \(\mathbf b\in\R^d\): \(\;\dfrac{\partial(\mathbf b^\top\mathbf w)}{\partial\mathbf w}=\mathbf b^\top\). <span class="tier-m">[MASTER]</span>
@@ -1005,6 +1017,7 @@ since \(\norm{X\mathbf d}^2\), a squared length, is never negative. So \(\mathbf
 <!-- L12-07 -->
 <section>
 <h4>Rule 2: the statement, and multiplying out \(\mathbf w^\top A\mathbf w\)</h4>
+<p><strong>Overall goal:</strong> prove \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\) for any number of features.</p>
 <p><strong>Look first:</strong> L09&rsquo;s partial derivatives of the quadratic part of our error, \(3w_0^2+6w_0w_1+5w_1^2=\mathbf w^\top X^\top X\mathbf w\), are \(\begin{bmatrix}6w_0+6w_1&6w_0+10w_1\end{bmatrix}=2\,\mathbf w^\top X^\top X\), with \(X^\top X=\left[\begin{smallmatrix}3&3\\3&5\end{smallmatrix}\right]\) symmetric.</p>
 <div class="mathbox">
 <strong>Rule 2</strong> (MML (5.107), p.158: for <em>any</em> square \(B\) the derivative of \(\mathbf w^\top B\mathbf w\) is \(\mathbf w^\top(B+B^\top)\); here \(B\) is symmetric). For a symmetric \(d\times d\) matrix \(A\) (that is, \(A^\top=A\)): \(\;\dfrac{\partial(\mathbf w^\top A\mathbf w)}{\partial\mathbf w}=2\,\mathbf w^\top A\). <span class="tier-m">[MASTER]</span>
@@ -1301,7 +1314,7 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 
 <!-- L13-12 -->
 <section>
-<h4>A product of many factors, each of size at most \(c&lt;1\), shrinks fast</h4>
+<h4>A fixed bound \(c&lt;1\) makes the product shrink exponentially</h4>
 <img src="../images/unit04/u4-L13-fig13c-vanishing.png" alt="Log-scale plot of 0.9^k and 0.5^k for k = 1 to 50: 0.9^50 is about 0.005 and 0.5^50 is about 8.9e-16" style="float:right; max-height:250px; max-width:34%; margin:0 0 0.5em 1em; border-radius:6px;">
 <p>By the chain rule, a chain of \(k\) stages has a derivative that is a product of \(k\) stage derivatives. If all \(k\) factors have size at most one fixed \(c&lt;1\) &mdash; every factor \(0.9\), say &mdash; the product is at most \(c^k\) and shrinks fast.</p>
 <table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
@@ -1315,7 +1328,7 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 <li class="fragment">&#9888;&#65039; <strong>&ldquo;Each factor below \(1\)&rdquo; is not enough</strong> &mdash; factors creeping up to \(1\), such as \(1-\tfrac12,\,1-\tfrac14,\,1-\tfrac18,\dots\), give a product that stays near \(0.29\). What matters is a fixed ceiling \(c&lt;1\).</li>
 <li class="fragment">Row \(k=50\): with \(50\) factors of \(0.9\), a small step \(\delta\) at the input of a \(50\)-stage chain moves its last output by only about \(0.005\,\delta\).</li>
 <li class="fragment">So the derivative of the error with respect to a parameter at the start of a long chain can be nearly \(0\), and the update to that parameter is tiny, so it barely moves.</li>
-<li class="fragment">In deep networks, a derivative shrunk this way, as a product of many stage derivatives of size at most some \(c&lt;1\), is called the <strong>vanishing-gradient</strong> problem. <span class="tier-u">[UNDERSTAND]</span></li>
+<li class="fragment">This scalar chain is the simplest version of the <strong>vanishing-gradient</strong> problem of deep networks, whose stages are vectors: L14 replaces the scalar factors by Jacobians. <span class="tier-u">[UNDERSTAND]</span></li>
 </ul>
 <aside class="notes">"0.5^10 = 1/1024 exactly. 0.9^10 = 0.3487, 0.9^50 = 0.00515, 0.5^50 = 8.88e-16. If they ask about factors larger than 1: the product then grows instead, the exploding case; not needed here."</aside>
 </section>
@@ -1391,23 +1404,6 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 </section>
 
 <!-- L14-03 -->
-<section>
-<h4>A small example, every entry computed</h4>
-<p><strong>A separate example, not our data:</strong> \(\;\mathbf f(x_1,x_2)=\begin{bmatrix}x_1^2x_2\\3x_1+x_2^2\end{bmatrix}\), a function \(\R^2\to\R^2\), so \(J_{\mathbf f}\) is \(2\times2\).</p>
-<ul>
-<li class="fragment">\(\dfrac{\partial f_1}{\partial x_1}\): hold \(x_2\) fixed, so \(x_1^2x_2\) is \(x_2\) times \(x_1^2\), and the derivative is \(x_2\cdot2x_1=2x_1x_2\).</li>
-<li class="fragment">\(\dfrac{\partial f_1}{\partial x_2}\): hold \(x_1\) fixed, so \(x_1^2x_2\) is the constant \(x_1^2\) times \(x_2\), and the derivative is \(x_1^2\cdot1=x_1^2\).</li>
-<li class="fragment">\(\dfrac{\partial f_2}{\partial x_1}\): \(3x_1\) gives \(3\); \(x_2^2\) is held fixed, so it gives \(0\). Total \(3+0=3\).</li>
-<li class="fragment">\(\dfrac{\partial f_2}{\partial x_2}\): \(3x_1\) is held fixed, so it gives \(0\); \(x_2^2\) gives \(2x_2\). Total \(0+2x_2=2x_2\).</li>
-</ul>
-<div class="fragment">
-\[J_{\mathbf f}=\begin{bmatrix}2x_1x_2&x_1^2\\3&2x_2\end{bmatrix},\qquad
-J_{\mathbf f}(1,2)=\begin{bmatrix}2\cdot1\cdot2&1^2\\3&2\cdot2\end{bmatrix}=\begin{bmatrix}4&1\\3&4\end{bmatrix}.\]
-</div>
-<p class="fragment">The output at \((1,2)^\top\): \(\mathbf f(1,2)=\big(1^2\cdot2,\;3\cdot1+2^2\big)^\top=(2,\,7)^\top\).</p>
-<aside class="notes">"Row 1 came from f1 only, row 2 from f2 only. Column 1 came from differentiating in x1 only. Have them say which entry each bullet fills before it appears."</aside>
-</section>
-
 <!-- L14-05 -->
 <section>
 <h4>The Jacobian of the prediction stage is \(X\)</h4>
@@ -1429,6 +1425,23 @@ J_{\mathbf f}(1,2)=\begin{bmatrix}2\cdot1\cdot2&1^2\\3&2\cdot2\end{bmatrix}=\beg
 </ul>
 <div class="key-question fragment"><strong>The Jacobian of the prediction stage is \(X\) itself</strong> &mdash; the matrix students have been carrying since Week 2. Nothing new had to be built. <span class="tier-m">[MASTER]</span></div>
 <aside class="notes">"The six sensitivities of the first slide are the six entries of X. The zero in row 1 is the student who studied 0 hours: the slope parameter cannot reach that prediction."</aside>
+</section>
+
+<section>
+<h4>Quick check, separate example: a Jacobian computed entry by entry</h4>
+<p><strong>A separate example, not our data:</strong> \(\;\mathbf f(x_1,x_2)=\begin{bmatrix}x_1^2x_2\\3x_1+x_2^2\end{bmatrix}\), a function \(\R^2\to\R^2\), so \(J_{\mathbf f}\) is \(2\times2\).</p>
+<ul>
+<li class="fragment">\(\dfrac{\partial f_1}{\partial x_1}\): hold \(x_2\) fixed, so \(x_1^2x_2\) is \(x_2\) times \(x_1^2\), and the derivative is \(x_2\cdot2x_1=2x_1x_2\).</li>
+<li class="fragment">\(\dfrac{\partial f_1}{\partial x_2}\): hold \(x_1\) fixed, so \(x_1^2x_2\) is the constant \(x_1^2\) times \(x_2\), and the derivative is \(x_1^2\cdot1=x_1^2\).</li>
+<li class="fragment">\(\dfrac{\partial f_2}{\partial x_1}\): \(3x_1\) gives \(3\); \(x_2^2\) is held fixed, so it gives \(0\). Total \(3+0=3\).</li>
+<li class="fragment">\(\dfrac{\partial f_2}{\partial x_2}\): \(3x_1\) is held fixed, so it gives \(0\); \(x_2^2\) gives \(2x_2\). Total \(0+2x_2=2x_2\).</li>
+</ul>
+<div class="fragment">
+\[J_{\mathbf f}=\begin{bmatrix}2x_1x_2&x_1^2\\3&2x_2\end{bmatrix},\qquad
+J_{\mathbf f}(1,2)=\begin{bmatrix}2\cdot1\cdot2&1^2\\3&2\cdot2\end{bmatrix}=\begin{bmatrix}4&1\\3&4\end{bmatrix}.\]
+</div>
+<p class="fragment">The output at \((1,2)^\top\): \(\mathbf f(1,2)=\big(1^2\cdot2,\;3\cdot1+2^2\big)^\top=(2,\,7)^\top\).</p>
+<aside class="notes">"Row 1 came from f1 only, row 2 from f2 only. Column 1 came from differentiating in x1 only. Have them say which entry each bullet fills before it appears."</aside>
 </section>
 
 <!-- L14-06 -->
