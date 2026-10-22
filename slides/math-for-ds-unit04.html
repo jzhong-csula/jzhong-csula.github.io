@@ -2449,14 +2449,31 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 </section>
 
 <section>
-<h4>Three Jacobians at \((0,0)^\top\): the product, last stage first</h4>
-<p>Working with: \(\mathbf r=(1,3,2)^\top\), Jacobians \(2\mathbf r^\top,\;-I,\;X=\begin{bmatrix}1&0\\1&1\\1&2\end{bmatrix}\).</p>
-<ol>
-<li class="fragment">\(2\mathbf r^\top=\begin{bmatrix}2&6&4\end{bmatrix}\) &nbsp; (plug in \(\mathbf r\))</li>
-<li class="fragment">\(\begin{bmatrix}2&6&4\end{bmatrix}(-I)=\begin{bmatrix}-2&-6&-4\end{bmatrix}\) &nbsp; (flip every sign)</li>
-<li class="fragment">\(\begin{bmatrix}-2&-6&-4\end{bmatrix}X=\begin{bmatrix}-12&-14\end{bmatrix}\) &nbsp; (row times each column of \(X\))</li>
-</ol>
-<aside class="notes">"Ask for the order before multiplying: L13 wrote de/dr times dr/dy-hat times dy-hat/dw."</aside>
+<h4>The product, last stage first, at \((0,0)^\top\): a backward pass</h4>
+<p>Working with: the three stage Jacobians \(2\mathbf r^\top,\ -I,\ X\), and the forward values at \(\mathbf w=(0,0)^\top\).</p>
+<img src="../images/unit04/u4-L14-fig14b-backprop.png" alt="The chain w=(0,0) to yhat=(0,0,0) to r=(1,3,2) to SSE=14 computed left to right in black; underneath, red arrows right to left multiply 1 by 2r^T giving [2 6 4], by -I giving [-2 -6 -4], by X giving [-12 -14], with sizes 1x1, 1x3, 1x3, 1x2" style="display:block; margin:0.2em auto; max-height:420px; max-width:100%; border-radius:6px;">
+<ul>
+<li class="fragment">Red, right to left: \(1\ \to\ \begin{bmatrix}2&6&4\end{bmatrix}\ \to\ \begin{bmatrix}-2&-6&-4\end{bmatrix}\ \to\ \begin{bmatrix}-12&-14\end{bmatrix}=\nabla\mathrm{SSE}(0,0)\).</li>
+</ul>
+<aside class="notes">"Point at the red arrows one at a time: 1 times 2r^T is [2 6 4]; times -I flips every sign; row times each column of X gives -12, -14." (2026-10-22, jzhong: this page is backpropagation; draw it.)</aside>
+</section>
+
+<section>
+<h4>Why multiply in this order?</h4>
+<p>Working with: \(\nabla\mathrm{SSE}=(2\mathbf r^\top)(-I)X\), computed right to left in the figure: \(1\to\begin{bmatrix}2&6&4\end{bmatrix}\to\begin{bmatrix}-2&-6&-4\end{bmatrix}\to\begin{bmatrix}-12&-14\end{bmatrix}\).</p>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>step</th><th>multiply the row by</th><th>the row we get</th><th>what it is</th><th>size</th></tr>
+<tr><td>start</td><td>&mdash;</td><td>\(1\)</td><td>\(d\,\mathrm{SSE}/d\,\mathrm{SSE}\)</td><td>\(1\times1\)</td></tr>
+<tr><td>1</td><td>\(2\mathbf r^\top\) \((1\times3)\)</td><td>\(\begin{bmatrix}2&6&4\end{bmatrix}\)</td><td>\(d\,\mathrm{SSE}/d\mathbf r\)</td><td>\(1\times3\)</td></tr>
+<tr><td>2</td><td>\(-I\) \((3\times3)\)</td><td>\(\begin{bmatrix}-2&-6&-4\end{bmatrix}\)</td><td>\(d\,\mathrm{SSE}/d\hat{\mathbf y}\)</td><td>\(1\times3\)</td></tr>
+<tr><td>3</td><td>\(X\) \((3\times2)\)</td><td>\(\begin{bmatrix}-12&-14\end{bmatrix}\)</td><td>\(d\,\mathrm{SSE}/d\mathbf w\), the gradient</td><td>\(1\times2\)</td></tr>
+</table>
+<ul>
+<li class="fragment">Each red row says how SSE changes with <strong>that stage&rsquo;s</strong> values.</li>
+<li class="fragment">The start is one number, so what we carry back is always a <strong>row</strong>: every step is row \(\times\) matrix, and the sizes match.</li>
+<li class="fragment">With \(1000\) students and \(50\) weights, the carried row has \(1000\), then \(50\) entries; no large matrix product is ever formed.</li>
+<li class="fragment">This is L13&rsquo;s red backward pass with matrices: <strong>backpropagation</strong>.</li>
+</ul>
 </section>
 
 <section>
@@ -2486,10 +2503,10 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 
 <section>
 <h4>Reading the chain rule</h4>
-<p>Working with: \(J_{\mathbf g\circ\mathbf f}(\mathbf w)=J_{\mathbf g}\big(\mathbf f(\mathbf w)\big)\,J_{\mathbf f}(\mathbf w)\), middle variables \(v_1,\dots,v_k\).</p>
+<p>Working with: \(J_{\mathbf g\circ\mathbf f}(\mathbf w)=J_{\mathbf g}\big(\mathbf f(\mathbf w)\big)\,J_{\mathbf f}(\mathbf w)\), and the middle variables \(\mathbf v=\mathbf f(\mathbf w)\), that is \(v_l=f_l(\mathbf w)\), \(l=1,\dots,k\): what the inner stage delivers to the outer one.</p>
 <ul>
 <li class="fragment">Entry \((i,j)\) is row times column over the \(k\) middle variables:
-\[\frac{\partial(\mathbf g\circ\mathbf f)_i}{\partial w_j}=\sum_{l=1}^{k}\frac{\partial g_i}{\partial v_l}\,\frac{\partial v_l}{\partial w_j}\]</li>
+\[\frac{\partial(\mathbf g\circ\mathbf f)_i}{\partial w_j}=\sum_{l=1}^{k}\frac{\partial g_i}{\partial v_l}\,\frac{\partial v_l}{\partial w_j},\qquad\frac{\partial v_l}{\partial w_j}=\frac{\partial f_l}{\partial w_j}\]</li>
 <li class="fragment">If \(n=k=m=1\): every Jacobian is \(1\times1\), and the rule is L13&rsquo;s
 \[\frac{dz}{dw}=\frac{dz}{dv}\cdot\frac{dv}{dw}\]</li>
 </ul>
@@ -2504,7 +2521,9 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 <tr class="fragment"><td>outer</td><td>\(g\)</td><td>\(\nabla g\)</td><td>\(1\times2\)</td></tr>
 </table>
 <ul>
-<li class="fragment">Product, outer first: \(\;\phi'(0)=\nabla g(\mathbf w)\,\mathbf u\).</li>
+<li class="fragment">Product, outer first, for every \(h\): \(\;\phi'(h)=\nabla g(\mathbf w+h\mathbf u)\,\mathbf u\) &nbsp; (\(\nabla g\) at the point the inner stage delivers).</li>
+<li class="fragment">At \(h=0\): \(\;\phi'(0)=\nabla g(\mathbf w)\,\mathbf u\).</li>
+<li class="fragment">Why \(\phi'(0)\): it is L11&rsquo;s <strong>directional derivative</strong>, \(D_{\mathbf u}g=\phi'(0)\), the slope of \(g\) at \(\mathbf w\) in direction \(\mathbf u\). So the chain rule is the reason behind L11&rsquo;s formula \(D_{\mathbf u}g=\nabla g\,\mathbf u\).</li>
 </ul>
 <aside class="notes">"For the L11 bullet: d/dh of (w0 + h u0, w1 + h u1)^T is u, and at h = 0 the outer Jacobian is evaluated at w."</aside>
 </section>
