@@ -2279,26 +2279,24 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 </section>
 
 <section>
-<h4>Nudge each parameter: six responses</h4>
-<p>Working with: \(\hat{\mathbf y}=X\mathbf w=(w_0,\;w_0+w_1,\;w_0+2w_1)^\top\). The figure starts from \(\mathbf w=\left(\tfrac32,\tfrac12\right)^\top\).</p>
-<img src="../images/unit04/u4-L14-fig14a-prediction-response.png" alt="Two panels starting from the line 3/2 + t/2: raising w0 by 1/2 moves all three predictions up by 1/2 (column (1,1,1) of X); raising w1 by 1/2 moves them by 0, 1/2, 1 (column (0,1,2) of X)" style="display:block; margin:0.4em auto; max-height:430px; max-width:100%; border-radius:6px;">
-<aside class="notes">"The six sensitivities are not all the same, and some are zero: w1 cannot reach the student who studied 0 hours."</aside>
-</section>
-
-<section>
-<h4>Nudge each parameter: six responses</h4>
-<p>Working with: \(\hat{\mathbf y}=X\mathbf w=(w_0,\;w_0+w_1,\;w_0+2w_1)^\top\).</p>
-<table class="fragment" style="width:auto; margin:0.5em auto; font-size:1em;">
-<tr><th>nudge</th><th>the three predictions move by (per unit of nudge)</th></tr>
-<tr><td>\(w_0\)</td><td>\((1,1,1)^\top\)</td></tr>
-<tr><td>\(w_1\)</td><td>\((0,1,2)^\top\)</td></tr>
+<h4>Three outputs, two inputs: how does each output move with each input?</h4>
+<p>Working with: \(\hat{\mathbf y}(\mathbf w)=X\mathbf w=\begin{bmatrix}\hat y_1\\ \hat y_2\\ \hat y_3\end{bmatrix}=\begin{bmatrix}w_0\\w_0+w_1\\w_0+2w_1\end{bmatrix}\).</p>
+<ul>
+<li class="fragment">Each prediction is a function of <strong>both</strong> parameters: \(\hat y_1(w_0,w_1)\), \(\hat y_2(w_0,w_1)\), \(\hat y_3(w_0,w_1)\).</li>
+<li class="fragment">How \(\hat y_i\) changes when \(w_j\) changes: the partial derivative \(\dfrac{\partial\hat y_i}{\partial w_j}\) (L09).</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.2em auto; font-size:0.85em;">
+<tr><th>output</th><th>changes with \(w_0\)</th><th>changes with \(w_1\)</th></tr>
+<tr><td>\(\hat y_1\)</td><td>\(\partial\hat y_1/\partial w_0\)</td><td>\(\partial\hat y_1/\partial w_1\)</td></tr>
+<tr><td>\(\hat y_2\)</td><td>\(\partial\hat y_2/\partial w_0\)</td><td>\(\partial\hat y_2/\partial w_1\)</td></tr>
+<tr><td>\(\hat y_3\)</td><td>\(\partial\hat y_3/\partial w_0\)</td><td>\(\partial\hat y_3/\partial w_1\)</td></tr>
 </table>
 <div class="key-question fragment">Each of \(3\) predictions responds to each of \(2\) parameters: <strong>six</strong> partial derivatives.
 <ul>
 <li>With \(1000\) students and \(50\) parameters: \(50{,}000\).</li>
 <li>How do we arrange them so that the chain rule still works?</li>
 </ul></div>
-<aside class="notes">"The six sensitivities are not all the same, and some are zero: w1 cannot reach the student who studied 0 hours."</aside>
+<aside class="notes">"A gradient was one output, many inputs: one row. Now there are three outputs. Keep the grid shape in mind: one row per output, one column per input. The next slide names it." (2026-10-22: replaces the two 'Nudge each parameter' slides; jzhong: the math motivation is clearer here than the figure.)</aside>
 </section>
 
 <section>
@@ -2512,8 +2510,27 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 </section>
 
 <section>
+<h4>The chain rule for any number of stages</h4>
+<p>Working with the two-stage rule: \(J_{\mathbf g\circ\mathbf f}(\mathbf w)=J_{\mathbf g}\big(\mathbf f(\mathbf w)\big)\,J_{\mathbf f}(\mathbf w)\).</p>
+<ul>
+<li class="fragment">Three stages: \(\mathbf w\;\xrightarrow{\ \mathbf h\ }\;\mathbf u\;\xrightarrow{\ \mathbf f\ }\;\mathbf v\;\xrightarrow{\ \mathbf g\ }\;\mathbf z\), with \(\mathbf w\in\R^n,\ \mathbf u\in\R^p,\ \mathbf v\in\R^k,\ \mathbf z\in\R^m\); that is \(\mathbf z=(\mathbf g\circ\mathbf f\circ\mathbf h)(\mathbf w)\).</li>
+<li class="fragment">Group it as \(\mathbf g\circ(\mathbf f\circ\mathbf h)\) and use the two-stage rule twice:</li>
+</ul>
+<div class="fragment">
+\[J_{\mathbf g\circ\mathbf f\circ\mathbf h}(\mathbf w)=J_{\mathbf g}(\mathbf v)\;J_{\mathbf f\circ\mathbf h}(\mathbf w)=J_{\mathbf g}(\mathbf v)\;J_{\mathbf f}(\mathbf u)\;J_{\mathbf h}(\mathbf w)\]
+</div>
+<ul>
+<li class="fragment"><strong>Any number of stages</strong>: multiply their Jacobians, last stage first. <span class="tier-m">[MASTER]</span>
+<ul><li>Each Jacobian is evaluated at the point its stage receives: \(J_{\mathbf h}\) at \(\mathbf w\), \(J_{\mathbf f}\) at \(\mathbf u=\mathbf h(\mathbf w)\), \(J_{\mathbf g}\) at \(\mathbf v=\mathbf f(\mathbf u)\).</li>
+<li>Sizes chain: \((m\times k)(k\times p)(p\times n)=m\times n\).</li></ul></li>
+<li class="fragment">L13&rsquo;s long chain was this rule with every Jacobian \(1\times1\): a product of numbers.</li>
+</ul>
+<div class="key-question fragment">Our error is exactly three stages: \(\mathbf w\mapsto\hat{\mathbf y}\mapsto\mathbf r\mapsto\mathrm{SSE}\). So its gradient is a product of three Jacobians.</div>
+</section>
+
+<section>
 <h4>Three stages as one chain: \((2\mathbf r^\top)(-I)X=-2\mathbf r^\top X\) at every \(\mathbf w\)</h4>
-<p>Apply \(J_{\mathbf g\circ\mathbf f}=J_{\mathbf g}J_{\mathbf f}\) twice along:</p>
+<p>The three-stage rule, last stage first, along:</p>
 \[\mathbf w\in\R^2\;\to\;\hat{\mathbf y}=X\mathbf w\in\R^3\;\to\;\mathbf r=\mathbf y-\hat{\mathbf y}\in\R^3\;\to\;\mathrm{SSE}=\mathbf r^\top\mathbf r\in\R\]
 <div class="fragment">
 \[\begin{aligned}\frac{d\,\mathrm{SSE}}{d\mathbf w}
