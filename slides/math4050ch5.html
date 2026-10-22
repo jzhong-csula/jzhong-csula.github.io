@@ -32,22 +32,22 @@ Department of Mathematics <br />
 California State University, Los Angeles</h6>
 </section>
 <section>
-<section id="slide-org9c0d19b">
-<h2 id="org9c0d19b">Chapter 5 Loan Repayment</h2>
-<div class="outline-text-2" id="text-org9c0d19b">
+<section id="slide-org897e901">
+<h2 id="org897e901">Chapter 5 Loan Repayment</h2>
+<div class="outline-text-2" id="text-org897e901">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org16cc739">
-<h3 id="org16cc739">Amortized Loans and Amortized Schedules</h3>
-<div class="outline-text-3" id="text-org16cc739">
+<section id="slide-org266d19a">
+<h3 id="org266d19a">Amortized Loans and Amortized Schedules</h3>
+<div class="outline-text-3" id="text-org266d19a">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org262ec95">
-<h4 id="org262ec95">Definitions</h4>
+<section id="slide-org06e7f5a">
+<h4 id="org06e7f5a">Definitions</h4>
 <p>
 When a loan is an <span style="color: rgb(24,116,205)">amortized loan</span>, each payment is understood to consist of:
 </p>
@@ -63,8 +63,8 @@ The chart (table) containing the payment amount, interest paid in each payment, 
 </section>
 </section>
 <section>
-<section id="slide-orgba69260">
-<h4 id="orgba69260">An Example</h4>
+<section id="slide-org316e0f1">
+<h4 id="org316e0f1">An Example</h4>
 <p>
 Consider a loan for \(1,000\) which is to be repaid in four annual payments under the effective annual interest rate of \(8\%\).
 </p>
@@ -84,8 +84,56 @@ What is amount of each level payment?
 </section>
 </section>
 <section>
-<section id="slide-org8a05af2">
-<h4 id="org8a05af2">An Example - Continued</h4>
+<section id="slide-org06f3473">
+<h4 id="org06f3473">An Example - on the calculator</h4>
+<p>
+The equation we just solved was \(1000 = Q\,a_{\overline{4}|0.08}\), with \(Q\) the unknown.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" data-fragment-index="1" class="fragment">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left"><code>2ND</code> <code>CLR</code> <code>TVM</code></td>
+<td class="org-left">clear</td>
+<td class="org-left"><code>4</code> <code>N</code></td>
+<td class="org-left">four annual payments</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>8</code> <code>I/Y</code></td>
+<td class="org-left">\(8\%\) per year</td>
+<td class="org-left"><code>1</code> <code>0</code> <code>0</code> <code>0</code> <code>PV</code></td>
+<td class="org-left">he <b>receives</b> the loan</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>0</code> <code>FV</code></td>
+<td class="org-left">nothing owed at the end</td>
+<td class="org-left"><code>CPT</code> <code>PMT</code></td>
+<td class="org-left"><b>-301.920804</b></td>
+</tr>
+</tbody>
+</table>
+
+<p data-fragment-index="2" class="fragment">
+Negative because the payments leave him. So \(Q = 301.92\), the same number as above.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgc2b0075">
+<h4 id="orgc2b0075">An Example - Continued</h4>
 <p>
 Then, amount of interest contained in the first payment is
 </p>
@@ -117,8 +165,52 @@ The outstanding balance at the end of the first year is, then
 </section>
 </section>
 <section>
-<section id="slide-orgdb3c926">
-<h4 id="orgdb3c926">An Example - Amortization Schedule</h4>
+<section id="slide-org4f2acc7">
+<h4 id="org4f2acc7">The outstanding balance on the calculator</h4>
+<p>
+By hand we got \(OLB_1\) by subtracting the principal repaid: \(1000-221.92=778.08\).
+The calculator reaches it the <b>other</b> way &#x2014; the <b>prospective</b> method of §3.6. After one payment, three remain, so
+</p>
+<div data-fragment-index="1" class="fragment">
+\begin{align*}
+ OLB_1 = Q\,a_{\overline{3}|0.08}.
+\end{align*}
+
+</div>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" data-fragment-index="2" class="fragment">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left"><code>3</code> <code>N</code></td>
+<td class="org-left"><b>three payments still to come</b></td>
+<td class="org-left"><code>CPT</code> <code>PV</code></td>
+<td class="org-left"><b>778.079196</b></td>
+</tr>
+</tbody>
+</table>
+
+<p data-fragment-index="3" class="fragment">
+🔴 Nothing else was retyped. <b>Only</b> <code>N</code> changed &#x2014; from the length of the loan to the number of payments <b>still to come</b>.
+</p>
+
+<p data-fragment-index="4" class="fragment">
+The split is still yours to write: \(I_1 = 0.08(1000) = 80\), and the principal is \(301.92-80=221.92\). There is no key for those two lines &#x2014; they <b>are</b> the definition of an amortized payment.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgc0998b8">
+<h4 id="orgc0998b8">An Example - Amortization Schedule</h4>
 <p>
 If we continue the procedure we completed for the first year for the remaining 3 payments, we get the entire amortization schedule:
 </p>
@@ -190,8 +282,64 @@ If we continue the procedure we completed for the first year for the remaining 3
 </section>
 </section>
 <section>
-<section id="slide-org709f8cb">
-<h4 id="org709f8cb">An Example - Smaller Final Payment</h4>
+<section id="slide-org8d98bae">
+<h4 id="org8d98bae">The whole OLB column, one keystroke each</h4>
+<p>
+Put the number of payments <b>still to come</b> into <code>N</code>, press <code>CPT</code> <code>PV</code>.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" data-fragment-index="1" class="fragment">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">after payment</th>
+<th scope="col" class="org-left">key</th>
+<th scope="col" class="org-left">display</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">\(1\)</td>
+<td class="org-left"><code>3</code> <code>N</code> <code>CPT</code> <code>PV</code></td>
+<td class="org-left">\(778.079196\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(2\)</td>
+<td class="org-left"><code>2</code> <code>N</code> <code>CPT</code> <code>PV</code></td>
+<td class="org-left">\(538.404727\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(3\)</td>
+<td class="org-left"><code>1</code> <code>N</code> <code>CPT</code> <code>PV</code></td>
+<td class="org-left">\(279.556300\)</td>
+</tr>
+
+<tr>
+<td class="org-left">\(4\)</td>
+<td class="org-left"><code>0</code> <code>N</code> <code>CPT</code> <code>PV</code></td>
+<td class="org-left">\(0\)</td>
+</tr>
+</tbody>
+</table>
+
+<p data-fragment-index="2" class="fragment">
+⚠️ The table on the previous slide says \(538.41\) in the \(t=2\) row; the calculator says \(538.40\). <b>Both are correct.</b> The schedule rounds every entry to the cent and then carries the <b>rounded</b> figure forward; the calculator carries the full value. The gap closes again by the next row.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgbcb0319">
+<h4 id="orgbcb0319">An Example - Smaller Final Payment</h4>
 <p>
 A \(1,000\) loan is being repaid by payments of \(100\) (plus the final smaller payment) at the end of each quarter for as long as it is necessary. Assume that \(i^{(4)}=0.16\).
 </p>
@@ -213,8 +361,8 @@ Which method, prospective or retrospective to compute the balance?
 </section>
 </section>
 <section>
-<section id="slide-orga6ab4cd">
-<h4 id="orga6ab4cd">An Example - Solution</h4>
+<section id="slide-org3a91ce0">
+<h4 id="org3a91ce0">An Example - Solution</h4>
 <p>
 We use retrospective method here:
 </p>
@@ -235,10 +383,86 @@ The principal payment in the fourth payment is \(100 - 32.51 = 67.49\).
 </section>
 </section>
 <section>
-<section id="slide-orgfaf2b18">
-<h4 id="orgfaf2b18">Amortization Schedule Table 5.2.6</h4>
+<section id="slide-org2ba2311">
+<h4 id="org2ba2311">Smaller final payment - on the calculator</h4>
+<p data-fragment-index="1" class="fragment">
+<b>How many payments?</b> The unknown is \(n\) in \(1000 = 100\,a_{\overline{n}|0.04}\):
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" data-fragment-index="2" class="fragment">
 
-<div id="orga8eacac" class="figure">
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left"><code>2ND</code> <code>CLR</code> <code>TVM</code></td>
+<td class="org-left">clear</td>
+<td class="org-left"><code>4</code> <code>I/Y</code></td>
+<td class="org-left">\(4\%\) per quarter</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>1</code> <code>0</code> <code>0</code> <code>0</code> <code>PV</code></td>
+<td class="org-left">the loan</td>
+<td class="org-left"><code>1</code> <code>0</code> <code>0</code> <code>+/-</code> <code>PMT</code></td>
+<td class="org-left">he pays \(100\)</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>0</code> <code>FV</code></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left"><code>CPT</code> <code>N</code></td>
+<td class="org-left"><b>13.024384</b></td>
+</tr>
+</tbody>
+</table>
+
+<p data-fragment-index="3" class="fragment">
+So there are <b>fourteen</b> payments, the last one smaller. By hand this step needs a logarithm.
+</p>
+
+<p data-fragment-index="4" class="fragment">
+<b>And \(OLB_3\)?</b> The <b>retrospective</b> calculation above, in one keystroke:
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" data-fragment-index="5" class="fragment">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left"><code>3</code> <code>N</code></td>
+<td class="org-left"><b>three payments already made</b></td>
+<td class="org-left"><code>CPT</code> <code>FV</code></td>
+<td class="org-left"><b>-812.704</b></td>
+</tr>
+</tbody>
+</table>
+
+<p data-fragment-index="6" class="fragment">
+\(812.70\), the number we just computed by hand.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org74c3aa8">
+<h4 id="org74c3aa8">Amortization Schedule Table 5.2.6</h4>
+
+<div id="org626c201" class="figure">
 <p><img src="../img/math4050/amortization-schedule.png" alt="amortization-schedule.png" width="75%" class="fragment middle" />
 </p>
 </div>
@@ -249,15 +473,68 @@ For the case that \(Q\neq R\), please check the table on page 232.
 </section>
 </section>
 <section>
-<section id="slide-org0f840c0">
-<h3 id="org0f840c0">Amortized Loans with Other Repayment Patterns</h3>
-<div class="outline-text-3" id="text-org0f840c0">
+<section id="slide-org37b3711">
+<h4 id="org37b3711">CPT PV or CPT FV - which method are you doing?</h4>
+<p>
+The two methods of §3.6 are two keys. <b>What you put in</b> <code>N</code> <b>decides which one.</b>
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" data-fragment-index="1" class="fragment">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">You key</th>
+<th scope="col" class="org-left">You get</th>
+<th scope="col" class="org-left">Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>N</code> \(=\) payments <b>left</b>, then <code>CPT</code> <code>PV</code></td>
+<td class="org-left">value of what is still to pay</td>
+<td class="org-left"><b>prospective</b></td>
+</tr>
+
+<tr>
+<td class="org-left"><code>N</code> \(=\) payments <b>made</b>, <code>PV</code> \(=\) the loan, then <code>CPT</code> <code>FV</code></td>
+<td class="org-left">loan rolled up, less payments rolled up</td>
+<td class="org-left"><b>retrospective</b></td>
+</tr>
+</tbody>
+</table>
+
+<p data-fragment-index="2" class="fragment">
+For the quarterly loan, <code>3</code> <code>N</code> <code>CPT</code> <code>FV</code> gave \(-812.704\), which is exactly
+</p>
+<div data-fragment-index="3" class="fragment">
+\begin{align*}
+ -\left[\, L(1+i)^{3} - Q\,s_{\overline{3}|i} \,\right].
+\end{align*}
+
+</div>
+<p data-fragment-index="4" class="fragment">
+Nothing new &#x2014; the same two formulas you drew the timelines for.
+</p>
+</section>
+</section>
+<section>
+<section id="slide-orgfc8f8fa">
+<h3 id="orgfc8f8fa">Amortized Loans with Other Repayment Patterns</h3>
+<div class="outline-text-3" id="text-orgfc8f8fa">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org65723a3">
-<h4 id="org65723a3">Notations</h4>
+<section id="slide-org0bbae47">
+<h4 id="org0bbae47">Notations</h4>
 <p>
 Let \(L\) denote the loan amount, \(B_t\) give the balance at time \(t\), immediately following any payment at time \(t\), \(P_t\) signify the payment amount at time \(t\).
 </p>
@@ -278,8 +555,31 @@ In particular, if \(n\) denotes the duration of the loan in interest periods, th
 </section>
 </section>
 <section>
-<section id="slide-org68a38c6">
-<h4 id="org68a38c6">Example 5.4.2 - Level Principal</h4>
+<section id="slide-org5f6d85a">
+<h4 id="org5f6d85a">Where the TVM worksheet stops</h4>
+<p>
+The <code>PMT</code> register holds <b>one</b> number. So the TVM worksheet can only handle a loan whose payments are <b>all the same</b>.
+</p>
+
+<ul>
+<li data-fragment-index="1" class="fragment">§5.4.2, level principal: \(P_t = 3100-100t\). Not level.</li>
+<li data-fragment-index="2" class="fragment">§5.4.3, payments rising by \(200\) each year. Not level.</li>
+<li data-fragment-index="3" class="fragment">§5.4.4, payments rising by \(20\%\) each year. Not level.</li>
+
+</ul>
+
+<p data-fragment-index="4" class="fragment">
+For all three, the tool is \(B_t = B_{t-1}(1+i_t) - P_t\), and the present values come from the §3.8 and §3.9 formulas.
+</p>
+
+<p data-fragment-index="5" class="fragment">
+<b>That is why those formulas had to be learned without a calculator.</b>
+</p>
+</section>
+</section>
+<section>
+<section id="slide-org0cbc188">
+<h4 id="org0cbc188">Example 5.4.2 - Level Principal</h4>
 <p>
 Adam takes out a \(20,000\) loan for ten years at a level annual effective interest rate of \(5\%\). At the end of each year, he pays \(2,000\) in principal, which is \(1/10\) of the loan, along with the interest due. Find a formula for \(P_t\).
 </p>
@@ -305,16 +605,16 @@ If \(t\in \{0, 1, 2, \dots, 10\}\), then \(B_t = 20000 - 2000t\). Therefore,
 </section>
 </section>
 <section>
-<section id="slide-orgda90907">
-<h4 id="orgda90907">Example 5.4.3 - Arithmetic Progression</h4>
+<section id="slide-orga790e9f">
+<h4 id="orga790e9f">Example 5.4.3 - Arithmetic Progression</h4>
 <p>
 Beatrice takes out a \(20,000\) loan for ten years at a level annual effective interest rate of \(5\%\). Her original payment is \(P\) and than her payments increase by \(200\) each year. Find \(P\).
 </p>
 </section>
 </section>
 <section>
-<section id="slide-org0fe7dc7">
-<h4 id="org0fe7dc7">Example 5.4.3 - Solution</h4>
+<section id="slide-org5d6c6eb">
+<h4 id="org5d6c6eb">Example 5.4.3 - Solution</h4>
 <p>
 Here it is simpler to use Equation (3.9.4) for present value of an arithmetic progression:
 </p>
@@ -339,16 +639,16 @@ Since \(\displaystyle a_{\overline{10}|0.05} = \frac{1 - (1.05)^{-10}}{0.05}\),
 </section>
 </section>
 <section>
-<section id="slide-orgbe836eb">
-<h4 id="orgbe836eb">Example 5.4.4 - Geometric Progression</h4>
+<section id="slide-org104cbdc">
+<h4 id="org104cbdc">Example 5.4.4 - Geometric Progression</h4>
 <p>
 Cedric also takes out a \(20,000\) loan for ten years at a level annual effective interest rate of \(5\%\). His payments grow by \(20\%\) each year. Find the amount of his first payment.
 </p>
 </section>
 </section>
 <section>
-<section id="slide-org0e4bbc8">
-<h4 id="org0e4bbc8">Example 5.4.4 - Solution</h4>
+<section id="slide-orge3bb704">
+<h4 id="orge3bb704">Example 5.4.4 - Solution</h4>
 <p class="fragment">
 Cedric's payments are: \(P_t = P_1(1.2)^{t-1}\).
 </p>
