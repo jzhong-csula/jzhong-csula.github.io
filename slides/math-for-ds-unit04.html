@@ -692,6 +692,7 @@ Both partial derivatives are zero at exactly one point, the <strong>flat point</
 </ul>
 <div class="key-question fragment">We have a <strong>flat point</strong>. Flat is not the same as lowest &mdash; and with two parameters there are far more ways to be flat. <strong>L10 settles it.</strong></div>
 </section>
+
 <section>
 <h2 style="font-size:1.3em;">L10 — Why the Flat Point Is the Lowest</h2>
 <ul>
@@ -1049,6 +1050,7 @@ In particular \(\mathrm{SSE}(\mathbf w)\ge\mathrm{SSE}(\mathbf w_{\text{flat}})=
 </ul>
 <div class="key-question fragment">\(\partial\,\mathrm{SSE}/\partial w_0\) and \(\partial\,\mathrm{SSE}/\partial w_1\) are slopes along the <strong>axes</strong>. Nobody changes one parameter at a time. <strong>L11: the slope in any direction.</strong></div>
 </section>
+
 <section>
 <h2 style="font-size:1.3em;">L11 — One Vector Answers Every Direction</h2>
 <p><strong>Reading</strong></p>
@@ -1557,6 +1559,7 @@ Notation: \(d\) for the derivative with respect to the whole vector \(\mathbf w\
 </ul>
 <div class="key-question fragment">Two partial derivatives, two entries. With \(50\) parameters there would be \(50\). <strong>L12: \(\nabla\mathrm{SSE}\) for any number of parameters, in one matrix line.</strong></div>
 </section>
+
 <section>
 <h2 style="font-size:1.3em;">L12 — The Matrix Form</h2>
 <ul>
@@ -1944,6 +1947,7 @@ Notation: \(d\) for the derivative with respect to the whole vector \(\mathbf w\
 </ul>
 <div class="key-question fragment">We now have \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\). But the model never jumps from parameters to error &mdash; it passes through predictions and residuals. Can we get \(-2\,\mathbf r^\top X\) <strong>one stage at a time</strong>? <strong>L13.</strong></div>
 </section>
+
 <section>
 <h2 style="font-size:1.3em;">L13 — A Model Is a Chain</h2>
 <p><strong>Reading:</strong></p>
@@ -1955,13 +1959,22 @@ Notation: \(d\) for the derivative with respect to the whole vector \(\mathbf w\
 
 <section>
 <h4>Step 1: why split the error into stages</h4>
+<img src="../images/unit04/u4-L13-fig13n-network.png" alt="A small neural network: two inputs, two layers of three units, one output, then the error; a black arrow for the forward pass and a red arrow for the backward pass" style="float:right; max-height:400px; max-width:50%; margin:0 0 0.5em 1em; border-radius:6px;">
 <ul>
-<li>A neural network is dozens of stages.</li>
-<li>It cannot be expanded the way L12 expanded \(\mathrm{SSE}\).</li>
-<li><span style="color:rgb(30,90,160)"><strong>We need the derivative from the stages, one at a time.</strong></span></li>
+<li>A neural network is a chain of layers: \(f_1\), then \(f_2\), then \(f_3\), &hellip;</li>
+<li class="fragment">Each layer is a function: a linear map, then a nonlinear function.</li>
+<li class="fragment"><strong>Forward:</strong> compute the values, layer by layer, up to the error.</li>
+<li class="fragment"><strong>Backward:</strong> compute the derivatives, layer by layer, back to the parameters &mdash; the chain rule. This is <strong>backpropagation</strong>.</li>
+<li class="fragment">Such a chain cannot be expanded into one polynomial the way L12 expanded \(\mathrm{SSE}\).</li>
 </ul>
-<p class="fragment"><strong>Our test case:</strong> L09&rsquo;s one-parameter model, on the same data.</p>
-<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<div class="key-question fragment">We need the derivative from the stages, one at a time. <strong>Start with the smallest chain.</strong></div>
+<aside class="notes">"Same three students, same one-parameter model as L09. The only new thing is that we stop jumping from w straight to the error and look at every stage in between."</aside>
+</section>
+
+<section>
+<h4>Step 1: our test case, a three-stage chain</h4>
+<p><strong>Our test case:</strong> L09&rsquo;s one-parameter model, on the same data.</p>
+<table style="width:auto; margin:0.3em auto; font-size:0.95em;">
 <tr><th>model</th><th>data</th></tr>
 <tr><td>\(\hat y_i=w\,t_i\)</td><td>\(\mathbf t=(0,1,2)^\top\), \(\;\mathbf y=(1,3,2)^\top\)</td></tr>
 </table>
@@ -1969,7 +1982,6 @@ Notation: \(d\) for the derivative with respect to the whole vector \(\mathbf w\
 <div class="fragment">
 \[w\;\xrightarrow{\ \times t_i\ }\;\hat y_i\;\xrightarrow{\ y_i-\;\cdot\ }\;r_i\;\xrightarrow{\ (\cdot)^2\ }\;e_i=r_i^2\]
 </div>
-<aside class="notes">"Same three students, same one-parameter model as L09. The only new thing is that we stop jumping from w straight to the error and look at every stage in between."</aside>
 </section>
 
 <section>
@@ -2015,18 +2027,15 @@ Notation: \(d\) for the derivative with respect to the whole vector \(\mathbf w\
 
 <section>
 <h4>Step 2: do the stage derivatives multiply?</h4>
-<img src="../images/unit04/u4-L13-fig13b-chain-student2.png" alt="Student 2 at w = 1: values 1 → 1 → 2 → 4 down the chain, stage derivatives 1, -1, 4 in blue, product -4" style="float:right; max-height:470px; max-width:40%; margin:0 0 0.5em 1em; border-radius:6px;">
+<img src="../images/unit04/u4-L13-fig13b2-forward-backward.png" alt="Student 2 at w=1: forward in black, values 1, 1, 2, 4 down the chain; backward in red, multiplying the stage derivatives 4, -1, 1 back up, giving de2/dw = -4" style="float:right; max-height:480px; max-width:46%; margin:0 0 0.5em 1em; border-radius:6px;">
 <p>Student 2 at \(w=1\): stage derivatives \(1\), \(-1\), \(4\).</p>
 <ul>
-<li class="fragment"><strong>Guess:</strong> multiply them: \(\;4\cdot(-1)\cdot1=-4\).</li>
-<li class="fragment"><strong>Check directly:</strong>
-<ol>
-<li>\(e_2(w)=(3-w)^2\)</li>
-<li>\(e_2'(w)=-2(3-w)\)</li>
-<li>\(e_2'(1)=-4\) ✓</li>
-</ol></li>
+<li class="fragment"><strong>Forward</strong> (black): the values \(1\to1\to2\to4\).</li>
+<li class="fragment"><strong>Backward</strong> (red): start from the error and multiply the stage derivatives on the way back: \(1\to4\to-4\to-4\).</li>
+<li class="fragment">So the guess: \(\dfrac{de_2}{dw}=4\cdot(-1)\cdot1=-4\).</li>
+<li class="fragment">Running a chain backward and multiplying is <strong>backpropagation</strong>, on the smallest example.</li>
 </ul>
-<div class="key-question fragment">The product of the stage derivatives is the derivative. <strong>Do rates always multiply along a chain?</strong></div>
+<div class="key-question fragment"><strong>Do rates always multiply along a chain?</strong> Step 3.</div>
 </section>
 
 <section>
@@ -2094,32 +2103,7 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 </section>
 
 <section>
-<h4>Step 4: check for every \(w\)</h4>
-<p>Claim: \(-2\,\mathbf t^\top\mathbf r=\mathrm{SSE}'(w)=10w-14\). Data \(\mathbf t=(0,1,2)^\top\), \(\mathbf y=(1,3,2)^\top\).</p>
-<ol>
-<li class="fragment">\(\mathbf r=\mathbf y-w\mathbf t\) &mdash; the residual vector</li>
-<li class="fragment">\(\mathbf t^\top\mathbf y=7,\quad \mathbf t^\top\mathbf t=5\) &mdash; from the data</li>
-<li class="fragment">\(-2\,\mathbf t^\top\mathbf r=-2(7-5w)=\)<span style="color:rgb(30,90,160)"><strong>\(\,10w-14\)</strong></span> ✓</li>
-</ol>
-<ul>
-<li class="fragment">That is the derivative of \(\mathrm{SSE}(w)=5w^2-14w+14\) &mdash; <strong>from the stages alone</strong>.</li>
-</ul>
-
-</section>
-
-<section>
-<h4>Step 4: your turn at \(w=\tfrac75\)</h4>
-<p>Data \(\mathbf t=(0,1,2)^\top\), \(\mathbf y=(1,3,2)^\top\); \(\;\mathbf r=\mathbf y-w\mathbf t\); \(\;\frac{d\,\mathrm{SSE}}{dw}=-2\,\mathbf t^\top\mathbf r\).</p>
-<div class="quickcheck"><strong>Your turn, \(w=\tfrac75\)</strong> (L09&rsquo;s best one-parameter rule):
-<ul>
-<li class="fragment">\(\mathbf r=\mathbf y-\tfrac75\mathbf t=\left(1,\tfrac85,-\tfrac45\right)^\top\)</li>
-<li class="fragment">\(-2\,\mathbf t^\top\mathbf r=-2\left(0+\tfrac85-\tfrac85\right)=0\) ✓</li>
-<li class="fragment">Students 2 and 3 pull \(w\) in opposite directions, equally hard.</li>
-</ul></div>
-</section>
-
-<section>
-<h4>What the product shows (1): one flat stage makes a student&rsquo;s term \(0\)</h4>
+<h4>Step 4: one term per student, and when a term is \(0\)</h4>
 <p>One student: \(\frac{de_i}{dw}=2r_i\cdot(-1)\cdot t_i\).</p>
 <ul>
 <li>A stage is <strong>flat</strong> at a point when its stage derivative there is \(0\).</li>
@@ -2131,30 +2115,71 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 <tr><td>1</td><td>\((0,1)\)</td><td>\(1\)</td><td>\(0\)</td><td><strong>stage 1</strong></td><td>\(t_1=0\): \(\hat y_1=w\cdot0\) does not move with \(w\)</td></tr>
 <tr><td>2</td><td>\((1,3)\)</td><td>\(2\)</td><td>\(-4\)</td><td>none</td><td>&mdash;</td></tr>
 <tr><td>3</td><td>\((2,2)\)</td><td>\(0\)</td><td>\(0\)</td><td><strong>stage 3</strong></td><td>\(r_3=0\): \(\frac{de_3}{dr_3}=2r_3=0\)</td></tr>
+<tr><td colspan="3"><strong>sum:</strong> \(\frac{d\,\mathrm{SSE}}{dw}(1)\)</td><td>\(-4\)</td><td colspan="2"></td></tr>
 </table>
+<ul>
+<li class="fragment">The derivative of the error is <strong>one term per student, added up</strong>: training uses the data through these terms.</li>
+</ul>
 <aside class="notes">"Two different reasons for a zero: student 1 is flat at the first stage (w cannot move that prediction), student 3 at the last stage (a zero residual, where the square has slope zero). The product does not care which factor is the zero."</aside>
 </section>
 
 <section>
-<h4>What the product shows (1): the total, and where it comes from</h4>
-<p>At \(w=1\), the three students&rsquo; terms \(\frac{de_i}{dw}=-2\,t_i\,r_i\) are \(0\), \(-4\), \(0\).</p>
+<h4>Step 4: your turn at \(w=\tfrac75\)</h4>
+<div class="quickcheck"><strong>Your turn.</strong> Model \(\hat y=wt\); data \(\mathbf t=(0,1,2)^\top\) hours, \(\mathbf y=(1,3,2)^\top\) points; take \(w=\tfrac75\) (L09&rsquo;s best one-parameter rule).
+<ul style="list-style:none; padding-left:0.6em; margin-top:0.2em;">
+<li>(a) Compute the residual \(\mathbf r=\mathbf y-w\mathbf t\).</li>
+<li>(b) Each student contributes \(-2\,t_ir_i\) to \(\dfrac{d\,\mathrm{SSE}}{dw}=-2\,\mathbf t^\top\mathbf r\). Compute the three contributions and their sum.</li>
+<li>(c) What does the sum say about \(w=\tfrac75\)?</li>
+</ul></div>
 <ul>
-<li class="fragment">Sum: \(\frac{d\,\mathrm{SSE}}{dw}(1)=0+(-4)+0=-4\).</li>
-<li class="fragment">Check: \(10w-14\) at \(w=1\) is \(-4\) ✓.</li>
-<li class="fragment">The polynomial \(10w-14\) gives only the total.</li>
-<li class="fragment"><strong>The chain rule shows which student, and which stage, made each term \(0\).</strong></li>
+<li class="fragment">(a) \(\mathbf r=\left(1,\tfrac85,-\tfrac45\right)^\top\)</li>
+<li class="fragment">(b) Student 1: \(0\) (\(t_1=0\)); student 2: \(-2\cdot1\cdot\tfrac85=-\tfrac{16}5\); student 3: \(-2\cdot2\cdot\left(-\tfrac45\right)=+\tfrac{16}5\). Sum \(0\).</li>
+<li class="fragment">(c) The sum is \(\dfrac{d\,\mathrm{SSE}}{dw}=0\): \(w=\tfrac75\) is the flat point.</li>
+<li class="fragment">Student 2&rsquo;s term \(-\tfrac{16}5\) alone says raise \(w\); student 3&rsquo;s \(+\tfrac{16}5\) alone says lower it. Same size, opposite sign: they cancel.</li>
 </ul>
-<aside class="notes">"A first-order check if asked: SSE(1) = 5, so SSE(1.1) is about 5 - 0.4 = 4.6; actual 4.65."</aside>
 </section>
 
 <section>
-<h4>What the product shows (2): many small factors</h4>
+<h4>What if a stage is nonlinear? <span class="tier-u">[UNDERSTAND]</span></h4>
+<div class="key-question">Step 1: every layer of a network ends with a <strong>nonlinear</strong> function. Our prediction stage \(\hat y_i=wt_i\) is linear. Does the stage-by-stage method still work for a nonlinear stage? <strong>Yes: only that stage&rsquo;s own derivative formula is new</strong>; the other stages keep theirs (MML &sect;5.6.2: automatic differentiation multiplies such local derivatives).</div>
+<p class="fragment"><strong>Try it:</strong> replace the prediction stage \(\hat y_i=wt_i\) by the nonlinear \(\hat y_i=e^{wt_i}\). Same data, same residual and square stages.</p>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>stage</th><th>derivative, \(\hat y_i=wt_i\)</th><th>derivative, \(\hat y_i=e^{wt_i}\)</th></tr>
+<tr><td>1, prediction</td><td>\(t_i\)</td><td>\(t_i\,e^{wt_i}\) &nbsp;(Calculus 1)</td></tr>
+<tr><td>2, residual</td><td>\(-1\)</td><td>\(-1\), same formula</td></tr>
+<tr><td>3, square</td><td>\(2r_i\)</td><td>\(2r_i\), same formula</td></tr>
+</table>
+<ul>
+<li class="fragment">Product: \(\dfrac{de_i}{dw}=2r_i\cdot(-1)\cdot t_ie^{wt_i}=-2\,t_i\,r_i\,e^{wt_i}\): the old answer times <span style="color:rgb(30,90,160)"><strong>one extra factor \(e^{wt_i}\)</strong></span>.</li>
+</ul>
+</section>
+
+<section>
+<h4>The nonlinear stage at \(w=0\) <span class="tier-u">[UNDERSTAND]</span></h4>
+<p>Model \(\hat y_i=e^{wt_i}\); one student: \(\dfrac{de_i}{dw}=-2\,t_i\,r_i\,e^{wt_i}\). Data \((t_i,y_i)=(0,1),(1,3),(2,2)\).</p>
+<ul>
+<li>\(\mathrm{SSE}(w)=(1-e^{0})^2+(3-e^{w})^2+(2-e^{2w})^2\) is no longer a quadratic in \(w\); the chain handles it the same way.</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>student</th><th>\((t_i,y_i)\)</th><th>\(\hat y_i=e^{0}\)</th><th>\(r_i\)</th><th>\(-2\,t_i\,r_i\,e^{0}\)</th></tr>
+<tr><td>1</td><td>\((0,1)\)</td><td>\(1\)</td><td>\(0\)</td><td>\(0\)</td></tr>
+<tr><td>2</td><td>\((1,3)\)</td><td>\(1\)</td><td>\(2\)</td><td>\(-4\)</td></tr>
+<tr><td>3</td><td>\((2,2)\)</td><td>\(1\)</td><td>\(1\)</td><td>\(-4\)</td></tr>
+<tr><td colspan="4"><strong>sum:</strong> \(\frac{d\,\mathrm{SSE}}{dw}(0)\)</td><td>\(-8\)</td></tr>
+</table>
+<ul>
+<li class="fragment">Negative: raising \(w\) a little lowers \(\mathrm{SSE}\).</li>
+</ul>
+</section>
+
+<section>
+<h4>What if the chain is long? Many small factors</h4>
 <ul>
 <li>A chain of \(k\) stages: its derivative is a product of \(k\) stage derivatives.</li>
-<li><span style="color:rgb(30,90,160)"><strong>Every factor of size at most one fixed \(c&lt;1\) \(\Rightarrow\) product at most \(c^k\).</strong></span></li>
+<li>If every stage derivative is about \(0.5\), or about \(0.9\):</li>
 </ul>
 <table class="fragment" style="width:auto; margin:0.5em auto; font-size:1em;">
-<tr><th>number of factors \(k\)</th><th>\(0.5^k\)</th><th>\(0.9^k\)</th></tr>
+<tr><th>number of stages \(k\)</th><th>\(0.5^k\)</th><th>\(0.9^k\)</th></tr>
 <tr><td>\(1\)</td><td>\(0.5\)</td><td>\(0.9\)</td></tr>
 <tr><td>\(10\)</td><td>\(\approx0.001\)</td><td>\(\approx0.349\)</td></tr>
 <tr><td>\(50\)</td><td>\(\approx8.9\times10^{-16}\)</td><td>\(\approx0.005\)</td></tr>
@@ -2163,91 +2188,37 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 </section>
 
 <section>
-<h4>What the product shows (2): many small factors</h4>
+<h4>What if the chain is long? Many small factors</h4>
 <img src="../images/unit04/u4-L13-fig13c-vanishing.png" alt="Log-scale plot of 0.9^k and 0.5^k for k = 1 to 50: 0.9^50 is about 0.005 and 0.5^50 is about 8.9e-16" style="float:right; max-height:470px; max-width:58%; margin:0 0 0.5em 1em; border-radius:6px;">
 <ul>
-<li><span style="color:rgb(30,90,160)"><strong>Every factor of size at most one fixed \(c&lt;1\) \(\Rightarrow\) product at most \(c^k\).</strong></span></li>
-<li>\(c^k\) shrinks exponentially in \(k\).</li>
+<li>Many factors below \(1\): the product shrinks fast as the chain gets longer.</li>
+<li>\(0.9\) looks harmless; \(0.9^{50}\approx0.005\) is not.</li>
 </ul>
 <aside class="notes">"0.5^10 = 1/1024 exactly. 0.9^10 = 0.3487, 0.9^50 = 0.00515, 0.5^50 = 8.88e-16."</aside>
 </section>
 
 <section>
-<h4>What the product shows (2): vanishing gradients</h4>
-<p>Product of \(k\) stage derivatives, each of size at most \(c&lt;1\): at most \(c^k\). E.g. \(0.9^{50}\approx0.005\).</p>
+<h4>The trade-off of depth: vanishing gradients</h4>
+<p>Product of \(50\) stage derivatives of about \(0.9\): about \(0.005\).</p>
 <ul>
-<li class="fragment">\(50\) factors of \(0.9\): a small step \(\delta\) at the input moves the last output by only \(\approx0.005\,\delta\).
+<li class="fragment"><strong>More layers:</strong> a more flexible model (and a greater risk of overfitting).</li>
+<li class="fragment"><strong>But:</strong> a parameter in an early layer gets its derivative through every later layer.
 <ul>
-<li>A parameter at the start of a long chain gets a near-\(0\) derivative.</li>
-<li>So its update is tiny.</li>
+<li>A long product of factors below \(1\) is nearly \(0\).</li>
+<li>So that parameter barely moves: its learning is very slow.</li>
 </ul></li>
-<li class="fragment">This scalar chain is the simplest version of the <strong>vanishing-gradient</strong> problem <span style="white-space:nowrap">of deep networks. <span class="tier-u">[UNDERSTAND]</span></span>
-<ul>
-<li>Their stages are vectors: L14 replaces the scalar factors by Jacobians.</li>
-</ul></li>
+<li class="fragment">This is the <strong>vanishing-gradient</strong> problem <span style="white-space:nowrap">of deep networks. <span class="tier-u">[UNDERSTAND]</span></span></li>
 </ul>
 </section>
 
 <section>
-<h4>What the product shows (2): &#9888;&#65039; &ldquo;each factor below \(1\)&rdquo; is not enough</h4>
-<p>The bound: \(k\) factors, each of size at most a fixed \(c&lt;1\) \(\Rightarrow\) product at most \(c^k\).</p>
+<h4>A preview of the fix: keep every factor near \(1\) <span class="tier-e">[EXPLORE]</span></h4>
+<p>The trouble is a long product of factors below \(1\). Deep networks are built so the factors stay near \(1\):</p>
 <ul>
-<li class="fragment">Factors creeping up to \(1\): \(1-\tfrac12,\,1-\tfrac14,\,1-\tfrac18,\dots\)</li>
-<li class="fragment">Each is below \(1\), but there is no fixed \(c&lt;1\) above all of them.</li>
-<li class="fragment">Their product stays near \(0.29\).</li>
-<li class="fragment"><span style="color:rgb(30,90,160)"><strong>What matters is a fixed ceiling \(c&lt;1\).</strong></span></li>
+<li class="fragment"><strong>ReLU</strong> nonlinearity, \(\max(0,x)\): where it is active its slope is exactly \(1\).</li>
+<li class="fragment"><strong>Skip connections</strong>: a layer computes \(x+f(x)\) instead of \(f(x)\). Its derivative is \(1+f'(x)\), which stays near \(1\) when \(f'(x)\) is small.</li>
+<li class="fragment">Both appear in the networks behind today&rsquo;s AI systems. Not on quizzes or exams.</li>
 </ul>
-<aside class="notes">"If they ask about factors larger than 1: the product then grows instead, the exploding case; not needed here."</aside>
-</section>
-
-<section>
-<h4 style="font-size:1.3em;">What the product shows (3): change one stage, change one factor <span class="tier-u">[UNDERSTAND]</span></h4>
-<p>A separate example, same data \((t_i,y_i)=(0,1),(1,3),(2,2)\).</p>
-<ul>
-<li>New model: \(\hat y_i=e^{wt_i}\)</li>
-<li>So \(r_i=y_i-e^{wt_i}\), \(\;e_i=r_i^2\)</li>
-</ul>
-<p class="fragment"><strong>Stage 1 changes.</strong> It is itself a two-stage chain:</p>
-<ol>
-<li class="fragment">\(u=t_iw\), so \(\frac{du}{dw}=t_i\)</li>
-<li class="fragment">\(\hat y_i=e^u\), so \(\frac{d\hat y_i}{du}=e^u\)</li>
-<li class="fragment">\(\dfrac{d\hat y_i}{dw}=e^{u}\cdot t_i=t_i\,e^{wt_i}\) &mdash; chain rule</li>
-</ol>
-</section>
-
-<section>
-<h4>What the product shows (3): the one extra factor <span class="tier-u">[UNDERSTAND]</span></h4>
-<p>Model \(\hat y_i=e^{wt_i}\), \(r_i=y_i-\hat y_i\), \(e_i=r_i^2\).</p>
-<table style="width:auto; margin:0.3em auto; font-size:0.9em;">
-<tr><th>stage</th><th>stage derivative, \(\hat y_i=wt_i\)</th><th>stage derivative, \(\hat y_i=e^{wt_i}\)</th></tr>
-<tr><td>1, prediction</td><td>\(t_i\)</td><td>\(t_i\,e^{wt_i}\)</td></tr>
-<tr><td>2, residual</td><td>\(-1\)</td><td>\(-1\) (unchanged)</td></tr>
-<tr><td>3, squared residual</td><td>\(2r_i\)</td><td>\(2r_i\) (unchanged)</td></tr>
-</table>
-<div class="fragment">
-\[\frac{de_i}{dw}=2r_i\cdot(-1)\cdot t_ie^{wt_i}=-2\,t_i\,r_i\,e^{wt_i}\]
-</div>
-<ul>
-<li class="fragment">Before: \(-2\,t_i\,r_i\).</li>
-<li class="fragment"><span style="color:rgb(30,90,160)"><strong>One extra factor \(e^{wt_i}\), from the only stage that changed.</strong></span></li>
-</ul>
-</section>
-
-<section>
-<h4>What the product shows (3): no polynomial needed <span class="tier-u">[UNDERSTAND]</span></h4>
-<p>One student: \(\frac{de_i}{dw}=-2\,t_i\,r_i\,e^{wt_i}\), with \(\hat y_i=e^{wt_i}\).</p>
-<ul>
-<li>\(\mathrm{SSE}(w)=(1-e^{0\cdot w})^2+(3-e^{w})^2+(2-e^{2w})^2\) is not a polynomial.</li>
-<li>There is nothing to expand. The chain rule works anyway.</li>
-</ul>
-<p class="fragment"><strong>At \(w=0\):</strong> every prediction is \(e^0=1\), so \(\mathbf r=(0,2,1)^\top\).</p>
-<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
-<tr><th>\(i\)</th><th>\((t_i,y_i)\)</th><th>\(\hat y_i\)</th><th>\(r_i\)</th><th>\(-2\,t_i\,r_i\,e^{0}\)</th></tr>
-<tr><td>1</td><td>\((0,1)\)</td><td>\(1\)</td><td>\(0\)</td><td>\(0\)</td></tr>
-<tr><td>2</td><td>\((1,3)\)</td><td>\(1\)</td><td>\(2\)</td><td>\(-4\)</td></tr>
-<tr><td>3</td><td>\((2,2)\)</td><td>\(1\)</td><td>\(1\)</td><td>\(-4\)</td></tr>
-<tr><td colspan="4"><strong>sum:</strong> \(\frac{d\,\mathrm{SSE}}{dw}(0)\)</td><td>\(-8\)</td></tr>
-</table>
 </section>
 
 <section>
@@ -2260,7 +2231,6 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 <li class="fragment">Summing over students: \(\frac{d\,\mathrm{SSE}}{dw}=-2\,\mathbf t^\top\mathbf r=10w-14\). <span class="tier-m">[MASTER]</span>
 <ul>
 <li>The derivative of \(\mathrm{SSE}(w)=(1-0\cdot w)^2+(3-w)^2+(2-2w)^2=5w^2-14w+14\)</li>
-<li>Checked at \(w=1\) (value \(-4\)) and at \(w=\tfrac75\) (value \(0\))</li>
 </ul></li>
 </ul>
 </section>
@@ -2268,16 +2238,14 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 <section>
 <h4>L13 takeaways (2)</h4>
 <ul>
-<li class="fragment">What the product shows: <span class="tier-u">[UNDERSTAND]</span>
-<ul>
-<li>One stage with derivative \(0\) makes \(\frac{de_i}{dw}=0\).</li>
-<li>Many factors, each at most a fixed \(c&lt;1\) in size: product nearly \(0\) (vanishing gradients).</li>
-</ul></li>
-<li class="fragment">Change one stage, change one factor: <span class="tier-u">[UNDERSTAND]</span>
+<li class="fragment">The derivative of \(\mathrm{SSE}\) is one term per student; a term is \(0\) when one of its stage derivatives is \(0\). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">A nonlinear stage needs only its own derivative formula; the other stages keep theirs &mdash; why backpropagation works layer by layer. <span class="tier-u">[UNDERSTAND]</span>
 <ul><li>\(\hat y_i=e^{wt_i}\) gives \(\frac{de_i}{dw}=-2\,t_i\,r_i\,e^{wt_i}\).</li></ul></li>
+<li class="fragment">A long chain of factors below \(1\): product nearly \(0\), so early parameters learn slowly (vanishing gradients). <span class="tier-u">[UNDERSTAND]</span></li>
 </ul>
 <div class="key-question fragment">We differentiated one student at a time. But the three predictions move <strong>together</strong>, as one vector. What is the derivative of a vector? <strong>L14.</strong></div>
 </section>
+
 <section>
 <h2 style="font-size:1.3em;">L14 — When a Stage Is a Vector</h2>
 <p><strong>Reading</strong> (MML):</p>
@@ -2352,8 +2320,12 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 <li class="fragment"><strong>Row \(i\)</strong>: one output, every input.</li>
 <li class="fragment"><strong>Column \(j\)</strong>: every output, one input.</li>
 </ul>
-<div class="quickcheck fragment"><strong>Quick check (a separate example, not our data):</strong>
-\[\mathbf f=\left(x_1^2x_2,\;3x_1+x_2^2\right)^\top\quad\Longrightarrow\quad J_{\mathbf f}=\begin{bmatrix}2x_1x_2&x_1^2\\3&2x_2\end{bmatrix}\]
+<div class="quickcheck fragment"><strong>Quick check</strong> (a separate example, not our data): for \(\mathbf f(\mathbf x)=\left(x_1^2x_2,\;3x_1+x_2^2\right)^\top\), what size is \(J_{\mathbf f}\)? Write \(J_{\mathbf f}\), then evaluate it at \(\mathbf x=(1,2)^\top\).
+<ul>
+<li class="fragment">Size \(2\times2\): two outputs, two inputs.</li>
+<li class="fragment">\(J_{\mathbf f}=\begin{bmatrix}2x_1x_2&x_1^2\\3&2x_2\end{bmatrix}\)</li>
+<li class="fragment">At \((1,2)^\top\): \(\begin{bmatrix}4&1\\3&4\end{bmatrix}\)</li>
+</ul>
 </div>
 <aside class="notes">"In the quick check, have them name which entry each partial fills before it appears."</aside>
 </section>
@@ -2573,17 +2545,17 @@ with \(\frac{dz}{dv}\) evaluated at \(v=f(w)\). <span class="tier-m">[MASTER]</s
 
 <section>
 <h4>Your turn: the chain at \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\)</h4>
-<p>Working with: \(\nabla\mathrm{SSE}=(2\mathbf r^\top)(-I)X\), \(\;\mathbf r=\mathbf y-X\mathbf w\).</p>
-<div class="quickcheck">
-<ol>
-<li class="fragment">\(\mathbf r^\ast=\left(-\tfrac12,\;1,\;-\tfrac12\right)^\top\)</li>
-<li class="fragment">\((2\mathbf r^{\ast\top})(-I)=\begin{bmatrix}1&-2&1\end{bmatrix}\)</li>
-<li class="fragment">\(\begin{bmatrix}1&-2&1\end{bmatrix}X=\begin{bmatrix}0&0\end{bmatrix}\) ✓</li>
-</ol>
-</div>
+<div class="quickcheck"><strong>Your turn.</strong> Data \(\mathbf y=(1,3,2)^\top\), \(X=\left[\begin{smallmatrix}1&0\\1&1\\1&2\end{smallmatrix}\right]\); the chain \(\nabla\mathrm{SSE}=(2\mathbf r^\top)(-I)X\) with \(\mathbf r=\mathbf y-X\mathbf w\). At \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\):
+<ul style="list-style:none; padding-left:0.6em; margin-top:0.2em;">
+<li>(a) Compute \(\mathbf r^\ast=\mathbf y-X\mathbf w^\ast\).</li>
+<li>(b) Compute the row \((2\mathbf r^{\ast\top})(-I)\).</li>
+<li>(c) Multiply by \(X\) to get \(\nabla\mathrm{SSE}(\mathbf w^\ast)\).</li>
+<li>(d) What does the result say about \(\mathbf w^\ast\)? Which of the three factors changed from \((0,0)^\top\) to \(\mathbf w^\ast\)?</li>
+</ul></div>
 <ul>
-<li class="fragment">\(\mathbf w^\ast\) is L10&rsquo;s lowest point.</li>
-<li class="fragment">Only \(2\mathbf r^\top\) changed; \(-I\) and \(X\) did not.</li>
+<li class="fragment">(a) \(\mathbf r^\ast=\left(-\tfrac12,\;1,\;-\tfrac12\right)^\top\)</li>
+<li class="fragment">(b) \(\begin{bmatrix}1&-2&1\end{bmatrix}\) &nbsp; (c) \(\begin{bmatrix}1&-2&1\end{bmatrix}X=\begin{bmatrix}0&0\end{bmatrix}\)</li>
+<li class="fragment">(d) The zero row: \(\mathbf w^\ast\) is the flat point, L10&rsquo;s lowest point. Only \(2\mathbf r^\top\) changed; \(-I\) and \(X\) did not.</li>
 </ul>
 </section>
 
