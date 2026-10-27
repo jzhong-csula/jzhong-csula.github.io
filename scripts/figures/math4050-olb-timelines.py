@@ -74,3 +74,36 @@ finish(ax, os.path.join(OUT, "olb-prospective.png"),
        r"$OLB_{k}\;=\;Q\,a_{\overline{n-k}|i}$",
        "Prospective - look ahead", n, -2.85)
 print("ok")
+
+# ---------- 3. 为什么一个叫 PV、一个叫 FV（2026-10-27 jzhong 要求）----------
+# 他的原话：「什么是 PV？这都是相对的……time three is relatively present to the future
+# payments, and relatively future to the payments already made.」
+# 用讲义 §5.2 `Smaller Final Payment` 那道的数：共 14 期，求 OLB_3。
+# 注意：本图不复用 valuation()，因为那个 helper 写死了 "valuation date $k$"，这里是 time 3。
+fig, ax = plt.subplots(figsize=(11.6, 6.2), dpi=150)
+K, N = 3, 7                      # x=7 代表第 14 期
+axis(ax, [(0, "$0$", False), (1, "$1$", False), (2, "$2$", False), (K, "$3$", True),
+          (4, "$4$", False), (5, "$5$", False), (N, "$14$", False)], N)
+ax.text(6, -.34, r"$\cdots$", ha="center", va="top", fontsize=15)
+for x in (1, 2, K): payment(ax, x, "", BLUE)
+for x in (4, 5, N): payment(ax, x, "", RED)
+ax.text(6, .52, r"$\cdots$", ha="center", va="center", color=RED, fontsize=16)
+ax.text(2.0, 1.04, "already paid", ha="center", va="bottom", color=BLUE, fontsize=15)
+ax.text(4.9, 1.04, "still to come", ha="center", va="bottom", color=RED, fontsize=15)
+# 估值日：自己画，虚线从轴一直上到标签
+ax.plot([K, K], [.10, 1.62], ls=(0, (4, 3)), lw=1.4, color=GREY, zorder=0)
+ax.text(K, 1.68, "we value everything at time 3", ha="center", va="bottom",
+        fontsize=14.5, color="0.25")
+move(ax, 1, K, "roll these FORWARD to time 3", BLUE, 0, rad=0.14, xlab=2.0)
+move(ax, N, K, "bring these BACK to time 3", RED, 1, rad=-0.11, xlab=5.2)
+ax.text(1.9, -3.68, "to payments already made,\ntime 3 is the FUTURE",
+        ha="center", va="top", fontsize=14, color=BLUE)
+ax.text(1.9, -4.74, r"$\Rightarrow$  CPT FV,  $N=3$", ha="center", va="top",
+        fontsize=15.5, color=BLUE, weight="bold")
+ax.text(5.3, -3.68, "to payments still to come,\ntime 3 is the PRESENT",
+        ha="center", va="top", fontsize=14, color=RED)
+ax.text(5.3, -4.74, r"$\Rightarrow$  CPT PV,  $N=14-3=11$", ha="center", va="top",
+        fontsize=15.5, color=RED, weight="bold")
+finish(ax, os.path.join(OUT, "olb-pv-fv-relative.png"),
+       "", "Present and future are relative to the valuation date", N, -5.75)
+print("ok: olb-pv-fv-relative.png")
