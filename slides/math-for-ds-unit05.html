@@ -224,24 +224,43 @@
 </section>
 
 <section>
-<h4>Proof: if \(f''\ge0\), the graph never rises above a chord</h4>
-<p><strong>Setup.</strong> \(f''\ge0\) everywhere, so \(f'\) never decreases.</p>
+<h4>Proof, setup: subtract the chord</h4>
+<img src="../images/unit05/u5-L15-fig08-subtract-chord.png" alt="g(t) = f(t) minus the chord height. Left: for x^2 with the chord from -1 to 2, g(t) = t^2 - (t + 2), zero at t = -1 and t = 2 and below 0 between. Right: for the two-valley f with the chord from -1 to 2, g is 0 at both ends but 14 at t = 0; its slope is 14 at a point a and -7 at a point b to the right, so g' went down." style="display:block; max-height:215px; max-width:100%; margin:0.1em auto 0.2em auto; border-radius:6px;">
 <ul>
-<li>Chord from \((x,f(x))\) to \((y,f(y))\), \(x&lt;y\): slope \(m=\frac{f(y)-f(x)}{y-x}\), height at \(z\): \(L(z)=f(x)+m(z-x)\).</li>
-<li>At \(z=\theta x+(1-\theta)y\): \(L(z)=\theta f(x)+(1-\theta)f(y)\), the right side of the definition.</li>
+<li><strong>Assume:</strong> \(f''(t)\ge0\) for every \(t\).</li>
+<li><strong>To prove:</strong> \(f\) is convex: for any \(x&lt;y\) and \(z=\theta x+(1-\theta)y\) between them, \(f(z)\le\theta f(x)+(1-\theta)f(y)\).</li>
+<li class="fragment"><strong>The chord</strong> from \((x,f(x))\) to \((y,f(y))\): \(L(t)=f(x)+m(t-x)\), slope \(m=\frac{f(y)-f(x)}{y-x}\). At \(z\): \(L(z)=\theta f(x)+(1-\theta)f(y)\), the right side.</li>
+<li class="fragment"><strong>Subtract it:</strong> \(g(t)=f(t)-L(t)\), how far the graph is above the chord.</li>
 </ul>
-<p><strong>Proof.</strong></p>
-<ul>
-<li class="fragment"><strong>Suppose</strong> the graph is above the chord at some \(z\) between \(x\) and \(y\): \(f(z)&gt;L(z)\).</li>
-<li class="fragment">Left piece, steeper than the chord: \(\;\frac{f(z)-f(x)}{z-x}&gt;\frac{L(z)-f(x)}{z-x}=m\).</li>
-<li class="fragment">Right piece, less steep (\(L(y)=f(y)\)): \(\;\frac{f(y)-f(z)}{y-z}&lt;\frac{f(y)-L(z)}{y-z}=m\).</li>
-<li class="fragment">Mean Value Theorem (Calc 1): some \(a\in(x,z)\) has \(f'(a)\) = the left slope \(&gt;m\); some \(b\in(z,y)\) has \(f'(b)\) = the right slope \(&lt;m\).</li>
-<li class="fragment">\(a&lt;b\) but \(f'(a)&gt;f'(b)\): the slope went down, which \(f''\ge0\) rules out. So \(f(z)\le L(z)\) for every \(z\): <strong>\(f\) is convex</strong>.</li>
-<li class="fragment">The other direction: if \(f''&lt;0\) somewhere, the graph bends down there, like the hump at \(0\), and a short chord across it lies below the graph: not convex. <span class="tier-u">[UNDERSTAND]</span></li>
-</ul>
-<aside class="notes">This is the proof for one variable. MML p.237 states the several-variable version (Hessian positive semidefinite) without proof; later in this lecture the line slices reduce SSE to this one-variable case.</aside>
+<table class="fragment" style="width:auto; margin:0.2em auto; font-size:0.9em;">
+<tr><th>fact about \(g\)</th><th>why</th></tr>
+<tr><td>\(g(x)=0,\ g(y)=0\)</td><td>the chord meets the graph at both ends</td></tr>
+<tr><td>\(g''=f''\ge0\), so \(g'\) never decreases</td><td>\(L\) is a line: \(L''=0\)</td></tr>
+<tr><td><strong>goal:</strong> \(g(z)\le0\) for every \(z\) between \(x\) and \(y\)</td><td>\(g(z)\le0\iff f(z)\le L(z)\)</td></tr>
+</table>
+<aside class="notes">Subtracting the chord turns the chord into the horizontal axis, so "never above a chord" becomes "never above 0". The left picture is x^2 with x = -1, y = 2: g(t) = t^2 - (t + 2) = (t + 1)(t - 2). The right picture is the two-valley f: g(t) = f(t) + 9(t + 1), with g(0) = 14.</aside>
 </section>
 
+<section>
+<h4>Proof: \(g\) cannot rise above \(0\) and come back</h4>
+<p>From the setup: \(g=f-L\), \(\;g(x)=g(y)=0\), \(\;g'\) never decreases. Goal: \(g(z)\le0\) for \(x&lt;z&lt;y\).</p>
+<div class="mathbox">
+<strong>Mean Value Theorem</strong> (Calc 1; Stewart &sect;4.2). If \(g\) is differentiable, then for \(p&lt;q\) some \(c\) with \(p&lt;c&lt;q\) has
+\[g'(c)=\frac{g(q)-g(p)}{q-p}:\quad\text{the slope at } c \text{ equals the average slope from } p \text{ to } q.\]
+</div>
+<p><strong>Proof</strong> by contradiction.</p>
+<ol>
+<li class="fragment"><strong>Suppose</strong> \(g(z)&gt;0\) at some \(z\) between \(x\) and \(y\).</li>
+<li class="fragment"><strong>Mean Value Theorem on \([x,z]\):</strong> some \(a\) with \(x&lt;a&lt;z\) has \(g'(a)=\frac{g(z)-g(x)}{z-x}=\frac{g(z)}{z-x}&gt;0\).</li>
+<li class="fragment"><strong>Slope never decreases:</strong> \(g'(t)\ge g'(a)&gt;0\) for every \(t\ge a\). So \(g\) is increasing from \(z\) to \(y\).</li>
+<li class="fragment"><strong>Contradiction:</strong> \(g(y)&gt;g(z)&gt;0\), but \(g(y)=0\).</li>
+</ol>
+<ul>
+<li class="fragment">So \(g(z)\le0\), that is \(f(z)\le\theta f(x)+(1-\theta)f(y)\), for every chord: <strong style="color:rgb(30,90,160)">\(f\) is convex</strong>.</li>
+<li class="fragment">The other direction, convex \(\Rightarrow f''\ge0\), is also true (MML p.237); we use it without proof. <span class="tier-u">[UNDERSTAND]</span></li>
+</ul>
+<aside class="notes">In the picture on the previous slide (two-valley f): g rises from 0 to g(0) = 14, so the Mean Value Theorem gives a point a with g'(a) = 14; to come back down to g(2) = 0 the slope must later be negative (g'(b) = -7). That drop in the slope is exactly what f'' &gt;= 0 forbids. Idea of the other direction if asked: if f''(c) &lt; 0, then near c the graph bends down like the hump at 0, and a short chord there lies below the graph. MML p.237 states the several-variable version (Hessian positive semidefinite) without proof; later in this lecture the line slices reduce SSE to the one-variable case.</aside>
+</section>
 <section>
 <h4>Theorem: for a convex function, local means global</h4>
 <p>Back to the lecture question: on a convex function, can a local minimum be the wrong valley?</p>
@@ -258,20 +277,36 @@
 </section>
 
 <section>
-<h4>Proof: a lower point anywhere means a lower point nearby</h4>
-<img src="../images/unit05/u5-L15-fig03-proof.png" alt="A convex curve, a point x* and a lower point y; the chord from x* to y slopes down, the graph lies under the chord, so a point z next to x* has f(z) below the level f(x*)." style="float:right; max-height:360px; max-width:40%; margin:0 0 0.5em 1em; border-radius:6px;">
-<p>Convex: \(f\big(\theta\mathbf y+(1-\theta)\mathbf x^\ast\big)\le\theta f(\mathbf y)+(1-\theta)f(\mathbf x^\ast)\).</p>
-<ol>
-<li class="fragment"><strong>Suppose</strong> some \(\mathbf y\) has \(f(\mathbf y)&lt;f(\mathbf x^\ast)\).</li>
-<li class="fragment"><strong>Points between:</strong> \(\mathbf z=\theta\mathbf y+(1-\theta)\mathbf x^\ast\), \(0&lt;\theta\le1\).</li>
-<li class="fragment"><strong>Convexity:</strong><br>\(f(\mathbf z)\le f(\mathbf x^\ast)-\theta\big(f(\mathbf x^\ast)-f(\mathbf y)\big)\)<br>\(\phantom{f(\mathbf z)}&lt;f(\mathbf x^\ast)\) &mdash; the gap is positive.</li>
-<li class="fragment"><strong>Nearby:</strong> \(\norm{\mathbf z-\mathbf x^\ast}=\theta\norm{\mathbf y-\mathbf x^\ast}\), as small as we like.</li>
-<li class="fragment"><strong>Contradiction:</strong> points lower than \(\mathbf x^\ast\) within every radius \(\varepsilon\), so \(\mathbf x^\ast\) is not a local minimum.</li>
-</ol>
-<p class="fragment">So no such \(\mathbf y\) exists: \(\mathbf x^\ast\) is a global minimum.</p>
-<aside class="notes">Step 3 is the right side of the definition rearranged: theta f(y) + (1-theta) f(x*) = f(x*) - theta (f(x*) - f(y)).</aside>
+<h4>Proof, setup: what we assume, what we prove</h4>
+<img src="../images/unit05/u5-L15-fig03-proof.png" alt="A convex curve, a point x* and a lower point y; the chord from x* to y slopes down, the graph lies under the chord, so a point z next to x* has f(z) below the level f(x*)." style="float:right; max-height:330px; max-width:40%; margin:0 0 0.5em 1em; border-radius:6px;">
+<ul>
+<li><strong>Assume (C):</strong> \(f\) is convex: for all \(\mathbf x,\mathbf y\) and \(0\le\theta\le1\),<br>\(f\big(\theta\mathbf x+(1-\theta)\mathbf y\big)\le\theta f(\mathbf x)+(1-\theta)f(\mathbf y)\).</li>
+<li><strong>Assume (L):</strong> \(\mathbf x^\ast\) is a local minimum: there is a radius \(\varepsilon&gt;0\) with \(f(\mathbf x^\ast)\le f(\mathbf x)\) for every \(\mathbf x\) with \(\norm{\mathbf x-\mathbf x^\ast}&lt;\varepsilon\).</li>
+<li><strong>To prove:</strong> \(\mathbf x^\ast\) is a global minimum: \(f(\mathbf x^\ast)\le f(\mathbf y)\) for every \(\mathbf y\).</li>
+</ul>
+<p class="fragment"><strong>Method: contradiction.</strong></p>
+<ul>
+<li class="fragment">Suppose \(\mathbf x^\ast\) is <strong>not</strong> a global minimum: some \(\mathbf y\) is lower, \(f(\mathbf y)&lt;f(\mathbf x^\ast)\).</li>
+<li class="fragment">Walk from \(\mathbf x^\ast\) toward \(\mathbf y\). By (C) the graph stays under the chord, and the chord goes down toward \(\mathbf y\).</li>
+<li class="fragment">So points <strong>right next to</strong> \(\mathbf x^\ast\) are already lower than \(\mathbf x^\ast\): inside the radius \(\varepsilon\), against (L).</li>
+</ul>
 </section>
 
+<section>
+<h4>Proof: a lower point anywhere means a lower point nearby</h4>
+<p>(C): \(f\big(\theta\mathbf x+(1-\theta)\mathbf y\big)\le\theta f(\mathbf x)+(1-\theta)f(\mathbf y)\). &ensp;(L): \(f(\mathbf x^\ast)\le f(\mathbf x)\) whenever \(\norm{\mathbf x-\mathbf x^\ast}&lt;\varepsilon\).</p>
+<ol>
+<li class="fragment"><strong>Suppose</strong> some \(\mathbf y\) has \(f(\mathbf y)&lt;f(\mathbf x^\ast)\). Then \(\mathbf y\ne\mathbf x^\ast\).</li>
+<li class="fragment"><strong>Points between:</strong> \(\mathbf z=\theta\mathbf y+(1-\theta)\mathbf x^\ast\), with \(0&lt;\theta\le1\) (\(\theta\to0\): next to \(\mathbf x^\ast\); \(\theta=1\): \(\mathbf y\)).</li>
+<li class="fragment"><strong>(C) with the pair \(\mathbf y,\mathbf x^\ast\):</strong>
+\[\begin{aligned}f(\mathbf z)&amp;\le\theta f(\mathbf y)+(1-\theta)f(\mathbf x^\ast)\\&amp;=f(\mathbf x^\ast)+\theta\big(f(\mathbf y)-f(\mathbf x^\ast)\big)\;&lt;\;f(\mathbf x^\ast),\end{aligned}\]
+since \(\theta&gt;0\) and \(f(\mathbf y)-f(\mathbf x^\ast)&lt;0\). every such \(\mathbf z\) is lower than \(\mathbf x^\ast\).</li>
+<li class="fragment"><strong>How close:</strong> \(\norm{\mathbf z-\mathbf x^\ast}=\theta\norm{\mathbf y-\mathbf x^\ast}\), which shrinks to \(0\) as \(\theta\to0\). Whatever the radius \(\varepsilon\) in (L), take \(\theta&lt;\varepsilon/\norm{\mathbf y-\mathbf x^\ast}\) (and \(\theta\le1\)): then \(\norm{\mathbf z-\mathbf x^\ast}&lt;\varepsilon\).</li>
+<li class="fragment"><strong>Contradiction with (L):</strong> this \(\mathbf z\) is within \(\varepsilon\) of \(\mathbf x^\ast\), yet \(f(\mathbf z)&lt;f(\mathbf x^\ast)\).</li>
+</ol>
+<p class="fragment">So no lower \(\mathbf y\) exists: <strong style="color:rgb(30,90,160)">\(\mathbf x^\ast\) is a global minimum</strong>.</p>
+<aside class="notes">Step 3, the rearrangement: (1 - theta) f(x*) = f(x*) - theta f(x*), so theta f(y) + (1 - theta) f(x*) = f(x*) + theta (f(y) - f(x*)). Step 4 is what "as small as we like" means: whatever radius epsilon the local minimum comes with, a small enough theta puts z inside it. Example: if ||y - x*|| = 10 and epsilon = 0.1, theta = 0.005 gives ||z - x*|| = 0.05 &lt; 0.1.</aside>
+</section>
 <section>
 <h4>For a differentiable convex function, a flat point is a global minimum</h4>
 <p>Setting \(\nabla f=\mathbf 0^\top\) finds <strong>flat points</strong>, and a flat point need not be a local minimum, so the local \(\Rightarrow\) global theorem does not cover it. We argue directly.</p>
