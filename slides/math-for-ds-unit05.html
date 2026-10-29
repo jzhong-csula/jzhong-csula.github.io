@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Mathematical Foundations for Data Science and AI</title>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+<link rel="stylesheet" href="../dist/theme/serif.css"/>
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+<link rel="stylesheet" href="../css/math-for-ds.css?v=4"/>
+<!-- MathJax macros configured in Reveal.initialize mathjax3 config below -->
+<style>
+.reveal ul { margin-top: 0.3em; }
+.reveal li { margin-bottom: 0.2em; }
+.reveal td, .reveal th { padding: 0.25em 0.5em; }
+.reveal .tier-m { color:#2563eb; font-size:0.85em; }
+.reveal .tier-u { color:#d97706; font-size:0.85em; }
+.reveal .tier-e { color:#6b7280; font-size:0.85em; }
+</style>
+<style>.reveal table{margin-left:auto !important;margin-right:auto !important;}</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     UNIT 4 — DERIVATIVES TELL MODELS HOW TO IMPROVE
+     Structure: lectures/week05/UNIT04_DESIGN.md v3.1 (D-018). If a slide does
+     not fit that structure, change the design file first, then the slide.
+
+     L09 recalls the Unit 2 opening example (not a new dataset):
+        guesses b = (19, 21, 20)^T, everyone predicted the same x
+        f(x) = sum (b_i - x)^2 = 3x^2 - 120x + 1202 = 3(x - 20)^2 + 2
+        f'(x) = 6x - 120,  f(17) = 29, f'(17) = -18, f(17.1) = 27.23
+     L10-L14: ONE dataset, t = (0,1,2)^T hours, y = (1,3,2)^T points.
+     Numbers verified with sympy, 2026-09-22.
+     ═══════════════════════════════════════════════════════════════ -->
+
+<!-- U4-00: Title -->
+<section>
+<h1 style="font-size:1.6em;">Mathematical Foundations for Data Science and AI</h1>
+<h2 style="font-size:1.0em;">Unit 5 — Optimization Is How Models Learn</h2>
+<p><br/>Jie Zhong<br/>Department of Mathematics<br/>California State University, Los Angeles</p>
+</section>
+
+<section>
+<h4>What this unit is for: from a gradient to a trained model</h4>
+<p>Unit 4 gave us the gradient of the error: \(\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\), and its direction of fastest decrease, \(-(\nabla\mathrm{SSE})^\top\).</p>
+<ul>
+<li class="fragment">A model learns by <strong>changing its parameters to lower the error</strong>, again and again.</li>
+<li class="fragment">That raises questions the gradient alone does not answer.</li>
+</ul>
+<div class="key-question fragment">The question of this unit: <span style="color:rgb(30,90,160)"><strong>how does a model use the gradient to learn &mdash; and when can we trust the answer it finds?</strong></span></div>
+</section>
+
+<section>
+<h4>Unit map: one question, five lectures</h4>
+<p>The question: <span style="color:rgb(30,90,160)"><strong>how does a model use the gradient to learn, and when can we trust the answer?</strong></span></p>
+<table style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>lecture</th><th>what it asks</th><th>the answer is called</th></tr>
+<tr><td>L15</td><td>a point with nothing lower nearby: is it the lowest point?</td><td>convexity</td></tr>
+<tr><td>L16</td><td>how to walk downhill step by step, and how big a step</td><td>gradient descent, step size</td></tr>
+<tr><td>L17</td><td>the best point when the parameters must obey a rule</td><td>Lagrange multipliers</td></tr>
+<tr><td>L18</td><td>weights that blow up: how to keep them stable</td><td>regularization (ridge)</td></tr>
+<tr><td>L19</td><td>when to stop, and why some problems are slow</td><td>stopping rules, conditioning</td></tr>
+</table>
+<ul>
+<li class="fragment">L17 also keeps a promise from Unit 3: the direction of largest variance is an eigenvector, now proved with calculus.</li>
+</ul>
+</section>
+<section>
+<h2 style="font-size:1.3em;">L15 — Convexity: When Is a Low Point the Lowest Point?</h2>
+<p><strong>Reading</strong> (MML):</p>
+<ul>
+<li>Ch. 7 introduction, pp.225&ndash;227: eq. (7.1) and Figure 7.2, an error with two valleys</li>
+<li>&sect;7.3, p.236: Definition 7.2 (convex set), Definition 7.3 (convex function), eq. (7.30)</li>
+<li>&sect;7.3, p.237: eq. (7.31), the graph above its tangent planes; the second-derivative test; Figure 7.7</li>
+</ul>
+<p><strong>The plan:</strong></p>
+<ol>
+<li class="fragment">A point that is lowest nearby can be the wrong valley</li>
+<li class="fragment">The shape that rules this out: a <span style="color:rgb(30,90,160);"><strong>convex function</strong></span></li>
+<li class="fragment">Theorem: for a convex function, every local minimum is a global minimum</li>
+<li class="fragment">Our \(\mathrm{SSE}\) is convex: its flat point \(\mathbf w^\ast\) is the lowest point</li>
+<li class="fragment">A two-layer model is already not convex</li>
+</ol>
+<aside class="notes">"Unit 4 told us which way is downhill at the point where we stand. Today we ask about the landscape: can a point that is lowest nearby be the wrong valley? Whether our steps actually reach the bottom is L16."</aside>
+</section>
+
+<section>
+<h4>The question: is a flat point the lowest point?</h4>
+<ul>
+<li>Unit 4: at the point where we stand, \(-(\nabla f)^\top\) is the steepest way down.</li>
+<li class="fragment">Where \(\nabla f=\mathbf 0^\top\), a <strong>flat point</strong>, every directional slope \(D_{\mathbf u}f=\nabla f\,\mathbf u\) is \(0\).</li>
+<li class="fragment">That does <strong>not</strong> yet mean there is no lower point nearby, let alone far away.</li>
+<li class="fragment">L10, our data: the flat point \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\) of \(\mathrm{SSE}\) is the lowest point &mdash; by Pythagoras, a proof for \(\mathrm{SSE}=\norm{\mathbf y-X\mathbf w}^2\) only.</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.4em auto; font-size:0.9em;">
+<tr><th>question</th><th>where</th></tr>
+<tr><td>Which way is down, at the point where we stand?</td><td>Unit 4: \(-(\nabla f)^\top\)</td></tr>
+<tr><td>Can a valley of the error be the <strong>wrong</strong> valley?</td><td>L15, today</td></tr>
+<tr><td>Do our steps actually reach the bottom?</td><td>L16</td></tr>
+</table>
+<div class="key-question fragment">For which errors is every point that is <strong style="color:rgb(30,90,160)">lowest nearby</strong> also the <strong style="color:rgb(30,90,160)">lowest point overall</strong>?</div>
+</section>
+
+<section>
+<h4>An error with two valleys</h4>
+<img src="../images/unit05/u5-L15-fig01-two-valleys.png" alt="The graph of f(x) = 3x^4 - 4x^3 - 12x^2 + 5 on [-2, 3]: a valley at x = -1 with f = 0, a hump at x = 0 with f = 5, a deeper valley at x = 2 with f = -27. Downhill moves from x0 = -2 end at -1; from x0 = 1 they reach 2." style="float:right; max-height:400px; max-width:44%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p><strong>Not our data</strong> &mdash; a one-variable example:</p>
+\[f(x)=3x^4-4x^3-12x^2+5\]
+<ul style="display:block;">
+<li class="fragment">\(f'(x)=12x^3-12x^2-24x=12x(x+1)(x-2)\)</li>
+<li class="fragment">Flat points: \(x=-1\) (valley), \(0\) (hump), \(2\) (valley)</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.4em 0; font-size:0.9em;">
+<tr><th>start \(x_0\)</th><th>\(f'(x_0)\)</th><th>downhill</th><th>ends in the valley at</th></tr>
+<tr><td>\(-2\)</td><td>\(-96\)</td><td>right</td><td>\(-1\), \(f=0\)</td></tr>
+<tr><td>\(1\)</td><td>\(-24\)</td><td>right</td><td>\(2\), \(f=-27\)</td></tr>
+</table>
+<ul>
+<li class="fragment">At \(-1\) every nearby point is higher, but \(f(2)=-27\) is lower: the <strong>wrong valley</strong>.</li>
+</ul>
+<aside class="notes">The slope is local information (L09): at x = -1 every nearby point is higher, so nothing nearby says "go elsewhere". MML's own example (7.1), x^4 + 7x^3 + 5x^2 - 17x + 3, has the same shape (Figure 7.2, p.227) but irrational flat points; this one has integer flat points so every number can be checked by hand.</aside>
+</section>
+
+<section>
+<h4>Two kinds of lowest point</h4>
+<p>In \(f(x)=3x^4-4x^3-12x^2+5\): \(x=-1\) is lowest only among <strong>nearby</strong> points; \(x=2\) is lowest among <strong>all</strong> points. We need two words.</p>
+<div class="mathbox">
+<strong>Definition</strong> (Stewart, <em>Calculus</em>, &sect;4.1 and &sect;14.7; MML uses both terms on p.225). Let \(f:\R^D\to\R\).
+<ul>
+<li>\(\mathbf x^\ast\) is a <strong>global minimum</strong> if \(f(\mathbf x^\ast)\le f(\mathbf x)\) for <strong>every</strong> \(\mathbf x\).</li>
+<li>\(\mathbf x^\ast\) is a <strong>local minimum</strong> if there is a radius \(\varepsilon&gt;0\) with \(f(\mathbf x^\ast)\le f(\mathbf x)\) for every \(\mathbf x\) with \(\norm{\mathbf x-\mathbf x^\ast}&lt;\varepsilon\).</li>
+</ul>
+<span class="tier-m">[MASTER]</span>
+</div>
+<p class="fragment">Same \(f\), with \(f(-1)=0\), \(f(2)=-27\):</p>
+<table class="fragment" style="width:auto; margin:0.3em auto;">
+<tr><th>point</th><th>local minimum?</th><th>global minimum?</th></tr>
+<tr><td>\(x=-1\)</td><td>yes: nearby values are \(\ge0\)</td><td><strong>no</strong>: \(f(2)=-27&lt;0\)</td></tr>
+<tr><td>\(x=2\)</td><td>yes</td><td>yes</td></tr>
+</table>
+<ul>
+<li class="fragment">Derivatives at a point describe \(f\) only <strong>near</strong> that point: by themselves they can show a local minimum, not a global one.</li>
+</ul>
+</section>
+
+<section>
+<h4>What shape has no wrong valley? Look at a chord</h4>
+<img src="../images/unit05/u5-L15-fig02-chords.png" alt="Left: x^2 with the chord from (x, f(x)) = (-1, 1) to (y, f(y)) = (2, 4); at the point theta x + (1 - theta) y = 0 the chord height theta f(x) + (1 - theta) f(y) is 2 and the graph height f(theta x + (1 - theta) y) is 0. Right: 3x^4 - 4x^3 - 12x^2 + 5 with the chord from (-1, 0) to (2, -27); at x = 0 the chord is at -9, the graph at 5." style="display:block; max-height:280px; max-width:100%; margin:0.2em auto 0.3em auto; border-radius:6px;">
+<ul>
+<li class="fragment">A <strong>chord</strong>: the straight segment from \((x,f(x))\) to \((y,f(y))\). Here \(x=-1\), \(y=2\).</li>
+<li class="fragment">Points between: \(\theta x+(1-\theta)y\) with \(0\le\theta\le1\) (\(\theta=1\): \(x\); \(\theta=0\): \(y\)).
+<ul>
+<li>chord height there: \(\theta f(x)+(1-\theta)f(y)\); &ensp; graph height: \(f\big(\theta x+(1-\theta)y\big)\)</li>
+</ul></li>
+</ul>
+<div class="key-question fragment"><strong>We know:</strong> a wrong second valley needs a <strong>hump</strong> between the two valleys.<br>
+<strong>What fails:</strong> at a hump, the graph rises <strong>above a chord</strong>.<br>
+<strong>What we need:</strong> rule humps out &mdash; a function whose graph <strong style="color:rgb(30,90,160)">never rises above a chord</strong>.</div>
+<aside class="notes">In the left picture theta = 2/3: (2/3)(-1) + (1/3)(2) = 0. The key-question is the reason for the definition on the next slide: no hump, no second valley.</aside>
+</section>
+
+<section>
+<h4>Name it: the convex function</h4>
+<div class="mathbox">
+<strong>Definition</strong> (MML Def. 7.3, eq. (7.30), p.236). A function \(f:\R^D\to\R\) is <strong>convex</strong> if for all \(\mathbf x,\mathbf y\) and every \(\theta\) with \(0\le\theta\le1\),
+\[f\big(\theta\mathbf x+(1-\theta)\mathbf y\big)\;\le\;\theta f(\mathbf x)+(1-\theta)f(\mathbf y).\]
+<span class="tier-m">[MASTER]</span>
+</div>
+<ul>
+<li class="fragment">Left side: the graph between \(\mathbf x\) and \(\mathbf y\). Right side: the chord.</li>
+<li class="fragment">In words: <strong style="color:rgb(30,90,160)">the graph never rises above a chord</strong>.</li>
+<li class="fragment">One pair \(\mathbf x,\mathbf y\) and one \(\theta\) that break the inequality are enough to show \(f\) is <strong>not</strong> convex.</li>
+<li class="fragment">The points \(\theta\mathbf x+(1-\theta)\mathbf y\) must lie where \(f\) is defined: a <strong>convex set</strong> (MML Def. 7.2, p.236), one that contains the segment between any two of its points. Every domain here is \(\R^D\), which is convex.</li>
+</ul>
+</section>
+
+<section>
+<h4>The definition at work: \(x=-1\), \(y=2\), \(\theta=\tfrac23\)</h4>
+<p>Definition: \(f\big(\theta x+(1-\theta)y\big)\le\theta f(x)+(1-\theta)f(y)\). The point is \(\tfrac23(-1)+\tfrac13(2)=0\).</p>
+<table style="width:auto; margin:0.5em auto;">
+<tr><th>function</th><th>graph \(f(0)\)</th><th>chord \(\tfrac23f(-1)+\tfrac13f(2)\)</th><th>graph \(\le\) chord?</th></tr>
+<tr class="fragment"><td>\(x^2\)</td><td>\(0\)</td><td>\(\tfrac23\cdot1+\tfrac13\cdot4=2\)</td><td>\(0\le2\) ✓</td></tr>
+<tr class="fragment"><td>\(3x^4-4x^3-12x^2+5\)</td><td>\(5\)</td><td>\(\tfrac23\cdot0+\tfrac13\cdot(-27)=-9\)</td><td>\(5\le-9\) ✗</td></tr>
+</table>
+<ul>
+<li class="fragment">The two-valley \(f\) is <strong>not convex</strong>: one failure settles it.</li>
+<li class="fragment">For \(x^2\), one success proves nothing: convex needs <strong>every</strong> \(x,y,\theta\).</li>
+</ul>
+<div class="key-question fragment">We cannot check every chord by hand. Is there a test?</div>
+</section>
+
+<section>
+<h4>A test for one variable: \(f''\ge0\)</h4>
+<p>For a smooth one-variable curve, &ldquo;never above a chord&rdquo; is exactly <strong>bending upward everywhere</strong>, and \(f''\) measures the bending:</p>
+<div class="mathbox">
+<strong>Second-derivative test</strong> (MML &sect;7.3, p.237: the Hessian is positive semidefinite; for one variable the Hessian is \(f''\)). Let \(f:\R\to\R\) be twice differentiable. Then
+\[f\text{ is convex}\iff f''(x)\ge0\ \text{ for every } x .\]
+<span class="tier-m">[MASTER]</span>
+</div>
+<table class="fragment" style="width:auto; margin:0.4em auto; font-size:0.95em;">
+<tr><th>function</th><th>\(f''(x)\)</th><th>convex?</th></tr>
+<tr><td>\(x^2\)</td><td>\(2\ge0\)</td><td>yes</td></tr>
+<tr><td>\(3x^2-5x+2\) (MML Figure 7.7, p.237)</td><td>\(6\ge0\)</td><td>yes</td></tr>
+<tr><td>\(3x^4-4x^3-12x^2+5\)</td><td>\(36x^2-24x-24\); at \(0\): \(-24&lt;0\)</td><td>no</td></tr>
+</table>
+<ul>
+<li class="fragment">\(f''&lt;0\) near the hump: the graph bends down there.</li>
+</ul>
+</section>
+
+<section>
+<h4>Theorem: for a convex function, local means global</h4>
+<p>Back to the lecture question: on a convex function, can a local minimum be the wrong valley?</p>
+<div class="mathbox">
+<strong>Theorem</strong> (MML Ch. 7 introduction, p.227: &ldquo;For convex functions all local minima are global minimum&rdquo;). Let \(f:\R^D\to\R\) be convex. If \(\mathbf x^\ast\) is a local minimum of \(f\), then \(\mathbf x^\ast\) is a global minimum:
+\[f(\mathbf x^\ast)\le f(\mathbf y)\quad\text{for every }\mathbf y .\]
+<span class="tier-m">[MASTER]</span>
+</div>
+<ul>
+<li class="fragment">No derivatives are needed: only the chord inequality.</li>
+<li class="fragment">Any number of variables \(D\).</li>
+<li class="fragment">The two-valley \(f\) is not convex, so the theorem says nothing about it &mdash; and indeed \(x=-1\) is local, not global.</li>
+</ul>
+</section>
+
+<section>
+<h4>Proof: a lower point anywhere means a lower point nearby</h4>
+<img src="../images/unit05/u5-L15-fig03-proof.png" alt="A convex curve, a point x* and a lower point y; the chord from x* to y slopes down, the graph lies under the chord, so a point z next to x* has f(z) below the level f(x*)." style="float:right; max-height:360px; max-width:40%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Convex: \(f\big(\theta\mathbf y+(1-\theta)\mathbf x^\ast\big)\le\theta f(\mathbf y)+(1-\theta)f(\mathbf x^\ast)\).</p>
+<ol>
+<li class="fragment"><strong>Suppose</strong> some \(\mathbf y\) has \(f(\mathbf y)&lt;f(\mathbf x^\ast)\).</li>
+<li class="fragment"><strong>Points between:</strong> \(\mathbf z=\theta\mathbf y+(1-\theta)\mathbf x^\ast\), \(0&lt;\theta\le1\).</li>
+<li class="fragment"><strong>Convexity:</strong><br>\(f(\mathbf z)\le f(\mathbf x^\ast)-\theta\big(f(\mathbf x^\ast)-f(\mathbf y)\big)\)<br>\(\phantom{f(\mathbf z)}&lt;f(\mathbf x^\ast)\) &mdash; the gap is positive.</li>
+<li class="fragment"><strong>Nearby:</strong> \(\norm{\mathbf z-\mathbf x^\ast}=\theta\norm{\mathbf y-\mathbf x^\ast}\), as small as we like.</li>
+<li class="fragment"><strong>Contradiction:</strong> points lower than \(\mathbf x^\ast\) within every radius \(\varepsilon\), so \(\mathbf x^\ast\) is not a local minimum.</li>
+</ol>
+<p class="fragment">So no such \(\mathbf y\) exists: \(\mathbf x^\ast\) is a global minimum.</p>
+<aside class="notes">Step 3 is the right side of the definition rearranged: theta f(y) + (1-theta) f(x*) = f(x*) - theta (f(x*) - f(y)).</aside>
+</section>
+
+<section>
+<h4>For a differentiable convex function, a flat point is a global minimum</h4>
+<p>Setting \(\nabla f=\mathbf 0^\top\) finds <strong>flat points</strong>, and a flat point need not be a local minimum, so the local \(\Rightarrow\) global theorem does not cover it. We argue directly.</p>
+<ul>
+<li class="fragment"><strong>One variable</strong>, \(f\) convex and twice differentiable: \(f''\ge0\), so the slope \(f'\) never decreases.
+<ul>
+<li>Flat point \(x^\ast\): \(f'(x^\ast)=0\). So \(f'\le0\) left of \(x^\ast\), \(f'\ge0\) right of it.</li>
+<li>\(f\) falls all the way to \(x^\ast\), then rises: \(x^\ast\) is a <strong>global</strong> minimum.</li>
+</ul></li>
+<li class="fragment"><strong>Several variables</strong> (MML eq. (7.31), p.237): a differentiable \(f\) is convex exactly when its graph lies above every tangent plane,
+\[f(\mathbf y)\;\ge\;f(\mathbf x)+\nabla f(\mathbf x)(\mathbf y-\mathbf x)\quad\text{for all }\mathbf x,\mathbf y.\]</li>
+<li class="fragment">At a flat point \(\nabla f(\mathbf x^\ast)=\mathbf 0^\top\): \(f(\mathbf y)\ge f(\mathbf x^\ast)\) for every \(\mathbf y\). A <strong>global</strong> minimum.</li>
+</ul>
+<p class="fragment"><strong>What convexity does not promise:</strong></p>
+<ul>
+<li class="fragment">That a lowest point exists: \(e^x\) is convex (\(f''=e^x&gt;0\)), but \(f'=e^x\) is never \(0\) and there is no minimum.</li>
+<li class="fragment">That our steps reach the bottom: a step that is too big can overshoot, even on \(x^2\). That is <strong>L16</strong>.</li>
+</ul>
+<aside class="notes">Why not "flat, so local, so global": without convexity a flat point need not be a local minimum (f(x) = x^3 at 0: f(-1) = -1 &lt; 0; the two-layer (0,0) later today). MML writes (7.31) with the gradient as a column, nabla f(x)^T (y - x); in our row-gradient convention (D-018) that is nabla f(x)(y - x).</aside>
+</section>
+
+<section>
+<h4>Our \(\mathrm{SSE}\): two variables. Restrict to a line</h4>
+<p>\(\mathrm{SSE}(w_0,w_1)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\).</p>
+<div class="key-question">The test \(f''\ge0\) is for one variable. How do we prove a function of two parameters is convex without checking every chord?</div>
+<ul>
+<li class="fragment">L11&rsquo;s idea: on the line of points \(\mathbf w+h\mathbf u\), the error is a function of one number \(h\):
+\[\phi(h)=\mathrm{SSE}(\mathbf w+h\mathbf u).\]</li>
+<li class="fragment">The definition of convex compares \(f\) only at points of <strong>one segment</strong>, and a segment lies on one line.</li>
+<li class="fragment">So: <strong style="color:rgb(30,90,160)">\(f\) is convex \(\iff\) every \(\phi\) is convex</strong>, for every point \(\mathbf w\) and every direction \(\mathbf u\). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Plan for \(\mathrm{SSE}\): show that every slice bends upward, \(\phi''(h)\ge0\). Then the whole surface is convex.</li>
+</ul>
+<aside class="notes">If asked for the details: for x, y in R^D take w = y and u = (x - y)/||x - y||; then theta x + (1 - theta) y = w + theta ||x - y|| u, and (7.30) for f at x, y is (7.30) for phi at h = ||x - y|| and h = 0.</aside>
+</section>
+
+<section>
+<h4>Every slice of \(\mathrm{SSE}\) opens upward</h4>
+<p>\(\mathrm{SSE}(\mathbf w)=\norm{\mathbf y-X\mathbf w}^2\), residual \(\mathbf r=\mathbf y-X\mathbf w\), slice \(\phi(h)=\mathrm{SSE}(\mathbf w+h\mathbf u)\).</p>
+<ol>
+<li class="fragment">\(\mathbf y-X(\mathbf w+h\mathbf u)=\mathbf r-h\,X\mathbf u\) &emsp;— the predictions move by \(h\,X\mathbf u\)</li>
+<li class="fragment">\(\phi(h)=\norm{\mathbf r-hX\mathbf u}^2=\lVert\mathbf r\rVert^2-2h\,\mathbf r^\top X\mathbf u+h^2\norm{X\mathbf u}^2\) &emsp;— expand the square</li>
+<li class="fragment">\(\phi''(h)=2\norm{X\mathbf u}^2\ge0\) &emsp;— a squared length</li>
+</ol>
+<ul>
+<li class="fragment">Check, our data: \(X=\left[\begin{smallmatrix}1&amp;0\\1&amp;1\\1&amp;2\end{smallmatrix}\right]\), \(\mathbf u=(1,0)^\top\): \(2\norm{X\mathbf u}^2=2\cdot3=6\), the \(\phi''\) of L11&rsquo;s slice \(3h^2-12h+14\).</li>
+<li class="fragment">Every slice is convex, so <strong style="color:rgb(30,90,160)">\(\mathrm{SSE}\) is convex &mdash; for every dataset \(X,\mathbf y\)</strong>. <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">The theorem applies: any local minimum of \(\mathrm{SSE}\) is a global minimum.</li>
+</ul>
+</section>
+
+<section>
+<h4>Convexity is the general reason behind L10</h4>
+<p>Slice: \(\phi(h)=\lVert\mathbf r\rVert^2-2h\,\mathbf r^\top X\mathbf u+h^2\norm{X\mathbf u}^2\). Take the slices through \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\), \(\mathbf r^\ast=\mathbf y-X\mathbf w^\ast\).</p>
+<ul>
+<li class="fragment">Flat point: \(X^\top\mathbf r^\ast=\mathbf 0\) (L10, Step 2), so the middle term is \(0\).</li>
+<li class="fragment">Every slice through \(\mathbf w^\ast\): \(\;\phi(h)=\tfrac32+h^2\norm{X\mathbf u}^2\ge\tfrac32\).</li>
+<li class="fragment">That is L10&rsquo;s Pythagoras identity \(\mathrm{SSE}(\mathbf w)=\tfrac32+\norm{X(\mathbf w-\mathbf w^\ast)}^2\), read along one line.</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.4em auto;">
+<tr><th>L10 showed</th><th>L15 explains</th></tr>
+<tr><td>this flat point is lowest, by Pythagoras</td><td>\(\mathrm{SSE}\) is convex, for every dataset</td></tr>
+<tr><td>for least squares only</td><td>for every convex error: local \(\Rightarrow\) global</td></tr>
+</table>
+<ul>
+<li class="fragment"><strong>Answer for \(\mathrm{SSE}\):</strong> no wrong valley. Its flat point \(\mathbf w^\ast\) is the lowest point, \(\mathrm{SSE}(\mathbf w^\ast)=\tfrac32\).</li>
+</ul>
+<div class="key-question fragment">So least squares has no wrong valley. Is that true for the <strong style="color:rgb(30,90,160)">multi-stage models</strong> that motivated the course?</div>
+</section>
+
+<section>
+<h4>A minimal two-layer linear model</h4>
+<img src="../images/unit05/u5-L15-fig05-two-layer.png" alt="Contours of E(v,w) = 5(vw)^2 - 14vw + 14; the lowest error 21/5 lies along the two branches of the curve vw = 7/5; A = (1, 7/5) and B = (-1, -7/5) lie on the two branches; the segment from B to A passes through (0,0), where E = 14." style="float:right; max-height:400px; max-width:36%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Our data \(\mathbf t=(0,1,2)^\top\), \(\mathbf y=(1,3,2)^\top\).</p>
+<table style="width:auto; margin:0.4em 0; font-size:0.85em;">
+<tr><th></th><th>model</th><th>error</th></tr>
+<tr><td>one layer (L09)</td><td>\(\hat y=w\,t\)</td><td>\(5w^2-14w+14\): convex (second derivative \(10\))</td></tr>
+<tr class="fragment"><td>two layers</td><td>\(\hat y=v\,(w\,t)\)</td><td>\(E(v,w)=5(vw)^2-14vw+14\): ?</td></tr>
+</table>
+<ul>
+<li class="fragment">Layer 1 multiplies by \(w\), layer 2 by \(v\). No nonlinear function yet.</li>
+<li class="fragment">The predictions depend only on the product \(vw\).</li>
+<li class="fragment">L09: the best product is \(\tfrac75\), with error \(\tfrac{21}{5}\).</li>
+<li class="fragment">So \(E\) is lowest, \(\tfrac{21}{5}\), on the whole curve \(vw=\tfrac75\): <strong>two separate branches</strong> (green).</li>
+</ul>
+</section>
+
+<section>
+<h4>Two layers: not convex, and a flat point that is not lowest</h4>
+<img src="../images/unit05/u5-L15-fig06-two-layer-segment.png" alt="E along the segment from B = (-1, -7/5) to A = (1, 7/5): it rises from 21/5 at B to 14 at the midpoint (0,0) and falls back to 21/5 at A; the chord between A and B stays at 21/5." style="float:right; max-height:340px; max-width:38%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>\(E(v,w)=5(vw)^2-14vw+14\): lowest, \(\tfrac{21}{5}\), at \(A=\left(1,\tfrac75\right)^\top\) and \(B=\left(-1,-\tfrac75\right)^\top\).</p>
+<ol>
+<li class="fragment"><strong>Chord test</strong>, \(\theta=\tfrac12\), midpoint \((0,0)^\top\):
+<ul><li>graph \(E(0,0)=14\); &ensp;chord \(\tfrac12\cdot\tfrac{21}5+\tfrac12\cdot\tfrac{21}5=\tfrac{21}{5}\)</li>
+<li>\(14\le\tfrac{21}{5}\) ✗ &mdash; <strong>not convex</strong></li></ul></li>
+<li class="fragment"><strong>Flat:</strong> \(\partial E/\partial v=10vw^2-14w\) and \(\partial E/\partial w=10v^2w-14v\) are both \(0\) at \((0,0)^\top\).</li>
+<li class="fragment"><strong>Not lowest:</strong> \(E(0,0)=14&gt;\tfrac{21}{5}\). Toward \(A\) the error drops at once: not even a local minimum.</li>
+</ol>
+<ul>
+<li class="fragment">Why: \((v,w)\to(-v,-w)\) keeps \(vw\) and the predictions: two lowest branches.</li>
+</ul>
+<aside class="notes">Along the segment (v, w) = s(1, 7/5): E = (49/5)s^4 - (98/5)s^2 + 14, which decreases as |s| grows from 0. This is the flat point of the opening slide: every first-order slope is 0, yet lower points are arbitrarily close.</aside>
+</section>
+
+<section>
+<h4>Neural networks: errors that are not convex</h4>
+<ul>
+<li>A neural network is a long chain of layers (L13). Its training error is generally <strong>nonconvex</strong> in the weights; even our two-layer example is already nonconvex. <span class="tier-u">[UNDERSTAND]</span>
+<ul>
+<li>Many separate lowest points (flipping signs, or swapping two units, keeps the predictions).</li>
+<li>Flat points that are not lowest, like \((0,0)^\top\) above.</li>
+</ul></li>
+<li class="fragment">So the theorem does not apply: a local minimum of a network&rsquo;s error need not be global.</li>
+<li class="fragment">Different starting weights can lead training to different final weights.</li>
+<li class="fragment">In practice, large networks still reach low errors; why this works so well is an active research question. <span class="tier-e">[EXPLORE]</span></li>
+</ul>
+<aside class="notes">MML p.227: many machine-learning objectives are designed to be convex (Chapter 12 example). Linear regression and ridge (L18) are; networks generally are not.</aside>
+</section>
+
+<section>
+<h4>L15 takeaways (1 of 2): convex functions</h4>
+<ul>
+<li><strong>Local</strong> minimum: lowest nearby. <strong>Global</strong> minimum: lowest everywhere. Derivatives see only nearby. <span class="tier-m">[MASTER]</span></li>
+<li class="fragment"><strong>Convex</strong> (MML Def. 7.3): \(f\big(\theta\mathbf x+(1-\theta)\mathbf y\big)\le\theta f(\mathbf x)+(1-\theta)f(\mathbf y)\), \(0\le\theta\le1\). <span class="tier-m">[MASTER]</span>
+<ul><li>The graph never rises above a chord.</li></ul></li>
+<li class="fragment">One variable: convex \(\iff f''\ge0\) everywhere. <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Several variables: convex \(\iff\) every line slice \(\phi(h)=f(\mathbf w+h\mathbf u)\) is convex. <span class="tier-m">[MASTER]</span></li>
+</ul>
+</section>
+
+<section>
+<h4>L15 takeaways (2 of 2): what convexity buys</h4>
+<ul>
+<li><strong>Theorem:</strong> for a convex function, every local minimum is a global minimum: <strong>no wrong valleys</strong>. <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">\(\mathrm{SSE}=\norm{\mathbf y-X\mathbf w}^2\) is convex for every dataset: every slice has \(\phi''=2\norm{X\mathbf u}^2\ge0\). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Differentiable convex \(f\): a flat point, \(\nabla f(\mathbf x^\ast)=\mathbf 0^\top\), is a global minimum, since \(f(\mathbf y)\ge f(\mathbf x^\ast)+\nabla f(\mathbf x^\ast)(\mathbf y-\mathbf x^\ast)\) (MML (7.31)). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">So the flat point of our \(\mathrm{SSE}\), \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\), is the lowest point: \(\mathrm{SSE}(\mathbf w^\ast)=\tfrac32\).</li>
+<li class="fragment">Not promised: that a minimum exists (\(e^x\) has none), or that our steps reach it (L16).</li>
+<li class="fragment">Not convex: \(3x^4-4x^3-12x^2+5\) (\(-1\) local, not global), the two-layer \(E(v,w)\) (flat at \((0,0)^\top\), not lowest), neural networks. <span class="tier-u">[UNDERSTAND]</span></li>
+</ul>
+<div class="key-question fragment">No wrong valleys on \(\mathrm{SSE}\). But how do we step, and how big a step still reaches the bottom? <strong>L16: gradient descent.</strong></div>
+</section>
+<section>
+<h2 style="font-size:1.3em;">L16 — Gradient Descent and Step Size</h2>
+<p><strong>Reading</strong> (MML):</p>
+<ul style="font-size:0.9em;">
+<li>Ch. 7 opening, pp.226&ndash;227: from &ldquo;In general, we are unable to find analytic solutions&rdquo; to &ldquo;(this is called the step-size)&rdquo;</li>
+<li>&sect;7.1, p.228: eqs. (7.5) and (7.6); Example 7.1 and Figure 7.3, pp.228&ndash;229</li>
+<li>&sect;7.1.1 Step-size, p.229</li>
+<li>&sect;7.1, Example 7.2, p.230: gradient descent for a squared error</li>
+</ul>
+<p><strong>The plan:</strong></p>
+<ol>
+<li class="fragment">The loop: step downhill, recompute, step again &mdash; <span style="color:rgb(30,90,160);"><strong>gradient descent</strong></span></li>
+<li class="fragment">The <span style="color:rgb(30,90,160);"><strong>step size</strong></span> on \(f(w)=w^2\): too small, good, too large</li>
+<li class="fragment">Gradient descent on our \(\mathrm{SSE}\)</li>
+<li class="fragment">Solve once, or iterate: why big models iterate</li>
+</ol>
+<aside class="notes">"L15 told us that our SSE has no wrong valley: its flat point is the lowest point. It did not tell us that a downhill walk gets there. Today: how to go downhill one step at a time, and how the step size decides whether we arrive."</aside>
+</section>
+
+<section>
+<h4>The question: how do we walk downhill, step by step?</h4>
+<p>Data \(\mathbf t=(0,1,2)^\top\) hours, \(\mathbf y=(1,3,2)^\top\) points; model \(\hat y=w_0+w_1t\); error</p>
+\[\mathrm{SSE}=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\]
+<ul>
+<li class="fragment"><strong>L11:</strong> at any \(\mathbf w\), the fastest way down is \(-\big(\nabla\mathrm{SSE}(\mathbf w)\big)^\top\) (steepest descent).</li>
+<li class="fragment"><strong>L15:</strong> \(\mathrm{SSE}\) is convex, so it has <strong>no wrong valley</strong>: its flat point \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\) is the lowest point, \(\mathrm{SSE}=\tfrac32\).</li>
+<li class="fragment">Whether our steps actually <strong>reach</strong> \(\mathbf w^\ast\) depends on how we step: today.</li>
+</ul>
+<div class="key-question fragment">Start at \((0,0)^\top\), \(\mathrm{SSE}=14\). <span style="color:rgb(30,90,160)"><strong>How do we walk downhill step by step, and how big should a step be?</strong></span></div>
+</section>
+
+<section>
+<h4>L11: one walk along the steepest direction is not enough</h4>
+<img src="../images/unit04/u4-L11-fig10d-overshoot.png" alt="Contours of SSE with the line w = s(6,7) from (0,0): at s=0 SSE 14, at s=17/121 the lowest point on the line with SSE 2.06, at s=34/121 SSE 14 again, at s=51/121 SSE 49.8; w* = (3/2,1/2) off the line" style="float:right; max-height:390px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>From \((0,0)^\top\), L11 walked along \(-(\nabla\mathrm{SSE})^\top=(12,14)^\top\): the line \(\mathbf w=s\,(6,7)^\top\).</p>
+<table style="width:auto; margin:0.2em auto; font-size:0.85em;">
+<tr><th>\(s\)</th><th>\(\mathrm{SSE}\)</th><th></th></tr>
+<tr><td>\(0\)</td><td>\(14\)</td><td>the start</td></tr>
+<tr><td>\(\tfrac{17}{121}\)</td><td>\(2.06\)</td><td>lowest on the line</td></tr>
+<tr><td>\(\tfrac{34}{121}\)</td><td>\(14\)</td><td>the start&rsquo;s error again</td></tr>
+<tr><td>\(\tfrac{51}{121}\)</td><td>\(49.8\)</td><td>worse than the start</td></tr>
+</table>
+<ul>
+<li class="fragment">Best on the line: \(2.06>\tfrac32\). <strong>One step is not enough.</strong></li>
+<li class="fragment">Too far in a good direction: the error goes <strong>up</strong> (overshooting).</li>
+</ul>
+<div class="key-question fragment"><strong>We know:</strong> the steepest way down at one point (L11).<br><strong>What fails:</strong> after we move, that direction changes; one arrow is not a training method.<br><strong>What we need:</strong> a rule we can <strong>repeat</strong>.</div>
+<aside class="notes">"These are L11's numbers; nothing new is computed here. Two lessons: we must repeat the step, and the length of the step matters."</aside>
+</section>
+
+<section>
+<h4>The idea on the simplest bowl, \(f(w)=w^2\)</h4>
+<img src="../images/unit05/u5-L16-fig01-w2-steps.png" alt="The parabola f(w)=w^2 with gradient-descent points w0=2, w1=1, w2=1/2, w3=1/4 joined by arrows toward the lowest point w=0; f goes 4, 1, 1/4, 1/16" style="float:right; max-height:400px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
+<ul>
+<li>A repeated update is easiest to see in <strong>one variable</strong>: every step can be drawn and computed exactly. Not our data: the same rule comes back to our \(\mathrm{SSE}\).</li>
+<li class="fragment">Lowest point \(w=0\); slope \(f'(w)=2w\). Start \(w_0=2\).</li>
+<li class="fragment">Repeat: find the slope <strong>here</strong>, step <strong>against</strong> it by \(\tfrac14\) of it.</li>
+</ul>
+<table style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>\(k\)</th><th>\(w_k\)</th><th>slope \(f'(w_k)\)</th><th>step \(-\tfrac14f'(w_k)\)</th><th>\(w_{k+1}\)</th><th>\(f(w_{k+1})\)</th></tr>
+<tr class="fragment"><td>\(0\)</td><td>\(2\)</td><td>\(4\)</td><td>\(-1\) (left)</td><td>\(1\)</td><td>\(1\)</td></tr>
+<tr class="fragment"><td>\(1\)</td><td>\(1\)</td><td>\(2\) (recomputed)</td><td>\(-\tfrac12\)</td><td>\(\tfrac12\)</td><td>\(\tfrac14\)</td></tr>
+<tr class="fragment"><td>\(2\)</td><td>\(\tfrac12\)</td><td>\(1\) (recomputed)</td><td>\(-\tfrac14\)</td><td>\(\tfrac14\)</td><td>\(\tfrac1{16}\)</td></tr>
+</table>
+<ul>
+<li class="fragment">Slope positive \(\Rightarrow\) step left. Flatter slope \(\Rightarrow\) shorter step.</li>
+</ul>
+<div class="key-question fragment">This loop &mdash; recompute the slope, step against it, repeat &mdash; <strong>is the method</strong>.</div>
+</section>
+
+<section>
+<h4>Gradient descent</h4>
+<p style="margin:0.1em 0 0.3em 0;">The loop &ldquo;recompute the slope, step against it, repeat&rdquo;, written for any number of parameters:</p>
+<div class="mathbox">
+<strong>Definition</strong> (MML &sect;7.1, eq. (7.6), p.228). To minimize \(f:\R^d\to\R\), start at a guess \(\mathbf w_0\) and repeat
+\[\mathbf w_{k+1}=\mathbf w_k-\gamma\,\big(\nabla f(\mathbf w_k)\big)^\top,\qquad k=0,1,2,\dots\]
+The number \(\gamma>0\) is the <strong>step-size</strong>, also called the <strong>learning rate</strong> (MML p.229). <span class="tier-m">[MASTER]</span>
+</div>
+<ul>
+<li class="fragment">One parameter: \((\nabla f)^\top=f'(w)\), so \(w_{k+1}=w_k-\gamma\,f'(w_k)\).
+<ul><li>\(f(w)=w^2\), \(\gamma=\tfrac14\), \(w_0=2\): \(\;2\to1\to\tfrac12\to\tfrac14\).</li></ul></li>
+<li class="fragment">The transpose: the gradient is a row, \(\mathbf w\) is a column (MML p.228, margin).</li>
+<li class="fragment">MML writes \(\mathbf x_i\) and \(\gamma_i\): the step-size may change from step to step. Today \(\gamma\) is fixed.</li>
+</ul>
+</section>
+
+<section>
+<h4>Reading the update, piece by piece</h4>
+\[\mathbf w_{k+1}=\mathbf w_k-\gamma\,\big(\nabla f(\mathbf w_k)\big)^\top\]
+<table style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>piece</th><th>what it is</th></tr>
+<tr class="fragment"><td>\(\mathbf w_k\)</td><td>where we stand after \(k\) steps</td></tr>
+<tr class="fragment"><td>\(\nabla f(\mathbf w_k)\)</td><td>the row of partial derivatives at \(\mathbf w_k\), <strong>recomputed every step</strong></td></tr>
+<tr class="fragment"><td>\(-\big(\nabla f(\mathbf w_k)\big)^\top\)</td><td>the steepest way down at \(\mathbf w_k\) (L11)</td></tr>
+<tr class="fragment"><td>\(\gamma\)</td><td>how far to go along it</td></tr>
+</table>
+<ul>
+<li class="fragment">Step length \(=\gamma\,\norm{\nabla f(\mathbf w_k)}\): steps shorten as the slope flattens.</li>
+<li class="fragment">If \(\nabla f(\mathbf w_k)=\mathbf 0\), then \(\mathbf w_{k+1}=\mathbf w_k\): <strong>gradient descent stops only at a flat point.</strong></li>
+</ul>
+</section>
+
+<section>
+<h4>Why a small step lowers the error</h4>
+<ul>
+<li>L09, L11: a small step \(\mathbf h\) from \(\mathbf w\) changes \(f\) by about \(\nabla f(\mathbf w)\,\mathbf h\) (row times column).</li>
+<li class="fragment">Gradient descent takes \(\mathbf h=-\gamma\big(\nabla f(\mathbf w)\big)^\top\):</li>
+</ul>
+<div class="fragment">
+\[f(\mathbf w+\mathbf h)\approx f(\mathbf w)-\gamma\,\nabla f(\mathbf w)\big(\nabla f(\mathbf w)\big)^\top=f(\mathbf w)-\gamma\,\norm{\nabla f(\mathbf w)}^2\]
+</div>
+<ul>
+<li class="fragment">If \(\nabla f(\mathbf w)\neq\mathbf 0\): a decrease of about \(\gamma\norm{\nabla f(\mathbf w)}^2\).</li>
+<li class="fragment">MML (7.5), p.228: for a <strong>small</strong> step-size, \(f(\mathbf x_1)\le f(\mathbf x_0)\). <span class="tier-u">[UNDERSTAND]</span></li>
+</ul>
+<div class="key-question fragment">&ldquo;About&rdquo; holds only for small \(\mathbf h\). What happens to a large step?</div>
+</section>
+
+<section>
+<h4>The first step on our SSE: the prediction holds only for small \(\gamma\)</h4>
+<p>\(\mathrm{SSE}=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\); at \((0,0)^\top\): \(\nabla\mathrm{SSE}=\begin{bmatrix}-12&-14\end{bmatrix}\), \(\norm{\nabla\mathrm{SSE}}^2=340\).</p>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>\(\gamma\)</th><th>\(\mathbf w_1=\gamma\,(12,14)^\top\)</th><th>predicted \(14-340\gamma\)</th><th>actual \(\mathrm{SSE}(\mathbf w_1)\)</th></tr>
+<tr><td>\(0.01\)</td><td>\((0.12,\,0.14)^\top\)</td><td>\(10.6\)</td><td>\(10.842\)</td></tr>
+<tr><td>\(0.02\)</td><td>\((0.24,\,0.28)^\top\)</td><td>\(7.2\)</td><td>\(8.168\)</td></tr>
+<tr><td>\(0.05\)</td><td>\((0.6,\,0.7)^\top\)</td><td>\(-3\)</td><td>\(3.05\)</td></tr>
+<tr><td>\(0.1\)</td><td>\((1.2,\,1.4)^\top\)</td><td>\(-20\)</td><td>\(4.2\)</td></tr>
+</table>
+<ul>
+<li class="fragment">Small \(\gamma\): prediction close to the actual error.</li>
+<li class="fragment">Larger \(\gamma\): prediction negative &mdash; impossible, a sum of squares is \(\ge0\).</li>
+</ul>
+<div class="key-question fragment">How large may \(\gamma\) be? <strong>Answer it first on the simplest bowl, \(f(w)=w^2\).</strong></div>
+</section>
+
+<section>
+<h4>Step size on \(f(w)=w^2\): four choices</h4>
+<p>A separate example, not our data. Start \(w_0=2\); update \(w_{k+1}=w_k-\gamma\cdot2w_k\).</p>
+<table style="width:auto; margin:0.2em auto; font-size:0.85em;">
+<tr><th>\(\gamma\)</th><th>\(w_1\)</th><th>\(w_2\)</th><th>\(w_3\)</th><th>what happens</th></tr>
+<tr class="fragment"><td>\(0.05\)</td><td>\(1.8\)</td><td>\(1.62\)</td><td>\(1.458\)</td><td>creeps toward \(0\): slow</td></tr>
+<tr class="fragment"><td>\(0.25\)</td><td>\(1\)</td><td>\(0.5\)</td><td>\(0.25\)</td><td>halves every step</td></tr>
+<tr class="fragment"><td>\(0.75\)</td><td>\(-1\)</td><td>\(0.5\)</td><td>\(-0.25\)</td><td>jumps past \(0\), still shrinks</td></tr>
+<tr class="fragment"><td>\(1.1\)</td><td>\(-2.4\)</td><td>\(2.88\)</td><td>\(-3.456\)</td><td>jumps past \(0\) and <strong>grows</strong></td></tr>
+</table>
+<img src="../images/unit05/u5-L16-fig02-three-steps-1d.png" alt="Three panels of the parabola w^2, six gradient-descent steps from w0=2 in each: gamma 0.05 creeps, w6=1.06; gamma 0.25, w6=0.03; gamma 1.1 bounces from side to side, w6=5.97" class="fragment" style="display:block; max-height:250px; max-width:100%; margin:0.2em auto 0.2em auto; border-radius:6px;">
+<ul>
+<li class="fragment">MML &sect;7.1.1, p.229: too small \(\Rightarrow\) <strong>slow</strong>; too large \(\Rightarrow\) <strong>overshoot</strong>, <strong>fail to converge</strong>, or <strong>diverge</strong>.</li>
+</ul>
+<aside class="notes">"The picture: six steps for three of the four step sizes. Green is the start w0=2, red the steps; w6 is where the sixth step lands. With gamma=1.1 every step lands on the other side of 0, higher up the bowl than before."</aside>
+</section>
+
+<section>
+<h4>Why: every step multiplies \(w\) by the same number</h4>
+<p>\(f(w)=w^2\), \(\;f'(w)=2w\), \(\;w_{k+1}=w_k-\gamma\,f'(w_k)\).</p>
+<ol>
+<li class="fragment">\(w_{k+1}=w_k-\gamma\cdot2w_k\) &emsp;&mdash; put in \(f'\)</li>
+<li class="fragment">\(w_{k+1}=(1-2\gamma)\,w_k\) &emsp;&mdash; factor out \(w_k\)</li>
+<li class="fragment">\(w_k=(1-2\gamma)^k\,w_0\) &emsp;&mdash; repeat \(k\) times</li>
+</ol>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>\(\gamma\)</th><th>factor \(1-2\gamma\)</th><th>each step</th></tr>
+<tr><td>\(0.05\)</td><td>\(0.9\)</td><td>shrinks by only \(10\%\): slow</td></tr>
+<tr><td>\(0.25\)</td><td>\(0.5\)</td><td>halves</td></tr>
+<tr><td>\(0.5\)</td><td>\(0\)</td><td>lands on \(0\) in one step</td></tr>
+<tr><td>\(0.75\)</td><td>\(-0.5\)</td><td>flips sign, halves</td></tr>
+<tr><td>\(1\)</td><td>\(-1\)</td><td>\(2,-2,2,-2,\dots\): never settles</td></tr>
+<tr><td>\(1.1\)</td><td>\(-1.2\)</td><td>flips sign, grows by \(20\%\): diverges</td></tr>
+</table>
+</section>
+
+<section>
+<h4>Theorem: the step sizes that work on \(f(w)=w^2\)</h4>
+<div class="mathbox">
+<strong>Theorem.</strong> Gradient descent on \(f(w)=w^2\) with a fixed step-size \(\gamma>0\), from any \(w_0\neq0\), converges to the lowest point \(0\) <strong>if and only if</strong> \(0<\gamma<1\). <span class="tier-m">[MASTER]</span>
+</div>
+<p class="fragment"><strong>Proof</strong></p>
+<ol>
+<li class="fragment">\(w_k=(1-2\gamma)^k\,w_0\) &emsp;&mdash; the update \(w_{k+1}=(1-2\gamma)\,w_k\), repeated</li>
+<li class="fragment">If \(|1-2\gamma|<1\): \(|w_k|=|1-2\gamma|^k\,|w_0|\to0\)</li>
+<li class="fragment">If \(|1-2\gamma|\ge1\): \(|w_k|\ge|w_0|>0\) for every \(k\), so \(w_k\not\to0\)</li>
+<li class="fragment">\(|1-2\gamma|<1\iff-1<1-2\gamma<1\iff0<\gamma<1\)</li>
+</ol>
+<ul>
+<li class="fragment">Overshooting (sign flips) means \(1-2\gamma<0\), i.e. \(\gamma>\tfrac12\): it still converges while \(\gamma<1\).</li>
+</ul>
+</section>
+
+<section>
+<h4>Your turn: predict three step sizes on \(f(w)=w^2\)</h4>
+<div class="quickcheck"><strong>Your turn.</strong> Gradient descent on \(f(w)=w^2\), \(f'(w)=2w\), from \(w_0=2\): \(\;w_{k+1}=w_k-\gamma\cdot2w_k\).<br>Without iterating, predict for each \(\gamma\): <strong>creeps slowly</strong> to \(0\), <strong>zigzags</strong> across \(0\), or <strong>diverges</strong>? Justify in one line.
+<ul style="list-style:none; padding-left:0.6em; margin-top:0.2em;">
+<li>(a) \(\gamma=0.1\) &emsp; (b) \(\gamma=0.9\) &emsp; (c) \(\gamma=1.2\)</li>
+<li>(d) Two of the three shrink \(|w_k|\) at the same rate. Which two?</li>
+</ul></div>
+<table style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th></th><th>factor \(1-2\gamma\)</th><th>\(w_0,w_1,w_2,\dots\)</th><th>prediction</th></tr>
+<tr class="fragment"><td>(a) \(\gamma=0.1\)</td><td>\(0.8\)</td><td>\(2,\ 1.6,\ 1.28,\dots\)</td><td>same sign, \(|w|\) shrinks by \(20\%\): creeps, slow</td></tr>
+<tr class="fragment"><td>(b) \(\gamma=0.9\)</td><td>\(-0.8\)</td><td>\(2,\ {-1.6},\ 1.28,\dots\)</td><td>sign flips, \(|w|\) shrinks by \(20\%\): zigzags, converges (\(\gamma<1\))</td></tr>
+<tr class="fragment"><td>(c) \(\gamma=1.2\)</td><td>\(-1.4\)</td><td>\(2,\ {-2.8},\ 3.92,\dots\)</td><td>sign flips, \(|w|\) grows by \(40\%\): diverges (\(\gamma\ge1\))</td></tr>
+</table>
+<ul>
+<li class="fragment">(d) (a) and (b): \(|1-2\gamma|=0.8\) for both. Jumping past \(0\) is not the problem; the size of \(|1-2\gamma|\) is.</li>
+<li class="fragment">Choosing \(\gamma\) in practice (MML &sect;7.1.1, p.229): error went up \(\Rightarrow\) undo the step, decrease \(\gamma\); error went down \(\Rightarrow\) try a larger \(\gamma\). Searching for the best \(\gamma\) along the line at every step is called <strong>line search</strong>. <span class="tier-e">[EXPLORE]</span></li>
+</ul>
+</section>
+
+<section>
+<h4>Back to our SSE: two steps by hand, \(\gamma=0.1\)</h4>
+<p style="margin:0.1em 0 0.3em 0;">The same loop on our data: two steps by hand, to see the direction change.</p>
+<ul>
+<li>\(\mathrm{SSE}=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\)</li>
+<li>\(\nabla\mathrm{SSE}=\begin{bmatrix}6w_0+6w_1-12&6w_0+10w_1-14\end{bmatrix}\)</li>
+<li>Update: \(\mathbf w_{k+1}=\mathbf w_k-0.1\,\big(\nabla\mathrm{SSE}(\mathbf w_k)\big)^\top\), start \(\mathbf w_0=(0,0)^\top\).</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.4em auto; font-size:0.95em;">
+<tr><th>\(k\)</th><th>\(\mathbf w_k\)</th><th>\(\nabla\mathrm{SSE}(\mathbf w_k)\)</th><th>\(\mathbf w_{k+1}=\mathbf w_k-0.1\,(\nabla\mathrm{SSE})^\top\)</th></tr>
+<tr><td>\(0\)</td><td>\((0,0)^\top\)</td><td>\(\begin{bmatrix}-12&-14\end{bmatrix}\)</td><td>\((1.2,\,1.4)^\top\)</td></tr>
+<tr class="fragment"><td>\(1\)</td><td>\((1.2,\,1.4)^\top\)</td><td>\(\begin{bmatrix}3.6&7.2\end{bmatrix}\)</td><td>\((0.84,\,0.68)^\top\)</td></tr>
+</table>
+<ul>
+<li class="fragment">\(\mathrm{SSE}\): \(14\to4.2\to2.256\).</li>
+<li class="fragment">Step 2 changes direction: the gradient was recomputed at \(\mathbf w_1\).</li>
+</ul>
+</section>
+
+<section>
+<h4>The path on the contour map</h4>
+<img src="../images/unit05/u5-L16-fig03-path-sse.png" alt="Contours of SSE at 1.6, 2, 4, 8, 14. Gradient descent with step size 0.1 from (0,0) (SSE 14): w1 = (1.2, 1.4) with SSE 4.2, w2 = (0.84, 0.68) with SSE 2.26, w3 = (1.128, 0.896) with SSE 1.82, then a zigzag of shorter and shorter steps into w* = (3/2, 1/2), SSE 3/2" style="float:right; max-height:470px; max-width:52%; margin:0 0 0.5em 1em; border-radius:6px;">
+<ul>
+<li>Gradient descent on our \(\mathrm{SSE}\), \(\gamma=0.1\), from \((0,0)^\top\): <strong>all</strong> the steps, not just the first two.</li>
+<li class="fragment">Green: the start \((0,0)^\top\), \(\mathrm{SSE}=14\).<br>Blue star: \(\mathbf w^\ast\), \(\mathrm{SSE}=\tfrac32\).</li>
+<li class="fragment">Each step crosses to <strong>lower</strong> contours:<br>\(14\to4.2\to2.26\to1.82\to\cdots\)</li>
+<li class="fragment">Each step leaves its point at a right angle to the contour there (L11).</li>
+<li class="fragment">The path <strong>zigzags</strong>: the fastest way down does not point at \(\mathbf w^\ast\) (L11). Why, and how to reduce it: L19.</li>
+<li class="fragment">After 50 steps: \(\mathbf w_{50}=(1.49992,\,0.50006)^\top\), \(\mathbf w^\ast\) to three decimals. <span class="tier-m">[MASTER]</span></li>
+</ul>
+<aside class="notes">"Compare MML Figure 7.3, p.229: the same picture on a different quadratic. The innermost ellipse is the level 1.6."</aside>
+</section>
+
+<section>
+<h4>Three step sizes on our SSE, from \((0,0)^\top\)</h4>
+<p style="margin:0.1em 0;">Does the \(f(w)=w^2\) lesson (too small, good, too large) hold on our data? \(\mathbf w_{k+1}=\mathbf w_k-\gamma\,\big(\nabla\mathrm{SSE}(\mathbf w_k)\big)^\top\). Green: start, \(\mathrm{SSE}=14\). Blue star: \(\mathbf w^\ast\), lowest \(\mathrm{SSE}=\tfrac32\).</p>
+<img src="../images/unit05/u5-L16-fig04-three-steps-sse.png" alt="Three contour maps of SSE with gradient-descent paths from (0,0): step 0.02 creeps, 20 steps bring SSE from 14 to 1.68; step 0.1 zigzags into w*, 20 steps give 1.50; step 0.15 bounces outward across w*, 6 steps take SSE from 14 to 63.7" style="display:block; max-height:245px; max-width:100%; margin:0.1em auto 0.2em auto; border-radius:6px;">
+<table style="width:auto; margin:0.2em auto; font-size:0.85em;">
+<tr><th>\(\gamma\)</th><th>\(\mathrm{SSE}\) after 1 step</th><th>after 5</th><th>after 20</th><th></th></tr>
+<tr class="fragment"><td>\(0.02\)</td><td>\(8.168\)</td><td>\(2.412\)</td><td>\(1.683\)</td><td>slow</td></tr>
+<tr class="fragment"><td>\(0.1\)</td><td>\(4.2\)</td><td>\(1.617\)</td><td>\(1.5005\)</td><td>good</td></tr>
+<tr class="fragment"><td>\(0.15\)</td><td>\(17.45\)</td><td>\(48.67\)</td><td>\(3017\)</td><td>diverges</td></tr>
+</table>
+<ul>
+<li class="fragment">The same three behaviours as on \(f(w)=w^2\). The limit (between \(0.1\) and \(0.15\)) comes from \(X^\top X\): L19.</li>
+</ul>
+<aside class="notes">"gamma=0.15: each step lands on the other side of w*, on a higher contour."</aside>
+</section>
+
+<section>
+<h4>Where gradient descent stops: the normal equation</h4>
+<p>Data \(\mathbf y=(1,3,2)^\top\), \(X=\left[\begin{smallmatrix}1&0\\1&1\\1&2\end{smallmatrix}\right]\), residual \(\mathbf r=\mathbf y-X\mathbf w\), \(\;\nabla\mathrm{SSE}=-2\,\mathbf r^\top X\) (L12).</p>
+<p style="margin:0.1em 0 0.2em 0;"><strong>If</strong> the iterates converge, \(\mathbf w_k\to\mathbf w_\infty\):</p>
+<ol>
+<li class="fragment">\(\mathbf w_\infty=\mathbf w_\infty-\gamma\big(\nabla\mathrm{SSE}(\mathbf w_\infty)\big)^\top\) &emsp;&mdash; let \(k\to\infty\) in the update: it no longer changes \(\mathbf w_\infty\)</li>
+<li class="fragment">\(\nabla\mathrm{SSE}(\mathbf w_\infty)=\mathbf 0^\top\) &emsp;&mdash; subtract \(\mathbf w_\infty\), divide by \(-\gamma\neq0\)</li>
+<li class="fragment">\(-2\,\mathbf r^\top X=\mathbf 0^\top\iff X^\top(\mathbf y-X\mathbf w_\infty)=\mathbf 0\) &emsp;&mdash; transpose, divide by \(-2\)</li>
+<li class="fragment">\(\iff X^\top X\mathbf w_\infty=X^\top\mathbf y\) &emsp;&mdash; the <strong>normal equation</strong> (Unit 2, L12)</li>
+</ol>
+<ul>
+<li class="fragment">Our data: \(\begin{bmatrix}3&3\\3&5\end{bmatrix}\mathbf w=\begin{bmatrix}6\\7\end{bmatrix}\Rightarrow\mathbf w_\infty=\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\). With \(\gamma=0.1\), 50 steps: \((1.49992,\,0.50006)^\top\).</li>
+<li class="fragment">With \(\gamma=0.15\) the iterates diverge: no \(\mathbf w_\infty\), and the argument says nothing.</li>
+<li class="fragment">MML Example 7.2, p.230: the same squared error.
+<ul><li>Gradient descent works; but here &ldquo;there is an analytic solution&rdquo;: set the gradient to zero.</li></ul></li>
+</ul>
+</section>
+
+<section>
+<h4>Two ways to the same \(\mathbf w^\ast\): solve once, or iterate</h4>
+<p>For \(\mathrm{SSE}\): \(-(\nabla\mathrm{SSE})^\top=2X^\top\mathbf r\), so a gradient step is \(\mathbf w_{k+1}=\mathbf w_k+2\gamma\,X^\top\mathbf r_k\), with \(\mathbf r_k=\mathbf y-X\mathbf w_k\).</p>
+<table style="width:auto; margin:0.4em auto; font-size:0.9em;">
+<tr><th></th><th>normal equation</th><th>gradient descent</th></tr>
+<tr class="fragment"><td>what you do</td><td>solve \(X^\top X\mathbf w=X^\top\mathbf y\) once</td><td>repeat \(\mathbf w_{k+1}=\mathbf w_k+2\gamma\,X^\top\mathbf r_k\)</td></tr>
+<tr class="fragment"><td>the answer</td><td>exact: \(\left(\tfrac32,\tfrac12\right)^\top\)</td><td>approaches it: \((1.49992,\,0.50006)^\top\) after 50 steps</td></tr>
+<tr class="fragment"><td>what it needs</td><td>the \(d\times d\) matrix \(X^\top X\), one linear solve</td><td>per step: \(X\mathbf w_k\), \(\mathbf r_k\), \(X^\top\mathbf r_k\)</td></tr>
+<tr class="fragment"><td>applies to</td><td>least squares only</td><td>any differentiable error; whether it converges is a separate question (step size: today, L19)</td></tr>
+</table>
+<ul>
+<li class="fragment">\(d\) = number of parameters (here \(d=2\)).</li>
+</ul>
+</section>
+
+<section>
+<h4>Why big models iterate: no linear equation to solve <span class="tier-u">[UNDERSTAND]</span></h4>
+<ul>
+<li>Least squares: \(\nabla\mathrm{SSE}=\mathbf 0\) is a <strong>linear</strong> system, \(X^\top X\mathbf w=X^\top\mathbf y\).</li>
+<li class="fragment">A neural network: layers with nonlinear functions (L13).
+<ul><li>\(\nabla f=\mathbf 0\) is a large system of <strong>nonlinear</strong> equations.</li>
+<li>MML p.228 assumes exactly this case: &ldquo;we are unable to analytically find a solution in closed form&rdquo;.</li></ul></li>
+<li class="fragment">Gradient descent needs only \(\nabla f\) at the current point.
+<ul><li>A network&rsquo;s \(\nabla f\): the chain rule, layer by layer &mdash; backpropagation (L13).</li></ul></li>
+</ul>
+</section>
+
+<section>
+<h4>L16 takeaways (1/2): gradient descent and the step size</h4>
+<ul>
+<li class="fragment"><strong>Gradient descent</strong> (MML (7.6), p.228): \(\mathbf w_{k+1}=\mathbf w_k-\gamma\big(\nabla f(\mathbf w_k)\big)^\top\); \(\gamma>0\) the step-size (learning rate). <span class="tier-m">[MASTER]</span>
+<ul><li>Why a loop: one steepest step is not enough, and the direction changes as we move; so recompute the gradient, step against it, repeat.</li>
+<li>One parameter: \(w_{k+1}=w_k-\gamma f'(w_k)\).</li>
+<li>It stops only where \(\nabla f=\mathbf 0^\top\).</li></ul></li>
+<li class="fragment">A small step lowers \(f\) by about \(\gamma\norm{\nabla f}^2\) (MML (7.5)). <span class="tier-u">[UNDERSTAND]</span></li>
+<li class="fragment">Step-size (MML &sect;7.1.1): too small \(\Rightarrow\) slow; too large \(\Rightarrow\) overshoot, never settle, or diverge. <span class="tier-m">[MASTER]</span>
+<ul><li>\(f(w)=w^2\): \(w_k=(1-2\gamma)^kw_0\); converges \(\iff0<\gamma<1\).</li></ul></li>
+</ul>
+</section>
+
+<section>
+<h4>L16 takeaways (2/2): our SSE, and solve versus iterate</h4>
+<ul>
+<li class="fragment">Our \(\mathrm{SSE}\) from \((0,0)^\top\), \(\gamma=0.1\): <span class="tier-m">[MASTER]</span>
+<ul><li>\(\mathrm{SSE}\): \(14\to4.2\to2.256\to\cdots\to\tfrac32\);</li>
+<li>\(\mathbf w_k\to\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\), along a zigzag path.</li></ul></li>
+<li class="fragment"><strong>If</strong> gradient descent converges, its limit has \(\nabla\mathrm{SSE}=\mathbf 0^\top\): the normal equation \(X^\top X\mathbf w=X^\top\mathbf y\). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Solve once, or iterate: <span class="tier-u">[UNDERSTAND]</span>
+<ul><li>normal equation: one exact solve, least squares only;</li>
+<li>gradient descent: many cheap steps; can be applied to any differentiable error &mdash; why big models iterate;</li>
+<li>whether it converges is a separate question: the step size (today; L19).</li></ul></li>
+</ul>
+<div class="key-question fragment">So far \(\mathbf w\) could go anywhere. In Unit 3 the direction \(\mathbf u\) had to satisfy \(\norm{\mathbf u}=1\). <strong>How do we find the best point when the parameters must obey a rule? L17.</strong></div>
+</section>
+<!-- ═════════════════════════ L17 — Lagrange Multipliers (Thu Nov 5) ═════════════════════════
+     Question: how do we find the best point when the parameters must satisfy a constraint?
+     Warm-up (a separate example): max 3x+4y on x^2+y^2=1 -> (3/5,4/5), value 5, lambda = 5/2.
+     Main (Unit 3's S = [[5,3],[3,5]]): max u^T S u s.t. u^T u = 1 -> Su = lambda u, value = lambda, max 8.
+     Your turn (a separate example): closest point on x+2y=5 to the origin -> (1,2), lambda = 2, f = 5.
+     Figures: slides/figures/gen_u5_L17.py. Numbers verified with fractions/numpy, 2026-10-21.
+     ═══════════════════════════════════════════════════════════════════════════════════════ -->
+
+<section>
+<h2 style="font-size:1.3em;">L17 — Lagrange Multipliers</h2>
+<p><strong>Reading:</strong></p>
+<ul>
+<li>MML &sect;7.2, pp.233&ndash;236: the constrained problem (7.17), the Lagrangian (7.20), the Remark on equality constraints.</li>
+<li>MML &sect;10.2.1, pp.321&ndash;322: eqs. (10.10)&ndash;(10.15), the textbook&rsquo;s proof of Unit 3&rsquo;s Theorem 2.</li>
+</ul>
+<div class="key-question">How do we find the best point when the parameters must satisfy a <strong>constraint</strong>?</div>
+<ol>
+<li class="fragment">The picture: at the best point, a contour of the objective touches the constraint curve.</li>
+<li class="fragment">The condition \(\nabla f=\lambda\nabla g\), and the Lagrangian that packages it.</li>
+<li class="fragment">Warm-up: a linear function on the unit circle.</li>
+<li class="fragment">Unit 3&rsquo;s promise: the largest variance is the largest eigenvalue, by calculus.</li>
+</ol>
+</section>
+
+<section>
+<h4>Unit 3 left a problem with a rule attached</h4>
+<ul>
+<li>Unit 3 (L07&ndash;L08): four students, two quizzes, covariance matrix \(S=\begin{bmatrix}5&3\\3&5\end{bmatrix}\).</li>
+<li>Variance of the data along a unit direction \(\mathbf u\): \(\;\mathbf u^\top S\mathbf u\).</li>
+<li class="fragment">PCA wants the direction with the <strong>largest</strong> variance (MML (10.10), p.322):
+\[\text{maximize}\quad\mathbf u^\top S\mathbf u\qquad\text{subject to}\quad\norm{\mathbf u}=1 .\]</li>
+<li class="fragment"><strong>Why the rule \(\norm{\mathbf u}=1\):</strong> \(\mathbf u=(2,2)^\top\) gives \(\mathbf u^\top S\mathbf u=64\), four times the \(16\) of \((1,1)^\top\). Without the rule, longer \(\mathbf u\) always wins.</li>
+<li class="fragment">Unit 3 answered with algebra (Theorem 2): largest variance \(8\), along \(\tfrac{1}{\sqrt2}(1,1)^\top\).</li>
+</ul>
+<div class="key-question fragment">Today: a <span style="color:rgb(30,90,160)"><strong>calculus method</strong></span> for every problem of this shape &mdash; the best point among the points that obey a rule.</div>
+</section>
+
+<section>
+<h4>Setting the gradient of \(\mathbf u^\top S\mathbf u\) to zero does not find the best unit direction</h4>
+<p>\(f(\mathbf u)=\mathbf u^\top S\mathbf u\), \(\;S=\begin{bmatrix}5&3\\3&5\end{bmatrix}\). &nbsp;L12, Rule 2: \(\;\nabla f=2\,\mathbf u^\top S\).</p>
+<table style="width:auto; margin:0.4em auto; font-size:0.95em;">
+<tr><th>question</th><th>answer</th></tr>
+<tr class="fragment"><td>where is \(\nabla f=\mathbf 0^\top\)?</td><td>\(S\mathbf u=\mathbf 0\); \(\det S=16\neq0\), so only \(\mathbf u=\mathbf 0\)</td></tr>
+<tr class="fragment"><td>does \(\mathbf u=\mathbf 0\) obey the rule?</td><td>no: \(\norm{\mathbf 0}=0\neq1\)</td></tr>
+<tr class="fragment"><td>\(\nabla f\) at Unit 3&rsquo;s best \(\mathbf u=\tfrac1{\sqrt2}(1,1)^\top\)</td><td>\(8\sqrt2\begin{bmatrix}1&1\end{bmatrix}\neq\mathbf 0^\top\)</td></tr>
+</table>
+<ul>
+<li class="fragment">The best point on the circle \(\norm{\mathbf u}=1\) is <strong>not</strong> a flat point of \(f\).</li>
+</ul>
+<div class="key-question fragment"><strong>We know:</strong> a lowest or highest point of \(f\) is flat, \(\nabla f=\mathbf 0^\top\) (L09&ndash;L12).<br><strong>What fails:</strong> the only flat point, \(\mathbf u=\mathbf 0\), is not on the circle.<br><strong>What we need:</strong> a condition for the best point <strong>among the points on the circle</strong>.</div>
+</section>
+
+<section>
+<h4>Constrained optimization: the problem and its words</h4>
+<p>The gap: \(\nabla f=\mathbf 0^\top\) only at \(\mathbf u=\mathbf 0\), off the circle. But \(\mathbf u\) may move <strong>only on the unit circle</strong>.</p>
+<table style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>in Unit 3&rsquo;s problem</th><th>the word</th></tr>
+<tr class="fragment"><td>the points that obey the rule: the unit circle</td><td><strong>feasible</strong> points</td></tr>
+<tr class="fragment"><td>the quantity to make largest: \(f(\mathbf u)=\mathbf u^\top S\mathbf u\)</td><td>the <strong>objective</strong></td></tr>
+<tr class="fragment"><td>the rule \(\mathbf u^\top\mathbf u=1\), the same as \(\norm{\mathbf u}=1\)</td><td>the <strong>constraint</strong></td></tr>
+</table>
+<div class="mathbox fragment">
+<strong>Definition</strong> (MML &sect;7.2, (7.17) and (7.28), pp.233&ndash;235). A <strong>constrained optimization problem</strong> with one equality constraint:
+\[\text{maximize (or minimize)}\quad f(\mathbf x)\qquad\text{subject to}\quad g(\mathbf x)=c .\]
+\(f\) is the <strong>objective</strong>; \(g(\mathbf x)=c\) is the <strong>constraint</strong>; a point with \(g(\mathbf x)=c\) is <strong>feasible</strong>. <span class="tier-m">[MASTER]</span>
+</div>
+<div class="key-question fragment">First a simpler problem of the same shape, solved by a picture: a <strong>linear</strong> objective on the same circle.</div>
+<aside class="notes">"u^T u = 1 and ||u|| = 1 are the same rule because a length is never negative." "MML (7.17) states inequality constraints; (7.28) adds equality ones. This lecture uses one equality constraint only."</aside>
+</section>
+
+<section>
+<h4>Warm-up: the largest value of \(3x+4y\) on the unit circle</h4>
+<img src="../images/unit05/u5-L17-fig01-warmup-levels.png" alt="The unit circle with the parallel lines 3x+4y = -5, -2.5, 0, 2.5, 5, 7. The line at level 5 touches the circle at (3/5, 4/5); the dashed line at level 7 misses it." style="float:right; max-height:470px; max-width:44%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p><strong>Maximize</strong> \(f(x,y)=3x+4y\) <strong>subject to</strong> \(x^2+y^2=1\).<br>A separate example, not our data.</p>
+<ul>
+<li class="fragment">Gray lines: <strong>contours</strong> of \(f\), the lines \(3x+4y=\text{level}\) (L11).</li>
+<li class="fragment">Level \(2.5\): the line crosses the circle twice.<br>Higher levels are still reachable.</li>
+<li class="fragment">Level \(7\) (dashed): the line misses the circle.<br>No feasible point has \(f=7\).</li>
+<li class="fragment">Level \(5\) (red): the highest level that still meets the circle, at one point \(\left(\tfrac35,\tfrac45\right)^\top\).</li>
+</ul>
+<div class="key-question fragment">At the best point, the contour of \(f\) <strong>touches</strong> the circle: the two curves are tangent.</div>
+<aside class="notes">"Slide the line upward with a ruler on the board. As long as it cuts the circle in two points, there are feasible points higher up. The last moment it still meets the circle is the answer." "Do not compute yet; the next slide turns 'touches' into an equation."</aside>
+</section>
+
+<section>
+<h4>At the touching point \(P^\ast\), the two gradients are parallel</h4>
+<img src="../images/unit05/u5-L17-fig02-two-points.png" alt="The unit circle with two points. At Q = (1,0) the red arrow (grad f) and the blue arrow (grad g) point in different directions, and a green arrow points along the circle. At P* = (3/5,4/5) the red and blue arrows point the same way." style="float:right; max-height:470px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<ul>
+<li>Objective \(f=3x+4y\): \(\;\nabla f=\begin{bmatrix}3&4\end{bmatrix}\) at every point.</li>
+<li>The circle is the contour \(g=1\) of \(g(x,y)=x^2+y^2\):<br>\(\nabla g=\begin{bmatrix}2x&2y\end{bmatrix}\).</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.4em auto; font-size:0.95em;">
+<tr><th>point</th><th>\(f\)</th><th>\(\nabla g\)</th><th>\(\nabla f\) vs. \(\nabla g\)</th></tr>
+<tr><td>\(Q=(1,0)^\top\)</td><td>\(3\)</td><td>\(\begin{bmatrix}2&0\end{bmatrix}\)</td><td>not parallel</td></tr>
+<tr><td>\(P^\ast=\left(\tfrac35,\tfrac45\right)^\top\)</td><td>\(5\)</td><td>\(\begin{bmatrix}\tfrac65&\tfrac85\end{bmatrix}\)</td><td>\(\begin{bmatrix}3&4\end{bmatrix}=\tfrac52\begin{bmatrix}\tfrac65&\tfrac85\end{bmatrix}\)</td></tr>
+</table>
+<ul>
+<li class="fragment">In the figure: red \((\nabla f)^\top\) and blue \((\nabla g)^\top\) point the same way at \(P^\ast\), different ways at \(Q\).</li>
+</ul>
+<div class="key-question fragment">Why does &ldquo;parallel&rdquo; mark the best point? Compute the slope of \(f\) along the circle at \(Q\) and at \(P^\ast\).</div>
+</section>
+
+<section>
+<h4>At \(Q\) the objective still rises along the circle; at \(P^\ast\) it does not</h4>
+<img src="../images/unit05/u5-L17-fig02-two-points.png" alt="The same figure: at Q the green arrow along the circle; at P* the red and blue arrows point the same way." style="float:right; max-height:470px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>L11: the slope of \(f\) in a unit direction \(\mathbf t\) is \(\nabla f\,\mathbf t\). &nbsp;Here \(\nabla f=\begin{bmatrix}3&4\end{bmatrix}\).</p>
+<table class="fragment" style="width:auto; margin:0.4em auto; font-size:0.95em;">
+<tr><th>point</th><th>circle runs along \(\mathbf t\)</th><th>slope \(\nabla f\,\mathbf t\)</th></tr>
+<tr><td>\(Q=(1,0)^\top\)</td><td>\((0,1)^\top\) (green)</td><td>\(4>0\)</td></tr>
+<tr><td>\(P^\ast=\left(\tfrac35,\tfrac45\right)^\top\)</td><td>\(\left(-\tfrac45,\tfrac35\right)^\top\)</td><td>\(-\tfrac{12}5+\tfrac{12}5=0\)</td></tr>
+</table>
+<ul>
+<li class="fragment">At \(Q\): walking up the circle raises \(f\). <strong>\(Q\) is not the best point.</strong></li>
+<li class="fragment">At \(P^\ast\): slope \(0\) along the circle, and \(\nabla f\) parallel to \(\nabla g\).</li>
+</ul>
+<div class="key-question fragment">Best point &rArr; slope \(0\) along the curve &rArr; parallel gradients. <strong>The theorem says this always happens.</strong></div>
+</section>
+
+<section>
+<h4>The Lagrange condition</h4>
+<p>The warm-up picture: at the best point, no direction along the curve improves \(f\), and the two gradients are parallel.</p>
+<div class="mathbox">
+<strong>Theorem.</strong> Let \(f\) and \(g\) be continuously differentiable near \(\mathbf x^\ast\). Suppose \(\mathbf x^\ast\) gives the largest (or the smallest) value of \(f(\mathbf x)\) among the points with \(g(\mathbf x)=c\), and \(\nabla g(\mathbf x^\ast)\neq\mathbf 0^\top\). Then there is a number \(\lambda\) with
+\[\nabla f(\mathbf x^\ast)=\lambda\,\nabla g(\mathbf x^\ast),\qquad g(\mathbf x^\ast)=c .\]
+The number \(\lambda\) is the <strong>Lagrange multiplier</strong>. <span class="tier-m">[MASTER]</span>
+</div>
+<ul>
+<li class="fragment">In the picture: the contour of \(f\) through \(\mathbf x^\ast\) is tangent to the curve \(g=c\).</li>
+<li class="fragment">Both gradients are rows (L11); the columns \((\nabla f)^\top\) and \((\nabla g)^\top\) point along one line.</li>
+<li class="fragment">Warm-up: \(\lambda=\tfrac52\) at \(P^\ast=\left(\tfrac35,\tfrac45\right)^\top\).</li>
+<li class="fragment">The theorem gives <strong>candidates</strong>: every largest and every smallest point satisfies it.</li>
+</ul>
+</section>
+
+<section>
+<h4>Proof of the Lagrange condition, for two variables</h4>
+<ul>
+<li><strong>To prove:</strong> \(\nabla f(\mathbf x^\ast)=\lambda\,\nabla g(\mathbf x^\ast)\) for some number \(\lambda\).</li>
+<li><strong>Fact used (step 0):</strong> near \(\mathbf x^\ast\), the points with \(g=c\) form a curve traced by a differentiable path \(\mathbf x(s)\), with \(\mathbf x(0)=\mathbf x^\ast\) and \(\mathbf x'(0)=\mathbf t\neq\mathbf 0\).
+<ul>
+<li>On the unit circle, with \(\mathbf x^\ast=(\cos s_0,\sin s_0)^\top\), we can write the path directly: \(\mathbf x(s)=\big(\cos(s_0+s),\,\sin(s_0+s)\big)^\top\).</li>
+<li>For a general smooth constraint with \(\nabla g(\mathbf x^\ast)\neq\mathbf 0^\top\), that such a path exists is a theorem from later calculus; we use it without proof.</li>
+</ul></li>
+</ul>
+<ol>
+<li class="fragment">\(h(s)=f(\mathbf x(s))\) is largest (or smallest) at \(s=0\), so \(h'(0)=0\). &emsp;— Calculus 1</li>
+<li class="fragment">\(h'(0)=\nabla f(\mathbf x^\ast)\,\mathbf x'(0)=\nabla f(\mathbf x^\ast)\,\mathbf t=0\), a \((1\times2\text{ row})(2\times1\text{ column})\).<br>— L14 chain rule: row times the Jacobian of the path \(\mathbf x(s)\)</li>
+<li class="fragment">\(g(\mathbf x(s))=c\) for every \(s\); differentiate: \(\nabla g(\mathbf x^\ast)\,\mathbf t=0\). &emsp;— same chain rule</li>
+<li class="fragment">In the plane, the vectors at a right angle to \(\mathbf t\) form one line. Both \((\nabla f)^\top\) and \((\nabla g)^\top\neq\mathbf 0\) lie on it, so \(\nabla f=\lambda\,\nabla g\).</li>
+</ol>
+<p class="fragment"><span class="tier-e">[EXPLORE]</span> With \(d\) variables, steps 1&ndash;3 hold for every direction \(\mathbf t\) along the surface \(g=c\), and the same conclusion follows.</p>
+<aside class="notes">"Step 0 is the only fact we take without proof. On the circle we write the path down explicitly, so for our examples the proof is complete. In general, grad g != 0 is what guarantees the level set is a genuine curve near x*. The 'theorem from later calculus' is the implicit function theorem; give the name only if someone asks, it is not on the slide on purpose." "Steps 2 and 3 are L11's two facts in chain-rule form: zero slope along the curve, and the gradient of g is orthogonal to its own contour. Differentiability of f and g is what lets us use the chain rule here."</aside>
+</section>
+
+<section>
+<h4>The warm-up, solved with the Lagrange condition</h4>
+<p>Maximize \(3x+4y\) subject to \(x^2+y^2=1\). &nbsp;\(\nabla f=\begin{bmatrix}3&4\end{bmatrix}\), \(\;\nabla g=\begin{bmatrix}2x&2y\end{bmatrix}\).</p>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>(1) first entry</th><th>(2) second entry</th><th>(3) constraint</th></tr>
+<tr><td>\(3=2\lambda x\)</td><td>\(4=2\lambda y\)</td><td>\(x^2+y^2=1\)</td></tr>
+</table>
+<ul>
+<li class="fragment">(1), (2): \(x=\tfrac{3}{2\lambda}\), \(\;y=\tfrac{2}{\lambda}\) &nbsp;(\(\lambda\neq0\), since \(3\neq0\)).</li>
+<li class="fragment">Into (3): \(\tfrac{9}{4\lambda^2}+\tfrac{4}{\lambda^2}=\tfrac{25}{4\lambda^2}=1\), so \(\lambda=\pm\tfrac52\).</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>\(\lambda\)</th><th>candidate</th><th>\(f=3x+4y\)</th></tr>
+<tr><td>\(\tfrac52\)</td><td>\(\left(\tfrac35,\tfrac45\right)^\top\)</td><td>\(5\), <strong>largest</strong></td></tr>
+<tr><td>\(-\tfrac52\)</td><td>\(\left(-\tfrac35,-\tfrac45\right)^\top\)</td><td>\(-5\), smallest</td></tr>
+</table>
+<ul>
+<li class="fragment">Same answer as L01&rsquo;s cosine formula: \(3x+4y=(3,4)^\top\mathbf u=5\cos\theta\) for a unit \(\mathbf u=(x,y)^\top\), between \(-5\) and \(5\).</li>
+</ul>
+</section>
+
+<section>
+<h4>The Lagrangian: one function whose flat points give both equations</h4>
+<div class="key-question">The condition is two equations, \(\nabla f=\lambda\nabla g\) and \(g=c\). Can one function package both, so that &ldquo;set its derivatives to zero&rdquo; &mdash; L09&ndash;L12&rsquo;s tool &mdash; gives exactly these equations?</div>
+<div class="mathbox fragment">
+<strong>Definition</strong> (MML (7.20), p.234; written as in (10.11), p.322). For &ldquo;maximize or minimize \(f(\mathbf x)\) subject to \(g(\mathbf x)=c\)&rdquo;, the <strong>Lagrangian</strong> is <span class="tier-m">[MASTER]</span>
+\[\mathcal L(\mathbf x,\lambda)=f(\mathbf x)+\lambda\,\big(c-g(\mathbf x)\big).\]
+</div>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>derivative of \(\mathcal L\)</th><th>set to zero</th><th>gives</th></tr>
+<tr><td>\(\dfrac{d\mathcal L}{d\mathbf x}=\nabla f-\lambda\,\nabla g\)</td><td>\(\mathbf 0^\top\)</td><td>\(\nabla f=\lambda\,\nabla g\)</td></tr>
+<tr><td>\(\dfrac{\partial\mathcal L}{\partial\lambda}=c-g(\mathbf x)\)</td><td>\(0\)</td><td>\(g(\mathbf x)=c\)</td></tr>
+</table>
+<ul>
+<li class="fragment">As in L12: \(d\) for the whole vector \(\mathbf x\) (a row), \(\partial\) for the single number \(\lambda\).</li>
+<li class="fragment">Sign: MML &sect;7.2 writes \(f+\lambda h\) with \(h=c-g\). Writing \(g-c\) only flips the sign of \(\lambda\) (MML pp.235&ndash;236).</li>
+</ul>
+</section>
+
+<section>
+<h4>Lagrange multipliers in four steps</h4>
+<p>Problem: maximize or minimize \(f(\mathbf x)\) subject to \(g(\mathbf x)=c\). <span class="tier-m">[MASTER]</span></p>
+<ol>
+<li class="fragment">Write the Lagrangian \(\;\mathcal L(\mathbf x,\lambda)=f(\mathbf x)+\lambda\,\big(c-g(\mathbf x)\big)\).</li>
+<li class="fragment">Set \(\;\dfrac{d\mathcal L}{d\mathbf x}=\mathbf 0^\top\;\) and \(\;\dfrac{\partial\mathcal L}{\partial\lambda}=0\).</li>
+<li class="fragment">Solve for every candidate \((\mathbf x,\lambda)\); \(\lambda\) may be positive or negative.</li>
+<li class="fragment">Compute \(f\) at each candidate: the largest value is the maximum, the smallest the minimum.</li>
+</ol>
+<ul>
+<li class="fragment"><strong>Also check (1):</strong> feasible points with \(\nabla g=\mathbf 0^\top\). The theorem says nothing there: add them to the candidates.</li>
+<li class="fragment"><strong>Also check (2):</strong> a largest / smallest value exists. Yes on a closed, bounded curve (extreme value theorem) <span class="tier-u">[UNDERSTAND]</span>; on a line, argue separately.</li>
+<li class="fragment">On the circle: \(\nabla g=\begin{bmatrix}2x&2y\end{bmatrix}=\mathbf 0^\top\) only at \((0,0)^\top\), off the circle; and the circle is closed and bounded.</li>
+</ul>
+<div class="key-question fragment"><strong>Now Unit 3&rsquo;s problem:</strong> first its picture, then the four steps.</div>
+<aside class="notes">"Warn them: the candidates are not maxima of the Lagrangian. They are points where all its derivatives vanish. The Lagrangian is bookkeeping, not a new thing to maximize."</aside>
+</section>
+
+<section>
+<h4>Unit 3&rsquo;s problem: contours of \(\mathbf u^\top S\mathbf u\) on the unit circle</h4>
+<img src="../images/unit05/u5-L17-fig03-main-ellipses.png" alt="The unit circle with three ellipses, the contours of 5u1^2+6u1u2+5u2^2 at levels 2, 5 and 8. Level 8 touches the circle from outside at plus and minus (1,1)/sqrt2; level 2 touches from inside at plus and minus (1,-1)/sqrt2; level 5 crosses at (1,0), (0,1), (-1,0), (0,-1)." style="float:right; max-height:470px; max-width:47%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Maximize \(f(\mathbf u)=\mathbf u^\top S\mathbf u=5u_1^2+6u_1u_2+5u_2^2\) subject to \(\mathbf u^\top\mathbf u=1\).</p>
+<ul>
+<li class="fragment">Contours of \(f\) are ellipses. Drawn: levels \(2\), \(5\), \(8\).</li>
+<li class="fragment">Level \(5\) crosses the circle at \((1,0)^\top\) and \((0,1)^\top\): variance \(5\) along each quiz (Unit 3).</li>
+<li class="fragment">Level \(8\): the highest level that still meets the circle. It touches at \(\pm\tfrac1{\sqrt2}(1,1)^\top\).</li>
+<li class="fragment">Level \(2\): the lowest. It touches at \(\pm\tfrac1{\sqrt2}(1,-1)^\top\).</li>
+</ul>
+<div class="key-question fragment">The picture predicts: largest \(8\), smallest \(2\). <strong>Now the four steps.</strong></div>
+</section>
+
+<section>
+<h4>The Lagrangian of Unit 3&rsquo;s problem gives the eigenvector equation</h4>
+<p>Step 1 (MML (10.11)): \(\;\mathcal L(\mathbf u,\lambda)=\mathbf u^\top S\mathbf u+\lambda\,(1-\mathbf u^\top\mathbf u)\).</p>
+<p class="fragment"><strong>Step 2: the derivatives</strong></p>
+<ol>
+<li class="fragment">\(d(\mathbf u^\top S\mathbf u)/d\mathbf u=2\,\mathbf u^\top S\) &emsp;— L12 Rule 2: \(d(\mathbf w^\top A\mathbf w)/d\mathbf w=2\,\mathbf w^\top A\), \(A\) symmetric</li>
+<li class="fragment">\(d(\mathbf u^\top\mathbf u)/d\mathbf u=d(\mathbf u^\top I\mathbf u)/d\mathbf u=2\,\mathbf u^\top\) &emsp;— Rule 2 with \(A=I\)</li>
+<li class="fragment">\(\dfrac{d\mathcal L}{d\mathbf u}=2\,\mathbf u^\top S-2\lambda\,\mathbf u^\top,\qquad\dfrac{\partial\mathcal L}{\partial\lambda}=1-\mathbf u^\top\mathbf u\) &emsp;— MML (10.12)</li>
+</ol>
+<p class="fragment"><strong>Set them to zero</strong></p>
+<ol start="4">
+<li class="fragment">\(\mathbf u^\top S=\lambda\,\mathbf u^\top\); transpose, using \(S^\top=S\): \(\;S\mathbf u=\lambda\,\mathbf u\) &emsp;— MML (10.13)</li>
+<li class="fragment">\(\mathbf u^\top\mathbf u=1\) &emsp;— MML (10.14)</li>
+</ol>
+<div class="key-question fragment">Every candidate is a <strong>unit eigenvector</strong> of \(S\), and the multiplier \(\lambda\) is its <strong>eigenvalue</strong>.</div>
+</section>
+
+<section>
+<h4>The largest variance is the largest eigenvalue</h4>
+<p>Candidates: \(S\mathbf u=\lambda\mathbf u\) and \(\mathbf u^\top\mathbf u=1\), with \(S=\begin{bmatrix}5&3\\3&5\end{bmatrix}\).</p>
+<ul>
+<li class="fragment">Step 3, solve (L07): \(\det(S-\lambda I)=(5-\lambda)^2-9=0\), so \(\lambda=8\) or \(\lambda=2\).</li>
+<li class="fragment">Step 4, compare. The value at a candidate (MML (10.15)): \(\;\mathbf u^\top S\mathbf u=\mathbf u^\top(\lambda\mathbf u)=\lambda\,\mathbf u^\top\mathbf u=\lambda\).</li>
+<li class="fragment">So comparing candidates = <strong>comparing eigenvalues</strong>.</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>\(\lambda\)</th><th>unit eigenvectors (candidates)</th><th>\(\mathbf u^\top S\mathbf u\)</th></tr>
+<tr><td>\(8\)</td><td>\(\pm\tfrac1{\sqrt2}(1,1)^\top\)</td><td>\(8\), <strong>largest</strong></td></tr>
+<tr><td>\(2\)</td><td>\(\pm\tfrac1{\sqrt2}(1,-1)^\top\)</td><td>\(2\), smallest</td></tr>
+</table>
+<div class="key-question fragment">Largest variance \(=\) largest eigenvalue \(=8\), along \(\tfrac1{\sqrt2}(1,1)^\top\): <span style="color:rgb(30,90,160)"><strong>Unit 3&rsquo;s Theorem 2, by calculus</strong></span> (MML &sect;10.2.1). <span class="tier-m">[MASTER]</span></div>
+<aside class="notes">"This is the slide Unit 3 promised: 'When you reach Lagrange multipliers in Unit 5, reopen p.322.' Have them open it now; every equation (10.10)-(10.15) on that page has been on the board today."</aside>
+</section>
+
+<section>
+<h4>Theorem 2 two ways: Unit 3&rsquo;s algebra and today&rsquo;s calculus</h4>
+<p>Theorem 2 (Unit 3): for every unit \(\mathbf u\), \(\;\lambda_2\le\mathbf u^\top S\mathbf u\le\lambda_1\); the upper bound is reached at the unit eigenvectors for \(\lambda_1\), the lower at those for \(\lambda_2\).</p>
+<table style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th></th><th>Unit 3 (L08): algebra</th><th>L17: calculus</th></tr>
+<tr class="fragment"><td>starts from</td><td>an orthogonal pair of unit eigenvectors (L07)</td><td>the problem itself</td></tr>
+<tr class="fragment"><td>key step</td><td>\(\mathbf u^\top S\mathbf u=\lambda_1c_1^2+\lambda_2c_2^2\), a weighted average</td><td>\(d\mathcal L/d\mathbf u=\mathbf 0^\top\) gives \(S\mathbf u=\lambda\mathbf u\)</td></tr>
+<tr class="fragment"><td>tools</td><td>orthogonality, Pythagoras</td><td>Rule 2, the Lagrange condition</td></tr>
+<tr class="fragment"><td>answer</td><td>largest \(\lambda_1=8\) at \(\pm\tfrac1{\sqrt2}(1,1)^\top\)</td><td>the same</td></tr>
+</table>
+<ul>
+<li class="fragment">The calculus route does not need the eigenvectors in advance: <strong>the eigenvector equation comes out of it</strong>.</li>
+<li class="fragment">Both routes work with \(d\) features: Unit 3&rsquo;s with \(d\) terms instead of two, today&rsquo;s because Rule 2 holds for every \(d\).</li>
+</ul>
+</section>
+
+
+<section>
+<h4>Your turn: the point on a line closest to the origin</h4>
+<div class="quickcheck"><strong>Your turn.</strong> A separate example, not our data. Find the point on the line \(x+2y=5\) closest to the origin: minimize the squared distance \(f(x,y)=x^2+y^2\) subject to \(g(x,y)=x+2y=5\).
+<ul style="list-style:none; padding-left:0.6em; margin-top:0.2em;">
+<li>(a) Write the Lagrangian \(\mathcal L(x,y,\lambda)\).</li>
+<li>(b) Set its three partial derivatives to zero.</li>
+<li>(c) Solve for \(x\), \(y\), \(\lambda\). Why is the candidate the minimum?</li>
+<li>(d) The squared distance there? Is the segment from the origin to your point perpendicular to the line?</li>
+</ul></div>
+<ul>
+<li class="fragment">(a) \(\mathcal L=x^2+y^2+\lambda\,(5-x-2y)\)</li>
+<li class="fragment">(b) \(2x-\lambda=0,\quad 2y-2\lambda=0,\quad 5-x-2y=0\)</li>
+<li class="fragment">(c) \(x=\tfrac\lambda2\), \(y=\lambda\); then \(\tfrac\lambda2+2\lambda=5\), so \(\lambda=2\): the point \((1,2)^\top\).</li>
+<li class="fragment" style="list-style:none;">Only one candidate, and \(f\) grows without bound far along the line: it is the minimum.</li>
+<li class="fragment">(d) \(f=1+4=5\). The line runs along \((2,-1)^\top\), and \((1,2)^\top\cdot(2,-1)^\top=0\): perpendicular, L03&rsquo;s projection picture.</li>
+</ul>
+</section>
+
+<section>
+<h4>L17 takeaways (1 of 2): the Lagrange condition</h4>
+<ul>
+<li>Constrained problem: maximize or minimize \(f(\mathbf x)\) subject to \(g(\mathbf x)=c\) (MML &sect;7.2). <span class="tier-m">[MASTER]</span>
+<ul><li>Setting \(\nabla f=\mathbf 0^\top\) is not enough: the best feasible point need not be flat.</li></ul></li>
+<li>At a best point, the contour of \(f\) touches the curve \(g=c\): <span class="tier-m">[MASTER]</span>
+\[\nabla f=\lambda\,\nabla g,\qquad g=c\qquad(f,g\text{ continuously differentiable},\ \nabla g\neq\mathbf 0^\top).\]
+<ul><li>Proof: along the curve, the slope of \(f\) is \(0\) and \(g\) does not change.</li></ul></li>
+<li>The condition gives candidates; compare \(f\) at each. <span class="tier-m">[MASTER]</span></li>
+</ul>
+</section>
+
+<section>
+<h4>L17 takeaways (2 of 2): the Lagrangian, and Unit 3&rsquo;s promise kept</h4>
+<ul>
+<li>Lagrangian \(\mathcal L(\mathbf x,\lambda)=f(\mathbf x)+\lambda\,\big(c-g(\mathbf x)\big)\) (MML (7.20), (10.11)). <span class="tier-m">[MASTER]</span>
+<ul><li>Setting its derivatives to zero gives both equations of the condition.</li></ul></li>
+<li>Maximize \(\mathbf u^\top S\mathbf u\) subject to \(\norm{\mathbf u}=1\): <span class="tier-m">[MASTER]</span>
+<ul><li>Rule 2 gives \(S\mathbf u=\lambda\mathbf u\), and the value at a candidate is \(\lambda\).</li>
+<li>Largest variance = largest eigenvalue: \(8\), along \(\tfrac1{\sqrt2}(1,1)^\top\).</li></ul></li>
+</ul>
+<div class="key-question fragment">Today the rule fixed the length of a direction \(\mathbf u\). A model&rsquo;s weights \(\mathbf w\) can also grow too large and make predictions unstable. <strong>L18: why weights explode, and how a penalty on \(\norm{\mathbf w}^2\) &mdash; ridge regression &mdash; keeps them stable.</strong></div>
+</section>
+<!-- ═══════════════════════════════════════════════════════════════
+     L18 — REGULARIZATION (Tue Nov 10)
+     Question: why can the fitted weights blow up, and how do we keep them stable?
+     Data: L06's two nearly dependent systems (recalled), the course data
+       t=(0,1,2)^T, y=(1,3,2)^T, X=[1 t].
+     2026-10-21 review fix: bias-variance (simulation, figs 03/04) moved to Unit 6;
+       Steps 1+2 merged; "Your turn lambda=3" cut to HW.
+     2026-10-21 round 2: know/fails/need key-question before ridge; objective built with
+       underbraces before the Definition; tangency slide softened (no KKT claim); one-line bridges.
+     Numbers verified with exact fractions (Python), 2026-10-21; figures:
+       slides/figures/gen_u5_L18.py (asserts every number drawn).
+     ═══════════════════════════════════════════════════════════════ -->
+
+<!-- L18-00: Title -->
+<section>
+<h2 style="font-size:1.3em;">L18 — Regularization</h2>
+<p><strong>Reading:</strong></p>
+<ul>
+<li>MML &sect;8.2.3, pp.262&ndash;263: Example 8.3, eq. (8.12), regularized least squares.</li>
+<li>MML &sect;9.2.4, pp.302&ndash;303: eq. (9.32), the loss; eq. (9.34), its solution.</li>
+<li>Optional: MML &sect;9.2.2, pp.298&ndash;300, Figure 9.6: training error vs. test error.</li>
+</ul>
+<p><strong>Plan:</strong></p>
+<ol>
+<li class="fragment">The problem: nearly dependent columns give huge, unstable weights.</li>
+<li class="fragment">The fix: add \(\lambda\lVert \mathbf w\rVert^2\) to the error &mdash; ridge regression.</li>
+<li class="fragment">Solve it with L12&rsquo;s two rules: \((X^\top X+\lambda I)\mathbf w=X^\top\mathbf y\).</li>
+<li class="fragment">On our data: the weights shrink.</li>
+<li class="fragment">How big should \(\lambda\) be? Training error cannot decide.</li>
+</ol>
+</section>
+
+<!-- L18-01: the problem, recalled from L06 -->
+<section>
+<h4>Recall L06: a tiny change in the data, a big change in the weights</h4>
+<p>L06&rsquo;s two systems, written with weights \(w_1,w_2\): two data points, two features.</p>
+\[X_1=\begin{bmatrix}1&1\\1&\mathbf{0.999}\end{bmatrix},\qquad X_2=\begin{bmatrix}1&1\\1&\mathbf{1.001}\end{bmatrix},\qquad \mathbf y=\begin{bmatrix}2\\1.998\end{bmatrix}\]
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>Data</th><th>Entry \((2,2)\) of \(X\)</th><th>Weights: solve \(X\mathbf w=\mathbf y\)</th></tr>
+<tr><td>\(X_1\)</td><td>\(0.999\)</td><td>\(\mathbf w=(0,\ 2)^\top\)</td></tr>
+<tr><td>\(X_2\)</td><td>\(1.001\)</td><td>\(\mathbf w=(4,\ -2)^\top\)</td></tr>
+</table>
+<ul>
+<li class="fragment">The data changed by \(0.002\). The weights changed by \(4\), and \(w_2\) changed sign.</li>
+<li class="fragment">L06&rsquo;s &deg;C/&deg;F data: one reading moved by \(0.1^\circ\); the Celsius weight went from \(+0.10\) to \(-1.19\). The predictions barely moved.</li>
+</ul>
+<div class="key-question fragment"><strong>Why</strong> can the fitted weights blow up &mdash; and <strong>how</strong> do we keep them stable?</div>
+<aside class="notes">"X is square and invertible here, so least squares gives exactly the solution of Xw = y; the normal equation X^T X w = X^T y has the same solution." "This is the only recall slide. The mechanism (determinant, eigenvalues) was L06 and L08; today is the fix as an optimization problem."</aside>
+</section>
+
+<!-- L18-02: why -->
+<section>
+<h4>Why: the two columns of \(X_1\) are almost the same</h4>
+<img src="../images/unit05/u5-L18-fig01a-L06-weights.png" alt="Weight plane: the line w1 + w2 = 2 through (0,2), (1,1) and (4,-2); a dashed circle of radius root 2 touches the line at (1,1)" style="float:right; max-height:470px; max-width:44%; margin:0 0 0.5em 1em; border-radius:6px;">
+<ul>
+<li>Columns of \(X_1\): \(\mathbf c_1=(1,1)^\top\), \(\mathbf c_2=(1,\,0.999)^\top\).</li>
+<li class="fragment">So \(X_1\mathbf w=w_1\mathbf c_1+w_2\mathbf c_2\approx(w_1+w_2)\,(1,1)^\top\).</li>
+<li class="fragment">The data fix the <strong>sum</strong> \(w_1+w_2\approx2\) (the gray line).</li>
+<li class="fragment">They barely fix the <strong>split</strong> between \(w_1\) and \(w_2\): only the \(0.001\) decides it.</li>
+<li class="fragment">Both answers are on the line: \(0+2=2\), \(\;4+(-2)=2\).</li>
+<li class="fragment">L08: \((1,-1)^\top\) is almost the eigenvector of \(X^\top X\) with eigenvalue \(\approx0\) &mdash; the direction the data say almost nothing about. <span class="tier-u">[UNDERSTAND]</span></li>
+</ul>
+</section>
+
+<!-- L18-03: three candidates -->
+<section>
+<h4>Three weight vectors that fit \(X_1\) almost equally well</h4>
+<p>Data \(X_1=\left[\begin{smallmatrix}1&1\\1&0.999\end{smallmatrix}\right]\), \(\mathbf y=(2,\,1.998)^\top\); residual \(\mathbf r=\mathbf y-X_1\mathbf w\), \(\;\mathrm{SSE}=\lVert \mathbf r\rVert^2\).</p>
+<table style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>\(\mathbf w\)</th><th>\(\mathbf r\)</th><th>\(\mathrm{SSE}\)</th><th>length\(^2\) \(\lVert \mathbf w\rVert^2\)</th></tr>
+<tr class="fragment"><td>\((0,\ 2)^\top\)</td><td>\((0,\ 0)^\top\)</td><td>\(0\)</td><td>\(4\)</td></tr>
+<tr class="fragment"><td>\((4,\ -2)^\top\)</td><td>\((0,\ -0.004)^\top\)</td><td>\(0.000016\)</td><td>\(20\)</td></tr>
+<tr class="fragment"><td>\((1,\ 1)^\top\)</td><td>\((0,\ -0.001)^\top\)</td><td>\(0.000001\)</td><td>\(2\)</td></tr>
+</table>
+<ul>
+<li class="fragment">Every \(\mathrm{SSE}\) is below \(0.00002\): the data cannot tell these apart.</li>
+<li class="fragment">\((4,-2)^\top\) uses two large weights that cancel: \(4-2=2\).</li>
+<li class="fragment">\((1,1)^\top\) is the <strong>shortest</strong> point on the line \(w_1+w_2=2\) (the circle on the previous figure).</li>
+</ul>
+<div class="key-question fragment"><strong>We know:</strong> several very different weights fit almost equally well.<br>
+<strong>What fails:</strong> training error alone cannot choose among them.<br>
+<strong>What we need:</strong> a second preference &mdash; among nearly tied fits, prefer the <strong>shorter</strong> weight vector.</div>
+</section>
+
+<!-- L18-04: definition -->
+<section>
+<h4>Ridge regression: the error plus a penalty on the weights</h4>
+<p>Two preferences, one number to minimize: fit the data, and keep the weights short.</p>
+\[\underbrace{\lVert \mathbf y-X\mathbf w\rVert^2}_{\text{fit the data}}\;+\;\underbrace{\lambda\lVert \mathbf w\rVert^2}_{\text{pay for large weights}}\]
+<div class="mathbox fragment">
+<strong>Definition</strong> (MML &sect;9.2.4, eq. (9.32), p.302; &sect;8.2.3, eq. (8.12), p.263). For a number \(\lambda\ge0\), <strong>regularized least squares</strong>, also called <strong>ridge regression</strong>, chooses \(\mathbf w\) to minimize
+\[E_\lambda(\mathbf w)=\lVert \mathbf y-X\mathbf w\rVert^2+\lambda\lVert \mathbf w\rVert^2 .\]
+<span class="tier-m">[MASTER]</span>
+</div>
+<ul>
+<li class="fragment">MML&rsquo;s names: \(\lVert \mathbf y-X\mathbf w\rVert^2=\mathrm{SSE}(\mathbf w)\) is the <strong>data-fit term</strong>; \(\lambda\lVert \mathbf w\rVert^2\) is the <strong>regularizer</strong> (penalty term).</li>
+<li class="fragment">\(\lambda\), the <strong>regularization parameter</strong>: the price of one unit of \(\lVert \mathbf w\rVert^2\).</li>
+<li class="fragment">\(\lambda=0\): \(E_0=\mathrm{SSE}\), the error of L09&ndash;L12.</li>
+<li class="fragment">MML (8.12) puts \(\tfrac1N\) in front of the data-fit term; (9.32) does not. We follow (9.32).</li>
+</ul>
+<aside class="notes">"MML p.87 (end of §3.8) calls the added λI the 'ridge' and says it is added for numerical stability: exactly L06's use." The name 'ridge regression' is the statistics name; MML's is 'regularized least squares'.</aside>
+</section>
+
+<!-- L18-05: the penalty on the three candidates -->
+<section>
+<h4>The penalty decides between the three: \(\lambda=0.01\)</h4>
+<p>Data \(X_1\), \(\mathbf y\) as before. \(\;E_{0.01}(\mathbf w)=\mathrm{SSE}(\mathbf w)+0.01\,\lVert \mathbf w\rVert^2\).</p>
+<table style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>\(\mathbf w\)</th><th>\(\mathrm{SSE}\)</th><th>\(0.01\,\lVert \mathbf w\rVert^2\)</th><th>\(E_{0.01}\)</th></tr>
+<tr class="fragment"><td>\((0,\ 2)^\top\)</td><td>\(0\)</td><td>\(0.04\)</td><td>\(0.04\)</td></tr>
+<tr class="fragment"><td>\((4,\ -2)^\top\)</td><td>\(0.000016\)</td><td>\(0.2\)</td><td>\(0.200016\)</td></tr>
+<tr class="fragment"><td>\((1,\ 1)^\top\)</td><td>\(0.000001\)</td><td>\(0.02\)</td><td><strong>\(0.020001\)</strong></td></tr>
+</table>
+<ul>
+<li class="fragment">The \(\mathrm{SSE}\) column is almost all zeros; the penalty column decides.</li>
+<li class="fragment">Of these three, \((1,1)^\top\) has the smallest \(E_{0.01}\).</li>
+</ul>
+<div class="key-question fragment">That compared <strong>three</strong> candidates. Which \(\mathbf w\) minimizes \(E_\lambda\) over <strong>all</strong> \(\mathbf w\)? Set the gradient to zero, as in L12.</div>
+</section>
+
+<!-- L18-06: step 1, L12's form and its derivative -->
+<section>
+<h4>Step 1: write \(E_\lambda\) in L12&rsquo;s form and differentiate</h4>
+<ul>
+<li>L12: \(\;\mathrm{SSE}(\mathbf w)=\mathbf w^\top X^\top X\mathbf w-2\,\mathbf w^\top X^\top\mathbf y+\mathbf y^\top\mathbf y\).</li>
+<li class="fragment">The penalty: \(\;\lambda\lVert \mathbf w\rVert^2=\mathbf w^\top(\lambda I)\,\mathbf w\). Add, and collect the two quadratic pieces:</li>
+</ul>
+<div class="fragment">
+\[E_\lambda(\mathbf w)=\mathbf w^\top A\,\mathbf w-2\,\mathbf w^\top X^\top\mathbf y+\mathbf y^\top\mathbf y,\qquad A=X^\top X+\lambda I\ \text{(symmetric)}\]
+</div>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>Piece</th><th>Rule (MML p.158)</th><th>Its derivative</th></tr>
+<tr><td>\(\mathbf w^\top A\mathbf w\)</td><td>Rule 2, (5.107): \(d(\mathbf w^\top A\mathbf w)/d\mathbf w=2\,\mathbf w^\top A\), \(A\) symmetric</td><td>\(2\,\mathbf w^\top(X^\top X+\lambda I)\)</td></tr>
+<tr><td>\(2\,\mathbf w^\top X^\top\mathbf y=2\,\mathbf b^\top\mathbf w\), &nbsp;\(\mathbf b=X^\top\mathbf y\)</td><td>Rule 1, (5.105): \(d(\mathbf b^\top\mathbf w)/d\mathbf w=\mathbf b^\top\)</td><td>\(2\,\mathbf b^\top=2\,\mathbf y^\top X\)</td></tr>
+<tr><td>\(\mathbf y^\top\mathbf y\)</td><td>no \(\mathbf w\)</td><td>\(0\)</td></tr>
+</table>
+<div class="fragment">
+\[\nabla E_\lambda=2\,\mathbf w^\top(X^\top X+\lambda I)-2\,\mathbf y^\top X=\underbrace{-2\,(\mathbf y-X\mathbf w)^\top X}_{\nabla\mathrm{SSE}\ \text{(L12)}}+\underbrace{2\lambda\,\mathbf w^\top}_{\text{from the penalty}}\]
+</div>
+<ul>
+<li class="fragment">The penalty adds \(2\lambda\mathbf w^\top\): Calculus 1&rsquo;s \((\lambda w^2)'=2\lambda w\), once per weight.</li>
+</ul>
+</section>
+
+<!-- L18-08: step 2, set to zero -->
+<section>
+<h4>Step 2: set \(\nabla E_\lambda\) to zero &mdash; the ridge normal equation</h4>
+<p>\(\nabla E_\lambda=2\,\mathbf w^\top(X^\top X+\lambda I)-2\,\mathbf y^\top X\).</p>
+\[\begin{aligned}
+&\nabla E_\lambda=\mathbf 0^\top\\
+\overset{(1)}{\iff}\;&\mathbf w^\top(X^\top X+\lambda I)=\mathbf y^\top X&&\text{add }2\,\mathbf y^\top X\text{, divide by }2\\
+\overset{(2)}{\iff}\;&(X^\top X+\lambda I)\,\mathbf w=X^\top\mathbf y&&\text{transpose both sides; }X^\top X+\lambda I\text{ is symmetric}
+\end{aligned}\]
+<div class="mathbox fragment">
+<strong>Theorem.</strong> The flat points of \(E_\lambda(\mathbf w)=\lVert \mathbf y-X\mathbf w\rVert^2+\lambda\lVert \mathbf w\rVert^2\) are exactly the solutions of
+\[(X^\top X+\lambda I)\,\mathbf w=X^\top\mathbf y .\]
+<span class="tier-m">[MASTER]</span>
+</div>
+<ul>
+<li class="fragment">\(\lambda=0\): L12&rsquo;s normal equation \(X^\top X\mathbf w=X^\top\mathbf y\).</li>
+<li class="fragment">MML (9.34), p.303: \(\boldsymbol\theta_{\text{RLS}}=(\Phi^\top\Phi+\lambda I)^{-1}\Phi^\top\mathbf y\). The book&rsquo;s \(\Phi\), \(\boldsymbol\theta\) are our \(X\), \(\mathbf w\).</li>
+</ul>
+</section>
+
+<!-- L18-09: exactly one solution -->
+<section>
+<h4>For \(\lambda&gt;0\): exactly one solution, for every \(X\)</h4>
+<p><strong>Claim.</strong> If \(\lambda&gt;0\), the matrix \(X^\top X+\lambda I\) is invertible &mdash; even when the columns of \(X\) are dependent.</p>
+<p class="fragment"><strong>Proof.</strong> Suppose \((X^\top X+\lambda I)\mathbf v=\mathbf 0\). We show \(\mathbf v=\mathbf 0\).</p>
+<ol>
+<li class="fragment">Multiply on the left by \(\mathbf v^\top\): \(\;\mathbf v^\top X^\top X\mathbf v+\lambda\,\mathbf v^\top\mathbf v=0\).</li>
+<li class="fragment">That is \(\;\lVert X\mathbf v\rVert^2+\lambda\lVert \mathbf v\rVert^2=0\), &nbsp;since \(\mathbf v^\top X^\top X\mathbf v=(X\mathbf v)^\top(X\mathbf v)\).</li>
+<li class="fragment">Both terms are \(\ge0\), so both are \(0\). With \(\lambda&gt;0\): \(\lVert \mathbf v\rVert^2=0\), so \(\mathbf v=\mathbf 0\).</li>
+<li class="fragment">Only \(\mathbf 0\) is sent to \(\mathbf 0\): the square matrix \(X^\top X+\lambda I\) is invertible (Unit 2).</li>
+</ol>
+<ul>
+<li class="fragment">So the ridge normal equation has <strong>exactly one</strong> solution \(\mathbf w_\lambda=(X^\top X+\lambda I)^{-1}X^\top\mathbf y\). Compare L10: dependent columns gave a whole line of best weights.</li>
+<li class="fragment">It is the <strong>lowest</strong> point: \(E_\lambda\) is convex (L15), and for a convex function a flat point is a global minimum. <span class="tier-u">[UNDERSTAND]</span></li>
+</ul>
+<aside class="notes">"Convexity of E_lambda: SSE is convex (L15) and lambda times |w|^2 is a sum of parabolas lambda w_j^2; adding the two chord inequalities shows the sum is convex. Do not prove it in class." MML p.302 margin note says the same: Phi^T Phi + lambda I is strictly positive definite, so the inverse exists.</aside>
+</section>
+
+<!-- L18-10: on our data, set up and solve -->
+<section>
+<h4>On our data: solve the ridge normal equation for \(\lambda=1\)</h4>
+<ul>
+<li>Data: \(\mathbf t=(0,1,2)^\top\) hours, \(\mathbf y=(1,3,2)^\top\) points; model \(\hat y=w_0+w_1t\), \(\;X=\left[\begin{smallmatrix}1&0\\1&1\\1&2\end{smallmatrix}\right]\).</li>
+<li>Following MML (9.32), we penalize both weights, including the intercept \(w_0\). Many software implementations do not penalize the intercept.</li>
+<li>From L12: \(\;X^\top X=\begin{bmatrix}3&3\\3&5\end{bmatrix}\), \(\;X^\top\mathbf y=\begin{bmatrix}6\\7\end{bmatrix}\). Without the penalty, \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\).</li>
+<li>To solve: \(\;(X^\top X+\lambda I)\,\mathbf w=X^\top\mathbf y\), with \(\lambda=1\).</li>
+<li>The \(2\times2\) inverse (L06): \(\begin{bmatrix}a&b\\c&d\end{bmatrix}^{-1}=\dfrac1{ad-bc}\begin{bmatrix}d&-b\\-c&a\end{bmatrix}\).</li>
+</ul>
+<div class="fragment">
+\[X^\top X+1\cdot I=\begin{bmatrix}4&3\\3&6\end{bmatrix},\qquad \det=4\cdot6-3\cdot3=15\]
+</div>
+<div class="fragment">
+\[\mathbf w_{\lambda=1}=\frac1{15}\begin{bmatrix}6&-3\\-3&4\end{bmatrix}\begin{bmatrix}6\\7\end{bmatrix}=\frac1{15}\begin{bmatrix}15\\10\end{bmatrix}=\begin{bmatrix}1\\[2pt]\tfrac23\end{bmatrix}\]
+</div>
+</section>
+
+<!-- L18-11: what lambda = 1 bought, and what it cost -->
+<section>
+<h4>What \(\lambda=1\) bought, and what it cost</h4>
+<p>Compare \(\mathbf w_{\lambda=1}\) with the unpenalized \(\mathbf w^\ast\).</p>
+<p>\(E_1(\mathbf w)=\mathrm{SSE}(\mathbf w)+\lVert \mathbf w\rVert^2\), with \(\mathrm{SSE}(\mathbf w)=\lVert \mathbf y-X\mathbf w\rVert^2\) on our data.</p>
+<table style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th></th><th>\(\mathbf w^\ast\) (\(\lambda=0\))</th><th>\(\mathbf w_{\lambda=1}\) (\(\lambda=1\))</th></tr>
+<tr><td>weights</td><td>\(\left(\tfrac32,\ \tfrac12\right)^\top\)</td><td>\(\left(1,\ \tfrac23\right)^\top\)</td></tr>
+<tr class="fragment"><td>length\(^2\) \(\lVert \mathbf w\rVert^2\)</td><td>\(\tfrac52=2.5\)</td><td>\(\tfrac{13}9\approx1.44\)</td></tr>
+<tr class="fragment"><td>\(\mathrm{SSE}\)</td><td>\(\tfrac32=1.5\)</td><td>\(\tfrac{17}9\approx1.89\)</td></tr>
+<tr class="fragment"><td>\(E_1=\mathrm{SSE}+\lVert \mathbf w\rVert^2\)</td><td>\(4\)</td><td>\(\tfrac{10}3\approx3.33\)</td></tr>
+</table>
+<ul>
+<li class="fragment"><strong>Bought:</strong> shorter weights, \(\;2.5\to1.44\).</li>
+<li class="fragment"><strong>Cost:</strong> a worse fit to the training data, \(\;1.5\to1.89\).</li>
+<li class="fragment">\(E_1\) is lower at \(\mathbf w_{\lambda=1}\): ridge minimizes the <strong>sum</strong>, not \(\mathrm{SSE}\) alone.</li>
+<li class="fragment">⚠️ The slope \(w_1\) went <strong>up</strong>, \(\tfrac12\to\tfrac23\). Ridge shrinks the length \(\lVert \mathbf w\rVert\), not necessarily every entry.</li>
+</ul>
+<aside class="notes">"Residuals at w_(lambda=1): r = (0, 4/3, -1/3)^T, so SSE = 16/9 + 1/9 = 17/9." "Let a student ask why w_1 grew; the next figure answers it: the path bends."</aside>
+</section>
+
+<!-- L18-13: the ridge path -->
+<section>
+<h4>The ridge path: \(\mathbf w_\lambda\) for every \(\lambda\)</h4>
+<img src="../images/unit05/u5-L18-fig02-ridge-path.png" alt="Contours of SSE around w* = (1.5, 0.5); the ridge path runs from w* through lambda = 1, 3, 10 to the origin; a dashed circle through w_1 touches the SSE contour there" style="float:right; max-height:470px; max-width:52%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>\(\lambda=1\) is one choice. To see how the answer moves with \(\lambda\), and why \(w_1\) grew, solve for every \(\lambda\).</p>
+<ul>
+<li>Red curve: \(\mathbf w_\lambda=(X^\top X+\lambda I)^{-1}X^\top\mathbf y\) on our data, \(\lambda\) from \(0\) up.</li>
+<li class="fragment">\(\lambda=0\): \(\mathbf w^\ast\). As \(\lambda\) grows, \(\mathbf w_\lambda\) moves toward \(\mathbf 0\).</li>
+<li class="fragment">\(\lVert \mathbf w_\lambda\rVert^2\): \(\;2.5,\ 1.44,\ 0.86\) at \(\lambda=0,1,3\).</li>
+<li class="fragment">Large \(\lambda\): \((X^\top X+\lambda I)\mathbf w\approx\lambda\mathbf w\), so \(\mathbf w_\lambda\approx X^\top\mathbf y/\lambda\to\mathbf 0\).</li>
+<li class="fragment">The curve first bends up: that is why the slope \(w_1\) grew from \(\tfrac12\) to \(\tfrac23\).</li>
+</ul>
+</section>
+
+<!-- L18-14: the tangency -->
+<section>
+<h4>Why the path bends: \(\mathbf w_\lambda\) is where a contour touches a circle <span class="tier-u">[UNDERSTAND]</span></h4>
+<img src="../images/unit05/u5-L18-fig02-ridge-path.png" alt="Same figure: the bold SSE contour through the lambda = 1 point touches the dashed circle through that point" style="float:right; max-height:420px; max-width:46%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p><strong>What does the penalty mean geometrically?</strong></p>
+<ul>
+<li>At \(\mathbf w_\lambda\): \(\nabla E_\lambda=\nabla\mathrm{SSE}+2\lambda\,\mathbf w_\lambda^\top=\mathbf 0^\top\), so \(\;\nabla\mathrm{SSE}=-2\lambda\,\mathbf w_\lambda^\top\).</li>
+<li class="fragment">\(\nabla\big(\lVert \mathbf w\rVert^2\big)=2\,\mathbf w^\top\). So at \(\mathbf w_\lambda\) the two gradients are <strong>parallel</strong>.</li>
+<li class="fragment">L17: parallel gradients = the contour of \(\mathrm{SSE}\) touches the circle \(\lVert \mathbf w\rVert=\lVert \mathbf w_\lambda\rVert\).</li>
+<li class="fragment">The ridge equation gives the same tangency condition as minimizing \(\mathrm{SSE}\) over the disc \(\lVert \mathbf w\rVert\le\lVert \mathbf w_\lambda\rVert\).</li>
+<li class="fragment">For this convex problem, that tangency picks out the <strong>best point on the disc</strong>: the best fit among all weights no longer than \(\mathbf w_\lambda\).</li>
+<li class="fragment">On our data at \(\lambda=1\): \(\nabla\mathrm{SSE}(\mathbf w_{\lambda=1})=\begin{bmatrix}-2&-\tfrac43\end{bmatrix}=-2\begin{bmatrix}1&\tfrac23\end{bmatrix}\) ✓</li>
+</ul>
+<aside class="notes">"grad SSE = [6w0+6w1-12, 6w0+10w1-14]; at (1, 2/3): [6+4-12, 6+20/3-14] = [-2, -4/3]." "The circle touches the tilted ellipse where the ellipse's normal points at the origin, not where w1 is smaller; that is the bend."</aside>
+</section>
+
+<!-- L18-15: back to L06 -->
+<section>
+<h4>Back to L06: ridge makes the weights stable</h4>
+<img src="../images/unit05/u5-L18-fig01b-L06-ridge.png" alt="Weight plane: without ridge the two answers are (0,2) and (4,-2); with lambda = 0.01 both are about (0.997, 0.997), next to (1,1)" style="float:right; max-height:440px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Does ridge fix L06&rsquo;s unstable weights? Same data: \(X_1\) (entry \(0.999\)), \(X_2\) (entry \(1.001\)), \(\mathbf y=(2,\,1.998)^\top\).</p>
+<table style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>\(\lambda\)</th><th>weights from \(X_1\)</th><th>weights from \(X_2\)</th></tr>
+<tr><td>\(0\)</td><td>\((0,\ 2)^\top\)</td><td>\((4,\ -2)^\top\)</td></tr>
+<tr class="fragment"><td>\(0.01\)</td><td>\((0.997,\ 0.997)^\top\)</td><td>\((0.997,\ 0.997)^\top\)</td></tr>
+</table>
+<ul>
+<li class="fragment">Without ridge: data change \(0.002\), weights change \(4\).</li>
+<li class="fragment">With \(\lambda=0.01\), the two answers agree to three decimals.</li>
+<li class="fragment">The cost: \(\mathrm{SSE}\) rises from \(0\) to about \(0.00005\).</li>
+<li class="fragment">L08&rsquo;s reason: \(+\lambda I\) lifts the eigenvalue \(\approx0\) to \(\approx0.01\).</li>
+</ul>
+<aside class="notes">Ridge weights to five decimals: X_1 gives (0.99748, 0.99703), X_2 gives (0.99659, 0.99693). SSE at the ridge weights: 5.0e-5 (X_1), 5.4e-5 (X_2). L08's eigenvalue of X^T X along (1,-1) is about 2.5e-7; plus 0.01 it is about 0.01, so the inverse stretches that direction by about 100 instead of 4,000,000.</aside>
+</section>
+
+<!-- L18-16: answer to the lecture question -->
+<section>
+<h4>The lecture&rsquo;s question, answered</h4>
+<table style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>Question</th><th>Answer</th></tr>
+<tr class="fragment"><td style="white-space:nowrap;">Why can the weights blow up?</td><td>Nearly dependent columns: the data fix some combinations of the weights (here \(w_1+w_2\)) and leave others (here \(w_1-w_2\)) to noise.</td></tr>
+<tr class="fragment"><td style="white-space:nowrap;">How do we keep them stable?</td><td>Minimize \(\mathrm{SSE}+\lambda\lVert \mathbf w\rVert^2\): among weights that fit about equally well, ridge takes a short one.</td></tr>
+<tr class="fragment"><td style="white-space:nowrap;">How do we compute it?</td><td>Solve \((X^\top X+\lambda I)\mathbf w=X^\top\mathbf y\): one solution for every \(X\), when \(\lambda&gt;0\).</td></tr>
+</table>
+<div class="key-question fragment">Ridge never fits the training data <strong>better</strong> than \(\lambda=0\) (usually worse). So how large should \(\lambda\) be?</div>
+</section>
+
+<!-- L18-17: the price of lambda -->
+<section>
+<h4>How large should \(\lambda\) be?</h4>
+<p>Our data, \(\mathbf w_\lambda=(X^\top X+\lambda I)^{-1}X^\top\mathbf y\):</p>
+<table style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>\(\lambda\)</th><th>\(\mathbf w_\lambda\)</th><th>length\(^2\) \(\lVert \mathbf w_\lambda\rVert^2\)</th><th>training \(\mathrm{SSE}\)</th></tr>
+<tr><td>\(0\)</td><td>\(\left(\tfrac32,\ \tfrac12\right)^\top\)</td><td>\(2.5\)</td><td>\(1.5\)</td></tr>
+<tr><td>\(1\)</td><td>\(\left(1,\ \tfrac23\right)^\top\)</td><td>\(1.44\)</td><td>\(1.89\)</td></tr>
+<tr><td>\(10\)</td><td>\(\approx(0.37,\ 0.39)^\top\)</td><td>\(0.29\)</td><td>\(6.11\)</td></tr>
+</table>
+<ul>
+<li class="fragment">\(\lambda=0\): the best training fit, but the weights can be unstable (L06).</li>
+<li class="fragment">Larger \(\lambda\): shorter, stabler weights; a worse (or equal) training fit.</li>
+<li class="fragment">Very large \(\lambda\): \(\mathbf w_\lambda\to\mathbf 0\), and the model ignores the data.</li>
+<li class="fragment">So the training \(\mathrm{SSE}\) cannot choose \(\lambda\): it always prefers \(\lambda=0\).</li>
+<li class="fragment">In practice: choose \(\lambda\) by the error on <strong>held-out</strong> data, data kept aside from fitting (MML &sect;8.2.4, p.263). <span class="tier-e">[EXPLORE]</span></li>
+<li class="fragment">MML Figure 9.6, p.300: training error keeps falling as the model gets more flexible; error on new data falls, then rises. Unit 6 explains why, with probability.</li>
+</ul>
+<aside class="notes">"w_10 = (23/62, 73/186) = (0.371, 0.392); |w_10|^2 = 5045/17298 = 0.292; SSE = 105697/17298 = 6.11." "That training SSE never decreases as lambda grows follows from the path being the best fit inside a shrinking disc (previous slides); do not prove it." Bias-variance (bias^2 + variance + noise) moved to Unit 6: it needs noise, repeated datasets and expectation.</aside>
+</section>
+
+<!-- L18-21: takeaways 1 -->
+<section>
+<h4>L18 takeaways (1 of 2): the problem and the fix</h4>
+<ul>
+<li class="fragment">Nearly dependent columns: the data fix some combinations of the weights and leave others to noise, so the weights can be huge and swing with tiny changes in the data. <span class="tier-u">[UNDERSTAND]</span></li>
+<li class="fragment">Ridge regression (MML (9.32), p.302): minimize \(E_\lambda(\mathbf w)=\lVert \mathbf y-X\mathbf w\rVert^2+\lambda\lVert \mathbf w\rVert^2\), \(\lambda\ge0\). <span class="tier-m">[MASTER]</span>
+<ul><li>data-fit term + regularizer; \(\lambda\) is the regularization parameter.</li></ul></li>
+<li class="fragment">\(\nabla E_\lambda=-2\,(\mathbf y-X\mathbf w)^\top X+2\lambda\,\mathbf w^\top\), by L12&rsquo;s Rule 1 and Rule 2. <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Its flat point solves \((X^\top X+\lambda I)\mathbf w=X^\top\mathbf y\) (MML (9.34), p.303). <span class="tier-m">[MASTER]</span>
+<ul><li>For \(\lambda&gt;0\) exactly one solution, for every \(X\): \(\lVert X\mathbf v\rVert^2+\lambda\lVert \mathbf v\rVert^2=0\Rightarrow\mathbf v=\mathbf 0\).</li></ul></li>
+</ul>
+</section>
+
+<!-- L18-22: takeaways 2 -->
+<section>
+<h4>L18 takeaways (2 of 2): shrinkage and the choice of \(\lambda\)</h4>
+<ul>
+<li class="fragment">Our data: \(\lambda=1\) gives \(\mathbf w_{\lambda=1}=\left(1,\tfrac23\right)^\top\); \(\lVert \mathbf w\rVert^2\) falls \(2.5\to1.44\), \(\mathrm{SSE}\) rises \(1.5\to1.89\). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Larger \(\lambda\), shorter \(\mathbf w_\lambda\); \(\mathbf w_\lambda\to\mathbf 0\). Ridge shrinks the length, not every entry. <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">The ridge equation is the tangency condition for minimizing \(\mathrm{SSE}\) over the disc \(\lVert \mathbf w\rVert\le\lVert \mathbf w_\lambda\rVert\) (contour touches circle, L17); for this convex problem it picks out the best fit on that disc. <span class="tier-u">[UNDERSTAND]</span></li>
+<li class="fragment">Training \(\mathrm{SSE}\) never falls as \(\lambda\) grows, so it cannot choose \(\lambda\); in practice \(\lambda\) is chosen by the error on held-out data. <span class="tier-e">[EXPLORE]</span></li>
+</ul>
+<div class="key-question fragment">With two weights we solved \((X^\top X+\lambda I)\mathbf w=X^\top\mathbf y\) in one step. With millions of weights, models walk downhill with gradient descent (L16) instead. <strong>When do we stop walking, and why is the walk sometimes very slow? L19.</strong></div>
+</section>
+<!-- ═══════════════════════════════════════════════════════════════
+     L19 — Stopping Criteria and Conditioning (Thu Nov 12)
+     Question: when should gradient descent stop, and why is it sometimes very slow?
+     Course data: t = (0,1,2)^T h, y = (1,3,2)^T, X^T X = [[3,3],[3,5]] (eigenvalues 4 +- sqrt 10),
+     w* = (3/2,1/2)^T, SSE* = 3/2. GD gamma = 0.1 from (0,0)^T (same run as L16).
+     Condition number always named: kappa(X^T X) = lambda_max / lambda_min of the normal-equation matrix.
+     Separate example: the same students, t in minutes; then the standardized feature z.
+     Numbers verified with fractions / numpy, 2026-10-21; figures: slides/figures/gen_u5_L19.py.
+     Revised 2026-10-21 after the ChatGPT review: 29 -> 21 slides (stopping Your turn cut to HW,
+     one-parameter 1-10 gamma slides replaced by the L16 callback, units part 7 -> 3 slides).
+     ═══════════════════════════════════════════════════════════════ -->
+
+<!-- L19-00: title -->
+<section>
+<h2 style="font-size:1.3em;">L19 — Stopping Criteria and Conditioning</h2>
+<p><strong>Reading:</strong></p>
+<ul>
+<li>MML &sect;7.1, p.228: eq. (7.6), gradient descent</li>
+<li>MML &sect;7.1, p.229: Remark on poorly conditioned problems (Figure 7.3); &sect;7.1.1, step-size</li>
+<li>MML &sect;7.1.1, p.230: Remark, the condition number</li>
+<li>MML &sect;10.6, p.336: step 2, standardization</li>
+</ul>
+<p class="fragment"><strong>The plan:</strong></p>
+<ol>
+<li class="fragment">When should gradient descent <span style="color:rgb(30,90,160)"><strong>stop</strong></span>? Three stopping rules.</li>
+<li class="fragment">Why is it sometimes very <span style="color:rgb(30,90,160)"><strong>slow</strong></span>? The eigenvalues of \(X^\top X\), the condition number \(\kappa(X^\top X)\).</li>
+<li class="fragment">When the cause is a feature&rsquo;s units: <span style="color:rgb(30,90,160)"><strong>standardize the feature</strong></span>.</li>
+</ol>
+</section>
+
+<!-- ─────────────── Part 1: when to stop ─────────────── -->
+
+<!-- L19-01 -->
+<section>
+<h4>Where L16 left us: gradient descent on our data</h4>
+<p>Data: \(\mathbf t=(0,1,2)^\top\) hours, \(\;\mathbf y=(1,3,2)^\top\) points, model \(\hat y=w_0+w_1t\).</p>
+<ul>
+<li>\(\mathrm{SSE}(\mathbf w)=3w_0^2+6w_0w_1+5w_1^2-12w_0-14w_1+14\)</li>
+<li>\(\nabla\mathrm{SSE}(\mathbf w)=\begin{bmatrix}6w_0+6w_1-12&amp;6w_0+10w_1-14\end{bmatrix}\), a row</li>
+<li>Gradient descent (MML (7.6), p.228): \(\;\mathbf w_{k+1}=\mathbf w_k-\gamma\,\big(\nabla\mathrm{SSE}(\mathbf w_k)\big)^\top\), &ensp;\(\gamma=0.1\), &ensp;\(\mathbf w_0=(0,0)^\top\)</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.4em auto; font-size:0.95em;">
+<tr><th>step \(k\)</th><th>\(\mathbf w_k\)</th><th>\(\mathrm{SSE}(\mathbf w_k)\)</th></tr>
+<tr><td>\(0\)</td><td>\((0,\,0)^\top\)</td><td>\(14\)</td></tr>
+<tr><td>\(1\)</td><td>\((1.2,\,1.4)^\top\)</td><td>\(4.2\)</td></tr>
+<tr><td>\(2\)</td><td>\((0.84,\,0.68)^\top\)</td><td>\(2.256\)</td></tr>
+<tr><td>\(3\)</td><td>\((1.128,\,0.896)^\top\)</td><td>\(\approx1.815\)</td></tr>
+</table>
+<p class="fragment">The best model (L10): \(\mathbf w^\ast=(1.5,\,0.5)^\top\), \(\;\mathrm{SSE}(\mathbf w^\ast)=1.5\).</p>
+<aside class="notes">"Same run as L16: gamma = 0.1 from the all-zero model. Step 1: the gradient at (0,0) is [-12 -14], so w1 = (1.2, 1.4). Step 2: the gradient at (1.2,1.4) is [3.6 7.2], so w2 = (0.84, 0.68)."</aside>
+</section>
+
+<!-- L19-02 -->
+<section>
+<h4>The loop gets close to \(\mathbf w^\ast\), but does not land on it</h4>
+<p>Gradient descent on our \(\mathrm{SSE}\), \(\gamma=0.1\), from \((0,0)^\top\); best: \(\mathbf w^\ast=(1.5,0.5)^\top\), \(\mathrm{SSE}=1.5\).</p>
+<table style="width:auto; margin:0.4em auto; font-size:0.95em;">
+<tr><th>step \(k\)</th><th>\(\mathbf w_k\)</th><th>\(\mathrm{SSE}(\mathbf w_k)\)</th><th>\(\mathrm{SSE}(\mathbf w_k)-1.5\)</th></tr>
+<tr><td>\(5\)</td><td>\((1.2115,\,0.7318)^\top\)</td><td>\(1.6171\)</td><td>\(0.12\)</td></tr>
+<tr><td>\(10\)</td><td>\((1.3800,\,0.5862)^\top\)</td><td>\(1.5183\)</td><td>\(0.018\)</td></tr>
+<tr><td>\(20\)</td><td>\((1.4808,\,0.5138)^\top\)</td><td>\(1.50047\)</td><td>\(0.00047\)</td></tr>
+<tr><td>\(40\)</td><td>\((1.4995,\,0.5004)^\top\)</td><td>\(1.5000003\)</td><td>\(0.0000003\)</td></tr>
+</table>
+<ul>
+<li class="fragment">The gap to the best error shrinks every step, but it is never \(0\).</li>
+<li class="fragment">The loop does not know \(\mathbf w^\ast\) or \(1.5\). If it did, there would be nothing to compute.</li>
+</ul>
+<div class="key-question fragment">The loop must stop at some step \(k\). <strong>Using only what it can compute at step \(k\), when should it stop?</strong></div>
+<aside class="notes">"Why never exactly 0: Part 2 shows each step multiplies the distance to w* by factors -0.43 and 0.83, never 0."</aside>
+</section>
+
+<!-- L19-03 -->
+<section>
+<h4>What the loop can compute at step \(k\)</h4>
+<img src="../images/unit05/u5-L19-fig01-stopping-signals.png" alt="Two log-scale plots over steps 0 to 40 of gradient descent on the course SSE with step size 0.1. Left: the length of the gradient, first below 0.01 at step 28. Right: the drop in SSE at each step, first below 0.0001 at step 22." style="float:right; max-height:360px; max-width:62%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Gradient descent on our \(\mathrm{SSE}\), \(\gamma=0.1\).</p>
+<ul>
+<li class="fragment">The <strong>length of the gradient</strong>, \(\norm{(\nabla\mathrm{SSE}(\mathbf w_k))^\top}\).<br>It is \(0\) at \(\mathbf w^\ast\) (L09).</li>
+<li class="fragment">The <strong>drop in error</strong>,<br>\(\mathrm{SSE}(\mathbf w_{k-1})-\mathrm{SSE}(\mathbf w_k)\).</li>
+<li class="fragment">The <strong>step count</strong> \(k\).</li>
+<li class="fragment">On our data the first two shrink steadily.</li>
+<li class="fragment">Dashed lines: possible cut-offs.</li>
+</ul>
+</section>
+
+<!-- L19-04 -->
+<section>
+<h4>Stopping rules <span class="tier-m">[MASTER]</span></h4>
+<div class="mathbox">
+<strong>Stopping rules for gradient descent.</strong> Choose in advance two tolerances \(\varepsilon_g&gt;0\), \(\varepsilon_f&gt;0\) and a step limit \(K_{\max}\).
+Stop at the <strong>first</strong> step \(k\) where <strong>any one</strong> of these holds:
+<ol>
+<li><strong>gradient small:</strong> \(\;\norm{(\nabla f(\mathbf w_k))^\top}&lt;\varepsilon_g\)</li>
+<li><strong>error barely changing:</strong> \(\;\big|f(\mathbf w_k)-f(\mathbf w_{k-1})\big|&lt;\varepsilon_f\)</li>
+<li><strong>step limit:</strong> \(\;k=K_{\max}\)</li>
+</ol>
+The trained parameters are \(\mathbf w_k\).
+</div>
+<ul>
+<li class="fragment">Rule 2 uses \(|\cdot|\): with too large a \(\gamma\) the error can go <em>up</em> (L16).</li>
+<li class="fragment">MML p.228 says only that, for a suitable \(\gamma\), \(f(\mathbf w_0)\ge f(\mathbf w_1)\ge\cdots\) converges. When to stop is a choice we make.</li>
+</ul>
+</section>
+
+<!-- L19-05 -->
+<section>
+<h4>Why each rule, and when it can mislead</h4>
+<table style="width:auto; margin:0.4em auto; font-size:0.9em;">
+<tr><th>rule</th><th>why it makes sense</th><th>it can mislead when</th></tr>
+<tr class="fragment"><td>1. gradient small</td><td>\(\nabla\mathrm{SSE}=\mathbf 0\) at \(\mathbf w^\ast\) (L09):<br>nearly flat \(\Rightarrow\) nearly there</td><td>the valley is long and nearly flat<br>(Part 2)</td></tr>
+<tr class="fragment"><td>2. error barely changing</td><td>more steps would buy<br>almost nothing</td><td>progress is slow, not finished<br>(Part 3)</td></tr>
+<tr class="fragment"><td>3. step limit</td><td>the loop always ends,<br>even if \(\gamma\) is too large (L16)</td><td>always possible: it stops<br>wherever it is</td></tr>
+</table>
+<ul>
+<li class="fragment">Use all three, then look at <strong>which rule</strong> stopped the loop.</li>
+<li class="fragment">Stopped by rule 3: the loop did <strong>not</strong> converge; something is wrong (\(\gamma\), or the problem itself: Part 2).</li>
+</ul>
+</section>
+
+<!-- L19-06 -->
+<section>
+<h4>Our data: which rule stops first?</h4>
+<p>Gradient descent on our \(\mathrm{SSE}\), \(\gamma=0.1\), from \((0,0)^\top\). Rules: \(\varepsilon_g=0.01\), \(\;\varepsilon_f=10^{-4}\), \(\;K_{\max}=1000\).</p>
+<table class="fragment" style="width:auto; margin:0.4em auto; font-size:0.95em;">
+<tr><th>rule</th><th>first step where it holds</th><th>\(\mathbf w_k\)</th><th>\(\mathrm{SSE}(\mathbf w_k)\)</th></tr>
+<tr><td>2. error barely changing</td><td>\(k=22\)</td><td>\((1.4867,\,0.5096)^\top\)</td><td>\(1.50022\)</td></tr>
+<tr><td>1. gradient small</td><td>\(k=28\)</td><td>\((1.4956,\,0.5032)^\top\)</td><td>\(1.50002\)</td></tr>
+<tr><td>3. step limit</td><td>\(k=1000\)</td><td>&mdash;</td><td>&mdash;</td></tr>
+</table>
+<ul>
+<li class="fragment">Rule 2 fires first: <strong>stop at \(k=22\)</strong>.</li>
+<li class="fragment">Trained model: \(\hat y\approx1.487+0.510\,t\). &ensp;Best model: \(\hat y=1.5+0.5\,t\).</li>
+<li class="fragment">Its \(\mathrm{SSE}\) is \(0.0002\) above the best \(1.5\): good enough.</li>
+</ul>
+</section>
+
+<!-- ─────────────── Part 2: why it is slow ─────────────── -->
+
+<!-- L19-08 -->
+<section>
+<h4>Why 22 steps? The path zigzags</h4>
+<img src="../images/unit05/u5-L19-fig02-zigzag.png" alt="Contours of the course SSE, ellipses tilted down to the right. The gradient-descent path with step size 0.1 from (0,0) jumps to w1 = (1.2, 1.4), back to w2 = (0.84, 0.68), to w3 = (1.128, 0.896), then creeps toward w* = (1.5, 0.5). Two dashed lines through w*: the long axis of the ellipses, labelled slow direction, lambda about 0.84, and the short axis, labelled fast direction, lambda about 7.16." style="float:right; max-height:420px; max-width:52%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Stopping tells us <strong>when</strong> to quit; it does not explain <strong>why</strong> it took 22 steps. <span style="color:rgb(30,90,160)"><strong>Now: why is the loop slow?</strong></span></p>
+<ul>
+<li class="fragment">Figure, \(\gamma=0.1\): \(\mathbf w_0\to\mathbf w_1\to\mathbf w_2\to\mathbf w_3\) jumps <strong>across</strong> the valley and back.</li>
+<li class="fragment">L11: the fastest way down, \(-(\nabla\mathrm{SSE})^\top\), <strong>does not point at the bottom</strong>.</li>
+<li class="fragment">Then it <strong>creeps along</strong> the long axis of the ellipses.</li>
+</ul>
+<div class="key-question fragment">L16, one parameter (\(f(w)=w^2\)): each step multiplies \(w\) by \(1-2\gamma\).<br>The ellipses have a long and a short axis (dashed). <strong>Does one step shrink the gap \(\mathbf w_k-\mathbf w^\ast\) by a different factor along each axis?</strong></div>
+<aside class="notes">"MML Figure 7.3 is the same picture on its own quadratic." "L16: f'(w) = 2w, so w_{k+1} = w_k - 2 gamma w_k; it converges iff |1 - 2 gamma| &lt; 1, i.e. 0 &lt; gamma &lt; 1."</aside>
+</section>
+
+<!-- L19-11 -->
+<section>
+<h4>Two parameters: one factor per eigenvector of \(X^\top X\) <span class="tier-u">[UNDERSTAND]</span></h4>
+<p>L16: on \(f(w)=w^2\), &ensp;\(w_{k+1}=(1-2\gamma)\,w_k\). &ensp;Now: \(\;\mathrm{SSE}(\mathbf w)=\norm{\mathbf y-X\mathbf w}^2\), &ensp;\(\mathbf w_{k+1}=\mathbf w_k-\gamma\,\big(\nabla\mathrm{SSE}(\mathbf w_k)\big)^\top\).</p>
+<div class="mathbox">
+Let \(X^\top X\mathbf v=\lambda\mathbf v\). If \(\;\mathbf w_k-\mathbf w^\ast=c\,\mathbf v\), then
+\[\mathbf w_{k+1}-\mathbf w^\ast=(1-2\gamma\lambda)\,c\,\mathbf v.\]
+Along an eigenvector, one step multiplies the gap \(\mathbf w_k-\mathbf w^\ast\) by \(1-2\gamma\lambda\).
+</div>
+<ul>
+<li class="fragment">\(f(w)=w^2\) is the case \(\lambda=1\): it is \(\norm{0-1\cdot w}^2\), an \(\mathrm{SSE}\) with \(X^\top X=1\) and \(w^\ast=0\).</li>
+<li class="fragment">\(X^\top X\) is symmetric, so it has an orthogonal eigenbasis \(\mathbf v_1,\mathbf v_2\) (Unit 3).<br>Write \(\mathbf w_k-\mathbf w^\ast=c_1\mathbf v_1+c_2\mathbf v_2\): each part gets <strong>its own factor</strong> \(1-2\gamma\lambda_i\).</li>
+</ul>
+</section>
+
+<!-- L19-12 -->
+<section>
+<h4>Why: the gradient is \(2X^\top X\) times the gap \(\mathbf w-\mathbf w^\ast\)</h4>
+<p>Claim: if \(X^\top X\mathbf v=\lambda\mathbf v\) and \(\mathbf w_k-\mathbf w^\ast=c\,\mathbf v\), then \(\mathbf w_{k+1}-\mathbf w^\ast=(1-2\gamma\lambda)\,c\,\mathbf v\).</p>
+<ol>
+<li class="fragment">L12: \(\;\big(\nabla\mathrm{SSE}(\mathbf w)\big)^\top=2\,(X^\top X\mathbf w-X^\top\mathbf y)\)</li>
+<li class="fragment">Normal equation \(X^\top X\mathbf w^\ast=X^\top\mathbf y\): &ensp;\(\big(\nabla\mathrm{SSE}(\mathbf w)\big)^\top=2\,X^\top X\,(\mathbf w-\mathbf w^\ast)\)</li>
+<li class="fragment">One step, minus \(\mathbf w^\ast\): &ensp;\(\mathbf w_{k+1}-\mathbf w^\ast=(\mathbf w_k-\mathbf w^\ast)-2\gamma\,X^\top X\,(\mathbf w_k-\mathbf w^\ast)\)</li>
+<li class="fragment">Put \(\mathbf w_k-\mathbf w^\ast=c\,\mathbf v\), use \(X^\top X\mathbf v=\lambda\mathbf v\): &ensp;\(\mathbf w_{k+1}-\mathbf w^\ast=c\,\mathbf v-2\gamma\lambda\,c\,\mathbf v=(1-2\gamma\lambda)\,c\,\mathbf v\)</li>
+</ol>
+</section>
+
+<!-- L19-13 -->
+<section>
+<h4>Our data: the two eigenvectors of \(X^\top X\)</h4>
+<img src="../images/unit05/u5-L19-fig02-zigzag.png" alt="Contours of the course SSE with the zigzag gradient-descent path; dashed lines through w* along the eigenvectors of X^T X: slow direction with lambda about 0.84 along the long axis, fast direction with lambda about 7.16 along the short axis." style="float:right; max-height:330px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>\(X^\top X=\begin{bmatrix}3&amp;3\\3&amp;5\end{bmatrix}\)</p>
+<ul>
+<li class="fragment">Unit 3: \(\det(X^\top X-\lambda I)=\lambda^2-8\lambda+6=0\)</li>
+<li class="fragment">\(\lambda=4\pm\sqrt{10}\): &ensp;\(\approx7.16\) and \(\approx0.84\)</li>
+<li class="fragment">Factors \(1-2\gamma\lambda\) at \(\gamma=0.1\):</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>\(\lambda\)</th><th>eigenvector</th><th>factor</th></tr>
+<tr><td>\(\approx7.16\)</td><td>\(\approx(0.585,\,0.811)^\top\)</td><td>\(\approx-0.43\)</td></tr>
+<tr><td>\(\approx0.84\)</td><td>\(\approx(0.811,\,-0.585)^\top\)</td><td>\(\approx0.83\)</td></tr>
+</table>
+<ul>
+<li class="fragment">\(-0.43\): flips side each step, shrinks fast: <strong>the zigzag</strong>.</li>
+<li class="fragment">\(0.83\): same side, only \(17\%\) closer per step: <strong>the slow creep</strong>.</li>
+</ul>
+<aside class="notes">"Eigenvectors: (3, lambda - 3) scaled to length 1. After the fast part dies out, the distance falls like 0.83^k: from step 10 (0.148) to step 20 (0.0236) the ratio is 0.16, and 0.8325^10 = 0.160." "The slow direction raises the baseline and lowers the slope together: models along the valley floor trade one for the other and fit almost equally well."</aside>
+</section>
+
+<!-- L19-14 -->
+<section>
+<h4>How large can \(\gamma\) be? The largest eigenvalue decides <span class="tier-u">[UNDERSTAND]</span></h4>
+<p>Along an eigenvector of \(X^\top X\) with eigenvalue \(\lambda\): factor \(1-2\gamma\lambda\) per step.</p>
+<ul>
+<li class="fragment">A part shrinks only if \(|1-2\gamma\lambda|&lt;1\), that is \(0&lt;\gamma&lt;1/\lambda\).</li>
+<li class="fragment">Both parts must shrink: \(\;\gamma&lt;1/\lambda_{\max}\).</li>
+<li class="fragment">Our data: \(1/(4+\sqrt{10})\approx0.140\).
+<ul>
+<li>\(\gamma=0.1\): converges.</li>
+<li>\(\gamma=0.15\): fast factor \(1-0.3\,(4+\sqrt{10})\approx-1.15\): diverges, as in L16.</li>
+</ul></li>
+</ul>
+<div class="key-question fragment"><strong>Then take a smaller \(\gamma\), to stop the zigzag?</strong>
+<ul>
+<li>\(\gamma&lt;1/(2\lambda_{\max})\approx0.070\): fast factor positive, no zigzag.</li>
+<li>But the slow factor \(1-2\gamma\lambda_{\min}\) is then above \(1-\lambda_{\min}/\lambda_{\max}\approx0.88\): <strong>even slower</strong>.</li>
+</ul></div>
+</section>
+
+<!-- L19-15 -->
+<section>
+<h4>How slow? The condition number of \(X^\top X\) <span class="tier-u">[UNDERSTAND]</span></h4>
+<div class="key-question">
+<strong>We know:</strong> along an eigenvector of \(X^\top X\), one step multiplies the gap \(\mathbf w_k-\mathbf w^\ast\) by \(1-2\gamma\lambda\), and a safe step needs \(\gamma&lt;1/\lambda_{\max}\).<br>
+<strong>What fails:</strong> the \(\lambda_{\min}\) direction then crawls: its factor is \(1-2\gamma\lambda_{\min}&gt;1-2\lambda_{\min}/\lambda_{\max}\), near \(1\) when \(\lambda_{\min}/\lambda_{\max}\) is small, <strong>whatever \(\gamma\) we pick</strong>.<br>
+<strong>What we need:</strong> one number comparing the direction that caps \(\gamma\) (\(\lambda_{\max}\)) with the direction that crawls (\(\lambda_{\min}\)).
+</div>
+<div class="mathbox fragment">
+<strong>Definition</strong> (MML &sect;7.1.1, Remark, p.230). The <strong>condition number</strong> of the normal-equation matrix \(X^\top X\) is
+\[\kappa(X^\top X)=\frac{\lambda_{\max}(X^\top X)}{\lambda_{\min}(X^\top X)}\ \ge 1.\]
+</div>
+<ul>
+<li class="fragment">MML p.230 uses singular values, \(\sigma_{\max}/\sigma_{\min}\). For the symmetric \(X^\top X\) they are its eigenvalues; for the data matrix \(X\), their square roots, so \(\kappa(X)=\sqrt{\kappa(X^\top X)}\) (MML p.127).</li>
+<li class="fragment">Slow factor \(&gt;1-2/\kappa(X^\top X)\): <strong>a simple bound, not the best possible rate</strong>. Large \(\kappa(X^\top X)\) = slow.</li>
+</ul>
+<aside class="notes">"The best fixed step gives worst-direction factor (kappa-1)/(kappa+1); we do not need it. The bound 1 - 2/kappa is enough to show: large kappa(X^T X) forces one direction to be slow, whatever gamma."</aside>
+</section>
+
+<!-- L19-16 -->
+<section>
+<h4>What a large \(\kappa(X^\top X)\) looks like: long, thin contours <span class="tier-u">[UNDERSTAND]</span></h4>
+<img src="../images/unit05/u5-L19-fig02-zigzag.png" alt="Contours of the course SSE: ellipses whose long axis is the slow direction (lambda about 0.84) and short axis the fast direction (lambda about 7.16)." style="float:right; max-height:330px; max-width:44%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Our data: \(\kappa(X^\top X)=\dfrac{4+\sqrt{10}}{4-\sqrt{10}}\approx8.55\).</p>
+<ul>
+<li class="fragment">L10: \(\;\mathrm{SSE}(\mathbf w)=1.5+\norm{X(\mathbf w-\mathbf w^\ast)}^2\)</li>
+<li class="fragment">Along a unit eigenvector, \(\mathbf w-\mathbf w^\ast=c\,\mathbf v\):<br>\(\norm{X c\mathbf v}^2=c^2\,\mathbf v^\top X^\top X\mathbf v=\lambda c^2\)</li>
+<li class="fragment">Contour \(\mathrm{SSE}=1.5+d\): reached at \(c=\sqrt{d/\lambda}\).<br>Small \(\lambda\): far out. Large \(\lambda\): close in.</li>
+<li class="fragment">Long axis / short axis \(=\sqrt{\kappa(X^\top X)}\approx2.92\).</li>
+<li class="fragment">MML p.229: a <strong>long, thin valley</strong> is a poorly conditioned problem, where gradient descent zigzags.</li>
+</ul>
+<aside class="notes">"Long / short = sqrt(lambda_max/lambda_min) = sqrt(kappa(X^T X)), which is also kappa(X)."</aside>
+</section>
+
+<!-- L19-17 -->
+<section>
+<h4>Your turn: a different \(X^\top X\)</h4>
+<div class="quickcheck"><strong>Your turn.</strong> A separate example, not our data: a least-squares problem with \(X^\top X=\begin{bmatrix}5&amp;3\\3&amp;5\end{bmatrix}\), Unit 3&rsquo;s matrix \(S\): eigenvalue \(8\) with eigenvector \((1,1)^\top\), eigenvalue \(2\) with \((1,-1)^\top\).
+<ul style="list-style:none; padding-left:0.6em; margin-top:0.2em;">
+<li>(a) What is the largest safe step size?</li>
+<li>(b) What is \(\kappa(X^\top X)\)?</li>
+<li>(c) At \(\gamma=0.1\): the factor along each eigenvector. Which direction zigzags?</li>
+<li>(d) Along which eigenvector do the contour ellipses have their long axis? Long / short = ?</li>
+</ul></div>
+<ul>
+<li class="fragment">(a) \(\gamma&lt;\tfrac1{\lambda_{\max}}=\tfrac18\)</li>
+<li class="fragment">(b) \(\kappa(X^\top X)=\tfrac82=4\)</li>
+<li class="fragment">(c) Along \((1,1)^\top\): \(1-0.2\cdot8=-0.6\), flips side: the zigzag. Along \((1,-1)^\top\): \(1-0.2\cdot2=0.6\).</li>
+<li class="fragment">(d) Along \((1,-1)^\top\), the smaller eigenvalue; long / short \(=\sqrt4=2\).</li>
+</ul>
+</section>
+
+<!-- ─────────────── Part 3: when the units are the cause ─────────────── -->
+
+<!-- L19-18 -->
+<section>
+<h4>The same students, time in minutes: what happens to \(\kappa(X^\top X)\)?</h4>
+<p><span style="color:rgb(30,90,160)"><strong>Is a large \(\kappa(X^\top X)\) a property of the prediction problem itself, or can our choice of units make it artificially bad?</strong></span></p>
+<p>A separate example: \(\mathbf t=(0,60,120)^\top\) minutes, \(\;\mathbf y=(1,3,2)^\top\), \(\;X=[\,\mathbf 1\ \ \mathbf t\,]\).<br>Same data, same best line: \(\hat y=1.5+0.5\cdot(\text{hours})=1.5+\tfrac{1}{120}\cdot(\text{minutes})\).</p>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th></th><th>hours</th><th>minutes</th></tr>
+<tr><td>\(X^\top X\)</td><td>\(\begin{bmatrix}3&amp;3\\3&amp;5\end{bmatrix}\)</td><td>\(\begin{bmatrix}3&amp;180\\180&amp;18000\end{bmatrix}\)</td></tr>
+<tr><td>\(\lambda_{\max}\), \(\lambda_{\min}\)</td><td>\(\approx7.16\), \(\approx0.84\)</td><td>\(\approx18001.8\), \(\approx1.20\)</td></tr>
+<tr><td>\(\kappa(X^\top X)\)</td><td>\(\approx8.55\)</td><td>\(\approx15003\)</td></tr>
+<tr><td>largest safe \(\gamma=1/\lambda_{\max}\)</td><td>\(\approx0.140\)</td><td>\(\approx0.0000556\)</td></tr>
+<tr><td>steps to within \(0.01\) of \(\mathbf w^\ast\)</td><td>\(25\) &ensp;(\(\gamma=0.1\))</td><td>\(41{,}757\) &ensp;(\(\gamma=0.00005\))</td></tr>
+</table>
+<ul>
+<li class="fragment">Only the <strong>unit</strong> changed, and \(\kappa(X^\top X)\) went from \(\approx8.55\) to \(\approx15003\): <strong>the units alone made it bad</strong>.</li>
+<li class="fragment">Rule 2 is fooled: it stops the minutes run at step \(7{,}786\) with \(\mathrm{SSE}\approx1.92\) (best \(1.5\)).</li>
+</ul>
+<aside class="notes">"18000 = 0^2 + 60^2 + 120^2. The big entry makes lambda_max big, which caps gamma; lambda_min stays near 1. Slow factor at gamma = 0.00005: 1 - 2(0.00005)(1.20) = 0.99988, about 0.01% closer per step. Rule 2 (eps_f = 1e-4) fires at step 7,786 with w approx (0.911, 0.0142), best (1.5, 0.0083); rule 1 (eps_g = 0.01) fires only at step 49,052. The figure u5-L19-fig04-hours-vs-minutes.png shows the two distance curves if a student asks."</aside>
+</section>
+
+<!-- L19-21 -->
+<section>
+<h4>Removing the unit: standardize the feature <span class="tier-u">[UNDERSTAND]</span></h4>
+<p>Goal: feature values that do not change when hours become minutes. Subtract the mean, divide by \(\sqrt{\text{variance}}\).</p>
+<div class="mathbox">
+<strong>Standardization</strong> (MML &sect;10.6, p.336, steps 1&ndash;2). Replace each value \(t_i\) of a feature by
+\[z_i=\frac{t_i-\bar t}{s},\qquad \bar t=\frac1N\sum_{i=1}^N t_i,\qquad s^2=\frac1N\sum_{i=1}^N(t_i-\bar t)^2\]
+(\(s^2\): the empirical variance of the list \(t_1,\dots,t_N\), Unit 3, MML Def. 6.9, p.192: computed from the data, not a probability statement). Then \(z_1,\dots,z_N\) have mean \(0\) and empirical variance \(1\).
+</div>
+<ul>
+<li class="fragment">Hours (\(\bar t=1,\ s^2=\tfrac23\)) and minutes (\(\bar t=60,\ s^2=2400\)) give the <strong>same</strong><br>\(\mathbf z=\left(-\sqrt{1.5},\,0,\,\sqrt{1.5}\right)^\top\): standardized data are &ldquo;unit free&rdquo; (MML p.336).</li>
+<li class="fragment">New model \(\hat y=v_0+v_1z\), \(Z=[\,\mathbf 1\ \ \mathbf z\,]\): &ensp;\(\mathbf 1^\top\mathbf 1=3\), &ensp;\(\mathbf 1^\top\mathbf z=0\) (mean \(0\)), &ensp;\(\mathbf z^\top\mathbf z=3\) (variance \(1\)).<br>So \(Z^\top Z=3I\): \(\lambda=3\) in every direction, <strong>\(\kappa(Z^\top Z)=1\)</strong>.</li>
+<li class="fragment">Factor \(1-6\gamma\) in every direction: \(\gamma=\tfrac16\) lands on the best \(\mathbf v=\left(2,\ \tfrac1{\sqrt6}\right)^\top\approx(2,\ 0.408)^\top\) in <strong>one step</strong>.</li>
+</ul>
+<aside class="notes">"From v = 0: the gradient row is -2 y^T Z, so the step is gamma 2 Z^T y = (1/3) Z^T y. Z^T y = (1+3+2, -sqrt1.5 + 2 sqrt1.5) = (6, sqrt 1.5), so v1 = (2, sqrt1.5/3) = (2, 1/sqrt 6)."</aside>
+</section>
+
+<!-- L19-23 -->
+<section>
+<h4>Before and after standardizing</h4>
+<img src="../images/unit05/u5-L19-fig03-before-after.png" alt="Two contour maps side by side, both starting at (0,0) with SSE 14. Left, hours, kappa(X^T X) about 8.55: tilted ellipses and a zigzag gradient-descent path with step size 0.1. Right, standardized feature, kappa(Z^T Z) = 1: circles around (2, 0.408), reached in one straight step with step size 1/6." style="float:right; max-height:380px; max-width:62%; margin:0 0 0.5em 1em; border-radius:6px;">
+<ul>
+<li class="fragment"><strong>Left</strong>, hours: \(\kappa(X^\top X)\approx8.55\)<br>Ellipses; \(\gamma=0.1\) zigzags, rule 2 stops it at step \(22\).</li>
+<li class="fragment"><strong>Right</strong>, standardized: \(\kappa(Z^\top Z)=1\)<br>Circles; \(-(\nabla\mathrm{SSE})^\top\) points <strong>straight at the bottom</strong>.</li>
+<li class="fragment">Same predictions, new parameters:<br>\(\hat y=2+\tfrac1{\sqrt6}\,z=1.5+0.5\,t\).</li>
+</ul>
+<aside class="notes">"Both start at (0,0) with SSE 14. Conversion: z = (t-1)/sqrt(2/3) in hours, and (1/sqrt6)/sqrt(2/3) = 1/sqrt4 = 1/2, so 2 + (t-1)/2 = 1.5 + 0.5 t: the same line as w* = (1.5, 0.5). Rescaling changes the parameters, not the predictions. [EXPLORE, if asked] Many features: standardize each column; kappa usually drops a lot, but is exactly 1 only if the features are uncorrelated (the off-diagonal entries of Z^T Z are N times the correlations)."</aside>
+</section>
+
+<!-- L19-25 -->
+<section>
+<h4>Today&rsquo;s three questions, answered</h4>
+<table style="width:auto; margin:0.4em auto; font-size:0.92em;">
+<tr><th>question</th><th>answer</th></tr>
+<tr class="fragment"><td>When should gradient descent stop?</td><td>At the first step where the gradient is small, the error barely changes, or the step limit is reached.</td></tr>
+<tr class="fragment"><td>Why is it sometimes very slow?</td><td>Along an eigenvector of \(X^\top X\), each step multiplies the gap \(\mathbf w_k-\mathbf w^\ast\) by \(1-2\gamma\lambda\).<br>\(\lambda_{\max}\) caps \(\gamma\); then the \(\lambda_{\min}\) direction crawls when \(\kappa(X^\top X)=\lambda_{\max}/\lambda_{\min}\) is large<br>(a simple bound: slow factor \(&gt;1-2/\kappa(X^\top X)\)).</td></tr>
+<tr class="fragment"><td>What can help when poor conditioning comes from the features&rsquo; scale?</td><td>Standardize the features. With one feature, \(Z^\top Z=3I\) here and \(\kappa(Z^\top Z)=1\).<br>It does not help when two features are nearly the same column (L18).</td></tr>
+</table>
+</section>
+
+<!-- L19-26 -->
+<section>
+<h4>L19 takeaways (1 of 2): stopping rules</h4>
+<ul>
+<li class="fragment">Gradient descent gets close to \(\mathbf w^\ast\) but does not land on it: it needs a rule to stop. <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Stop at the first step where any one holds: <span class="tier-m">[MASTER]</span>
+<ul>
+<li>\(\norm{(\nabla f(\mathbf w_k))^\top}&lt;\varepsilon_g\) &ensp;(gradient small)</li>
+<li>\(|f(\mathbf w_k)-f(\mathbf w_{k-1})|&lt;\varepsilon_f\) &ensp;(error barely changing)</li>
+<li>\(k=K_{\max}\) &ensp;(step limit)</li>
+</ul></li>
+<li class="fragment">Our data, \(\gamma=0.1\), \(\varepsilon_g=0.01\), \(\varepsilon_f=10^{-4}\): rule 2 stops at \(k=22\), \(\mathrm{SSE}\approx1.50022\). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">A small change in error does not prove we are close: slow progress also gives small changes. <span class="tier-u">[UNDERSTAND]</span></li>
+</ul>
+</section>
+
+<!-- L19-27 -->
+<section>
+<h4>L19 takeaways (2 of 2): conditioning</h4>
+<ul>
+<li class="fragment">Along an eigenvector of \(X^\top X\) (eigenvalue \(\lambda\)), one step multiplies the gap \(\mathbf w_k-\mathbf w^\ast\) by \(1-2\gamma\lambda\); L16&rsquo;s \(w^2\) is \(\lambda=1\). <span class="tier-u">[UNDERSTAND]</span></li>
+<li class="fragment">Safe step: \(\gamma&lt;1/\lambda_{\max}\). Condition number \(\kappa(X^\top X)=\lambda_{\max}/\lambda_{\min}\) (MML p.230); slow factor \(&gt;1-2/\kappa(X^\top X)\), a simple bound. Large \(\kappa(X^\top X)\): long, thin contours and slow gradient descent along the \(\lambda_{\min}\) direction; a step near the limit \(1/\lambda_{\max}\) also zigzags along the \(\lambda_{\max}\) direction. <span class="tier-u">[UNDERSTAND]</span>
+<ul><li>Our data: \(\lambda=4\pm\sqrt{10}\), \(\;\kappa(X^\top X)\approx8.55\); in minutes, \(\approx15003\).</li></ul></li>
+<li class="fragment">Standardizing a feature, \(z_i=(t_i-\bar t)/s\), removes its unit; with one feature, \(Z^\top Z=3I\) here and \(\kappa(Z^\top Z)=1\). <span class="tier-u">[UNDERSTAND]</span></li>
+</ul>
+<div class="key-question fragment">Units 4&ndash;5: from the gradient to a trained model, every number exact for our three students. But data are noisy: three new students would give a different \(\mathbf w^\ast\). <strong>How sure can we be of what a model learned? Unit 6: probability.</strong> (Before that: Quiz 3, Tue Nov 17, on L15&ndash;L19.)</div>
+</section>
+
+
+
+
+
+
+</div>
+</div>
+
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/math/math.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script src="../reveal.js-plugins/menu/menu.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  transition: 'none',
+  width: 1200,
+  height: 700,
+  margin: 0.04,
+  mathjax3: {
+    // TeX-only build: the default tex-mml-chtml also has MathML input, which re-typesets
+    // the assistive MathML on every slide change -- the DOM grew 5x in 20 flips and the
+    // chalkboard lagged worse and worse through a lecture (2026-09-30).
+    mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
+    tex: {
+      // Only \( \) and \[ \] delimit math -- see unit02-preview.html for why.
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true,
+      macros: {
+        R: "\\mathbb{R}",
+        norm: ["\\left\\|#1\\right\\|", 1],
+        inner: ["\\left\\langle #1,#2\\right\\rangle", 2]
+      }
+    }
+  },
+  plugins: [ RevealMath.MathJax3, RevealChalkboard, RevealMenu ],
+  chalkboard: {
+    storage: "math-for-ds",
+    toggleChalkboardButton: { left: "80px" },
+    toggleNotesButton: { left: "130px" },
+    colorButtons: 5
+  }
+});
+</script>
+</body>
+</html>
