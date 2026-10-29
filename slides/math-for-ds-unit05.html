@@ -212,6 +212,37 @@
 </section>
 
 <section>
+<h4>Why \(f''\ge0\) gives convex: the slope never goes down</h4>
+<img src="../images/unit05/u5-L15-fig07-slope-never-down.png" alt="Left: x^2 with the chord from (-1, 1) to (2, 4), slope 1, and tangent lines at x = -1, 1/2, 2 with slopes -2, 1, 4. Right: the two-valley f with the chord from (-1, 0) to (2, -27), slope -9; at x = 0 the graph is 5, above the chord; tangent lines at a point a in (-1, 0) with slope 5 and at a point b in (0, 2) with slope -16." style="display:block; max-height:265px; max-width:100%; margin:0.1em auto 0.2em auto; border-radius:6px;">
+<table class="fragment" style="width:auto; margin:0.2em auto; font-size:0.9em;">
+<tr><th>function</th><th>chord slope</th><th>slopes along the graph, left to right</th><th>graph vs chord</th></tr>
+<tr><td>\(x^2\), \(f''=2\)</td><td>\(1\)</td><td>\(-2,\ 1,\ 4\): rise</td><td>below</td></tr>
+<tr><td>\(3x^4-4x^3-12x^2+5\)</td><td>\(-9\)</td><td>\(5\) (from \((-1,0)\) to \((0,5)\)), then \(-16\) (to \((2,-27)\)): go down</td><td>above at \(0\)</td></tr>
+</table>
+<div class="key-question fragment">A graph above a chord forces the slope to <strong>go down</strong> somewhere. \(f''\ge0\) means the slope \(f'\) never goes down (Calc 1: a function with derivative \(\ge0\) never decreases), so the graph <strong style="color:rgb(30,90,160)">never rises above a chord</strong>.</div>
+<aside class="notes">The green tangent lines touch at the Mean Value Theorem points: on the right, a is where f' = 5 (the average slope from -1 to 0) and b is where f' = -16 (the average slope from 0 to 2). The next slide turns this picture into a proof for any f and any chord.</aside>
+</section>
+
+<section>
+<h4>Proof: if \(f''\ge0\), the graph never rises above a chord</h4>
+<p><strong>Setup.</strong> \(f''\ge0\) everywhere, so \(f'\) never decreases.</p>
+<ul>
+<li>Chord from \((x,f(x))\) to \((y,f(y))\), \(x&lt;y\): slope \(m=\frac{f(y)-f(x)}{y-x}\), height at \(z\): \(L(z)=f(x)+m(z-x)\).</li>
+<li>At \(z=\theta x+(1-\theta)y\): \(L(z)=\theta f(x)+(1-\theta)f(y)\), the right side of the definition.</li>
+</ul>
+<p><strong>Proof.</strong></p>
+<ul>
+<li class="fragment"><strong>Suppose</strong> the graph is above the chord at some \(z\) between \(x\) and \(y\): \(f(z)&gt;L(z)\).</li>
+<li class="fragment">Left piece, steeper than the chord: \(\;\frac{f(z)-f(x)}{z-x}&gt;\frac{L(z)-f(x)}{z-x}=m\).</li>
+<li class="fragment">Right piece, less steep (\(L(y)=f(y)\)): \(\;\frac{f(y)-f(z)}{y-z}&lt;\frac{f(y)-L(z)}{y-z}=m\).</li>
+<li class="fragment">Mean Value Theorem (Calc 1): some \(a\in(x,z)\) has \(f'(a)\) = the left slope \(&gt;m\); some \(b\in(z,y)\) has \(f'(b)\) = the right slope \(&lt;m\).</li>
+<li class="fragment">\(a&lt;b\) but \(f'(a)&gt;f'(b)\): the slope went down, which \(f''\ge0\) rules out. So \(f(z)\le L(z)\) for every \(z\): <strong>\(f\) is convex</strong>.</li>
+<li class="fragment">The other direction: if \(f''&lt;0\) somewhere, the graph bends down there, like the hump at \(0\), and a short chord across it lies below the graph: not convex. <span class="tier-u">[UNDERSTAND]</span></li>
+</ul>
+<aside class="notes">This is the proof for one variable. MML p.237 states the several-variable version (Hessian positive semidefinite) without proof; later in this lecture the line slices reduce SSE to this one-variable case.</aside>
+</section>
+
+<section>
 <h4>Theorem: for a convex function, local means global</h4>
 <p>Back to the lecture question: on a convex function, can a local minimum be the wrong valley?</p>
 <div class="mathbox">
@@ -1613,7 +1644,7 @@ Along an eigenvector, one step multiplies the gap \(\mathbf w_k-\mathbf w^\ast\)
 <h4>Your turn: a different \(X^\top X\)</h4>
 <div class="quickcheck"><strong>Your turn.</strong> A separate example, not our data: a least-squares problem with \(X^\top X=\begin{bmatrix}5&amp;3\\3&amp;5\end{bmatrix}\), Unit 3&rsquo;s matrix \(S\): eigenvalue \(8\) with eigenvector \((1,1)^\top\), eigenvalue \(2\) with \((1,-1)^\top\).
 <ul style="list-style:none; padding-left:0.6em; margin-top:0.2em;">
-<li>(a) What is the largest safe step size?</li>
+<li>(a) For which step sizes \(\gamma\) does gradient descent converge?</li>
 <li>(b) What is \(\kappa(X^\top X)\)?</li>
 <li>(c) At \(\gamma=0.1\): the factor along each eigenvector. Which direction zigzags?</li>
 <li>(d) Along which eigenvector do the contour ellipses have their long axis? Long / short = ?</li>
@@ -1638,7 +1669,7 @@ Along an eigenvector, one step multiplies the gap \(\mathbf w_k-\mathbf w^\ast\)
 <tr><td>\(X^\top X\)</td><td>\(\begin{bmatrix}3&amp;3\\3&amp;5\end{bmatrix}\)</td><td>\(\begin{bmatrix}3&amp;180\\180&amp;18000\end{bmatrix}\)</td></tr>
 <tr><td>\(\lambda_{\max}\), \(\lambda_{\min}\)</td><td>\(\approx7.16\), \(\approx0.84\)</td><td>\(\approx18001.8\), \(\approx1.20\)</td></tr>
 <tr><td>\(\kappa(X^\top X)\)</td><td>\(\approx8.55\)</td><td>\(\approx15003\)</td></tr>
-<tr><td>largest safe \(\gamma=1/\lambda_{\max}\)</td><td>\(\approx0.140\)</td><td>\(\approx0.0000556\)</td></tr>
+<tr><td>step-size limit \(1/\lambda_{\max}\) (need \(\gamma\) below it)</td><td>\(\approx0.140\)</td><td>\(\approx0.0000556\)</td></tr>
 <tr><td>steps to within \(0.01\) of \(\mathbf w^\ast\)</td><td>\(25\) &ensp;(\(\gamma=0.1\))</td><td>\(41{,}757\) &ensp;(\(\gamma=0.00005\))</td></tr>
 </table>
 <ul>
