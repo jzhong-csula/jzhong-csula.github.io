@@ -148,7 +148,7 @@
 
 <section>
 <h4>What shape has no wrong valley? Look at a chord</h4>
-<img src="../images/unit05/u5-L15-fig02-chords.png" alt="Left: x^2 with the chord from (x, f(x)) = (-1, 1) to (y, f(y)) = (2, 4); at the point theta x + (1 - theta) y = 0 the chord height theta f(x) + (1 - theta) f(y) is 2 and the graph height f(theta x + (1 - theta) y) is 0. Right: 3x^4 - 4x^3 - 12x^2 + 5 with the chord from (-1, 0) to (2, -27); at x = 0 the chord is at -9, the graph at 5." style="display:block; max-height:280px; max-width:100%; margin:0.2em auto 0.3em auto; border-radius:6px;">
+<img src="../images/unit05/u5-L15-fig02-chords.png" alt="Left: x^2 with the chord from (x, f(x)) = (-1, 1) to (y, f(y)) = (2, 4); at the point theta x + (1 - theta) y = 1 the chord height theta f(x) + (1 - theta) f(y) is 3 and the graph height f(theta x + (1 - theta) y) is 1. Right: 3x^4 - 4x^3 - 12x^2 + 5 with the chord from (-1, 0) to (2, -27); at x = 1 the chord is at -18, the graph at -8." style="display:block; max-height:280px; max-width:100%; margin:0.2em auto 0.3em auto; border-radius:6px;">
 <ul>
 <li class="fragment">A <strong>chord</strong>: the straight segment from \((x,f(x))\) to \((y,f(y))\). Here \(x=-1\), \(y=2\).</li>
 <li class="fragment">Points between: \(\theta x+(1-\theta)y\) with \(0\le\theta\le1\) (\(\theta=1\): \(x\); \(\theta=0\): \(y\)).
@@ -159,7 +159,7 @@
 <div class="key-question fragment"><strong>We know:</strong> a wrong second valley needs a <strong>hump</strong> between the two valleys.<br>
 <strong>What fails:</strong> at a hump, the graph rises <strong>above a chord</strong>.<br>
 <strong>What we need:</strong> rule humps out &mdash; a function whose graph <strong style="color:rgb(30,90,160)">never rises above a chord</strong>.</div>
-<aside class="notes">In the left picture theta = 2/3: (2/3)(-1) + (1/3)(2) = 0. The key-question is the reason for the definition on the next slide: no hump, no second valley.</aside>
+<aside class="notes">In both pictures theta = 1/3: (1/3)(-1) + (2/3)(2) = 1. The point 1 is deliberately not the bottom of x^2 (which is at 0), so nobody reads theta x + (1 - theta) y as &quot;the lowest point&quot;. The key-question is the reason for the definition on the next slide: no hump, no second valley.</aside>
 </section>
 
 <section>
@@ -178,12 +178,12 @@
 </section>
 
 <section>
-<h4>The definition at work: \(x=-1\), \(y=2\), \(\theta=\tfrac23\)</h4>
-<p>Definition: \(f\big(\theta x+(1-\theta)y\big)\le\theta f(x)+(1-\theta)f(y)\). The point is \(\tfrac23(-1)+\tfrac13(2)=0\).</p>
+<h4>The definition at work: \(x=-1\), \(y=2\), \(\theta=\tfrac13\)</h4>
+<p>Definition: \(f\big(\theta x+(1-\theta)y\big)\le\theta f(x)+(1-\theta)f(y)\). The point is \(\tfrac13(-1)+\tfrac23(2)=1\).</p>
 <table style="width:auto; margin:0.5em auto;">
-<tr><th>function</th><th>graph \(f(0)\)</th><th>chord \(\tfrac23f(-1)+\tfrac13f(2)\)</th><th>graph \(\le\) chord?</th></tr>
-<tr class="fragment"><td>\(x^2\)</td><td>\(0\)</td><td>\(\tfrac23\cdot1+\tfrac13\cdot4=2\)</td><td>\(0\le2\) ✓</td></tr>
-<tr class="fragment"><td>\(3x^4-4x^3-12x^2+5\)</td><td>\(5\)</td><td>\(\tfrac23\cdot0+\tfrac13\cdot(-27)=-9\)</td><td>\(5\le-9\) ✗</td></tr>
+<tr><th>function</th><th>graph \(f(1)\)</th><th>chord \(\tfrac13f(-1)+\tfrac23f(2)\)</th><th>graph \(\le\) chord?</th></tr>
+<tr class="fragment"><td>\(x^2\)</td><td>\(1\)</td><td>\(\tfrac13\cdot1+\tfrac23\cdot4=3\)</td><td>\(1\le3\) ✓</td></tr>
+<tr class="fragment"><td>\(3x^4-4x^3-12x^2+5\)</td><td>\(-8\)</td><td>\(\tfrac13\cdot0+\tfrac23\cdot(-27)=-18\)</td><td>\(-8\le-18\) ✗</td></tr>
 </table>
 <ul>
 <li class="fragment">The two-valley \(f\) is <strong>not convex</strong>: one failure settles it.</li>
