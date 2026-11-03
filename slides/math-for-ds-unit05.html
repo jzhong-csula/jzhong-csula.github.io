@@ -82,7 +82,7 @@
 <li class="fragment">The shape that rules this out: a <span style="color:rgb(30,90,160);"><strong>convex function</strong></span></li>
 <li class="fragment">Theorem: for a convex function, every local minimum is a global minimum</li>
 <li class="fragment">Our \(\mathrm{SSE}\) is convex: its flat point \(\mathbf w^\ast\) is the lowest point</li>
-<li class="fragment">A two-layer model is already not convex</li>
+<li class="fragment">One more layer: the error is no longer convex</li>
 </ol>
 <aside class="notes">"Unit 4 told us which way is downhill at the point where we stand. Today we ask about the landscape: can a point that is lowest nearby be the wrong valley? Whether our steps actually reach the bottom is L16."</aside>
 </section>
@@ -377,37 +377,44 @@ since \(\theta&gt;0\) and \(f(\mathbf y)-f(\mathbf x^\ast)&lt;0\). every such \(
 </section>
 
 <section>
-<h4>A minimal two-layer linear model</h4>
-<img src="../images/unit05/u5-L15-fig05-two-layer.png" alt="Contours of E(v,w) = 5(vw)^2 - 14vw + 14; the lowest error 21/5 lies along the two branches of the curve vw = 7/5; A = (1, 7/5) and B = (-1, -7/5) lie on the two branches; the segment from B to A passes through (0,0), where E = 14." style="float:right; max-height:400px; max-width:36%; margin:0 0 0.5em 1em; border-radius:6px;">
-<p>Our data \(\mathbf t=(0,1,2)^\top\), \(\mathbf y=(1,3,2)^\top\).</p>
+<h4>One more layer: is the error still convex?</h4>
+<img src="../images/unit05/u5-L15-fig05-two-layer.png" alt="Contours of E(v,w) = 5(vw)^2 - 14vw + 14; the lowest error 21/5 lies along the two pieces of the curve vw = 7/5; A = (1, 7/5) and B = (-1, -7/5) lie on the two pieces; the segment from B to A passes through (0,0), where E = 14." style="float:right; max-height:400px; max-width:36%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Same data: hours \(\mathbf t=(0,1,2)^\top\), points \(\mathbf y=(1,3,2)^\top\). Same error: \(\mathrm{SSE}\).</p>
 <table style="width:auto; margin:0.4em 0; font-size:0.85em;">
-<tr><th></th><th>model</th><th>error</th></tr>
-<tr><td>one layer (L09)</td><td>\(\hat y=w\,t\)</td><td>\(5w^2-14w+14\): convex (second derivative \(10\))</td></tr>
-<tr class="fragment"><td>two layers</td><td>\(\hat y=v\,(w\,t)\)</td><td>\(E(v,w)=5(vw)^2-14vw+14\): ?</td></tr>
+<tr><th>rule</th><th>its \(\mathrm{SSE}\)</th></tr>
+<tr><td>L09: \(\hat y=w\,t\)</td><td>\(\mathrm{SSE}(w)=5w^2-14w+14\); best \(w^\ast=\tfrac75\), \(\mathrm{SSE}=\tfrac{21}5\)</td></tr>
+<tr class="fragment"><td>two layers: \(\hat y=v\,(w\,t)\)</td><td>\(E(v,w)=5(vw)^2-14vw+14\)</td></tr>
 </table>
 <ul>
-<li class="fragment">Layer 1 multiplies by \(w\), layer 2 by \(v\). No nonlinear function yet.</li>
-<li class="fragment">The predictions depend only on the product \(vw\).</li>
-<li class="fragment">L09: the best product is \(\tfrac75\), with error \(\tfrac{21}{5}\).</li>
-<li class="fragment">So \(E\) is lowest, \(\tfrac{21}{5}\), on the whole curve \(vw=\tfrac75\): <strong>two separate branches</strong> (green).</li>
+<li class="fragment">Layer 1 multiplies \(t\) by \(w\), layer 2 multiplies by \(v\) (a chain of stages, L13).</li>
+<li class="fragment">\(E(v,w)\) is the \(\mathrm{SSE}\) of the new rule: in \(\mathrm{SSE}(w)\), \(w\) becomes the product \(vw\).</li>
+<li class="fragment">\(E\) is <strong>one function of two numbers</strong>, like \(\mathrm{SSE}(w_0,w_1)\). Its input is the point \((v,w)^\top\).</li>
+<li class="fragment">Convex: the same Def. 7.3, with points \(\mathbf a,\mathbf b\) in \(\R^2\):<br>\(E\big(\theta\mathbf a+(1-\theta)\mathbf b\big)\le\theta E(\mathbf a)+(1-\theta)E(\mathbf b)\), \(0\le\theta\le1\).</li>
+<li class="fragment">\(E\) depends only on the product \(vw\). L09: lowest when it is \(\tfrac75\), \(\mathrm{SSE}=\tfrac{21}5\).</li>
+<li class="fragment">So \(E=\tfrac{21}5\) on the whole curve \(vw=\tfrac75\): <strong>two separate pieces</strong> (green).</li>
 </ul>
+<aside class="notes">The question from the previous slide: least squares has no wrong valley; does that survive one more layer? This model is the smallest multi-stage model: no nonlinear function, just two multiplications. The two pieces of vw = 7/5: one with v, w &gt; 0, one with v, w &lt; 0, because (v, w) -&gt; (-v, -w) keeps the product vw and so keeps every prediction.</aside>
 </section>
 
 <section>
-<h4>Two layers: not convex, and a flat point that is not lowest</h4>
+<h4>Two layers: the chord test fails</h4>
 <img src="../images/unit05/u5-L15-fig06-two-layer-segment.png" alt="E along the segment from B = (-1, -7/5) to A = (1, 7/5): it rises from 21/5 at B to 14 at the midpoint (0,0) and falls back to 21/5 at A; the chord between A and B stays at 21/5." style="float:right; max-height:340px; max-width:38%; margin:0 0 0.5em 1em; border-radius:6px;">
-<p>\(E(v,w)=5(vw)^2-14vw+14\): lowest, \(\tfrac{21}{5}\), at \(A=\left(1,\tfrac75\right)^\top\) and \(B=\left(-1,-\tfrac75\right)^\top\).</p>
+<p>\(E(v,w)=5(vw)^2-14vw+14\). Convex: \(E\big(\theta\mathbf a+(1-\theta)\mathbf b\big)\le\theta E(\mathbf a)+(1-\theta)E(\mathbf b)\).</p>
 <ol>
-<li class="fragment"><strong>Chord test</strong>, \(\theta=\tfrac12\), midpoint \((0,0)^\top\):
-<ul><li>graph \(E(0,0)=14\); &ensp;chord \(\tfrac12\cdot\tfrac{21}5+\tfrac12\cdot\tfrac{21}5=\tfrac{21}{5}\)</li>
-<li>\(14\le\tfrac{21}{5}\) ✗ &mdash; <strong>not convex</strong></li></ul></li>
-<li class="fragment"><strong>Flat:</strong> \(\partial E/\partial v=10vw^2-14w\) and \(\partial E/\partial w=10v^2w-14v\) are both \(0\) at \((0,0)^\top\).</li>
-<li class="fragment"><strong>Not lowest:</strong> \(E(0,0)=14&gt;\tfrac{21}{5}\). Toward \(A\) the error drops at once: not even a local minimum.</li>
+<li class="fragment"><strong>Two lowest points:</strong> \(A=\left(1,\tfrac75\right)^\top\), \(B=\left(-1,-\tfrac75\right)^\top\). Both have \(vw=\tfrac75\), so \(E=\tfrac{21}5\).</li>
+<li class="fragment"><strong>Chord test</strong>, \(\theta=\tfrac12\): the midpoint is \(\tfrac12A+\tfrac12B=(0,0)^\top\).
+<table style="width:auto; margin:0.3em 0; font-size:0.9em;">
+<tr><td>graph</td><td>\(E(0,0)=14\)</td></tr>
+<tr><td>chord</td><td>\(\tfrac12\cdot\tfrac{21}5+\tfrac12\cdot\tfrac{21}5=\tfrac{21}5\)</td></tr>
+</table>
+\(14\le\tfrac{21}5\) is false ✗: <strong>\(E\) is not convex</strong>.</li>
+<li class="fragment"><strong>Flat, but not lowest:</strong> \(\partial E/\partial v=10vw^2-14w\) and \(\partial E/\partial w=10v^2w-14v\) are both \(0\) at \((0,0)^\top\), yet \(E(0,0)=14&gt;\tfrac{21}5\).</li>
 </ol>
 <ul>
-<li class="fragment">Why: \((v,w)\to(-v,-w)\) keeps \(vw\) and the predictions: two lowest branches.</li>
+<li class="fragment">The picture: \(E\) on the segment from \(B\) to \(A\), a hump between two lowest points.</li>
+<li class="fragment"><strong>Answer:</strong> one extra layer already loses convexity, so the local \(\Rightarrow\) global theorem no longer applies.</li>
 </ul>
-<aside class="notes">Along the segment (v, w) = s(1, 7/5): E = (49/5)s^4 - (98/5)s^2 + 14, which decreases as |s| grows from 0. This is the flat point of the opening slide: every first-order slope is 0, yet lower points are arbitrarily close.</aside>
+<aside class="notes">The figure's horizontal axis: the points s(1, 7/5), s from -1 (B) to 1 (A); s = 0 is the midpoint (0,0). Along it E = (49/5)s^4 - (98/5)s^2 + 14, the same "restrict to a line" idea as for SSE, and this slice bends down at 0. (0,0) is not even a local minimum: toward A the error drops at once. Every first-order slope there is 0, yet lower points are arbitrarily close.</aside>
 </section>
 
 <section>
@@ -506,9 +513,9 @@ since \(\theta&gt;0\) and \(f(\mathbf y)-f(\mathbf x^\ast)&lt;0\). every such \(
 <li class="fragment">Lowest point \(w=0\); slope \(f'(w)=2w\). Start \(w_0=2\).</li>
 <li class="fragment">Repeat: find the slope <strong>here</strong>, step <strong>against</strong> it by \(\tfrac14\) of it.</li>
 </ul>
-<table style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
 <tr><th>\(k\)</th><th>\(w_k\)</th><th>slope \(f'(w_k)\)</th><th>step \(-\tfrac14f'(w_k)\)</th><th>\(w_{k+1}\)</th><th>\(f(w_{k+1})\)</th></tr>
-<tr class="fragment"><td>\(0\)</td><td>\(2\)</td><td>\(4\)</td><td>\(-1\) (left)</td><td>\(1\)</td><td>\(1\)</td></tr>
+<tr><td>\(0\)</td><td>\(2\)</td><td>\(4\)</td><td>\(-1\) (left)</td><td>\(1\)</td><td>\(1\)</td></tr>
 <tr class="fragment"><td>\(1\)</td><td>\(1\)</td><td>\(2\) (recomputed)</td><td>\(-\tfrac12\)</td><td>\(\tfrac12\)</td><td>\(\tfrac14\)</td></tr>
 <tr class="fragment"><td>\(2\)</td><td>\(\tfrac12\)</td><td>\(1\) (recomputed)</td><td>\(-\tfrac14\)</td><td>\(\tfrac14\)</td><td>\(\tfrac1{16}\)</td></tr>
 </table>
