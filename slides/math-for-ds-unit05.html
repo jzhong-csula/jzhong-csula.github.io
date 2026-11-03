@@ -82,7 +82,7 @@
 <li class="fragment">The shape that rules this out: a <span style="color:rgb(30,90,160);"><strong>convex function</strong></span></li>
 <li class="fragment">Theorem: for a convex function, every local minimum is a global minimum</li>
 <li class="fragment">Our \(\mathrm{SSE}\) is convex: its flat point \(\mathbf w^\ast\) is the lowest point</li>
-<li class="fragment">One more layer: the error is no longer convex</li>
+<li class="fragment">Two variables: a flat point can be a saddle</li>
 </ol>
 <aside class="notes">"Unit 4 told us which way is downhill at the point where we stand. Today we ask about the landscape: can a point that is lowest nearby be the wrong valley? Whether our steps actually reach the bottom is L16."</aside>
 </section>
@@ -325,7 +325,7 @@ since \(\theta&gt;0\) and \(f(\mathbf y)-f(\mathbf x^\ast)&lt;0\). every such \(
 <li class="fragment">That a lowest point exists: \(e^x\) is convex (\(f''=e^x&gt;0\)), but \(f'=e^x\) is never \(0\) and there is no minimum.</li>
 <li class="fragment">That our steps reach the bottom: a step that is too big can overshoot, even on \(x^2\). That is <strong>L16</strong>.</li>
 </ul>
-<aside class="notes">Why not "flat, so local, so global": without convexity a flat point need not be a local minimum (f(x) = x^3 at 0: f(-1) = -1 &lt; 0; the two-layer (0,0) later today). MML writes (7.31) with the gradient as a column, nabla f(x)^T (y - x); in our row-gradient convention (D-018) that is nabla f(x)(y - x).</aside>
+<aside class="notes">Why not "flat, so local, so global": without convexity a flat point need not be a local minimum (f(x) = x^3 at 0: f(-1) = -1 &lt; 0; the saddle vw at (0,0) later today). MML writes (7.31) with the gradient as a column, nabla f(x)^T (y - x); in our row-gradient convention (D-018) that is nabla f(x)(y - x).</aside>
 </section>
 
 <section>
@@ -373,57 +373,51 @@ since \(\theta&gt;0\) and \(f(\mathbf y)-f(\mathbf x^\ast)&lt;0\). every such \(
 <ul>
 <li class="fragment"><strong>Answer for \(\mathrm{SSE}\):</strong> no wrong valley. Its flat point \(\mathbf w^\ast\) is the lowest point, \(\mathrm{SSE}(\mathbf w^\ast)=\tfrac32\).</li>
 </ul>
-<div class="key-question fragment">So least squares has no wrong valley. Is that true for the <strong style="color:rgb(30,90,160)">multi-stage models</strong> that motivated the course?</div>
+<div class="key-question fragment">So least squares has no wrong valley. With two variables, what else can a flat point be?</div>
 </section>
 
 <section>
-<h4>One more layer: is the error still convex?</h4>
-<img src="../images/unit05/u5-L15-fig05-two-layer.png" alt="Contours of E(v,w) = 5(vw)^2 - 14vw + 14; the lowest error 21/5 lies along the two pieces of the curve vw = 7/5; A = (1, 7/5) and B = (-1, -7/5) lie on the two pieces; the segment from B to A passes through (0,0), where E = 14." style="float:right; max-height:400px; max-width:36%; margin:0 0 0.5em 1em; border-radius:6px;">
-<p>Same data: hours \(\mathbf t=(0,1,2)^\top\), points \(\mathbf y=(1,3,2)^\top\). Same error: \(\mathrm{SSE}\).</p>
-<table style="width:auto; margin:0.4em 0; font-size:0.85em;">
-<tr><th>rule</th><th>its \(\mathrm{SSE}\)</th></tr>
-<tr><td>L09: \(\hat y=w\,t\)</td><td>\(\mathrm{SSE}(w)=5w^2-14w+14\); best \(w^\ast=\tfrac75\), \(\mathrm{SSE}=\tfrac{21}5\)</td></tr>
-<tr class="fragment"><td>two layers: \(\hat y=v\,(w\,t)\)</td><td>\(E(v,w)=5(vw)^2-14vw+14\)</td></tr>
-</table>
+<h4>Two variables: a flat point can be a saddle</h4>
+<img src="../images/unit05/u5-L15-fig09-saddle-3d.png" alt="The surface f(v,w) = vw over v, w from -1.5 to 1.5. Along the line v = w the height is s^2 (blue curve, rising both ways); along v = -w it is -s^2 (red curve, falling both ways); they cross at the flat point (0,0), height 0." style="float:right; max-height:420px; max-width:44%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>A separate example, not our data: \(f(v,w)=vw\).</p>
 <ul>
-<li class="fragment">Layer 1 multiplies \(t\) by \(w\), layer 2 multiplies by \(v\) (a chain of stages, L13).</li>
-<li class="fragment">\(E(v,w)\) is the \(\mathrm{SSE}\) of the new rule: in \(\mathrm{SSE}(w)\), \(w\) becomes the product \(vw\).</li>
-<li class="fragment">\(E\) is <strong>one function of two numbers</strong>, like \(\mathrm{SSE}(w_0,w_1)\). Its input is the point \((v,w)^\top\).</li>
-<li class="fragment">Convex: the same Def. 7.3, with points \(\mathbf a,\mathbf b\) in \(\R^2\):<br>\(E\big(\theta\mathbf a+(1-\theta)\mathbf b\big)\le\theta E(\mathbf a)+(1-\theta)E(\mathbf b)\), \(0\le\theta\le1\).</li>
-<li class="fragment">\(E\) depends only on the product \(vw\). L09: lowest when it is \(\tfrac75\), \(\mathrm{SSE}=\tfrac{21}5\).</li>
-<li class="fragment">So \(E=\tfrac{21}5\) on the whole curve \(vw=\tfrac75\): <strong>two separate pieces</strong> (green).</li>
+<li>The graph: above each point \((v,w)^\top\), the surface has height \(f(v,w)\), as for \(\mathrm{SSE}\) in L09.</li>
+<li class="fragment"><strong>Flat at \((0,0)^\top\):</strong> \(\partial f/\partial v=w\) and \(\partial f/\partial w=v\), both \(0\) there.</li>
+<li class="fragment">Along the line \(v=w\), points \(s\,(1,1)^\top\): \(f=s\cdot s=s^2\). <strong>Up</strong> both ways (blue).</li>
+<li class="fragment">Along the line \(v=-w\), points \(s\,(1,-1)^\top\): \(f=s\cdot(-s)=-s^2\). <strong>Down</strong> both ways (red).</li>
+<li class="fragment">A <strong style="color:rgb(30,90,160)">saddle</strong>: lowest along one line, highest along another.</li>
+<li class="fragment">So \((0,0)^\top\) is flat, but not a minimum, not even a local one.</li>
 </ul>
-<aside class="notes">The question from the previous slide: least squares has no wrong valley; does that survive one more layer? This model is the smallest multi-stage model: no nonlinear function, just two multiplications. The two pieces of vw = 7/5: one with v, w &gt; 0, one with v, w &lt; 0, because (v, w) -&gt; (-v, -w) keeps the product vw and so keeps every prediction.</aside>
+<aside class="notes">This is the two-variable version of x^3 at 0: flat, not lowest. Students have seen error surfaces and vertical slices in L09 and L11; the two colored curves are two such slices.</aside>
 </section>
 
 <section>
-<h4>Two layers: the chord test fails</h4>
-<img src="../images/unit05/u5-L15-fig06-two-layer-segment.png" alt="E along the segment from B = (-1, -7/5) to A = (1, 7/5): it rises from 21/5 at B to 14 at the midpoint (0,0) and falls back to 21/5 at A; the chord between A and B stays at 21/5." style="float:right; max-height:340px; max-width:38%; margin:0 0 0.5em 1em; border-radius:6px;">
-<p>\(E(v,w)=5(vw)^2-14vw+14\). Convex: \(E\big(\theta\mathbf a+(1-\theta)\mathbf b\big)\le\theta E(\mathbf a)+(1-\theta)E(\mathbf b)\).</p>
+<h4>A saddle is not convex</h4>
+<img src="../images/unit05/u5-L15-fig10-saddle-slices.png" alt="Two slices of f = vw through (0,0): s^2 (blue, opening up) and -s^2 (red, opening down). On the red slice the chord from s = -1 to s = 1 is at height -1, while the graph at s = 0 is 0, above the chord." style="float:right; max-height:360px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>\(f(v,w)=vw\). Earlier today: \(f\) is convex \(\iff\) every slice along a line is convex.</p>
 <ol>
-<li class="fragment"><strong>Two lowest points:</strong> \(A=\left(1,\tfrac75\right)^\top\), \(B=\left(-1,-\tfrac75\right)^\top\). Both have \(vw=\tfrac75\), so \(E=\tfrac{21}5\).</li>
-<li class="fragment"><strong>Chord test</strong>, \(\theta=\tfrac12\): the midpoint is \(\tfrac12A+\tfrac12B=(0,0)^\top\).
+<li class="fragment"><strong>The slice along \(v=-w\):</strong> \(\phi(s)=f(s,-s)=-s^2\), so \(\phi''(s)=-2&lt;0\). Not convex.</li>
+<li class="fragment"><strong>Chord check</strong> on this slice, \(s=-1\) and \(s=1\), midpoint \(s=0\):
 <table style="width:auto; margin:0.3em 0; font-size:0.9em;">
-<tr><td>graph</td><td>\(E(0,0)=14\)</td></tr>
-<tr><td>chord</td><td>\(\tfrac12\cdot\tfrac{21}5+\tfrac12\cdot\tfrac{21}5=\tfrac{21}5\)</td></tr>
+<tr><td>graph</td><td>\(\phi(0)=0\)</td></tr>
+<tr><td>chord</td><td>\(\tfrac12(-1)+\tfrac12(-1)=-1\)</td></tr>
 </table>
-\(14\le\tfrac{21}5\) is false ✗: <strong>\(E\) is not convex</strong>.</li>
-<li class="fragment"><strong>Flat, but not lowest:</strong> \(\partial E/\partial v=10vw^2-14w\) and \(\partial E/\partial w=10v^2w-14v\) are both \(0\) at \((0,0)^\top\), yet \(E(0,0)=14&gt;\tfrac{21}5\).</li>
+\(0\le-1\) is false ✗.</li>
+<li class="fragment">So <strong>\(f\) is not convex</strong>, and the local \(\Rightarrow\) global theorem says nothing about it.</li>
 </ol>
 <ul>
-<li class="fragment">The picture: \(E\) on the segment from \(B\) to \(A\), a hump between two lowest points.</li>
-<li class="fragment"><strong>Answer:</strong> one extra layer already loses convexity, so the local \(\Rightarrow\) global theorem no longer applies.</li>
+<li class="fragment">Lesson: with two or more variables, \(\nabla f=\mathbf 0^\top\) finds flat points, and a flat point can be a saddle.</li>
 </ul>
-<aside class="notes">The figure's horizontal axis: the points s(1, 7/5), s from -1 (B) to 1 (A); s = 0 is the midpoint (0,0). Along it E = (49/5)s^4 - (98/5)s^2 + 14, the same "restrict to a line" idea as for SSE, and this slice bends down at 0. (0,0) is not even a local minimum: toward A the error drops at once. Every first-order slope there is 0, yet lower points are arbitrarily close.</aside>
+<aside class="notes">Only one slice needs to fail: the definition must hold for every chord. The other slice, s^2, is convex; that is not enough.</aside>
 </section>
 
 <section>
 <h4>Neural networks: errors that are not convex</h4>
 <ul>
-<li>A neural network is a long chain of layers (L13). Its training error is generally <strong>nonconvex</strong> in the weights; even our two-layer example is already nonconvex. <span class="tier-u">[UNDERSTAND]</span>
+<li>A neural network is a long chain of layers (L13). Its training error is generally <strong>nonconvex</strong> in the weights. <span class="tier-u">[UNDERSTAND]</span>
 <ul>
 <li>Many separate lowest points (flipping signs, or swapping two units, keeps the predictions).</li>
-<li>Flat points that are not lowest, like \((0,0)^\top\) above.</li>
+<li>Saddles: flat points that are not lowest, like \((0,0)^\top\) for \(vw\).</li>
 </ul></li>
 <li class="fragment">So the theorem does not apply: a local minimum of a network&rsquo;s error need not be global.</li>
 <li class="fragment">Different starting weights can lead training to different final weights.</li>
@@ -451,7 +445,7 @@ since \(\theta&gt;0\) and \(f(\mathbf y)-f(\mathbf x^\ast)&lt;0\). every such \(
 <li class="fragment">Differentiable convex \(f\): a flat point, \(\nabla f(\mathbf x^\ast)=\mathbf 0^\top\), is a global minimum, since \(f(\mathbf y)\ge f(\mathbf x^\ast)+\nabla f(\mathbf x^\ast)(\mathbf y-\mathbf x^\ast)\) (MML (7.31)). <span class="tier-m">[MASTER]</span></li>
 <li class="fragment">So the flat point of our \(\mathrm{SSE}\), \(\mathbf w^\ast=\left(\tfrac32,\tfrac12\right)^\top\), is the lowest point: \(\mathrm{SSE}(\mathbf w^\ast)=\tfrac32\).</li>
 <li class="fragment">Not promised: that a minimum exists (\(e^x\) has none), or that our steps reach it (L16).</li>
-<li class="fragment">Not convex: \(3x^4-4x^3-12x^2+5\) (\(-1\) local, not global), the two-layer \(E(v,w)\) (flat at \((0,0)^\top\), not lowest), neural networks. <span class="tier-u">[UNDERSTAND]</span></li>
+<li class="fragment">Not convex: \(3x^4-4x^3-12x^2+5\) (\(-1\) local, not global), the saddle \(vw\) (flat at \((0,0)^\top\), not lowest), neural networks. <span class="tier-u">[UNDERSTAND]</span></li>
 </ul>
 <div class="key-question fragment">No wrong valleys on \(\mathrm{SSE}\). But how do we step, and how big a step still reaches the bottom? <strong>L16: gradient descent.</strong></div>
 </section>
