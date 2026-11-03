@@ -898,15 +898,15 @@ The number \(\gamma>0\) is the <strong>step-size</strong>, also called the <stro
 
 <section>
 <h4>At the touching point \(P^\ast\), the two gradients are parallel</h4>
-<img src="../images/unit05/u5-L17-fig02-two-points.png" alt="The unit circle with two points. At Q = (1,0) the red arrow (grad f) and the blue arrow (grad g) point in different directions, and a green arrow points along the circle. At P* = (3/5,4/5) the red and blue arrows point the same way." style="float:right; max-height:470px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<img src="../images/unit05/u5-L17-fig02-two-points.png" alt="The unit circle and the two levels f = 3 (through Q) and f = 5 (through P*). A key above the plot: red is (grad f)^T = (3,4)^T at every point, blue is (grad g)^T = (2x,2y)^T, green points along the circle at Q, arrows drawn at 1/5 of their length. At Q = (1,0) the red and blue arrows point in different directions; at P* = (3/5,4/5) they point the same way." style="float:right; max-height:540px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
 <ul>
 <li>Objective \(f=3x+4y\): \(\;\nabla f=\begin{bmatrix}3&4\end{bmatrix}\) at every point.</li>
 <li>The circle is the contour \(g=1\) of \(g(x,y)=x^2+y^2\):<br>\(\nabla g=\begin{bmatrix}2x&2y\end{bmatrix}\).</li>
 </ul>
 <table class="fragment" style="width:auto; margin:0.4em auto; font-size:0.95em;">
-<tr><th>point</th><th>\(f\)</th><th>\(\nabla g\)</th><th>\(\nabla f\) vs. \(\nabla g\)</th></tr>
-<tr><td>\(Q=(1,0)^\top\)</td><td>\(3\)</td><td>\(\begin{bmatrix}2&0\end{bmatrix}\)</td><td>not parallel</td></tr>
-<tr><td>\(P^\ast=\left(\tfrac35,\tfrac45\right)^\top\)</td><td>\(5\)</td><td>\(\begin{bmatrix}\tfrac65&\tfrac85\end{bmatrix}\)</td><td>\(\begin{bmatrix}3&4\end{bmatrix}=\tfrac52\begin{bmatrix}\tfrac65&\tfrac85\end{bmatrix}\)</td></tr>
+<tr><th style="padding:0.2em 0.6em;">point</th><th style="padding:0.2em 0.6em;">\(f\)</th><th style="padding:0.2em 0.6em;">\(\nabla f\)</th><th style="padding:0.2em 0.6em;">\(\nabla g\)</th><th style="padding:0.2em 0.6em;">parallel?</th></tr>
+<tr><td style="padding:0.2em 0.6em;">\(Q=(1,0)^\top\)</td><td style="padding:0.2em 0.6em;">\(3\)</td><td style="padding:0.2em 0.6em;">\(\begin{bmatrix}3&4\end{bmatrix}\)</td><td style="padding:0.2em 0.6em;">\(\begin{bmatrix}2&0\end{bmatrix}\)</td><td style="padding:0.2em 0.6em;">no</td></tr>
+<tr><td style="padding:0.2em 0.6em;">\(P^\ast=\left(\tfrac35,\tfrac45\right)^\top\)</td><td style="padding:0.2em 0.6em;">\(5\)</td><td style="padding:0.2em 0.6em;">\(\begin{bmatrix}3&4\end{bmatrix}\)</td><td style="padding:0.2em 0.6em;">\(\begin{bmatrix}\tfrac65&\tfrac85\end{bmatrix}\)</td><td style="padding:0.2em 0.6em;">yes: \(\nabla f=\tfrac52\,\nabla g\)</td></tr>
 </table>
 <ul>
 <li class="fragment">In the figure: red \((\nabla f)^\top\) and blue \((\nabla g)^\top\) point the same way at \(P^\ast\), different ways at \(Q\).</li>
@@ -916,7 +916,7 @@ The number \(\gamma>0\) is the <strong>step-size</strong>, also called the <stro
 
 <section>
 <h4>At \(Q\) the objective still rises along the circle; at \(P^\ast\) it does not</h4>
-<img src="../images/unit05/u5-L17-fig02-two-points.png" alt="The same figure: at Q the green arrow along the circle; at P* the red and blue arrows point the same way." style="float:right; max-height:470px; max-width:45%; margin:0 0 0.5em 1em; border-radius:6px;">
+<img src="../images/unit05/u5-L17-fig02-two-points.png" alt="The same figure: at Q the green arrow along the circle; at P* the red and blue arrows point the same way." style="float:right; max-height:540px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
 <p>L11: the slope of \(f\) in a unit direction \(\mathbf t\) is \(\nabla f\,\mathbf t\). &nbsp;Here \(\nabla f=\begin{bmatrix}3&4\end{bmatrix}\).</p>
 <table class="fragment" style="width:auto; margin:0.4em auto; font-size:0.95em;">
 <tr><th>point</th><th>circle runs along \(\mathbf t\)</th><th>slope \(\nabla f\,\mathbf t\)</th></tr>
