@@ -509,18 +509,30 @@ since \(\theta&gt;0\) and \(f(\mathbf y)-f(\mathbf x^\ast)&lt;0\). every such \(
 <h4>The idea on the simplest bowl, \(f(w)=w^2\)</h4>
 <img src="../images/unit05/u5-L16-fig01-w2-steps.png" alt="The parabola f(w)=w^2 with gradient-descent points w0=2, w1=1, w2=1/2, w3=1/4 joined by arrows toward the lowest point w=0; f goes 4, 1, 1/4, 1/16" style="float:right; max-height:400px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
 <ul>
-<li>A repeated update is easiest to see in <strong>one variable</strong>: every step can be drawn and computed exactly. Not our data: the same rule comes back to our \(\mathrm{SSE}\).</li>
+<li>One variable first: every step can be drawn and computed exactly. (Not our data; the same rule comes back to our \(\mathrm{SSE}\).)</li>
 <li class="fragment">Lowest point \(w=0\); slope \(f'(w)=2w\). Start \(w_0=2\).</li>
-<li class="fragment">Repeat: find the slope <strong>here</strong>, step <strong>against</strong> it by \(\tfrac14\) of it.</li>
+<li class="fragment">One step: new \(w\) = old \(w\) \(-\ \tfrac14\times\) slope,<br>\(w_{k+1}=w_k-\tfrac14 f'(w_k)\).
+<ul>
+<li><strong>Minus:</strong> slope \(&gt;0\) means \(f\) rises to the right, so go left, downhill.</li>
+<li><strong>\(\tfrac14\):</strong> how far to go, a number <strong>we choose</strong>.</li>
+<li>It keeps the numbers simple: \(w-\tfrac14\cdot2w=\tfrac12w\), each step halves \(w\).</li>
+<li>Which choices work: later today.</li>
+</ul></li>
 </ul>
-<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
+</section>
+
+<section>
+<h4>Three steps on \(f(w)=w^2\)</h4>
+<p>The rule: \(w_{k+1}=w_k-\tfrac14 f'(w_k)\), with slope \(f'(w)=2w\), start \(w_0=2\).</p>
+<table style="width:auto; margin:0.3em auto; font-size:0.9em;">
 <tr><th>\(k\)</th><th>\(w_k\)</th><th>slope \(f'(w_k)\)</th><th>step \(-\tfrac14f'(w_k)\)</th><th>\(w_{k+1}\)</th><th>\(f(w_{k+1})\)</th></tr>
-<tr><td>\(0\)</td><td>\(2\)</td><td>\(4\)</td><td>\(-1\) (left)</td><td>\(1\)</td><td>\(1\)</td></tr>
+<tr class="fragment"><td>\(0\)</td><td>\(2\)</td><td>\(4\)</td><td>\(-1\) (left)</td><td>\(1\)</td><td>\(1\)</td></tr>
 <tr class="fragment"><td>\(1\)</td><td>\(1\)</td><td>\(2\) (recomputed)</td><td>\(-\tfrac12\)</td><td>\(\tfrac12\)</td><td>\(\tfrac14\)</td></tr>
 <tr class="fragment"><td>\(2\)</td><td>\(\tfrac12\)</td><td>\(1\) (recomputed)</td><td>\(-\tfrac14\)</td><td>\(\tfrac14\)</td><td>\(\tfrac1{16}\)</td></tr>
 </table>
 <ul>
-<li class="fragment">Slope positive \(\Rightarrow\) step left. Flatter slope \(\Rightarrow\) shorter step.</li>
+<li class="fragment">The slope is recomputed at every new \(w\).</li>
+<li class="fragment">Flatter slope \(\Rightarrow\) shorter step: \(1,\ \tfrac12,\ \tfrac14\). The error drops \(4\to1\to\tfrac14\to\tfrac1{16}\).</li>
 </ul>
 <div class="key-question fragment">This loop &mdash; recompute the slope, step against it, repeat &mdash; <strong>is the method</strong>.</div>
 </section>
