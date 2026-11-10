@@ -1180,39 +1180,77 @@ The number \(\lambda\) is the <strong>Lagrange multiplier</strong>. <span class=
 
 <section>
 <h4>Both weight vectors fit their data exactly. So what goes wrong?</h4>
-<p>A model is fit in order to predict <span style="color:rgb(30,90,160);"><strong>new</strong></span> inputs. Take a new input \(\mathbf x=(1,\ 0.9)^\top\): prediction \(\hat y=\mathbf x^\top\mathbf w=w_1+0.9\,w_2\).</p>
+<p>A model is fit in order to predict <span style="color:rgb(30,90,160);"><strong>new</strong></span> inputs. Take a new input \(\mathbf x=(1.1,\ 0.9)^\top\): prediction \(\hat y=\mathbf x^\top\mathbf w=1.1\,w_1+0.9\,w_2\).</p>
 <table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
-<tr><th style="padding:0.2em 0.6em;">Data</th><th style="padding:0.2em 0.6em;">Weights \(\mathbf w\)</th><th style="padding:0.2em 0.6em;">Predictions on the data, \(X\mathbf w\)</th><th style="padding:0.2em 0.6em;">Prediction at \(\mathbf x=(1,\ 0.9)^\top\)</th></tr>
-<tr><td style="padding:0.2em 0.6em;">\(X_1\)</td><td style="padding:0.2em 0.6em;">\((0,\ 2)^\top\)</td><td style="padding:0.2em 0.6em;">\((2,\ 1.998)^\top=\mathbf y\)</td><td style="padding:0.2em 0.6em;">\(0+0.9\cdot2=1.8\)</td></tr>
-<tr><td style="padding:0.2em 0.6em;">\(X_2\)</td><td style="padding:0.2em 0.6em;">\((4,\ -2)^\top\)</td><td style="padding:0.2em 0.6em;">\((2,\ 1.998)^\top=\mathbf y\)</td><td style="padding:0.2em 0.6em;">\(4+0.9\cdot(-2)=2.2\)</td></tr>
+<tr><th style="padding:0.2em 0.6em;">Data</th><th style="padding:0.2em 0.6em;">Weights \(\mathbf w\)</th><th style="padding:0.2em 0.6em;">Predictions on the data, \(X\mathbf w\)</th><th style="padding:0.2em 0.6em;">Prediction at \(\mathbf x=(1.1,\ 0.9)^\top\)</th></tr>
+<tr><td style="padding:0.2em 0.6em;">\(X_1\)</td><td style="padding:0.2em 0.6em;">\((0,\ 2)^\top\)</td><td style="padding:0.2em 0.6em;">\((2,\ 1.998)^\top=\mathbf y\)</td><td style="padding:0.2em 0.6em;">\(1.1\cdot0+0.9\cdot2=1.8\)</td></tr>
+<tr><td style="padding:0.2em 0.6em;">\(X_2\)</td><td style="padding:0.2em 0.6em;">\((4,\ -2)^\top\)</td><td style="padding:0.2em 0.6em;">\((2,\ 1.998)^\top=\mathbf y\)</td><td style="padding:0.2em 0.6em;">\(1.1\cdot4+0.9\cdot(-2)=2.6\)</td></tr>
 </table>
 <ul>
-<li class="fragment">On the data the two models agree exactly. On the new input they disagree: \(1.8\) or \(2.2\).</li>
+<li class="fragment">On the data the two models agree exactly. On the new input they disagree: \(1.8\) or \(2.6\).</li>
 <li class="fragment">Which one we get is decided by a \(0.002\) change in the data. So we cannot trust the predictions on new inputs.</li>
 <li class="fragment">Nor can we read a weight: \(X_1\) says \(w_2=2\), \(X_2\) says \(w_2=-2\). (L06&rsquo;s &deg;C/&deg;F example: the Celsius weight flipped sign.)</li>
 </ul>
 <aside class="notes">"jzhong 2026-11-10: 'the predictions barely moved, so why does it matter?' Answer: they barely move on the training data only. The model is used on new inputs, and there the two fits disagree." Standard explanation: ISLR 6.2.1 (high variance: small change in training data, large change in coefficient estimates), ESL 3.4.1 (correlated variables: large positive coefficient canceled by large negative one; a size constraint alleviates it).</aside>
 </section>
 
-<!-- L18-02: why -->
+<!-- L18-02: why the weights jump (1): the exactly singular case -->
 <section>
-<h4>Where the large weights come from: the two columns of \(X_1\) are almost equal</h4>
-<img src="../images/unit05/u5-L18-fig01c-L06-line.png" alt="Weight plane: the gray line w1 + w2 = 2 through (0,2) (the answer for X1), (1,1), and (4,-2) (the answer for X2)" style="float:right; max-height:470px; max-width:44%; margin:0 0 0.5em 1em; border-radius:6px;">
+<h4>Why the weights jump (1): if the two columns were exactly equal</h4>
+<img src="../images/unit05/u5-L18-fig01c-L06-line.png" alt="Weight plane: the gray line w1 + w2 = 2 through (0,2) (the answer for X1), (1,1), and (4,-2) (the answer for X2)" style="float:right; max-height:440px; max-width:40%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Replace \(0.999\) and \(1.001\) by \(1\):</p>
+\[X_0=\begin{bmatrix}1&1\\1&1\end{bmatrix},\qquad \det X_0=1-1=0:\ \text{singular}.\]
 <ul>
-<li>Columns of \(X_1\): \(\mathbf c_1=(1,1)^\top\), \(\mathbf c_2=(1,\,0.999)^\top\), almost equal.</li>
-<li class="fragment">So the prediction \(X_1\mathbf w=w_1\mathbf c_1+w_2\mathbf c_2\approx(w_1+w_2)\,(1,1)^\top\) depends almost only on the sum \(w_1+w_2\).</li>
-<li class="fragment">Fitting \(\mathbf y=(2,\,1.998)^\top\) fixes the sum: \(w_1+w_2\approx2\), the gray line.</li>
-<li class="fragment">It does not fix how the \(2\) is split between \(w_1\) and \(w_2\): \((0,2)^\top\), \((1,1)^\top\), \((4,-2)^\top\) all predict about \((2,2)^\top\). Only the \(0.001\) decides the split, so a tiny change in the data moves it far.</li>
-<li class="fragment">\((4,-2)^\top\): both weights are large, but on the data their effects cancel, \(4-2=2\). This is the standard explanation (ESL &sect;3.4.1): when two features are nearly the same, a large positive weight on one can be canceled by a large negative weight on the other.</li>
+<li class="fragment">\(X_0\mathbf w=\begin{bmatrix}w_1+w_2\\w_1+w_2\end{bmatrix}\). The two equations are \(w_1+w_2=2\) and \(w_1+w_2=1.998\).</li>
+<li class="fragment">They say the same thing: one equation, \(w_1+w_2\approx2\).</li>
+<li class="fragment">One equation, two unknowns: <strong>under-determined</strong>.</li>
+<li class="fragment">Infinitely many solutions: every point of the gray line, e.g. \((0,2)^\top\), \((1,1)^\top\), \((4,-2)^\top\).</li>
 </ul>
-<aside class="notes">"L08: (1,-1) is almost the eigenvector of X^T X with eigenvalue about 0, the direction the data say almost nothing about." ESL = Hastie, Tibshirani, Friedman, The Elements of Statistical Learning, 2nd ed., section 3.4.1 (free PDF).</aside>
+<aside class="notes">"jzhong 2026-11-10: the mathematical essence is near-dependence. Four 1s: singular, the 2x2 system reduces to one equation w1+w2=2 in two unknowns, under-determined, infinitely many solutions. 0.999 and 1.001: unique solutions, but both systems are close to the singular one, so their solutions share the one constraint w1+w2 about 2." "Strictly, the singular system with y=(2,1.998) has no exact solution; its least-squares solutions are the line w1+w2=1.999. Say 'about 2' on the slide." "L08: (1,-1) is almost the eigenvector of X^T X with eigenvalue about 0, the direction the data say almost nothing about."</aside>
+</section>
+
+<!-- L18-02a: why the weights jump (2): X1, X2 are almost X0 -->
+<section>
+<h4>Why the weights jump (2): \(X_1\) and \(X_2\) are almost that singular matrix</h4>
+<img src="../images/unit05/u5-L18-fig01c-L06-line.png" alt="Weight plane: the gray line w1 + w2 = 2 through (0,2) (the answer for X1), (1,1), and (4,-2) (the answer for X2)" style="float:right; max-height:440px; max-width:40%; margin:0 0 0.5em 1em; border-radius:6px;">
+<ul>
+<li>\(X_1\), \(X_2\) differ from \(X_0\) in one entry, by \(0.001\).</li>
+<li class="fragment">\(\det X_1=-0.001\), \(\det X_2=0.001\), not \(0\) (L06): each has exactly one solution.</li>
+<li class="fragment">But each is almost \(X_0\), so each still says essentially one thing: \(w_1+w_2\approx2\).</li>
+<li class="fragment">Both solutions lie on the line: \(0+2=2\) for \(X_1\), \(\;4+(-2)=2\) for \(X_2\).</li>
+<li class="fragment">Where on the line the solution sits is decided only by the \(0.001\). A \(0.002\) change in the data moves it from \((0,2)^\top\) to \((4,-2)^\top\).</li>
+</ul>
+<div class="key-question fragment">Every \(\mathbf w\) on the line, \((1,1)^\top\) included, fits \(X_1\) and \(X_2\) almost equally well. The data cannot choose among them.</div>
+</section>
+
+<!-- L18-02b: what large weights do -->
+<section>
+<h4>What large weights do: they amplify small changes in the input</h4>
+<ul>
+<li>In the data the two features always agree, both about \(1\). For such an input, \(\mathbf x=(1,1)^\top\), every \(\mathbf w\) on the line predicts \(w_1+w_2=2\).</li>
+<li class="fragment">A new input never matches exactly. Move it a little: \(\mathbf x=(1.1,\ 0.9)^\top\). Now the two features differ by \(0.2\).</li>
+<li class="fragment">The prediction changes by \(\;(1.1\,w_1+0.9\,w_2)-(w_1+w_2)=0.1\,(w_1-w_2)\).</li>
+<li class="fragment">Size of the weights: \(\lVert\mathbf w\rVert^2=w_1^2+w_2^2\) (MML p.263: the &ldquo;magnitude of the parameters&rdquo;).</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th style="padding:0.2em 0.6em;">\(\mathbf w\)</th><th style="padding:0.2em 0.6em;">size \(\lVert\mathbf w\rVert^2\)</th><th style="padding:0.2em 0.6em;">Prediction at \((1,1)^\top\)</th><th style="padding:0.2em 0.6em;">Prediction at \((1.1,\ 0.9)^\top\)</th><th style="padding:0.2em 0.6em;">Change</th></tr>
+<tr><td style="padding:0.2em 0.6em;">\((1,\ 1)^\top\)</td><td style="padding:0.2em 0.6em;">\(2\)</td><td style="padding:0.2em 0.6em;">\(2\)</td><td style="padding:0.2em 0.6em;">\(2\)</td><td style="padding:0.2em 0.6em;">\(0\)</td></tr>
+<tr><td style="padding:0.2em 0.6em;">\((0,\ 2)^\top\), the answer for \(X_1\)</td><td style="padding:0.2em 0.6em;">\(4\)</td><td style="padding:0.2em 0.6em;">\(2\)</td><td style="padding:0.2em 0.6em;">\(1.8\)</td><td style="padding:0.2em 0.6em;">\(-0.2\)</td></tr>
+<tr><td style="padding:0.2em 0.6em;">\((4,\ -2)^\top\), the answer for \(X_2\)</td><td style="padding:0.2em 0.6em;">\(20\)</td><td style="padding:0.2em 0.6em;">\(2\)</td><td style="padding:0.2em 0.6em;">\(2.6\)</td><td style="padding:0.2em 0.6em;">\(+0.6\)</td></tr>
+</table>
+<ul>
+<li class="fragment">The larger the size, the bigger the change: large weights <span style="color:rgb(30,90,160);"><strong>amplify</strong></span> small changes in the input. \((1,1)^\top\), the smallest size on the line, does not change at all.</li>
+<li class="fragment">Why: large weights rely on \(w_1-w_2\), which the data never determined. Small weights rely only on \(w_1+w_2\), which the data did determine.</li>
+</ul>
+<div class="key-question fragment"><strong>So:</strong> among weights that fit the data (almost) equally well, prefer the one of smallest size \(\lVert\mathbf w\rVert^2\). Its predictions are stable.</div>
+<aside class="notes">"jzhong 2026-11-10: why, at the same or nearly the same SSE, prefer the smaller magnitude? What goes wrong if it is large? This slide is the answer: the prediction on a new input moves by w^T(change in x); large w, large move." "In general the change is w^T dx, at most ||w|| ||dx|| (Cauchy-Schwarz, MML (3.17), named in Unit 1). Do not prove it today." "On the line w1+w2=2: ||w||^2 = ((w1+w2)^2+(w1-w2)^2)/2 = 2+(w1-w2)^2/2, so smallest size is exactly w1-w2=0." "MML p.263 and p.302: 'It often happens that the magnitude of the parameter values becomes relatively large if we run into overfitting (Bishop, 2006).' Bishop PRML 1.1, Table 1.1: the degree-9 polynomial's coefficients are huge, and the curve swings wildly between the data points. Same mechanism."</aside>
 </section>
 
 <!-- L18-03: three candidates -->
 <section>
 <h4>The fix: make large weights cost something</h4>
 <img src="../images/unit05/u5-L18-fig01a-L06-weights.png" alt="The line w1 + w2 = 2 with (0,2), (1,1), (4,-2); the dashed circle is every w of size 2, and it touches the line at (1,1)" style="float:right; max-height:420px; max-width:38%; margin:0 0 0.5em 1em; border-radius:6px;">
-<p>ESL &sect;3.4.1: the canceling large weights are removed by limiting the <strong>size</strong> of the weights, \(\lVert\mathbf w\rVert^2\). MML p.263: the penalty &ldquo;biases the vector \(\boldsymbol\theta\) to be closer to the origin&rdquo;.</p>
+<p>Goal: among weights that fit (almost) equally well, take the one of smallest size \(\lVert\mathbf w\rVert^2\), whose predictions are stable. The standard way: make size cost something (ESL &sect;3.4.1; MML p.263: the penalty &ldquo;biases the vector \(\boldsymbol\theta\) to be closer to the origin&rdquo;).</p>
 <p>Data \(X_1\), \(\mathbf y=(2,\,1.998)^\top\); \(\;\mathrm{SSE}=\lVert \mathbf y-X_1\mathbf w\rVert^2\).</p>
 <table style="width:auto; margin:0.3em auto; font-size:0.95em;">
 <tr><th style="padding:0.2em 0.6em;">\(\mathbf w\)</th><th style="padding:0.2em 0.6em;">\(\mathrm{SSE}\)</th><th style="padding:0.2em 0.6em;">size \(\lVert \mathbf w\rVert^2\)</th></tr>
@@ -1222,9 +1260,9 @@ The number \(\lambda\) is the <strong>Lagrange multiplier</strong>. <span class=
 </table>
 <ul>
 <li class="fragment">All three fit almost perfectly: \(\mathrm{SSE}\) alone cannot choose.</li>
-<li class="fragment">The canceling pair \((4,-2)^\top\) has the largest size, \(20\). On the line \(w_1+w_2=2\) the smallest size is at \((1,1)^\top\): \(2\) The dashed circle is every \(\mathbf w\) of size \(2\); it touches the line only there.</li>
+<li class="fragment">\((4,-2)^\top\) has the largest size, \(20\). On the line \(w_1+w_2=2\) the smallest size is at \((1,1)^\top\): \(2\). The dashed circle is every \(\mathbf w\) of size \(2\); it touches the line only there.</li>
 </ul>
-<div class="key-question fragment"><strong>What we need:</strong> one number that adds the size \(\lVert\mathbf w\rVert^2\) to the error, so that large canceling weights cost something.</div>
+<div class="key-question fragment"><strong>What we need:</strong> one number that adds the size \(\lVert\mathbf w\rVert^2\) to the error, so that large weights cost something.</div>
 </section>
 
 <!-- L18-04: definition -->
