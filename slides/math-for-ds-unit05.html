@@ -1173,50 +1173,64 @@ The number \(\lambda\) is the <strong>Lagrange multiplier</strong>. <span class=
 </table>
 <ul>
 <li class="fragment">The data changed by \(0.002\). The weights changed by \(4\), and \(w_2\) changed sign.</li>
-<li class="fragment">L06&rsquo;s &deg;C/&deg;F data: one reading moved by \(0.1^\circ\); the Celsius weight went from \(+0.10\) to \(-1.19\). The predictions barely moved.</li>
+<li class="fragment">The data are the input, the fitted weights are the output. A tiny change in the input gave a big change in the output: the weights are <span style="color:rgb(30,90,160);"><strong>not stable</strong></span>. (ISLR &sect;6.2.1 calls this <strong>high variance</strong>.)</li>
 </ul>
-<div class="key-question fragment"><strong>Why</strong> can the fitted weights blow up &mdash; and <strong>how</strong> do we keep them stable?</div>
 <aside class="notes">"X is square and invertible here, so least squares gives exactly the solution of Xw = y; the normal equation X^T X w = X^T y has the same solution." "This is the only recall slide. The mechanism (determinant, eigenvalues) was L06 and L08; today is the fix as an optimization problem."</aside>
+</section>
+
+<section>
+<h4>Both weight vectors fit their data exactly. So what goes wrong?</h4>
+<p>A model is fit in order to predict <span style="color:rgb(30,90,160);"><strong>new</strong></span> inputs. Take a new input \(\mathbf x=(1,\ 0.9)^\top\): prediction \(\hat y=\mathbf x^\top\mathbf w=w_1+0.9\,w_2\).</p>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th style="padding:0.2em 0.6em;">Data</th><th style="padding:0.2em 0.6em;">Weights \(\mathbf w\)</th><th style="padding:0.2em 0.6em;">Predictions on the data, \(X\mathbf w\)</th><th style="padding:0.2em 0.6em;">Prediction at \(\mathbf x=(1,\ 0.9)^\top\)</th></tr>
+<tr><td style="padding:0.2em 0.6em;">\(X_1\)</td><td style="padding:0.2em 0.6em;">\((0,\ 2)^\top\)</td><td style="padding:0.2em 0.6em;">\((2,\ 1.998)^\top=\mathbf y\)</td><td style="padding:0.2em 0.6em;">\(0+0.9\cdot2=1.8\)</td></tr>
+<tr><td style="padding:0.2em 0.6em;">\(X_2\)</td><td style="padding:0.2em 0.6em;">\((4,\ -2)^\top\)</td><td style="padding:0.2em 0.6em;">\((2,\ 1.998)^\top=\mathbf y\)</td><td style="padding:0.2em 0.6em;">\(4+0.9\cdot(-2)=2.2\)</td></tr>
+</table>
+<ul>
+<li class="fragment">On the data the two models agree exactly. On the new input they disagree: \(1.8\) or \(2.2\).</li>
+<li class="fragment">Which one we get is decided by a \(0.002\) change in the data. So we cannot trust the predictions on new inputs.</li>
+<li class="fragment">Nor can we read a weight: \(X_1\) says \(w_2=2\), \(X_2\) says \(w_2=-2\). (L06&rsquo;s &deg;C/&deg;F example: the Celsius weight flipped sign.)</li>
+</ul>
+<aside class="notes">"jzhong 2026-11-10: 'the predictions barely moved, so why does it matter?' Answer: they barely move on the training data only. The model is used on new inputs, and there the two fits disagree." Standard explanation: ISLR 6.2.1 (high variance: small change in training data, large change in coefficient estimates), ESL 3.4.1 (correlated variables: large positive coefficient canceled by large negative one; a size constraint alleviates it).</aside>
 </section>
 
 <!-- L18-02: why -->
 <section>
-<h4>Why: the two columns of \(X_1\) are almost the same</h4>
-<img src="../images/unit05/u5-L18-fig01a-L06-weights.png" alt="Weight plane: the line w1 + w2 = 2 through (0,2), (1,1) and (4,-2); a dashed circle of radius root 2 touches the line at (1,1)" style="float:right; max-height:470px; max-width:44%; margin:0 0 0.5em 1em; border-radius:6px;">
+<h4>Where the large weights come from: the two columns of \(X_1\) are almost equal</h4>
+<img src="../images/unit05/u5-L18-fig01c-L06-line.png" alt="Weight plane: the gray line w1 + w2 = 2 through (0,2) (the answer for X1), (1,1), and (4,-2) (the answer for X2)" style="float:right; max-height:470px; max-width:44%; margin:0 0 0.5em 1em; border-radius:6px;">
 <ul>
-<li>Columns of \(X_1\): \(\mathbf c_1=(1,1)^\top\), \(\mathbf c_2=(1,\,0.999)^\top\).</li>
-<li class="fragment">So \(X_1\mathbf w=w_1\mathbf c_1+w_2\mathbf c_2\approx(w_1+w_2)\,(1,1)^\top\).</li>
-<li class="fragment">The data fix the <strong>sum</strong> \(w_1+w_2\approx2\) (the gray line).</li>
-<li class="fragment">They barely fix the <strong>split</strong> between \(w_1\) and \(w_2\): only the \(0.001\) decides it.</li>
-<li class="fragment">Both answers are on the line: \(0+2=2\), \(\;4+(-2)=2\).</li>
-<li class="fragment">L08: \((1,-1)^\top\) is almost the eigenvector of \(X^\top X\) with eigenvalue \(\approx0\) &mdash; the direction the data say almost nothing about. <span class="tier-u">[UNDERSTAND]</span></li>
+<li>Columns of \(X_1\): \(\mathbf c_1=(1,1)^\top\), \(\mathbf c_2=(1,\,0.999)^\top\), almost equal.</li>
+<li class="fragment">So the prediction \(X_1\mathbf w=w_1\mathbf c_1+w_2\mathbf c_2\approx(w_1+w_2)\,(1,1)^\top\) depends almost only on the sum \(w_1+w_2\).</li>
+<li class="fragment">Fitting \(\mathbf y=(2,\,1.998)^\top\) fixes the sum: \(w_1+w_2\approx2\), the gray line.</li>
+<li class="fragment">It does not fix how the \(2\) is split between \(w_1\) and \(w_2\): \((0,2)^\top\), \((1,1)^\top\), \((4,-2)^\top\) all predict about \((2,2)^\top\). Only the \(0.001\) decides the split, so a tiny change in the data moves it far.</li>
+<li class="fragment">\((4,-2)^\top\): both weights are large, but on the data their effects cancel, \(4-2=2\). This is the standard explanation (ESL &sect;3.4.1): when two features are nearly the same, a large positive weight on one can be canceled by a large negative weight on the other.</li>
 </ul>
+<aside class="notes">"L08: (1,-1) is almost the eigenvector of X^T X with eigenvalue about 0, the direction the data say almost nothing about." ESL = Hastie, Tibshirani, Friedman, The Elements of Statistical Learning, 2nd ed., section 3.4.1 (free PDF).</aside>
 </section>
 
 <!-- L18-03: three candidates -->
 <section>
-<h4>Three weight vectors that fit \(X_1\) almost equally well</h4>
-<p>Data \(X_1=\left[\begin{smallmatrix}1&1\\1&0.999\end{smallmatrix}\right]\), \(\mathbf y=(2,\,1.998)^\top\); residual \(\mathbf r=\mathbf y-X_1\mathbf w\), \(\;\mathrm{SSE}=\lVert \mathbf r\rVert^2\).</p>
+<h4>The fix: make large weights cost something</h4>
+<img src="../images/unit05/u5-L18-fig01a-L06-weights.png" alt="The line w1 + w2 = 2 with (0,2), (1,1), (4,-2); the dashed circle is every w of size 2, and it touches the line at (1,1)" style="float:right; max-height:420px; max-width:38%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>ESL &sect;3.4.1: the canceling large weights are removed by limiting the <strong>size</strong> of the weights, \(\lVert\mathbf w\rVert^2\). MML p.263: the penalty &ldquo;biases the vector \(\boldsymbol\theta\) to be closer to the origin&rdquo;.</p>
+<p>Data \(X_1\), \(\mathbf y=(2,\,1.998)^\top\); \(\;\mathrm{SSE}=\lVert \mathbf y-X_1\mathbf w\rVert^2\).</p>
 <table style="width:auto; margin:0.3em auto; font-size:0.95em;">
-<tr><th>\(\mathbf w\)</th><th>\(\mathbf r\)</th><th>\(\mathrm{SSE}\)</th><th>length\(^2\) \(\lVert \mathbf w\rVert^2\)</th></tr>
-<tr class="fragment"><td>\((0,\ 2)^\top\)</td><td>\((0,\ 0)^\top\)</td><td>\(0\)</td><td>\(4\)</td></tr>
-<tr class="fragment"><td>\((4,\ -2)^\top\)</td><td>\((0,\ -0.004)^\top\)</td><td>\(0.000016\)</td><td>\(20\)</td></tr>
-<tr class="fragment"><td>\((1,\ 1)^\top\)</td><td>\((0,\ -0.001)^\top\)</td><td>\(0.000001\)</td><td>\(2\)</td></tr>
+<tr><th style="padding:0.2em 0.6em;">\(\mathbf w\)</th><th style="padding:0.2em 0.6em;">\(\mathrm{SSE}\)</th><th style="padding:0.2em 0.6em;">size \(\lVert \mathbf w\rVert^2\)</th></tr>
+<tr class="fragment"><td style="padding:0.2em 0.6em;">\((0,\ 2)^\top\)</td><td style="padding:0.2em 0.6em;">\(0\)</td><td style="padding:0.2em 0.6em;">\(4\)</td></tr>
+<tr class="fragment"><td style="padding:0.2em 0.6em;">\((4,\ -2)^\top\)</td><td style="padding:0.2em 0.6em;">\(0.000016\)</td><td style="padding:0.2em 0.6em;">\(20\)</td></tr>
+<tr class="fragment"><td style="padding:0.2em 0.6em;">\((1,\ 1)^\top\)</td><td style="padding:0.2em 0.6em;">\(0.000001\)</td><td style="padding:0.2em 0.6em;">\(2\)</td></tr>
 </table>
 <ul>
-<li class="fragment">Every \(\mathrm{SSE}\) is below \(0.00002\): the data cannot tell these apart.</li>
-<li class="fragment">\((4,-2)^\top\) uses two large weights that cancel: \(4-2=2\).</li>
-<li class="fragment">\((1,1)^\top\) is the <strong>shortest</strong> point on the line \(w_1+w_2=2\) (the circle on the previous figure).</li>
+<li class="fragment">All three fit almost perfectly: \(\mathrm{SSE}\) alone cannot choose.</li>
+<li class="fragment">The canceling pair \((4,-2)^\top\) has the largest size, \(20\). On the line \(w_1+w_2=2\) the smallest size is at \((1,1)^\top\): \(2\) The dashed circle is every \(\mathbf w\) of size \(2\); it touches the line only there.</li>
 </ul>
-<div class="key-question fragment"><strong>We know:</strong> several very different weights fit almost equally well.<br>
-<strong>What fails:</strong> training error alone cannot choose among them.<br>
-<strong>What we need:</strong> a second preference &mdash; among nearly tied fits, prefer the <strong>shorter</strong> weight vector.</div>
+<div class="key-question fragment"><strong>What we need:</strong> one number that adds the size \(\lVert\mathbf w\rVert^2\) to the error, so that large canceling weights cost something.</div>
 </section>
 
 <!-- L18-04: definition -->
 <section>
 <h4>Ridge regression: the error plus a penalty on the weights</h4>
-<p>Two preferences, one number to minimize: fit the data, and keep the weights short.</p>
+<p>Two preferences, one number to minimize: fit the data, and keep the weights small.</p>
 \[\underbrace{\lVert \mathbf y-X\mathbf w\rVert^2}_{\text{fit the data}}\;+\;\underbrace{\lambda\lVert \mathbf w\rVert^2}_{\text{pay for large weights}}\]
 <div class="mathbox fragment">
 <strong>Definition</strong> (MML &sect;9.2.4, eq. (9.32), p.302; &sect;8.2.3, eq. (8.12), p.263). For a number \(\lambda\ge0\), <strong>regularized least squares</strong>, also called <strong>ridge regression</strong>, chooses \(\mathbf w\) to minimize
@@ -1405,7 +1419,7 @@ The number \(\lambda\) is the <strong>Lagrange multiplier</strong>. <span class=
 <table style="width:auto; margin:0.3em auto; font-size:0.95em;">
 <tr><th>Question</th><th>Answer</th></tr>
 <tr class="fragment"><td style="white-space:nowrap;">Why can the weights blow up?</td><td>Nearly dependent columns: the data fix some combinations of the weights (here \(w_1+w_2\)) and leave others (here \(w_1-w_2\)) to noise.</td></tr>
-<tr class="fragment"><td style="white-space:nowrap;">How do we keep them stable?</td><td>Minimize \(\mathrm{SSE}+\lambda\lVert \mathbf w\rVert^2\): among weights that fit about equally well, ridge takes a short one.</td></tr>
+<tr class="fragment"><td style="white-space:nowrap;">How do we keep them stable?</td><td>Minimize \(\mathrm{SSE}+\lambda\lVert \mathbf w\rVert^2\): among weights that fit about equally well, ridge takes one of small size \(\lVert\mathbf w\rVert^2\).</td></tr>
 <tr class="fragment"><td style="white-space:nowrap;">How do we compute it?</td><td>Solve \((X^\top X+\lambda I)\mathbf w=X^\top\mathbf y\): one solution for every \(X\), when \(\lambda&gt;0\).</td></tr>
 </table>
 <div class="key-question fragment">Ridge never fits the training data <strong>better</strong> than \(\lambda=0\) (usually worse). So how large should \(\lambda\) be?</div>
@@ -1423,7 +1437,7 @@ The number \(\lambda\) is the <strong>Lagrange multiplier</strong>. <span class=
 </table>
 <ul>
 <li class="fragment">\(\lambda=0\): the best training fit, but the weights can be unstable (L06).</li>
-<li class="fragment">Larger \(\lambda\): shorter, stabler weights; a worse (or equal) training fit.</li>
+<li class="fragment">Larger \(\lambda\): smaller, stabler weights; a worse (or equal) training fit.</li>
 <li class="fragment">Very large \(\lambda\): \(\mathbf w_\lambda\to\mathbf 0\), and the model ignores the data.</li>
 <li class="fragment">So the training \(\mathrm{SSE}\) cannot choose \(\lambda\): it always prefers \(\lambda=0\).</li>
 <li class="fragment">In practice: choose \(\lambda\) by the error on <strong>held-out</strong> data, data kept aside from fitting (MML &sect;8.2.4, p.263). <span class="tier-e">[EXPLORE]</span></li>
