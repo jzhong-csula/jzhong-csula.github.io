@@ -1646,121 +1646,119 @@ The trained parameters are \(\mathbf w_k\).
 
 <!-- ─────────────── Part 2: why it is slow ─────────────── -->
 
-<!-- L19-08 -->
+<!-- L19-08: motivation from the picture -->
 <section>
-<h4>Why 22 steps? The path zigzags</h4>
-<img src="../images/unit05/u5-L19-fig02-zigzag.png" alt="Contours of the course SSE, ellipses tilted down to the right. The gradient-descent path with step size 0.1 from (0,0) jumps to w1 = (1.2, 1.4), back to w2 = (0.84, 0.68), to w3 = (1.128, 0.896), then creeps toward w* = (1.5, 0.5). Two dashed lines through w*: the long axis of the ellipses, labelled slow direction, lambda about 0.84, and the short axis, labelled fast direction, lambda about 7.16." style="float:right; max-height:420px; max-width:52%; margin:0 0 0.5em 1em; border-radius:6px;">
-<p>Stopping tells us <strong>when</strong> to quit; it does not explain <strong>why</strong> it took 22 steps. <span style="color:rgb(30,90,160)"><strong>Now: why is the loop slow?</strong></span></p>
+<h4>Why 22 steps? Which landscape is faster for gradient descent?</h4>
+<img src="../images/unit05/u5-L19-fig05-compare.png" alt="Two contour maps side by side. Left: our SSE, long thin tilted ellipses; gradient descent with step size 0.1 from (0,0) jumps across the valley and back, then creeps toward the bottom. Right: a landscape whose contours are circles; one straight step from (0,0) reaches the bottom." style="float:right; max-height:400px; max-width:56%; margin:0 0 0.5em 1em; border-radius:6px;">
 <ul>
-<li class="fragment">Figure, \(\gamma=0.1\): \(\mathbf w_0\to\mathbf w_1\to\mathbf w_2\to\mathbf w_3\) jumps <strong>across</strong> the valley and back.</li>
-<li class="fragment">L11: the fastest way down, \(-(\nabla\mathrm{SSE})^\top\), <strong>does not point at the bottom</strong>.</li>
-<li class="fragment">Then it <strong>creeps along</strong> the long axis of the ellipses.</li>
+<li><strong>Left</strong>, our \(\mathrm{SSE}\): contours are <strong>long, thin ellipses</strong>. With \(\gamma=0.1\) the path jumps across the valley and back (a <strong>zigzag</strong>), then creeps along it. Rule 2 stops it at step \(22\).</li>
+<li class="fragment"><strong>Right</strong>, a landscape whose contours are <strong>circles</strong> (Part 3 gets one from the same data). One step lands on the bottom.</li>
+<li class="fragment">L11: the downhill direction \(-(\nabla\mathrm{SSE})^\top\) is perpendicular to the contour. On a circle it points at the center. On a thin ellipse it points mostly <strong>across</strong> the valley, not along it.</li>
 </ul>
-<div class="key-question fragment">L16, one parameter (\(f(w)=w^2\)): each step multiplies \(w\) by \(1-2\gamma\).<br>The ellipses have a long and a short axis (dashed). <strong>Does one step shrink the gap \(\mathbf w_k-\mathbf w^\ast\) by a different factor along each axis?</strong></div>
-<aside class="notes">"MML Figure 7.3 is the same picture on its own quadratic." "L16: f'(w) = 2w, so w_{k+1} = w_k - 2 gamma w_k; it converges iff |1 - 2 gamma| &lt; 1, i.e. 0 &lt; gamma &lt; 1."</aside>
+<div class="key-question fragment"><span style="color:rgb(30,90,160);"><strong>Why do long, thin contours make gradient descent slow?</strong></span> Start with one parameter.</div>
+<aside class="notes">"jzhong 2026-11-12: start from the picture. Ask the class first: which one converges faster? Then: why?" "MML Figure 7.3 is the same picture on its own quadratic."</aside>
 </section>
 
-<!-- L19-11 -->
+<!-- L19-09: one parameter -->
 <section>
-<h4>Two parameters: one factor per eigenvector of \(X^\top X\) <span class="tier-u">[UNDERSTAND]</span></h4>
-<p>L16: on \(f(w)=w^2\), &ensp;\(w_{k+1}=(1-2\gamma)\,w_k\). &ensp;Now: \(\;\mathrm{SSE}(\mathbf w)=\norm{\mathbf y-X\mathbf w}^2\), &ensp;\(\mathbf w_{k+1}=\mathbf w_k-\gamma\,\big(\nabla\mathrm{SSE}(\mathbf w_k)\big)^\top\).</p>
-<div class="mathbox">
-Let \(X^\top X\mathbf v=\lambda\mathbf v\). If \(\;\mathbf w_k-\mathbf w^\ast=c\,\mathbf v\), then
-\[\mathbf w_{k+1}-\mathbf w^\ast=(1-2\gamma\lambda)\,c\,\mathbf v.\]
-Along an eigenvector, one step multiplies the gap \(\mathbf w_k-\mathbf w^\ast\) by \(1-2\gamma\lambda\).
-</div>
+<h4>One parameter (L16): each step multiplies \(w\) by \(1-2\gamma\)</h4>
+<img src="../images/unit05/u5-L19-fig06-one-parameter.png" alt="Two copies of the parabola f(w) = w squared, starting at w0 = 1. Left, step size 0.1: w1 = 0.8, w2 = 0.64, staying on the right side and creeping toward 0. Right, step size 0.75: w1 = -0.5, w2 = 0.25, jumping to the other side each step." style="float:right; max-height:240px; max-width:48%; margin:0 0 0.5em 1em; border-radius:6px;">
 <ul>
-<li class="fragment">\(f(w)=w^2\) is the case \(\lambda=1\): it is \(\norm{0-1\cdot w}^2\), an \(\mathrm{SSE}\) with \(X^\top X=1\) and \(w^\ast=0\).</li>
-<li class="fragment">\(X^\top X\) is symmetric, so it has an orthogonal eigenbasis \(\mathbf v_1,\mathbf v_2\) (Unit 3).<br>Write \(\mathbf w_k-\mathbf w^\ast=c_1\mathbf v_1+c_2\mathbf v_2\): each part gets <strong>its own factor</strong> \(1-2\gamma\lambda_i\).</li>
+<li>L16: \(f(w)=w^2\), &ensp;\(f'(w)=2w\), &ensp;bottom at \(w^\ast=0\).</li>
+<li class="fragment">One step: \(\;w_{k+1}=w_k-\gamma f'(w_k)\)<br>\(\qquad\qquad\ \ =w_k-2\gamma\,w_k=(1-2\gamma)\,w_k\)</li>
+<li class="fragment">So every step multiplies the distance to the bottom by the same <strong>factor</strong> \(1-2\gamma\).</li>
 </ul>
-</section>
-
-<!-- L19-12 -->
-<section>
-<h4>Why: the gradient is \(2X^\top X\) times the gap \(\mathbf w-\mathbf w^\ast\)</h4>
-<p>Claim: if \(X^\top X\mathbf v=\lambda\mathbf v\) and \(\mathbf w_k-\mathbf w^\ast=c\,\mathbf v\), then \(\mathbf w_{k+1}-\mathbf w^\ast=(1-2\gamma\lambda)\,c\,\mathbf v\).</p>
-<ol>
-<li class="fragment">L12: \(\;\big(\nabla\mathrm{SSE}(\mathbf w)\big)^\top=2\,(X^\top X\mathbf w-X^\top\mathbf y)\)</li>
-<li class="fragment">Normal equation \(X^\top X\mathbf w^\ast=X^\top\mathbf y\): &ensp;\(\big(\nabla\mathrm{SSE}(\mathbf w)\big)^\top=2\,X^\top X\,(\mathbf w-\mathbf w^\ast)\)</li>
-<li class="fragment">One step, minus \(\mathbf w^\ast\): &ensp;\(\mathbf w_{k+1}-\mathbf w^\ast=(\mathbf w_k-\mathbf w^\ast)-2\gamma\,X^\top X\,(\mathbf w_k-\mathbf w^\ast)\)</li>
-<li class="fragment">Put \(\mathbf w_k-\mathbf w^\ast=c\,\mathbf v\), use \(X^\top X\mathbf v=\lambda\mathbf v\): &ensp;\(\mathbf w_{k+1}-\mathbf w^\ast=c\,\mathbf v-2\gamma\lambda\,c\,\mathbf v=(1-2\gamma\lambda)\,c\,\mathbf v\)</li>
-</ol>
-</section>
-
-<!-- L19-13 -->
-<section>
-<h4>Our data: the two eigenvectors of \(X^\top X\)</h4>
-<img src="../images/unit05/u5-L19-fig02-zigzag.png" alt="Contours of the course SSE with the zigzag gradient-descent path; dashed lines through w* along the eigenvectors of X^T X: slow direction with lambda about 0.84 along the long axis, fast direction with lambda about 7.16 along the short axis." style="float:right; max-height:330px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
-<p>\(X^\top X=\begin{bmatrix}3&amp;3\\3&amp;5\end{bmatrix}\)</p>
-<ul>
-<li class="fragment">Unit 3: \(\det(X^\top X-\lambda I)=\lambda^2-8\lambda+6=0\)</li>
-<li class="fragment">\(\lambda=4\pm\sqrt{10}\): &ensp;\(\approx7.16\) and \(\approx0.84\)</li>
-<li class="fragment">Factors \(1-2\gamma\lambda\) at \(\gamma=0.1\):</li>
-</ul>
-<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.9em;">
-<tr><th>\(\lambda\)</th><th>eigenvector</th><th>factor</th></tr>
-<tr><td>\(\approx7.16\)</td><td>\(\approx(0.585,\,0.811)^\top\)</td><td>\(\approx-0.43\)</td></tr>
-<tr><td>\(\approx0.84\)</td><td>\(\approx(0.811,\,-0.585)^\top\)</td><td>\(\approx0.83\)</td></tr>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.92em; clear:both;">
+<tr><th style="padding:0.15em 0.6em;">\(\gamma\)</th><th style="padding:0.15em 0.6em;">factor \(1-2\gamma\)</th><th style="padding:0.15em 0.6em;">what one step does</th></tr>
+<tr><td style="padding:0.15em 0.6em;">\(0.1\)</td><td style="padding:0.15em 0.6em;">\(0.8\)</td><td style="padding:0.15em 0.6em;">same side, \(20\%\) closer: <strong>creeps</strong></td></tr>
+<tr><td style="padding:0.15em 0.6em;">\(0.5\)</td><td style="padding:0.15em 0.6em;">\(0\)</td><td style="padding:0.15em 0.6em;">lands on the bottom</td></tr>
+<tr><td style="padding:0.15em 0.6em;">\(0.75\)</td><td style="padding:0.15em 0.6em;">\(-0.5\)</td><td style="padding:0.15em 0.6em;">jumps to the other side, closer: <strong>zigzags</strong></td></tr>
+<tr><td style="padding:0.15em 0.6em;">\(1.1\)</td><td style="padding:0.15em 0.6em;">\(-1.2\)</td><td style="padding:0.15em 0.6em;">jumps to the other side, farther: <strong>diverges</strong></td></tr>
 </table>
 <ul>
-<li class="fragment">\(-0.43\): flips side each step, shrinks fast: <strong>the zigzag</strong>.</li>
-<li class="fragment">\(0.83\): same side, only \(17\%\) closer per step: <strong>the slow creep</strong>.</li>
+<li class="fragment">A steeper bowl \(f(w)=a\,w^2\): &ensp;\(f'(w)=2a\,w\), factor \(1-2\gamma a\). The steeper the bowl (larger \(a\)), the farther the same \(\gamma\) jumps.</li>
 </ul>
-<aside class="notes">"Eigenvectors: (3, lambda - 3) scaled to length 1. After the fast part dies out, the distance falls like 0.83^k: from step 10 (0.148) to step 20 (0.0236) the ratio is 0.16, and 0.8325^10 = 0.160." "The slow direction raises the baseline and lowers the slope together: models along the valley floor trade one for the other and fit almost equally well."</aside>
+<aside class="notes">"L16 preview Q1 used gamma = 0.4: factor 0.2, w_k = 0.2^k." "Converges iff |1 - 2 gamma a| &lt; 1, i.e. 0 &lt; gamma &lt; 1/a."</aside>
 </section>
 
-<!-- L19-14 -->
+<!-- L19-10: two parameters, steep and flat -->
 <section>
-<h4>How large can \(\gamma\) be? The largest eigenvalue decides <span class="tier-u">[UNDERSTAND]</span></h4>
-<p>Along an eigenvector of \(X^\top X\) with eigenvalue \(\lambda\): factor \(1-2\gamma\lambda\) per step.</p>
+<h4>Our \(\mathrm{SSE}\) has a steep direction and a flat direction</h4>
+<img src="../images/unit05/u5-L19-fig02-zigzag.png" alt="Contours of the course SSE, tilted ellipses, with the zigzag gradient-descent path from (0,0) with step size 0.1. Two dashed lines through w* = (1.5, 0.5): the short axis, labelled steep direction, lambda about 7.16, and the long axis, labelled flat direction, lambda about 0.84." style="float:right; max-height:390px; max-width:44%; margin:0 0 0.5em 1em; border-radius:6px;">
 <ul>
-<li class="fragment">A part shrinks only if \(|1-2\gamma\lambda|&lt;1\), that is \(0&lt;\gamma&lt;1/\lambda\).</li>
-<li class="fragment">Both parts must shrink: \(\;\gamma&lt;1/\lambda_{\max}\).</li>
-<li class="fragment">Our data: \(1/(4+\sqrt{10})\approx0.140\).
+<li>The ellipses have a short axis and a long axis (dashed). Across the valley \(\mathrm{SSE}\) rises fast: <strong>steep</strong>. Along it, slowly: <strong>flat</strong>.</li>
+<li class="fragment">Let \(c_1,c_2\) be the distances from \(\mathbf w^\ast\) along the two axes. Then
+\[\mathrm{SSE}=1.5+7.16\,c_1^2+0.84\,c_2^2\]
+(where \(7.16\) and \(0.84\) come from: two slides on).</li>
+<li class="fragment">Each axis is a one-parameter bowl \(a\,c^2\): one step multiplies \(c\) by \(1-2\gamma a\). <strong>The same \(\gamma\) for both.</strong></li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.92em;">
+<tr><th style="padding:0.15em 0.5em;">\(\gamma=0.1\)</th><th style="padding:0.15em 0.5em;">\(a\)</th><th style="padding:0.15em 0.5em;">factor \(1-2\gamma a\)</th><th style="padding:0.15em 0.5em;">what it does</th></tr>
+<tr><td style="padding:0.15em 0.5em;">steep</td><td style="padding:0.15em 0.5em;">\(7.16\)</td><td style="padding:0.15em 0.5em;">\(-0.43\)</td><td style="padding:0.15em 0.5em;">jumps across the valley: <strong>the zigzag</strong></td></tr>
+<tr><td style="padding:0.15em 0.5em;">flat</td><td style="padding:0.15em 0.5em;">\(0.84\)</td><td style="padding:0.15em 0.5em;">\(0.83\)</td><td style="padding:0.15em 0.5em;">same side, \(17\%\) closer: <strong>the creep</strong></td></tr>
+</table>
 <ul>
-<li>\(\gamma=0.1\): converges.</li>
-<li>\(\gamma=0.15\): fast factor \(1-0.3\,(4+\sqrt{10})\approx-1.15\): diverges, as in L16.</li>
+<li class="fragment">The zigzag dies out fast (\(0.43^k\)). The creep is what takes \(22\) steps: \(0.83^{22}\approx0.02\).</li>
+</ul>
+<aside class="notes">"0.83 is 1 - 2(0.1)(0.84) = 0.832; -0.43 is 1 - 2(0.1)(7.16) = -0.432." "From step 10 (distance 0.148) to step 20 (0.0236) the ratio is 0.16 = 0.8325^10: once the zigzag is gone, only the creep is left."</aside>
+</section>
+
+<!-- L19-11: is a bigger gamma better? -->
+<section>
+<h4>Is a bigger \(\gamma\) better? One \(\gamma\) must serve both directions</h4>
+<p>Our \(\mathrm{SSE}\): per step, the steep part is multiplied by \(1-2\gamma(7.16)\), the flat part by \(1-2\gamma(0.84)\).</p>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.92em;">
+<tr><th style="padding:0.15em 0.6em;">\(\gamma\)</th><th style="padding:0.15em 0.6em;">steep factor</th><th style="padding:0.15em 0.6em;">flat factor</th><th style="padding:0.15em 0.6em;">steps to within \(0.01\) of \(\mathbf w^\ast\)</th></tr>
+<tr><td style="padding:0.15em 0.6em;">\(0.05\)</td><td style="padding:0.15em 0.6em;">\(0.28\)</td><td style="padding:0.15em 0.6em;">\(0.92\)</td><td style="padding:0.15em 0.6em;">\(52\): no zigzag, slow creep</td></tr>
+<tr><td style="padding:0.15em 0.6em;">\(0.10\)</td><td style="padding:0.15em 0.6em;">\(-0.43\)</td><td style="padding:0.15em 0.6em;">\(0.83\)</td><td style="padding:0.15em 0.6em;">\(25\)</td></tr>
+<tr><td style="padding:0.15em 0.6em;">\(0.12\)</td><td style="padding:0.15em 0.6em;">\(-0.72\)</td><td style="padding:0.15em 0.6em;">\(0.80\)</td><td style="padding:0.15em 0.6em;">\(21\)</td></tr>
+<tr><td style="padding:0.15em 0.6em;">\(0.13\)</td><td style="padding:0.15em 0.6em;">\(-0.86\)</td><td style="padding:0.15em 0.6em;">\(0.78\)</td><td style="padding:0.15em 0.6em;">\(33\): the zigzag dies slowly</td></tr>
+<tr><td style="padding:0.15em 0.6em;">\(0.15\)</td><td style="padding:0.15em 0.6em;">\(-1.15\)</td><td style="padding:0.15em 0.6em;">\(0.75\)</td><td style="padding:0.15em 0.6em;">never: diverges</td></tr>
+</table>
+<ul>
+<li class="fragment">A bigger \(\gamma\) helps the flat part (its factor drops) and hurts the steep part (its factor goes toward \(-1\)).</li>
+<li class="fragment">The <strong>steep</strong> direction caps \(\gamma\): it needs \(|1-2\gamma(7.16)|&lt;1\), that is \(\gamma&lt;1/7.16\approx0.14\).</li>
+<li class="fragment">A smaller \(\gamma\) (below \(1/(2\cdot7.16)\approx0.07\)) stops the zigzag, but the flat factor is then above \(0.88\): even slower.</li>
+<li class="fragment">Every \(\gamma\) below the cap: flat factor \(&gt;1-2(0.84)/7.16\approx0.77\). <strong>The flat direction is slow whatever \(\gamma\) we pick.</strong></li>
+</ul>
+<aside class="notes">"The best fixed gamma is 1/(7.16 + 0.84) = 1/8: both factors are then 0.79 in size (21-22 steps). We do not need it." "Step counts: gradient descent from (0,0), stop when ||w_k - w*|| &lt; 0.01."</aside>
+</section>
+
+<!-- L19-12: where 7.16 and 0.84 come from -->
+<section>
+<h4>Where \(7.16\) and \(0.84\) come from: the eigenvalues of \(X^\top X\) <span class="tier-u">[UNDERSTAND]</span></h4>
+<ul>
+<li>L10: \(\;\mathrm{SSE}(\mathbf w)=1.5+\lVert X(\mathbf w-\mathbf w^\ast)\rVert^2\), &ensp;\(X^\top X=\begin{bmatrix}3&amp;3\\3&amp;5\end{bmatrix}\).</li>
+<li class="fragment">Unit 3: \(\det(X^\top X-\lambda I)=\lambda^2-8\lambda+6=0\), so \(\lambda=4\pm\sqrt{10}\approx7.16,\ 0.84\).</li>
+<li class="fragment">Unit eigenvectors: \(\mathbf v_1\approx(0.585,\,0.811)^\top\) for \(7.16\), &ensp;\(\mathbf v_2\approx(0.811,\,-0.585)^\top\) for \(0.84\). Orthogonal, since \(X^\top X\) is symmetric (Unit 3).</li>
+<li class="fragment">Measure from \(\mathbf w^\ast\) along them: \(\;\mathbf w-\mathbf w^\ast=c_1\mathbf v_1+c_2\mathbf v_2\).</li>
+<li class="fragment">\(\lVert X(\mathbf w-\mathbf w^\ast)\rVert^2=(\mathbf w-\mathbf w^\ast)^\top X^\top X(\mathbf w-\mathbf w^\ast)=\lambda_1c_1^2+\lambda_2c_2^2\), &ensp;because \(\mathbf v_1^\top\mathbf v_2=0\) and \(\mathbf v_i^\top\mathbf v_i=1\).</li>
+<li class="fragment">So \(\mathrm{SSE}=1.5+7.16\,c_1^2+0.84\,c_2^2\):
+<ul>
+<li>the <strong>eigenvectors</strong> of \(X^\top X\) are the axes of the ellipses;</li>
+<li>the <strong>eigenvalues</strong> say how steep \(\mathrm{SSE}\) is along each axis.</li>
 </ul></li>
 </ul>
-<div class="key-question fragment"><strong>Then take a smaller \(\gamma\), to stop the zigzag?</strong>
-<ul>
-<li>\(\gamma&lt;1/(2\lambda_{\max})\approx0.070\): fast factor positive, no zigzag.</li>
-<li>But the slow factor \(1-2\gamma\lambda_{\min}\) is then above \(1-\lambda_{\min}/\lambda_{\max}\approx0.88\): <strong>even slower</strong>.</li>
-</ul></div>
+<aside class="notes">"Why gradient descent treats c1 and c2 separately: L12 gives (grad SSE)^T = 2(X^T X w - X^T y) = 2 X^T X (w - w*) by the normal equation. With w - w* = c1 v1 + c2 v2 this is 2(lambda1 c1 v1 + lambda2 c2 v2), so one step sends c_i to (1 - 2 gamma lambda_i) c_i." "Eigenvectors: (3, lambda - 3) scaled to length 1."</aside>
 </section>
 
-<!-- L19-15 -->
+<!-- L19-13: how slow -->
 <section>
 <h4>How slow? The condition number of \(X^\top X\) <span class="tier-u">[UNDERSTAND]</span></h4>
-<div class="key-question">
-<strong>We know:</strong> along an eigenvector of \(X^\top X\), one step multiplies the gap \(\mathbf w_k-\mathbf w^\ast\) by \(1-2\gamma\lambda\), and a safe step needs \(\gamma&lt;1/\lambda_{\max}\).<br>
-<strong>What fails:</strong> the \(\lambda_{\min}\) direction then crawls: its factor is \(1-2\gamma\lambda_{\min}&gt;1-2\lambda_{\min}/\lambda_{\max}\), near \(1\) when \(\lambda_{\min}/\lambda_{\max}\) is small, <strong>whatever \(\gamma\) we pick</strong>.<br>
-<strong>What we need:</strong> one number comparing the direction that caps \(\gamma\) (\(\lambda_{\max}\)) with the direction that crawls (\(\lambda_{\min}\)).
-</div>
+<ul>
+<li>The steep direction caps \(\gamma\) below \(1/\lambda_{\max}\). Then the flat factor is \(1-2\gamma\lambda_{\min}&gt;1-2\,\lambda_{\min}/\lambda_{\max}\).</li>
+<li class="fragment">So the speed is decided by one ratio: how much steeper the steep direction is than the flat one.</li>
+</ul>
 <div class="mathbox fragment">
-<strong>Definition</strong> (MML &sect;7.1.1, Remark, p.230). The <strong>condition number</strong> of the normal-equation matrix \(X^\top X\) is
+<strong>Definition</strong> (MML &sect;7.1.1, Remark, p.230). The <strong>condition number</strong> of \(X^\top X\) is
 \[\kappa(X^\top X)=\frac{\lambda_{\max}(X^\top X)}{\lambda_{\min}(X^\top X)}\ \ge 1.\]
 </div>
 <ul>
-<li class="fragment">MML p.230 uses singular values, \(\sigma_{\max}/\sigma_{\min}\). For the symmetric \(X^\top X\) they are its eigenvalues; for the data matrix \(X\), their square roots, so \(\kappa(X)=\sqrt{\kappa(X^\top X)}\) (MML p.127).</li>
-<li class="fragment">Slow factor \(&gt;1-2/\kappa(X^\top X)\): <strong>a simple bound, not the best possible rate</strong>. Large \(\kappa(X^\top X)\) = slow.</li>
+<li class="fragment">Our data: \(\kappa(X^\top X)=\dfrac{4+\sqrt{10}}{4-\sqrt{10}}\approx8.55\); flat factor \(&gt;1-2/8.55\approx0.77\).</li>
+<li class="fragment">Large \(\kappa\): flat factor near \(1\), slow whatever \(\gamma\). &ensp;\(\kappa=1\): one factor in every direction; the right \(\gamma\) lands in one step (the circles).</li>
+<li class="fragment">Shape: the contour \(\mathrm{SSE}=1.5+d\) is reached at \(c=\sqrt{d/\lambda}\) along each axis, so long axis / short axis \(=\sqrt{\kappa(X^\top X)}\approx2.92\). Large \(\kappa\) = <strong>long, thin</strong> contours (MML p.229).</li>
 </ul>
-<aside class="notes">"The best fixed step gives worst-direction factor (kappa-1)/(kappa+1); we do not need it. The bound 1 - 2/kappa is enough to show: large kappa(X^T X) forces one direction to be slow, whatever gamma."</aside>
-</section>
-
-<!-- L19-16 -->
-<section>
-<h4>What a large \(\kappa(X^\top X)\) looks like: long, thin contours <span class="tier-u">[UNDERSTAND]</span></h4>
-<img src="../images/unit05/u5-L19-fig02-zigzag.png" alt="Contours of the course SSE: ellipses whose long axis is the slow direction (lambda about 0.84) and short axis the fast direction (lambda about 7.16)." style="float:right; max-height:330px; max-width:44%; margin:0 0 0.5em 1em; border-radius:6px;">
-<p>Our data: \(\kappa(X^\top X)=\dfrac{4+\sqrt{10}}{4-\sqrt{10}}\approx8.55\).</p>
-<ul>
-<li class="fragment">L10: \(\;\mathrm{SSE}(\mathbf w)=1.5+\norm{X(\mathbf w-\mathbf w^\ast)}^2\)</li>
-<li class="fragment">Along a unit eigenvector, \(\mathbf w-\mathbf w^\ast=c\,\mathbf v\):<br>\(\norm{X c\mathbf v}^2=c^2\,\mathbf v^\top X^\top X\mathbf v=\lambda c^2\)</li>
-<li class="fragment">Contour \(\mathrm{SSE}=1.5+d\): reached at \(c=\sqrt{d/\lambda}\).<br>Small \(\lambda\): far out. Large \(\lambda\): close in.</li>
-<li class="fragment">Long axis / short axis \(=\sqrt{\kappa(X^\top X)}\approx2.92\).</li>
-<li class="fragment">MML p.229: a <strong>long, thin valley</strong> is a poorly conditioned problem, where gradient descent zigzags.</li>
-</ul>
-<aside class="notes">"Long / short = sqrt(lambda_max/lambda_min) = sqrt(kappa(X^T X)), which is also kappa(X)."</aside>
+<aside class="notes">"MML p.230 uses singular values sigma_max/sigma_min. For the symmetric X^T X they are its eigenvalues; for X, their square roots, so kappa(X) = sqrt(kappa(X^T X)) (MML p.127)." "1 - 2/kappa is a simple bound, not the best possible rate; the best fixed step gives (kappa-1)/(kappa+1)."</aside>
 </section>
 
 <!-- L19-17 -->
@@ -1838,7 +1836,7 @@ Along an eigenvector, one step multiplies the gap \(\mathbf w_k-\mathbf w^\ast\)
 <table style="width:auto; margin:0.4em auto; font-size:0.92em;">
 <tr><th>question</th><th>answer</th></tr>
 <tr class="fragment"><td>When should gradient descent stop?</td><td>At the first step where the gradient is small, the error barely changes, or the step limit is reached.</td></tr>
-<tr class="fragment"><td>Why is it sometimes very slow?</td><td>Along an eigenvector of \(X^\top X\), each step multiplies the gap \(\mathbf w_k-\mathbf w^\ast\) by \(1-2\gamma\lambda\).<br>\(\lambda_{\max}\) caps \(\gamma\); then the \(\lambda_{\min}\) direction crawls when \(\kappa(X^\top X)=\lambda_{\max}/\lambda_{\min}\) is large<br>(a simple bound: slow factor \(&gt;1-2/\kappa(X^\top X)\)).</td></tr>
+<tr class="fragment"><td>Why is it sometimes very slow?</td><td>Long, thin contours: a steep direction and a flat one. Along each, one step multiplies the distance by \(1-2\gamma\lambda\).<br>The steep direction caps \(\gamma\) (\(\gamma&lt;1/\lambda_{\max}\)); then the flat direction creeps when \(\kappa(X^\top X)=\lambda_{\max}/\lambda_{\min}\) is large<br>(flat factor \(&gt;1-2/\kappa(X^\top X)\)).</td></tr>
 <tr class="fragment"><td>What can help when poor conditioning comes from the features&rsquo; scale?</td><td>Standardize the features. With one feature, \(Z^\top Z=3I\) here and \(\kappa(Z^\top Z)=1\).<br>It does not help when two features are nearly the same column (L18).</td></tr>
 </table>
 </section>
@@ -1863,8 +1861,8 @@ Along an eigenvector, one step multiplies the gap \(\mathbf w_k-\mathbf w^\ast\)
 <section>
 <h4>L19 takeaways (2 of 2): conditioning</h4>
 <ul>
-<li class="fragment">Along an eigenvector of \(X^\top X\) (eigenvalue \(\lambda\)), one step multiplies the gap \(\mathbf w_k-\mathbf w^\ast\) by \(1-2\gamma\lambda\); L16&rsquo;s \(w^2\) is \(\lambda=1\). <span class="tier-u">[UNDERSTAND]</span></li>
-<li class="fragment">Safe step: \(\gamma&lt;1/\lambda_{\max}\). Condition number \(\kappa(X^\top X)=\lambda_{\max}/\lambda_{\min}\) (MML p.230); slow factor \(&gt;1-2/\kappa(X^\top X)\), a simple bound. Large \(\kappa(X^\top X)\): long, thin contours and slow gradient descent along the \(\lambda_{\min}\) direction; a step near the limit \(1/\lambda_{\max}\) also zigzags along the \(\lambda_{\max}\) direction. <span class="tier-u">[UNDERSTAND]</span>
+<li class="fragment">One parameter, \(f(w)=a\,w^2\): each step multiplies \(w\) by \(1-2\gamma a\). Our \(\mathrm{SSE}\) is such a bowl along each eigenvector of \(X^\top X\), with \(a=\lambda\): steep (\(7.16\)) across the valley, flat (\(0.84\)) along it. <span class="tier-u">[UNDERSTAND]</span></li>
+<li class="fragment">Safe step: \(\gamma&lt;1/\lambda_{\max}\). Condition number \(\kappa(X^\top X)=\lambda_{\max}/\lambda_{\min}\) (MML p.230); flat factor \(&gt;1-2/\kappa(X^\top X)\). Large \(\kappa(X^\top X)\): long, thin contours; gradient descent creeps along the flat direction and zigzags across the steep one. <span class="tier-u">[UNDERSTAND]</span>
 <ul><li>Our data: \(\lambda=4\pm\sqrt{10}\), \(\;\kappa(X^\top X)\approx8.55\); in minutes, \(\approx15003\).</li></ul></li>
 <li class="fragment">Standardizing a feature, \(z_i=(t_i-\bar t)/s\), removes its unit; with one feature, \(Z^\top Z=3I\) here and \(\kappa(Z^\top Z)=1\). <span class="tier-u">[UNDERSTAND]</span></li>
 </ul>
