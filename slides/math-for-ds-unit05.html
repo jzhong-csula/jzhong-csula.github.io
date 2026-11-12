@@ -1675,10 +1675,7 @@ The trained parameters are \(\mathbf w_k\).
 <tr><td style="padding:0.15em 0.6em;">\(0.75\)</td><td style="padding:0.15em 0.6em;">\(-0.5\)</td><td style="padding:0.15em 0.6em;">jumps to the other side, closer: <strong>zigzags</strong></td></tr>
 <tr><td style="padding:0.15em 0.6em;">\(1.1\)</td><td style="padding:0.15em 0.6em;">\(-1.2\)</td><td style="padding:0.15em 0.6em;">jumps to the other side, farther: <strong>diverges</strong></td></tr>
 </table>
-<ul>
-<li class="fragment">A steeper bowl \(f(w)=a\,w^2\): &ensp;\(f'(w)=2a\,w\), factor \(1-2\gamma a\). The steeper the bowl (larger \(a\)), the farther the same \(\gamma\) jumps.</li>
-</ul>
-<aside class="notes">"L16 preview Q1 used gamma = 0.4: factor 0.2, w_k = 0.2^k." "Converges iff |1 - 2 gamma a| &lt; 1, i.e. 0 &lt; gamma &lt; 1/a."</aside>
+<aside class="notes">"L16 preview Q1 used gamma = 0.4: factor 0.2, w_k = 0.2^k." "Converges iff |1 - 2 gamma| &lt; 1, i.e. 0 &lt; gamma &lt; 1."</aside>
 </section>
 
 <!-- L19-10: two parameters, steep and flat -->
@@ -1690,7 +1687,8 @@ The trained parameters are \(\mathbf w_k\).
 <li class="fragment">Let \(c_1,c_2\) be the distances from \(\mathbf w^\ast\) along the two axes. Then
 \[\mathrm{SSE}=1.5+7.16\,c_1^2+0.84\,c_2^2\]
 (where \(7.16\) and \(0.84\) come from: two slides on).</li>
-<li class="fragment">Each axis is a one-parameter bowl \(a\,c^2\): one step multiplies \(c\) by \(1-2\gamma a\). <strong>The same \(\gamma\) for both.</strong></li>
+<li class="fragment">Each axis is a bowl like L16&rsquo;s \(w^2\), but with a number in front: \(7.16\,c_1^2\), \(0.84\,c_2^2\). Call that number \(a\).</li>
+<li class="fragment">L16&rsquo;s step on \(f(c)=a\,c^2\): &ensp;\(f'(c)=2a\,c\), &ensp;\(c_{k+1}=c_k-2\gamma a\,c_k=(1-2\gamma a)\,c_k\).<br>(\(a=1\) is L16&rsquo;s \(w^2\).) <strong>The same \(\gamma\) for both axes.</strong></li>
 </ul>
 <table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.92em;">
 <tr><th style="padding:0.15em 0.5em;">\(\gamma=0.1\)</th><th style="padding:0.15em 0.5em;">\(a\)</th><th style="padding:0.15em 0.5em;">factor \(1-2\gamma a\)</th><th style="padding:0.15em 0.5em;">what it does</th></tr>
