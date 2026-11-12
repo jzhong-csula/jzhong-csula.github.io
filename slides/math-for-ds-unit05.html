@@ -1706,22 +1706,25 @@ The trained parameters are \(\mathbf w_k\).
 <!-- L19-11: is a bigger gamma better? -->
 <section>
 <h4>Is a bigger \(\gamma\) better? One \(\gamma\) must serve both directions</h4>
-<p>Our \(\mathrm{SSE}\): per step, the steep part is multiplied by \(1-2\gamma(7.16)\), the flat part by \(1-2\gamma(0.84)\).</p>
-<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.92em;">
-<tr><th style="padding:0.15em 0.6em;">\(\gamma\)</th><th style="padding:0.15em 0.6em;">steep factor</th><th style="padding:0.15em 0.6em;">flat factor</th><th style="padding:0.15em 0.6em;">steps to within \(0.01\) of \(\mathbf w^\ast\)</th></tr>
-<tr><td style="padding:0.15em 0.6em;">\(0.05\)</td><td style="padding:0.15em 0.6em;">\(0.28\)</td><td style="padding:0.15em 0.6em;">\(0.92\)</td><td style="padding:0.15em 0.6em;">\(52\): no zigzag, slow creep</td></tr>
-<tr><td style="padding:0.15em 0.6em;">\(0.10\)</td><td style="padding:0.15em 0.6em;">\(-0.43\)</td><td style="padding:0.15em 0.6em;">\(0.83\)</td><td style="padding:0.15em 0.6em;">\(25\)</td></tr>
-<tr><td style="padding:0.15em 0.6em;">\(0.12\)</td><td style="padding:0.15em 0.6em;">\(-0.72\)</td><td style="padding:0.15em 0.6em;">\(0.80\)</td><td style="padding:0.15em 0.6em;">\(21\)</td></tr>
-<tr><td style="padding:0.15em 0.6em;">\(0.13\)</td><td style="padding:0.15em 0.6em;">\(-0.86\)</td><td style="padding:0.15em 0.6em;">\(0.78\)</td><td style="padding:0.15em 0.6em;">\(33\): the zigzag dies slowly</td></tr>
-<tr><td style="padding:0.15em 0.6em;">\(0.15\)</td><td style="padding:0.15em 0.6em;">\(-1.15\)</td><td style="padding:0.15em 0.6em;">\(0.75\)</td><td style="padding:0.15em 0.6em;">never: diverges</td></tr>
-</table>
+<p>Our \(\mathrm{SSE}=1.5+7.16\,c_1^2+0.84\,c_2^2\). One step multiplies each distance by its factor \(1-2\gamma a\):</p>
 <ul>
-<li class="fragment">A bigger \(\gamma\) helps the flat part (its factor drops) and hurts the steep part (its factor goes toward \(-1\)).</li>
-<li class="fragment">The <strong>steep</strong> direction caps \(\gamma\): it needs \(|1-2\gamma(7.16)|&lt;1\), that is \(\gamma&lt;1/7.16\approx0.14\).</li>
-<li class="fragment">A smaller \(\gamma\) (below \(1/(2\cdot7.16)\approx0.07\)) stops the zigzag, but the flat factor is then above \(0.88\): even slower.</li>
-<li class="fragment">Every \(\gamma\) below the cap: flat factor \(&gt;1-2(0.84)/7.16\approx0.77\). <strong>The flat direction is slow whatever \(\gamma\) we pick.</strong></li>
+<li>steep axis (\(a=7.16\)): &ensp;\(c_1\) is multiplied by \(1-2\gamma(7.16)=1-14.32\,\gamma\)</li>
+<li>flat axis (\(a=0.84\)): &ensp;\(c_2\) is multiplied by \(1-2\gamma(0.84)=1-1.68\,\gamma\)</li>
+<li class="fragment">e.g. \(\gamma=0.1\): \(\;1-1.43=-0.43\) &ensp;and&ensp; \(1-0.17=0.83\)</li>
 </ul>
-<aside class="notes">"The best fixed gamma is 1/(7.16 + 0.84) = 1/8: both factors are then 0.79 in size (21-22 steps). We do not need it." "Step counts: gradient descent from (0,0), stop when ||w_k - w*|| &lt; 0.01."</aside>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.92em;">
+<tr><th style="padding:0.15em 0.6em;">\(\gamma\)</th><th style="padding:0.15em 0.6em;">steep: \(1-14.32\,\gamma\)</th><th style="padding:0.15em 0.6em;">flat: \(1-1.68\,\gamma\)</th><th style="padding:0.15em 0.6em;">what happens</th></tr>
+<tr><td style="padding:0.15em 0.6em;">\(0.05\)</td><td style="padding:0.15em 0.6em;">\(0.28\)</td><td style="padding:0.15em 0.6em;">\(0.92\)</td><td style="padding:0.15em 0.6em;">no zigzag, but a slower creep: \(52\) steps</td></tr>
+<tr><td style="padding:0.15em 0.6em;">\(0.10\)</td><td style="padding:0.15em 0.6em;">\(-0.43\)</td><td style="padding:0.15em 0.6em;">\(0.83\)</td><td style="padding:0.15em 0.6em;">zigzag, then creep: \(25\) steps</td></tr>
+<tr><td style="padding:0.15em 0.6em;">\(0.15\)</td><td style="padding:0.15em 0.6em;">\(-1.15\)</td><td style="padding:0.15em 0.6em;">\(0.75\)</td><td style="padding:0.15em 0.6em;">steep part grows each step: diverges</td></tr>
+</table>
+<p class="fragment" style="font-size:0.85em; text-align:center;">(steps: gradient descent from \((0,0)^\top\) until within \(0.01\) of \(\mathbf w^\ast\))</p>
+<ul>
+<li class="fragment">Bigger \(\gamma\): the flat factor gets smaller (good), the steep factor goes toward \(-1\) (bad).</li>
+<li class="fragment">The <strong>steep</strong> axis caps \(\gamma\): \(1-14.32\,\gamma&gt;-1\) needs \(\gamma&lt;1/7.16\approx0.14\).</li>
+<li class="fragment">Below the cap the flat factor is \(1-1.68\,\gamma&gt;1-1.68/7.16\approx0.77\). <strong>The flat direction is slow whatever \(\gamma\) we pick.</strong></li>
+</ul>
+<aside class="notes">"jzhong 2026-11-12: 'what are the steep and flat factors, how do you compute them?' Answer on the slide: the one-parameter factor 1 - 2 gamma a with a = 7.16 and a = 0.84." "Other gammas if asked: 0.12 gives 21 steps (-0.72, 0.80); 0.13 gives 33 (-0.86, 0.78): the zigzag dies slowly. The best fixed gamma is 1/(7.16 + 0.84) = 1/8, both factors 0.79 in size." "Below 1/(2*7.16) = 0.07 the steep factor is positive (no zigzag) but the flat factor is above 0.88."</aside>
 </section>
 
 <!-- L19-12: where 7.16 and 0.84 come from -->
