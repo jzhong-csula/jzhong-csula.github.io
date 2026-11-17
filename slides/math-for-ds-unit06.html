@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Mathematical Foundations for Data Science and AI</title>
+<link rel="stylesheet" href="../dist/reveal.css"/>
+<link rel="stylesheet" href="../dist/theme/serif.css"/>
+<link rel="stylesheet" href="../reveal.js-plugins/chalkboard/style.css"/>
+<link rel="stylesheet" href="../reveal.js-plugins/menu/font-awesome/css/fontawesome.css"/>
+<link rel="stylesheet" href="../css/math-for-ds.css?v=4"/>
+<!-- MathJax macros configured in Reveal.initialize mathjax3 config below -->
+<style>
+.reveal ul { margin-top: 0.3em; }
+.reveal li { margin-bottom: 0.2em; }
+.reveal td, .reveal th { padding: 0.25em 0.5em; }
+.reveal .tier-m { color:#2563eb; font-size:0.85em; }
+.reveal .tier-u { color:#d97706; font-size:0.85em; }
+.reveal .tier-e { color:#6b7280; font-size:0.85em; }
+</style>
+<style>.reveal table{margin-left:auto !important;margin-right:auto !important;}</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<!-- U6-00: Title -->
+<section>
+<h1 style="font-size:1.6em;">Mathematical Foundations for Data Science and AI</h1>
+<h2 style="font-size:1.0em;">Unit 6 — Probability Is the Language of Uncertainty</h2>
+<p><br/>Jie Zhong<br/>Department of Mathematics<br/>California State University, Los Angeles</p>
+<p style="font-size:0.8em; margin-top:1.5em;">© 2026 Jie Zhong. Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">CC BY-NC-SA 3.0</a>.<br/>This material is based upon work supported by the National Science Foundation under Grant No. 2525508. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author and do not necessarily reflect the views of the National Science Foundation.</p>
+</section>
+
+<section>
+<h4>What this unit is for: how sure can we be of what a model learned?</h4>
+<p>Units 2&ndash;5 found the best weights for our three students: \(\hat y=1.5+0.5\,t\), by making the error \(\mathrm{SSE}\) as small as possible.</p>
+<ul>
+<li class="fragment">Real data are <strong>noisy</strong>: three new students would give different points, and a different best line.</li>
+<li class="fragment">Our line misses every student: residuals \(\mathbf r=(-0.5,\ 1,\ -0.5)^\top\). Is that a failure, or just noise?</li>
+<li class="fragment">And why <em>squared</em> errors? Units 2&ndash;5 chose them; nothing yet said they are the right choice.</li>
+</ul>
+<div class="key-question fragment">The question of this unit: <span style="color:rgb(30,90,160)"><strong>what is the mathematics of uncertainty, and what does it say about least squares?</strong></span></div>
+</section>
+
+<section>
+<h4>Unit map: one question, five lectures</h4>
+<p>The question: <span style="color:rgb(30,90,160)"><strong>what is the mathematics of uncertainty, and what does it say about least squares?</strong></span></p>
+<table style="width:auto; margin:0.3em auto; font-size:0.9em;">
+<tr><th>lecture</th><th>what it asks</th><th>the answer is called</th></tr>
+<tr><td>L21</td><td>a residual of a randomly chosen student: what is it on average?</td><td>random variable, expectation (and softmax)</td></tr>
+<tr><td>L22</td><td>how does new information change a probability?</td><td>conditional probability, Bayes&rsquo; theorem</td></tr>
+<tr><td>L23</td><td>how far from its average is a random quantity, typically?</td><td>variance, covariance (and \(\sqrt{d_k}\) in attention)</td></tr>
+<tr><td>L24</td><td>what is the standard shape of noise?</td><td>the Normal distribution</td></tr>
+<tr><td>L25</td><td>if the noise is Normal, which line is most likely?</td><td>maximum likelihood = least squares</td></tr>
+</table>
+</section>
+
+<!-- ════════════════ L21 ════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════
+     L21 — Probability Basics, Random Variables, Expectation (Tue Nov 17)
+     Question: if we choose one of the three students at random, what error should we expect the line to make?
+     Course data: t = (0,1,2)^T h, y = (1,3,2)^T, best line y_hat = 1.5 + 0.5 t, predictions (1.5,2,2.5)^T,
+       residuals r = (-0.5, 1, -0.5)^T, SSE = 1.5.
+     Random student: Omega = {1,2,3}, each 1/3; R = residual: P(R=-0.5) = 2/3, P(R=1) = 1/3, E[R] = 0.
+       Wording fixed everywhere (2026-11-12 review): the residuals average to 0 (the line is not too high or too low
+       on average); this says nothing about how large the errors are.
+     Separate examples (labelled on the slides): a fair die D; softmax s = (0, ln 2, ln 3)^T -> p = (1/6,1/3,1/2)^T,
+       values v1 = (6,0)^T, v2 = (0,6)^T, v3 = (6,6)^T -> sum_j p_j v_j = (4,5)^T, read as E[v_J] (J = the word index).
+     Part B order (2026-11-12 review): weighted average of value vectors -> relevance scores -> dividing by the sum
+       fails -> softmax -> only then the expectation reading (attention does not sample a word).
+     MML pages checked in references/mml-book.pdf (printed = PDF - 6), 2026-11-12:
+       p.174-175 sample space / event space / probability, random variable; p.176 Example 6.1; p.177 (6.8), distribution;
+       p.178 pmf; p.187 Def 6.3 (6.29), (6.30); p.187-188 Def 6.4 (6.32); p.189 Remark (6.34); p.192 Def 6.9; p.193 (6.46).
+     Softmax is not in MML: Goodfellow, Bengio, Courville, Deep Learning (2016), 6.2.2.3, eq. (6.29);
+       attention: Vaswani et al. (2017), 3.2.1, eq. (1).
+     Numbers verified with fractions: runs_local/unit06/verify_L21.py; figures: slides/figures/gen_u6_L21.py.
+     ═══════════════════════════════════════════════════════════════ -->
+
+<!-- L21-00: title -->
+<section>
+<h2 style="font-size:1.3em;">L21 — Probability Basics, Random Variables, Expectation</h2>
+<p><strong>Reading:</strong></p>
+<ul>
+<li>MML &sect;6.1.2, pp.174&ndash;177: sample space, event space, probability; random variable; Example 6.1; eq. (6.8), the distribution</li>
+<li>MML &sect;6.2, p.178: the probability mass function</li>
+<li>MML &sect;6.4.1, pp.187&ndash;189: Definition 6.3 (expected value), eq. (6.29); Definition 6.4 (mean); the Remark with eq. (6.34)</li>
+<li>MML &sect;6.4.4, p.193: eq. (6.46), the expected value of a sum</li>
+<li>Softmax is not in MML: Goodfellow, Bengio, Courville, <em>Deep Learning</em> (2016), &sect;6.2.2.3, eq. (6.29). Optional: Vaswani et al., <em>Attention Is All You Need</em> (2017), &sect;3.2.1, eq. (1).</li>
+</ul>
+<p class="fragment"><strong>The plan:</strong></p>
+<ol>
+<li class="fragment">L19 asked <span style="color:rgb(30,90,160)"><strong>how sure</strong></span> we can be. First, three words, on a die: outcome, event, probability.</li>
+<li class="fragment">Choose one of our students at random: the residual is a <span style="color:rgb(30,90,160)"><strong>random variable</strong></span>, with a distribution.</li>
+<li class="fragment">Its <span style="color:rgb(30,90,160)"><strong>expected value</strong></span>: the residuals average to \(0\); this says nothing about how large the errors are. Linearity.</li>
+<li class="fragment">Attention: a weighted average whose weights <span style="color:rgb(30,90,160)"><strong>softmax</strong></span> makes from scores; read as an expected value.</li>
+</ol>
+</section>
+
+<!-- ─────────────── Part A: the language of chance, our residual, its expected value ─────────────── -->
+
+<!-- L21-01: where L19 left us -->
+<section>
+<h4>Where L19 left us: one line, three students, three errors</h4>
+<img src="../images/unit06/u6-L21-fig01-residuals.png" alt="The three students as points (0,1), (1,3), (2,2) with the line y-hat = 1.5 + 0.5 t; vertical red segments show the residuals r1 = -0.5, r2 = 1, r3 = -0.5" style="float:right; max-height:400px; max-width:44%; margin:0 0 0.5em 1em; border-radius:6px;">
+<ul>
+<li>Data: \(\mathbf t=(0,1,2)^\top\) hours, \(\;\mathbf y=(1,3,2)^\top\) points.</li>
+<li>Best line (L10): \(\hat y=1.5+0.5\,t\); predictions \(\hat{\mathbf y}=(1.5,\ 2,\ 2.5)^\top\).</li>
+<li>Residuals \(\mathbf r=\mathbf y-\hat{\mathbf y}=(-0.5,\ 1,\ -0.5)^\top\); \(\;\mathrm{SSE}=0.25+1+0.25=1.5\).</li>
+<li class="fragment">L19 ended: data are noisy; three new students would give a different \(\mathbf w^\ast\). <strong>How sure can we be of what a model learned?</strong></li>
+<li class="fragment">&ldquo;How sure&rdquo; needs numbers for <strong>how likely</strong>. That is probability.</li>
+<li class="fragment">Smallest case first: one student, chosen at random.</li>
+</ul>
+<div class="key-question fragment">Today&rsquo;s question: <span style="color:rgb(30,90,160)"><strong>if we choose one of the three students at random, what error should we expect the line to make?</strong></span></div>
+</section>
+
+<!-- L21-02: a die, only for three words -->
+<section>
+<h4>Three words first, learned on a die: outcome, event, probability</h4>
+<p>A separate example, used <strong>only to learn three words</strong>: outcome, event, probability. We come back to our three students right after. Roll a fair six-sided die once.</p>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>question about the roll</th><th>the results that answer &ldquo;yes&rdquo;</th><th>how likely</th></tr>
+<tr><td>which results are possible?</td><td>\(\{1,2,3,4,5,6\}\)</td><td>&mdash;</td></tr>
+<tr><td>is it a 6?</td><td>\(\{6\}\)</td><td>\(\tfrac16\)</td></tr>
+<tr><td>is it even?</td><td>\(\{2,4,6\}\)</td><td>\(\tfrac16+\tfrac16+\tfrac16=\tfrac12\)</td></tr>
+<tr><td>is it anything at all?</td><td>\(\{1,2,3,4,5,6\}\)</td><td>\(1\)</td></tr>
+</table>
+<ul>
+<li class="fragment">Each face gets \(\tfrac16\): the die is fair, so the six results are equally likely.</li>
+<li class="fragment">Every question is a <strong>set of results</strong>. Its chance: add the chances of the results in it.</li>
+</ul>
+<div class="key-question fragment">Three ingredients: the list of all results, the sets we ask about, and a number for each set. <strong>Each one has a name.</strong></div>
+</section>
+
+<!-- L21-03: definition: sample space, event, probability; complement -->
+<section>
+<h4>Sample space, event, probability <span class="tier-m">[MASTER]</span></h4>
+<div class="mathbox">
+<strong>Definition</strong> (MML &sect;6.1.2, p.175). An experiment has random <strong>outcomes</strong>.
+<ul>
+<li>The <strong>sample space</strong> \(\Omega\) is the set of all possible outcomes.</li>
+<li>An <strong>event</strong> is a subset \(A\subseteq\Omega\).</li>
+<li>The <strong>probability</strong> \(P\) assigns a number \(P(A)\) to each event \(A\), with three rules:
+<ol>
+<li>\(0\le P(A)\le 1\);</li>
+<li>\(P(\Omega)=1\);</li>
+<li>if \(A\) and \(B\) share no outcome (\(A\cap B=\emptyset\)), then \(P(A\cup B)=P(A)+P(B)\).</li>
+</ol></li>
+</ul>
+</div>
+<table class="fragment" style="width:auto; margin:0.2em auto; font-size:0.88em;">
+<tr><th>rule</th><th>in words</th><th>the die</th></tr>
+<tr><td>1</td><td>a probability is between \(0\) and \(1\)</td><td>\(P(\{6\})=\tfrac16\)</td></tr>
+<tr><td>2</td><td>some outcome happens</td><td>\(P(\{1,\dots,6\})=1\)</td></tr>
+<tr><td>3</td><td>no shared outcome: add</td><td>\(P(\{2,4,6\})=\tfrac16+\tfrac16+\tfrac16=\tfrac12\)</td></tr>
+</table>
+<ul>
+<li class="fragment">Equally likely outcomes: \(P(A)=|A|\,/\,|\Omega|\), &ensp;\(|A|\) = number of outcomes in \(A\).</li>
+<li class="fragment"><strong>Complement</strong> \(A^c\) = outcomes outside \(A\): &ensp;\(P(A^c)=1-P(A)\) (rules 3, 2). &ensp;Die: \(P(\text{not a }6)=\tfrac56\).</li>
+<li class="fragment">If \(A\), \(B\) share outcomes, subtract the shared part once: \(P(A\cup B)=P(A)+P(B)-P(A\cap B)\).</li>
+</ul>
+<aside class="notes">"MML p.175 states rules 1 and 2 in words. Rule 3 completes Kolmogorov's axioms, which MML names on pp.174-175 but does not list. Strictly the axiom is for countably many disjoint events; two at a time is all we need." "MML calls the collection of events the event space; for a finite Omega it is every subset." "Complement: A and A^c share nothing and together make Omega, so rule 3 then rule 2: P(A) + P(A^c) = P(Omega) = 1. L22 uses A^c."
+Cut 2026-11-12 (ChatGPT review): the separate slide "Rule 3 needs 'no shared outcome': what goes wrong without it" is now the last bullet. If a student asks: die, A = even = {2,4,6}, B = at least 5 = {5,6}. Adding anyway: 1/2 + 1/3 = 5/6. Counting: A u B = {2,4,5,6}, P = 4/6 = 2/3. Not equal: the face 6 is in both (A n B = {6}), and adding counts it twice. Subtract it once: 1/2 + 1/3 - 1/6 = 2/3.</aside>
+</section>
+
+<!-- L21-04: choose a student at random -->
+<section>
+<h4>Our data: choose one of the three students at random</h4>
+<img src="../images/unit06/u6-L21-fig02-rv-map.png" alt="Top: random, which student omega is chosen. The sample space, three boxes student 1, student 2, student 3, each with probability 1/3. Arrows labelled R go down to a number line: students 1 and 3 to -0.5, student 2 to 1. Bottom: fixed, student omega's residual R(omega)." style="float:right; max-height:330px; max-width:46%; margin:0 0 0.5em 1em; border-radius:6px;">
+<ul>
+<li>Experiment: choose one student; each equally likely.</li>
+<li>Sample space \(\Omega=\{1,2,3\}\), the student&rsquo;s number; \(\;P(\{\omega\})=\tfrac13\) for each \(\omega\).</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.3em 0; font-size:0.95em;">
+<tr><th>student \(\omega\)</th><th>\(t\)</th><th>\(y\)</th><th>\(\hat y=1.5+0.5t\)</th><th>residual \(y-\hat y\)</th></tr>
+<tr><td>\(1\)</td><td>\(0\)</td><td>\(1\)</td><td>\(1.5\)</td><td>\(-0.5\)</td></tr>
+<tr><td>\(2\)</td><td>\(1\)</td><td>\(3\)</td><td>\(2\)</td><td>\(1\)</td></tr>
+<tr><td>\(3\)</td><td>\(2\)</td><td>\(2\)</td><td>\(2.5\)</td><td>\(-0.5\)</td></tr>
+</table>
+<ul style="clear:both;">
+<li class="fragment">What is random: <span style="color:rgb(30,90,160)"><strong>which student \(\omega\) is chosen</strong></span>.</li>
+<li class="fragment">Each student&rsquo;s residual is a <strong>fixed number</strong>, the last column of the table. Nothing about a student changes.</li>
+<li class="fragment">So the residual we get is a <strong>rule</strong>: outcome \(\omega\) \(\to\) the residual of student \(\omega\). Students 1 and 3 go to the same number \(-0.5\).</li>
+</ul>
+<aside class="notes">"Say it out loud: the randomness is a choice we make among the three students we already have. L24-L25 use a different kind of randomness: noise in scores not yet observed. L24 opens with a table that compares the two."</aside>
+</section>
+
+<!-- L21-05: definition: random variable -->
+<section>
+<h4>A random variable is a function from outcomes to numbers <span class="tier-m">[MASTER]</span></h4>
+<div class="mathbox">
+<strong>Definition</strong> (MML &sect;6.1.2, p.175). A <strong>random variable</strong> is a function from the sample space to the real numbers, \(\;R:\Omega\to\R\).
+</div>
+<ul>
+<li class="fragment">Ours: \(R(\omega)\) = the residual of student \(\omega\): &ensp;\(R(1)=-0.5,\ \ R(2)=1,\ \ R(3)=-0.5\).</li>
+<li class="fragment">The chance is in which \(\omega\) is chosen; the rule \(R\) itself is fixed. MML&rsquo;s margin, p.175: it is &ldquo;neither random nor is it a variable. It is a function.&rdquo;</li>
+<li class="fragment">Notation: random variables are capital letters; a lowercase \(r\) is one value \(R\) can take. We never use \(X\): \(X\) is still the data matrix of Units 2&ndash;5.</li>
+<li class="fragment">An event written with \(R\) (MML (6.8), p.177):
+\[\{R=-0.5\}=\{\omega\in\Omega:\ R(\omega)=-0.5\}=\{1,3\}.\]</li>
+<li class="fragment">Its probability, by rule 3 (\(\{1\}\) and \(\{3\}\) share no outcome): \(\;P(R=-0.5)=P(\{1,3\})=\tfrac13+\tfrac13=\tfrac23\).</li>
+</ul>
+<aside class="notes">"The die is a random variable too: D(omega) = omega, the face shown, on Omega = {1,...,6}." (moved here from a bullet, 2026-11-12, to keep the slide on our data)</aside>
+</section>
+
+<!-- L21-06: definition: distribution / pmf -->
+<section>
+<h4>The distribution of \(R\): every value, with its probability <span class="tier-m">[MASTER]</span></h4>
+<img src="../images/unit06/u6-L21-fig03-pmf.png" alt="Bar chart of the distribution of R: a bar of height 2/3 at -0.5 and a bar of height 1/3 at 1" style="float:right; max-height:320px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>Which values can \(R\) take, and how likely is each? &ensp;(\(R\) = residual of a random student, \(R(1)=R(3)=-0.5\), \(R(2)=1\).)</p>
+<table class="fragment" style="width:auto; margin:0.3em 0; font-size:0.95em;">
+<tr><th>value \(r\)</th><th>event \(\{R=r\}\)</th><th>\(P(R=r)\)</th></tr>
+<tr><td>\(-0.5\)</td><td>\(\{1,3\}\)</td><td>\(\tfrac13+\tfrac13=\tfrac23\)</td></tr>
+<tr><td>\(1\)</td><td>\(\{2\}\)</td><td>\(\tfrac13\)</td></tr>
+<tr><td>total</td><td>\(\Omega\)</td><td>\(1\)</td></tr>
+</table>
+<div class="mathbox fragment" style="clear:both;">
+<strong>Definition</strong> (MML &sect;6.1.2, p.177; &sect;6.2, p.178). The <strong>distribution</strong> of a discrete random variable \(R\) is the list of its values \(r\) with their probabilities \(P(R=r)\). As a function of \(r\), \(P(R=r)\) is the <strong>probability mass function</strong> (pmf).
+</div>
+<ul>
+<li class="fragment">Every pmf: \(P(R=r)\ge0\) and \(\sum_r P(R=r)=1\), because the events \(\{R=r\}\) share no outcome and together make \(\Omega\) (rules 1&ndash;3).</li>
+</ul>
+</section>
+
+<!-- L21-07: motivation for expectation -->
+<section>
+<h4>The residual of a random student: two ways to average it</h4>
+<p>Residuals of our three students: \(\mathbf r=(-0.5,\ 1,\ -0.5)^\top\). &ensp;Distribution of \(R\): \(P(R=-0.5)=\tfrac23\), \(P(R=1)=\tfrac13\).</p>
+<ul>
+<li class="fragment"><strong>Student by student</strong>: \(\;\dfrac{r_1+r_2+r_3}{3}=\dfrac{-0.5+1-0.5}{3}=0\).</li>
+<li class="fragment"><strong>Value by value</strong>: \(-0.5\) for \(2\) of the \(3\) students, \(1\) for \(1\) of \(3\):
+\[(-0.5)\cdot\tfrac23+1\cdot\tfrac13=-\tfrac13+\tfrac13=0.\]</li>
+<li class="fragment">Same number. The second way needs only the distribution table: each value times its probability, then add.</li>
+<li class="fragment">It works for any distribution, also when the outcomes are not equally likely.</li>
+</ul>
+<div class="key-question fragment">The probability-weighted average of the values of a random variable is the number we were asking for. <strong>It has a name.</strong></div>
+</section>
+
+<!-- L21-08: definition: expected value -->
+<section>
+<h4>Expected value <span class="tier-m">[MASTER]</span></h4>
+<div class="mathbox">
+<strong>Definition</strong> (MML Def. 6.3, eq. (6.29), p.187). For a discrete random variable \(R\) and a function \(g\), the <strong>expected value</strong> of \(g(R)\) is
+\[\mathbb E[g(R)]=\sum_{r}g(r)\,P(R=r),\]
+the sum over all values \(r\) of \(R\). With \(g(r)=r\) it is the <strong>mean</strong> of \(R\) (MML Def. 6.4, pp.187&ndash;188):
+\[\mathbb E[R]=\sum_{r}r\,P(R=r).\]
+</div>
+<ul>
+<li class="fragment">MML writes \(\mathbb E_X\): the subscript names the random variable whose distribution is used. We drop it when only one random variable is in play.</li>
+<li class="fragment">Also called the <strong>expectation</strong> or the <strong>mean</strong> of \(R\).</li>
+<li class="fragment">Recipe: distribution table \(\to\) multiply each value by its probability \(\to\) add.</li>
+</ul>
+</section>
+
+<!-- L21-09: E[R] = 0 on our data -->
+<section>
+<h4>Our data: \(\mathbb E[R]=0\), the residuals average to \(0\)</h4>
+<img src="../images/unit06/u6-L21-fig04-balance.png" alt="The two bars of the distribution of R, height 2/3 at -0.5 and 1/3 at 1, balanced on a triangle at 0. Left: 2/3 times 0.5 = 1/3. Right: 1/3 times 1 = 1/3. Labelled E[R] = 0." style="float:right; max-height:300px; max-width:42%; margin:0 0 0.5em 1em; border-radius:6px;">
+<p>\(\mathbb E[R]=\sum_r r\,P(R=r)\), with \(P(R=-0.5)=\tfrac23\), \(P(R=1)=\tfrac13\):</p>
+\[\mathbb E[R]=(-0.5)\cdot\tfrac23+1\cdot\tfrac13=0.\]
+<ul>
+<li class="fragment">Two students: the line is \(0.5\) too high. One student: \(1\) too low. The residuals average to \(0\): the line is not too high or too low on average.</li>
+<li class="fragment"><span style="color:rgb(30,90,160)"><strong>This says nothing about how large the errors are.</strong></span> A separate example: residuals \(-100\) and \(+100\), each with probability \(\tfrac12\), also average to \(0\).</li>
+<li class="fragment">Picture: \(\mathbb E[R]\) is the <strong>balance point</strong> of the bars. Left: \(\tfrac23\cdot0.5=\tfrac13\); right: \(\tfrac13\cdot1=\tfrac13\).</li>
+<li class="fragment">Not luck <span class="tier-u">[UNDERSTAND]</span>: at the best \(\mathbf w^\ast\), \(X^\top\mathbf r=\mathbf 0\) (L12). Its first entry is \(\mathbf 1^\top\mathbf r=r_1+r_2+r_3=0\). So every least-squares line with an intercept has \(\mathbb E[R]=0\).</li>
+</ul>
+<aside class="notes">"With N students, each 1/N: E[R] = (r_1 + ... + r_N)/N, and the first row of X^T r = 0 says the sum is 0, as long as X has the column of ones." "Do not let 'the residuals average to 0' become 'the line is accurate'. E[R] = 0 is true of every least-squares line with an intercept, good or bad; it does not say the line works for new students either."</aside>
+</section>
+
+<!-- L21-10: questions students ask -->
+<section>
+<h4>Three questions about expected values that students ask</h4>
+<table style="width:auto; margin:0.4em auto; font-size:0.9em;">
+<tr><th>question</th><th>answer</th></tr>
+<tr class="fragment"><td>Equally likely outcomes: is the expected value just the plain average?</td><td><strong>Yes.</strong> \(N\) outcomes, each \(\tfrac1N\), values \(z_1,\dots,z_N\): \(\;\sum_i z_i\cdot\tfrac1N=\bar z\), Unit 3&rsquo;s empirical mean (MML Def. 6.9, p.192).<br>Ours: \(\tfrac13(-0.5+1-0.5)=0\).</td></tr>
+<tr class="fragment"><td>Is the expected value a value we will see?</td><td><strong>Not always.</strong> A separate example, a fair die \(D\), \(P(D=k)=\tfrac16\): \(\;\mathbb E[D]=\tfrac16(1+2+\dots+6)=3.5\), not a face. It is a weighted average, a balance point.</td></tr>
+<tr class="fragment"><td>\(\mathbb E[R]=0\): will the line also average \(0\) error on <strong>new</strong> students?</td><td><strong>Not from this.</strong> \(R\) chooses among our three students only, so \(\mathbb E[R]\) describes these data. New students need a model of new data: L24&ndash;L25.</td></tr>
+</table>
+<div class="key-question fragment">\(\mathbb E[R]=0\) does not say how far \(R\) is from \(0\). That number is the <strong>variance</strong>: L23. (Unit 3 defined the empirical variance of a list; L23 gives its version for a random variable.)</div>
+<aside class="notes">Cut 2026-11-12 (ChatGPT review): the die's expected value had its own slide, with a figure (six bars of height 1/6 balancing at 3.5). Now the second row. If time: "Roll many times: the average of the faces gets close to 3.5. This is the 'relative frequency' view of probability (MML p.174). [UNDERSTAND]" E[D] = sum_k k P(D=k) = 21/6 = 3.5.</aside>
+</section>
+
+<!-- L21-11: linearity, motivation on our data -->
+<section>
+<h4>Two shortcuts for expected values, tried on our data</h4>
+<p>Choose a student at random (each \(\tfrac13\)). Hours \(T\), prediction \(\hat Y=1.5+0.5\,T\), residual \(R\), points \(Y=\hat Y+R\) (since \(R=Y-\hat Y\)).</p>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>student \(\omega\)</th><th>\(T\)</th><th>\(\hat Y=1.5+0.5T\)</th><th>\(R\)</th><th>\(Y=\hat Y+R\)</th></tr>
+<tr><td>\(1\)</td><td>\(0\)</td><td>\(1.5\)</td><td>\(-0.5\)</td><td>\(1\)</td></tr>
+<tr><td>\(2\)</td><td>\(1\)</td><td>\(2\)</td><td>\(1\)</td><td>\(3\)</td></tr>
+<tr><td>\(3\)</td><td>\(2\)</td><td>\(2.5\)</td><td>\(-0.5\)</td><td>\(2\)</td></tr>
+<tr><td>\(\mathbb E\), plain average</td><td>\(1\)</td><td>\(2\)</td><td>\(0\)</td><td>\(2\)</td></tr>
+</table>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th></th><th>directly (last row above)</th><th>shortcut</th></tr>
+<tr><td>\(\mathbb E[1.5+0.5\,T]\)</td><td>\(2\)</td><td>\(1.5+0.5\,\mathbb E[T]=1.5+0.5\cdot1=2\)</td></tr>
+<tr><td>\(\mathbb E[\hat Y+R]\)</td><td>\(2\)</td><td>\(\mathbb E[\hat Y]+\mathbb E[R]=2+0=2\)</td></tr>
+</table>
+<div class="key-question fragment">Both shortcuts gave the right answer here. <strong>Do they always?</strong></div>
+</section>
+
+<!-- L21-12: theorem: linearity -->
+<section>
+<h4>Linearity of expectation <span class="tier-m">[MASTER]</span></h4>
+<div class="mathbox">
+<strong>Theorem</strong> (MML Remark, eq. (6.34), p.189; eq. (6.46), p.193). For random variables \(R\), \(S\) on the same sample space and numbers \(a\), \(b\):
+\[\mathbb E[aR+b]=a\,\mathbb E[R]+b,\qquad \mathbb E[R+S]=\mathbb E[R]+\mathbb E[S].\]
+</div>
+<p class="fragment"><strong>Proof of the first rule.</strong> Assume: \(R\) is discrete with values \(r\) and probabilities \(P(R=r)\). To prove: \(\mathbb E[aR+b]=a\,\mathbb E[R]+b\). Method: Def. 6.3 with \(g(r)=ar+b\), then split the sum.</p>
+<ol>
+<li class="fragment">\(\mathbb E[aR+b]=\sum_r (ar+b)\,P(R=r)\) &emsp;&mdash; Def. 6.3, \(g(r)=ar+b\)</li>
+<li class="fragment">\(\sum_r (ar+b)\,P(R=r)=a\sum_r r\,P(R=r)+b\sum_r P(R=r)\) &emsp;&mdash; split the sum</li>
+<li class="fragment">\(a\sum_r r\,P(R=r)+b\sum_r P(R=r)=a\,\mathbb E[R]+b\cdot1\) &emsp;&mdash; definition of \(\mathbb E[R]\); the probabilities add to \(1\)</li>
+</ol>
+<ul>
+<li class="fragment">The second rule needs no extra condition: \(R\) and \(S\) may depend on each other, as \(\hat Y\) and \(R\) do. Its proof adds outcome by outcome; MML (6.46).</li>
+</ul>
+<aside class="notes">"Proof of the sum rule, if asked: E[R] = sum over outcomes omega of R(omega) P({omega}) (group outcomes with the same value to get Def. 6.3 back). Then E[R+S] = sum (R(omega)+S(omega)) P({omega}) splits into two sums." "Independence is L22; the point is that linearity does not need it." "Kept MASTER with its proof (2026-11-12): L23 (variance formulas), L24 (mu + sigma Z) and L25 use it."</aside>
+</section>
+
+<!-- ─────────────── Part B: weighted averages in AI: softmax and attention ─────────────── -->
+
+<!-- L21-13: bridge: attention is a weighted average -->
+<section>
+<h4>We can compute a weighted average. Attention computes one too.</h4>
+<img src="../images/unit06/u6-L21-fig07-attention.png" alt="Three value vectors as green dots: v1 = (6,0) with weight 1/6, v2 = (0,6) with weight 1/3, v3 = (6,6) with weight 1/2, dot size proportional to weight. Their weighted average, a blue diamond at (4,5)." style="float:right; max-height:340px; max-width:38%; margin:0 0 0.5em 1em; border-radius:6px;">
+<ul>
+<li>An expected value is a <strong>weighted average</strong>: each value times its weight, then add; the weights are \(\ge0\) and add to \(1\).</li>
+<li class="fragment">Unit 0: attention takes a weighted average of the words&rsquo; <strong>value vectors</strong> \(\mathbf v_j\) (like a GPA). In Vaswani et al., \(\mathbf v_j\) is row \(j\) of \(V\); here a column.</li>
+<li class="fragment">A separate example, three words: \(\mathbf v_1=(6,0)^\top\), \(\mathbf v_2=(0,6)^\top\), \(\mathbf v_3=(6,6)^\top\), weights \(\mathbf p=\left(\tfrac16,\tfrac13,\tfrac12\right)^\top\). The output:
+\[\textstyle\sum_j p_j\mathbf v_j=\tfrac16\begin{bmatrix}6\\0\end{bmatrix}+\tfrac13\begin{bmatrix}0\\6\end{bmatrix}+\tfrac12\begin{bmatrix}6\\6\end{bmatrix}=\begin{bmatrix}4\\5\end{bmatrix}.\]</li>
+<li class="fragment">A larger weight pulls the output toward that word&rsquo;s value: \(\mathbf v_3\), weight \(\tfrac12\), pulls most.</li>
+</ul>
+<div class="key-question fragment"><span style="color:rgb(30,90,160)"><strong>Where do the weights come from?</strong></span> Attention computes them from the words&rsquo; scores.</div>
+<aside class="notes">"The output (4,5) lies inside the triangle of the three values: every weighted average with nonnegative weights adding to 1 does." "Bridge (2026-11-12 review): students just learned the weighted average sum value x probability; attention is the same shape of computation, and the question is where its weights come from."</aside>
+</section>
+
+<!-- L21-14: relevance scores, and dividing by the sum fails -->
+<section>
+<h4>Attention&rsquo;s weights start from relevance scores</h4>
+<p>Unit 0: for the blank in &ldquo;The cat sat on ___&rdquo;, a dot product scored how <strong>relevant</strong> each word is: &ensp;The \(1\), cat \(3\), sat \(2.5\), on \(1.5\).</p>
+<ul>
+<li class="fragment">More relevant word, larger score: &ldquo;cat&rdquo; (\(3\)) should get the largest weight.</li>
+<li class="fragment">The weights must be \(\ge0\) and add to \(1\): a <span style="color:rgb(30,90,160)"><strong>probability distribution on the words</strong></span>.</li>
+<li class="fragment">Scores are any real numbers. First try: divide each score by the sum of the scores. It can fail:</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.95em;">
+<tr><th>scores</th><th>divide by the sum</th><th>a probability distribution?</th></tr>
+<tr><td>\((1,\ 3,\ 2.5,\ 1.5)^\top\)</td><td>sum \(8\): \((0.125,\ 0.375,\ 0.3125,\ 0.1875)^\top\)</td><td>yes</td></tr>
+<tr><td>\((2,\ -1)^\top\)</td><td>sum \(1\): \((2,\ -1)^\top\)</td><td>no: a negative weight</td></tr>
+<tr><td>\((1,\ -1)^\top\)</td><td>sum \(0\)</td><td>no: cannot divide by \(0\)</td></tr>
+</table>
+<div class="key-question fragment">How do we turn <strong>any</strong> scores into a probability distribution, so that a larger score still gets a larger weight?</div>
+</section>
+
+<!-- L21-15: softmax computed -->
+<section>
+<h4>Make every score positive, then divide by the total</h4>
+<img src="../images/unit06/u6-L21-fig06-softmax.png" alt="Three bar charts. Scores 0, ln 2, ln 3; after exponentiating, 1, 2, 3; after dividing by the total 6, the weights 1/6, 1/3, 1/2, which sum to 1." style="display:block; margin:0 auto 0.3em auto; max-height:270px; max-width:96%; border-radius:6px;">
+<p>A separate example, three words with scores \(\mathbf s=(0,\ \ln2,\ \ln3)^\top\), chosen so that the exponentials are whole numbers.</p>
+<ul>
+<li class="fragment"><strong>Step 1.</strong> \(e^{s_j}&gt;0\) for every real \(s_j\), and a larger \(s_j\) gives a larger \(e^{s_j}\): &ensp;\((e^{0},\ e^{\ln2},\ e^{\ln3})^\top=(1,\ 2,\ 3)^\top\).</li>
+<li class="fragment"><strong>Step 2.</strong> Divide by the total \(1+2+3=6\): &ensp;\(\mathbf p=\left(\tfrac16,\ \tfrac13,\ \tfrac12\right)^\top\).</li>
+<li class="fragment">Check: every \(p_j&gt;0\), and \(\tfrac16+\tfrac13+\tfrac12=1\). These are the weights we used to average \(\mathbf v_1=(6,0)^\top\), \(\mathbf v_2=(0,6)^\top\), \(\mathbf v_3=(6,6)^\top\) into \((4,5)^\top\).</li>
+</ul>
+</section>
+
+<!-- L21-16: definition: softmax -->
+<section>
+<h4>Softmax <span class="tier-m">[MASTER]</span></h4>
+<div class="mathbox">
+<strong>Definition</strong> (Goodfellow, Bengio, Courville, <em>Deep Learning</em>, &sect;6.2.2.3, eq. (6.29); MML does not define it). For scores \(\mathbf s=(s_1,\dots,s_n)^\top\),
+\[\mathrm{softmax}(\mathbf s)_j=p_j=\frac{e^{s_j}}{\sum_{k=1}^n e^{s_k}},\qquad j=1,\dots,n.\]
+</div>
+<table class="fragment" style="width:auto; margin:0.3em auto; font-size:0.92em;">
+<tr><th>property</th><th>why, from the formula</th></tr>
+<tr><td>every \(p_j&gt;0\)</td><td>\(e^{s_j}&gt;0\), and so is the total</td></tr>
+<tr><td>\(p_1+\dots+p_n=1\)</td><td>the numerators add up to the denominator</td></tr>
+<tr><td>\(s_i&gt;s_j\ \Rightarrow\ p_i&gt;p_j\)</td><td>\(e^x\) is increasing; same denominator</td></tr>
+<tr><td>add \(c\) to every score: \(\mathbf p\) unchanged</td><td>\(e^{s_j+c}=e^c\,e^{s_j}\); \(e^c\) cancels above and below</td></tr>
+</table>
+<ul>
+<li class="fragment">Scores where dividing by the sum failed: \((2,-1)^\top\to(0.95,\ 0.05)^\top\); &ensp;\((1,-1)^\top\to(0.88,\ 0.12)^\top\).</li>
+<li class="fragment">Unit 0&rsquo;s scores \((1,\ 3,\ 2.5,\ 1.5)^\top\to(0.07,\ 0.51,\ 0.31,\ 0.11)^\top\): Unit 0&rsquo;s percentages. &ldquo;cat&rdquo; gets the most.</li>
+</ul>
+<aside class="notes">"Unit 0 called this 'grow each score, then divide by the total'. Now the output has a name: a probability distribution." "e^2/(e^2+e^-1) = 0.9526; e/(e+1/e) = 0.8808. Unit 0: e^1, e^3, e^2.5, e^1.5 = 2.72, 20.09, 12.18, 4.48, total 39.47." "Why e and not, say, squaring: squaring would give -3 and 3 the same weight; e^x keeps the order. Goodfellow et al. 6.2.2.3 explain the choice through log-probabilities; not needed here."</aside>
+</section>
+
+<!-- L21-17: attention output read as an expectation -->
+<section>
+<h4>Reading the attention output as an expected value <span class="tier-m">[MASTER]</span></h4>
+<p>Three words: values \(\mathbf v_1=(6,0)^\top\), \(\mathbf v_2=(0,6)^\top\), \(\mathbf v_3=(6,6)^\top\); softmax weights \(\mathbf p=\left(\tfrac16,\tfrac13,\tfrac12\right)^\top\); output \(\sum_j p_j\mathbf v_j=(4,5)^\top\).</p>
+<ul>
+<li class="fragment">The softmax weights are \(\ge0\) and add to \(1\): a probability distribution on the words \(\{1,2,3\}\).</li>
+<li class="fragment">So we may <strong>read</strong> them as the distribution of a random word \(J\), with \(P(J=j)=p_j\):</li>
+</ul>
+<table class="fragment" style="width:auto; margin:0.2em auto; font-size:0.92em;">
+<tr><th>word \(j\)</th><td>\(1\)</td><td>\(2\)</td><td>\(3\)</td></tr>
+<tr><th>\(P(J=j)\)</th><td>\(\tfrac16\)</td><td>\(\tfrac13\)</td><td>\(\tfrac12\)</td></tr>
+<tr><th>\(\mathbf v_j\)</th><td>\((6,0)^\top\)</td><td>\((0,6)^\top\)</td><td>\((6,6)^\top\)</td></tr>
+</table>
+<ul>
+<li class="fragment">Def. 6.3 with \(g(j)=\mathbf v_j\), entry by entry (MML (6.30), p.187): &ensp;\(\mathbb E[\mathbf v_J]=\sum_j p_j\,\mathbf v_j=(4,5)^\top\), the attention output.</li>
+<li class="fragment"><span style="color:rgb(30,90,160)"><strong>A way of reading the formula, nothing more:</strong></span> attention does not choose a word at random. It computes \(\sum_j p_j\mathbf v_j\), the same output every time.</li>
+<li class="fragment">Why read it this way: attention&rsquo;s weights are a probability distribution, so probability tools apply to attention. L23 uses them to explain why the scores are divided by \(\sqrt{d_k}\).</li>
+</ul>
+<aside class="notes">"Vaswani et al. 2017, eq. (1): Attention(Q,K,V) = softmax(QK^T / sqrt(d_k)) V, softmax applied to each row. Row i of the output is sum_j p_ij (row j of V). So, for one word, (one row of softmax(QK^T/sqrt(d_k)) V)^T = E[v_J]." "Final project Part A table: softmax row is L21, the (...)V row is L21 and L02-L03." "Order changed 2026-11-12 (ChatGPT review): the weighted combination and softmax come first; the expectation reading comes last and is labelled as a reading, so that students do not think attention samples a word."</aside>
+</section>
+
+<!-- L21-18: your turn 1 -->
+<section>
+<h4>Your turn (1 of 2): the residual of a random student, four students</h4>
+<div class="quickcheck"><strong>Your turn.</strong> A separate example, not our data: four students, \(\mathbf t=(0,1,2,3)^\top\) hours, \(\mathbf y=(2,0,4,4)^\top\) points. The least-squares line is \(\hat y=1+t\). Choose one student at random, each equally likely; \(R\) = that student&rsquo;s residual \(y-\hat y\).
+<ul style="list-style:none; padding-left:0.6em; margin-top:0.2em;">
+<li>(a) Find the four residuals.</li>
+<li>(b) Write the distribution of \(R\) as a table.</li>
+<li>(c) Find \(\mathbb E[R]\).</li>
+<li>(d) Find \(\mathbb E[3R+2]\) with linearity. Then check it from the distribution of \(3R+2\).</li>
+</ul></div>
+<ul>
+<li class="fragment">(a) \(\hat{\mathbf y}=(1,2,3,4)^\top\), so \(\mathbf r=\mathbf y-\hat{\mathbf y}=(1,\ -2,\ 1,\ 0)^\top\).</li>
+<li class="fragment">(b) \(P(R=-2)=\tfrac14\), &ensp;\(P(R=0)=\tfrac14\), &ensp;\(P(R=1)=\tfrac24=\tfrac12\) &ensp;(two students have residual \(1\)).</li>
+<li class="fragment">(c) \(\mathbb E[R]=(-2)\cdot\tfrac14+0\cdot\tfrac14+1\cdot\tfrac12=0\), as for every least-squares line with an intercept.</li>
+<li class="fragment">(d) \(\mathbb E[3R+2]=3\cdot0+2=2\). &ensp;Check: \(3R+2\) takes \(-4,\ 2,\ 5\) with \(\tfrac14,\tfrac14,\tfrac12\): \(\;-1+\tfrac12+\tfrac52=2\) ✓</li>
+</ul>
+</section>
+
+<!-- L21-19: your turn 2 -->
+<section>
+<h4>Your turn (2 of 2): softmax weights and an attention output</h4>
+<div class="quickcheck"><strong>Your turn.</strong> A separate example: one word&rsquo;s scores against three words are \(\mathbf s=(0,\ \ln4,\ \ln5)^\top\). The value vectors are \(\mathbf v_1=(10,0)^\top\), \(\mathbf v_2=(0,10)^\top\), \(\mathbf v_3=(10,10)^\top\).
+<ul style="list-style:none; padding-left:0.6em; margin-top:0.2em;">
+<li>(a) Find the softmax weights \(\mathbf p\).</li>
+<li>(b) Find the attention output \(\sum_j p_j\mathbf v_j\), read as \(\mathbb E[\mathbf v_J]\).</li>
+<li>(c) Add \(2\) to every score. What are the new weights?</li>
+<li>(d) Which word&rsquo;s value pulls the output most, and why?</li>
+</ul></div>
+<ul>
+<li class="fragment">(a) \(e^{\mathbf s}=(1,\ 4,\ 5)^\top\), total \(10\): &ensp;\(\mathbf p=(0.1,\ 0.4,\ 0.5)^\top\).</li>
+<li class="fragment">(b) \(0.1\,(10,0)^\top+0.4\,(0,10)^\top+0.5\,(10,10)^\top=(1+0+5,\ 0+4+5)^\top=(6,\ 9)^\top\).</li>
+<li class="fragment">(c) The same, \((0.1,\ 0.4,\ 0.5)^\top\): \(e^{s_j+2}=e^2e^{s_j}\), and \(e^2\) cancels.</li>
+<li class="fragment">(d) Word 3: the largest score, \(\ln5\), gets the largest weight, \(0.5\).</li>
+</ul>
+</section>
+
+<!-- L21-20: takeaways 1 -->
+<section>
+<h4>L21 takeaways (1 of 2): probability, random variables, expected value</h4>
+<ul>
+<li class="fragment">Sample space \(\Omega\): all outcomes. Event: a subset \(A\subseteq\Omega\). Probability: \(0\le P(A)\le1\), \(P(\Omega)=1\), add over events with no shared outcome; \(P(A^c)=1-P(A)\). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Random variable: a function \(R:\Omega\to\R\); the chance is in which outcome \(\omega\) occurs. Its distribution: each value \(r\) with \(P(R=r)\) (the pmf); probabilities \(\ge0\), adding to \(1\). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Expected value (MML Def. 6.3): \(\mathbb E[g(R)]=\sum_r g(r)\,P(R=r)\); the mean \(\mathbb E[R]=\sum_r r\,P(R=r)\). Equally likely outcomes: the plain average. <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Linearity: \(\mathbb E[aR+b]=a\,\mathbb E[R]+b\), &ensp;\(\mathbb E[R+S]=\mathbb E[R]+\mathbb E[S]\). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Our data, residual of a random student: \(P(R=-0.5)=\tfrac23\), \(P(R=1)=\tfrac13\), \(\mathbb E[R]=0\). <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">\(\mathbb E[R]=0\) for every least-squares line with an intercept (\(\mathbf 1^\top\mathbf r=0\), L12): the residuals average to \(0\) (the line is not too high or too low on average); this says nothing about how large the errors are. <span class="tier-u">[UNDERSTAND]</span></li>
+</ul>
+</section>
+
+<!-- L21-21: takeaways 2 -->
+<section>
+<h4>L21 takeaways (2 of 2): softmax and attention</h4>
+<ul>
+<li class="fragment">Attention output for one word: a weighted average \(\sum_j p_j\mathbf v_j\) of the words&rsquo; value vectors. <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">The weights come from relevance scores. Softmax \(p_j=e^{s_j}\big/\sum_k e^{s_k}\) turns any scores into a probability distribution: positive, adding to \(1\), larger score \(\Rightarrow\) larger weight, unchanged if a constant is added to every score. <span class="tier-m">[MASTER]</span></li>
+<li class="fragment">Reading the weights as \(P(J=j)\) for a random word \(J\): the output is \(\mathbb E[\mathbf v_J]\). A reading only: attention does not choose a word at random. <span class="tier-m">[MASTER]</span></li>
+</ul>
+<div class="key-question fragment">Today each student had probability \(\tfrac13\), fixed. Suppose we <strong>learn something</strong>: the chosen student studied at least \(1\) hour. Is \(P(R=1)\) still \(\tfrac13\)? <strong>How should probabilities change when we learn something? L22: conditional probability and Bayes&rsquo; theorem.</strong></div>
+</section>
+
+</div>
+</div>
+
+<script src="../dist/reveal.js"></script>
+<script src="../plugin/math/math.js"></script>
+<script src="../reveal.js-plugins/chalkboard/plugin.js"></script>
+<script src="../reveal.js-plugins/menu/menu.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  transition: 'none',
+  width: 1200,
+  height: 700,
+  margin: 0.04,
+  mathjax3: {
+    // TeX-only build: the default tex-mml-chtml also has MathML input, which re-typesets
+    // the assistive MathML on every slide change -- the DOM grew 5x in 20 flips and the
+    // chalkboard lagged worse and worse through a lecture (2026-09-30).
+    mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
+    tex: {
+      // Only \( \) and \[ \] delimit math -- see unit02-preview.html for why.
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true,
+      macros: {
+        R: "\\mathbb{R}",
+        norm: ["\\left\\|#1\\right\\|", 1],
+        inner: ["\\left\\langle #1,#2\\right\\rangle", 2]
+      }
+    }
+  },
+  plugins: [ RevealMath.MathJax3, RevealChalkboard, RevealMenu ],
+  chalkboard: {
+    storage: "math-for-ds",
+    toggleChalkboardButton: { left: "80px" },
+    toggleNotesButton: { left: "130px" },
+    colorButtons: 5
+  }
+});
+</script>
+</body>
+</html>
