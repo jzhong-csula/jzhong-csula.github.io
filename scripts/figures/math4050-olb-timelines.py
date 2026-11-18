@@ -65,8 +65,17 @@ ax.text(1.9, -4.74, r"$\Rightarrow$  CPT FV,  $N=3$", ha="center", va="top",
         fontsize=15.5, color=BLUE, weight="bold")
 ax.text(5.3, -3.68, "to payments still to come,\ntime 3 is the PRESENT",
         ha="center", va="top", fontsize=14, color=RED)
-ax.text(5.3, -4.74, r"$\Rightarrow$  CPT PV,  $N=14-3=11$", ha="center", va="top",
+ax.text(5.3, -4.74, r"$\Rightarrow$  CPT PV", ha="center", va="top",
         fontsize=15.5, color=RED, weight="bold")
+# 2026-11-18 更正：原来写的是 N = 14 - 3 = 11。确实还剩 11 笔，但第 14 笔不是 100
+# （13 笔 100 之后余额 2.389739，第 14 笔 = 2.485329），所以 N=11 / PMT=-100 定价的
+# 是「11 笔 100」，CPT PV 给 876.047671，而 OLB_3 = 812.704。等额的那 10 笔进 PMT，
+# 最后那笔小的进 FV。
+ax.text(5.3, -5.52, "eleven payments are left, but the last one is smaller:\n"
+        r"$N=10$,  PMT$\,=-100$,  FV$\,=-2.389739$  $\Rightarrow$  $812.704$",
+        ha="center", va="top", fontsize=12.5, color=RED)
+ax.text(1.9, -5.52, r"$\Rightarrow$  $-812.704$", ha="center", va="top",
+        fontsize=12.5, color=BLUE)
 finish(ax, os.path.join(OUT, "olb-pv-fv-relative.png"),
-       "", "Present and future are relative to the valuation date", N, -5.75)
+       "", "Present and future are relative to the valuation date", N, -6.75)
 print("ok: olb-pv-fv-relative.png")
